@@ -1,0 +1,34 @@
+\name{lhs.select}
+\alias{lhs.select}
+\title{Select hullsets}
+\usage{
+  lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+    s = NULL, hs.names = NULL, hs.idx = NULL,
+    status = TRUE)
+}
+\arguments{
+  \item{lhs}{A LoCoH-hullset object}
+
+  \item{id}{The name(s) of individuals to extract}
+
+  \item{k}{The k value of hullsets to extract}
+
+  \item{r}{The r value of hullsets to extract}
+
+  \item{a}{The a value of hullsets to extract}
+
+  \item{s}{The s value of hullsets to extract}
+
+  \item{hs.names}{The name(s) of saved hullsets to extract}
+
+  \item{hs.idx}{The indices of saved hullsets to extract}
+
+  \item{status}{Show status messages (T/F)}
+}
+\value{
+  A LoCoH-hullset object
+}
+\description{
+  Select hullsets
+}
+

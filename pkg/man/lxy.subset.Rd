@@ -1,0 +1,43 @@
+\name{lxy.subset}
+\alias{lxy.subset}
+\title{Take a subset of a LoCoH-xy object}
+\usage{
+  lxy.subset(lxy, id = NULL, ptid = NULL, idx = NULL,
+    dt.start = NULL, dt.end = NULL, dt.int.round.to = 0.1,
+    tau.diff.max = 0.02)
+}
+\arguments{
+  \item{lxy}{A LoCoH-xy object}
+
+  \item{ptid}{A vector of ptid values for the subset of
+  points}
+
+  \item{idx}{A vector of indices for the subset of points}
+
+  \item{dt.start}{A starting date for the subset. POSIXct
+  object (or something that can be coered to POSIXct)}
+
+  \item{dt.end}{An ending date for the subset. POSIXct
+  object (or something that can be coered to POSIXct)}
+
+  \item{dt.int.round.to}{The proportion of the median
+  sampling frequency that time intervals will be rounded to
+  when computing the frequency table of sampling intervals
+  (no change is made to the time stamps)}
+
+  \item{tau.diff.max}{The maximum deviation from tau
+  (expressed as a proportion of tau) that a point-to-point
+  time difference must fall within for the point-to-point
+  distance to be included in the calculation of the median
+  step length}
+}
+\value{
+  A LoCoH-xy object
+}
+\description{
+  Returns a subset of lxy based on ptid, idx, or dates
+}
+\seealso{
+  \code{\link{xyt.lxy}}, \code{\link{lxy.repair}}
+}
+

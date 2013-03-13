@@ -1,0 +1,134 @@
+\name{lxy.plot.mtdr}
+\alias{lxy.plot.mtdr}
+\title{Plot distribution of the ratio the maximum theoretical distance ratio for nearest neighbors}
+\usage{
+  lxy.plot.mtdr(lxy, s = NULL, k = NULL, a = NULL,
+    r = NULL, type = c("mtd.tsd", "mtd.ed")[1],
+    offset.dups = 1, id = NULL, show.samp.size = TRUE,
+    outline = FALSE, desc = c(0, 1, 3)[2], cex.desc = 0.8,
+    col.desc = "darkgreen",
+    mar = c(3, 3, if (title.show) 3 else 0.7, 0.5),
+    mgp = c(1.9, 0.5, 0), figs.per.page = NULL,
+    title = NULL, title.show = TRUE,
+    title.obj.name = FALSE, panel.num = NULL,
+    panel.num.inside.plot = !title.show,
+    xaxis.no.sci.notation = FALSE, png.dir = NULL,
+    png.dir.make = TRUE, png.width = 800,
+    png.height = png.width, png.overwrite = TRUE,
+    png.pointsize = 12 + (png.width - 480)/80,
+    status = TRUE, ...)
+}
+\arguments{
+  \item{lxy}{A \link{LoCoH-xy} object}
+
+  \item{s}{The s value(s) of nearest neighbor sets to
+  include in the plot. If NULL, all values will be used}
+
+  \item{k}{A k-value for the number of nearest neighbors
+  around each point to include in the plot}
+
+  \item{r}{A r-value for the number of nearest neighbors
+  around each point to include in the plot}
+
+  \item{a}{A a-value for the number of nearest neighbors
+  around each point to include in the plot}
+
+  \item{type}{Which ratio to plot: maximum theoretical
+  distance over TSD, or maximum theoretical distance over
+  Euclidean distance}
+
+  \item{offset.dups}{An amount in map units for which pairs
+  of points with the same location but different times will
+  be offset so that a TSD or Euclidean distance can be
+  calculated (see also \code{\link{lxy.lhs}})}
+
+  \item{id}{The id(s) of the individual(s) to include in
+  the plot}
+
+  \item{show.samp.size}{Whether to display the sample size
+  of the number of unique pairs of points for each value of
+  s, T/F}
+
+  \item{outline}{Show outliers in the box plots T/F}
+
+  \item{desc}{Which side to display automatically generated
+  desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.}
+
+  \item{cex.desc}{The expansion factor for the descriptive
+  text. Numeric value.}
+
+  \item{col.desc}{The color of the descriptive text. Color
+  value.}
+
+  \item{mar}{The plot margins. A four item numeric vector}
+
+  \item{mgp}{The distance away from the edge of the plot
+  for the 1) label, 2) tick marks, and 3) axis line. A
+  three-item numeric vector}
+
+  \item{panel.num}{A number or letter to display in the
+  upper left hand corner of the plot when the plot will be
+  used as part of a multi-frame graphic (as in
+  publications). Character}
+
+  \item{panel.num.inside.plot}{Whether to display panel.num
+  inside the plot area itself, as opposed to the title
+  area. T/F}
+
+  \item{png.dir}{The directory for a PNG file (filename
+  will be constructed automatically). Ignored if png.fn is
+  passed}
+
+  \item{png.dir.make}{Whether to create png.dir if it
+  doesn't exist. T/F}
+
+  \item{png.width}{The width of the PNG image}
+
+  \item{png.height}{The height of the PNG image}
+
+  \item{png.overwrite}{Whether to overwrite an existing PNG
+  file if it exists. T/F}
+
+  \item{png.pointsize}{The pointsize (in pixels) for the
+  PNG image, equivalent to the height or width of a
+  character in pixels (increase to make labels appear
+  larger)}
+
+  \item{...}{Additional parameters that will be passed to
+  the \code{\link{plot}} function}
+}
+\value{
+  A list of plots created, with one element per id, and
+  each element consisting of another list with elements for
+  the filename (or NULL), filename dimensions in pixels (or
+  NULL), the MTD ratios (as a list with one element for
+  each value of s), descriptive text, and the k/a/r value
+}
+\description{
+  Plot distributions of the ratio of maximum theoretical
+  distance times 's' over TSD for all unique pairs of
+  nearest neighbors
+}
+\details{
+  This function plots the ratio of the maximum theoretical
+  distance the individual could have traveled (multiplied
+  by 's') over the total TSD distance metric for all
+  nearests neighbors for the specified value of k/a/r for
+  different values of s. This ratio will of course never be
+  greater than one because the maximum theoretical distance
+  is one of the terms in TSD. The purpose of this function
+  is to see the effect of s on the relative contribution of
+  the time term in the TSD metric.
+
+  This function requires that nearest neighbors already be
+  computed. To identify nearest neighbors for a range of
+  's' values, use \code{\link{lxy.ptsh.add}} (see
+  examples).
+}
+\examples{
+## Identify a range of 's' values from space-selection to time-selection, and find 10 nearest neighbors for each value of 's'
+lxy <- lxy.ptsh(lxy, nn=TRUE)
+## Plot the ratio of maximum theoretical distance travel to TSD
+lxy.plot.mtdr(lxy)
+}
+

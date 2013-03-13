@@ -1,0 +1,64 @@
+\name{hist.locoh.lxy}
+\alias{hist.locoh.lxy}
+\title{Plot histograms of properties of a LoCoH-xy object}
+\usage{
+  hist.locoh.lxy(lxy, id = NULL, dt = TRUE, d = TRUE,
+    delta.t = TRUE, v = TRUE, figs.per.page = NULL,
+    col = "gray80",
+    dt.bins.base = c("secs", "mins", "hours", "days")[4],
+    dt.bins.width = 3600 * 24 * 7, delta.t.num.sd = NULL,
+    d.tct = 1.2, time.unit = "auto", overlay.median = TRUE,
+    breaks = 20)
+}
+\arguments{
+  \item{lxy}{A LoCoH-xy object}
+
+  \item{dt}{Include a histogram of the number of locations
+  over time) (T/F)}
+
+  \item{d}{Include a histogram of distance travelled per
+  adjacent points (i.e., step length) (T/F)}
+
+  \item{delta.t}{Include a histogram of the time between
+  points (i.e., sampling frequency) (T/F)}
+
+  \item{v}{Include a histogram of point velocity (distance
+  over delta.t) (T/F)}
+
+  \item{dt.bins.base}{Where to start the first bin ((for
+  histogram of number of points over time): "secs", "mins",
+  "hours", "days"}
+
+  \item{dt.bins.width}{The width of the time bins (for
+  histogram of number of points over time). In seconds.}
+
+  \item{figs.per.page}{Number of plots per page}
+
+  \item{col}{The color of the bars}
+
+  \item{d.tct}{temporal connectivity thsesshold for the
+  distance between two points to be included in the
+  histogram of step length. In other words, detlta.t must
+  be <= median delta.t * d.tct). Ignored if d=F.}
+
+  \item{delta.t.num.sd}{Number of standard deviations for
+  delta.t to be included in the histogram. To omit outliers
+  from appearing in the histogram (which can make the
+  central data more difficult to discern, set
+  delta.t.num.sd to ~2. Ignored if delta.t=F.}
+
+  \item{time.unit}{The unit of time on the x-axis
+  (character). Ignored if delta.t=F.}
+
+  \item{overlay.median}{Plot the median value on the
+  histogram (T/F)}
+}
+\value{
+  A list of frequencies with one element for each of the
+  histograms plotted.
+}
+\description{
+  Displays histogram(s) of point-to-point step length,
+  velocity, and sampling frequency for a LoCoH-xy object
+}
+

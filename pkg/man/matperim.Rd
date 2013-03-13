@@ -1,0 +1,17 @@
+\name{matperim}
+\alias{matperim}
+\title{matperim}
+\usage{
+  matperim(mat)
+}
+\arguments{
+  \item{mat}{2-column matrix representing the xy
+  coordinates of a closed polygon or line segment}
+}
+\value{
+  The length of the perimeter
+}
+\description{
+  matperim
+}
+

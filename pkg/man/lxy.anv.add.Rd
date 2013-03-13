@@ -1,0 +1,24 @@
+\name{lxy.anv.add}
+\alias{lxy.anv.add}
+\title{Add ancillary variable(s) to a LoCoH-xy object}
+\usage{
+  lxy.anv.add(lxy, anv, anv.desc = NULL, overwrite = FALSE)
+}
+\arguments{
+  \item{lxy}{\link{LoCoH-xy} object}
+
+  \item{anv}{vector, named list or data frame with the same
+  number of values as points}
+
+  \item{anv.desc}{A character vector of descriptions}
+
+  \item{overwrite}{Whether to overwrite existing variables
+  with the same names (T/F)}
+}
+\value{
+  A \link{LoCoH-xy} object
+}
+\description{
+  Add ancillary variable(s) to a LoCoH-xy object
+}
+

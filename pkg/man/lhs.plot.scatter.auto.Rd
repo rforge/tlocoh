@@ -1,0 +1,129 @@
+\name{lhs.plot.scatter.auto}
+\alias{lhs.plot.scatter.auto}
+\title{Generate multiple scatterplots of hull metrics}
+\usage{
+  lhs.plot.scatter.auto(hs, id = NULL, k = NULL, r = NULL,
+    a = NULL, s = NULL, hs.names = NULL,
+    x.metrics = c("auto", "all")[1],
+    y.metrics = c("auto", "all")[1],
+    metrics.exclude = c("bearing", "sgf.nn.mean", "sgf.enc.mean"),
+    exclude.same.pair = TRUE, exclude.reverse.pair = TRUE,
+    png.dir = NULL, png.dir.make = TRUE, png.width = 800,
+    png.height = png.width,
+    png.pointsize = 12 + (png.width - 480)/80,
+    png.fn.pre = NULL, png.fn.mid = NULL,
+    png.fn.suf = NULL,
+    png.exists = c("skip", "overwrite")[1],
+    progress.bar = TRUE, test.sample = NULL,
+    enumerate.pairs.only = FALSE, new.plot.window = TRUE,
+    hmap = NULL, ...)
+}
+\arguments{
+  \item{hs}{A LoCoH-hullset object}
+
+  \item{id}{The names of the individual(s) to include in
+  the plot. Character vector or comma-delimited character.}
+
+  \item{k}{The k value(s) of the hullset(s) to include in
+  the plot. Numeric vector or comma-delimited character
+  object.}
+
+  \item{r}{The r value(s) of the hullset(s) to include in
+  the plot. Numeric vector or comma-delimited character
+  object.}
+
+  \item{a}{The a value(s) of the hullset(s) to include in
+  the plot. Numeric vector or comma-delimited character
+  object.}
+
+  \item{s}{The s value(s) of the hullset(s) to include in
+  the plot. Numeric vector or comma-delimited character
+  object.}
+
+  \item{hs.names}{The name(s) of saved hullsets to include
+  in the plot.}
+
+  \item{x.metrics}{The name(s) of hull metric(s) to plot on
+  the x-axis. Can also be "auto" for the most common ones,
+  or "all"}
+
+  \item{y.metrics}{The name(s) of hull metric(s) to plot on
+  the y-axis. Can also be "auto" for the most common ones,
+  or "all"}
+
+  \item{metrics.exclude}{The name(s) of hull metrics to
+  exclude from both the x and y axes}
+
+  \item{exclude.same.pair}{Whether to exclude a hull metric
+  being plotted against itself. T/F}
+
+  \item{exclude.reverse.pair}{Whether to exclude opposite
+  pairs of metrics. T/F}
+
+  \item{png.dir}{The directory for a PNG file (filename
+  will be constructed automatically). Ignored if png.fn is
+  passed.}
+
+  \item{png.dir.make}{Whether to create png.dir if it
+  doesn't exist. T/F.}
+
+  \item{png.width}{The width of the PNG image. Ignored if
+  png.fn is passed.}
+
+  \item{png.height}{The height of the PNG image. Ignored if
+  png.fn is passed.}
+
+  \item{png.pointsize}{The pointsize (in pixels) for the
+  PNG image (increase to make labels appear larger).
+  Equivalent to the height or width of a character in
+  pixels.}
+
+  \item{png.fn.pre}{A prefix that will be used in the
+  construction of the PNG filename}
+
+  \item{png.fn.mid}{A mid-fix that will be used in the
+  construction of the PNG filename}
+
+  \item{png.fn.suf}{A suffix that will be used in the
+  construction of the PNG filename}
+
+  \item{png.exists}{What to do if a PNG with the same
+  filename already exists: "overwrite" or "skip"}
+
+  \item{test.sample}{An optional number of randomly
+  selected pairs of hull metrics to generate for testing
+  purposes. Or NULL.}
+
+  \item{enumerate.pairs.only}{Whether to only return a
+  two-column data frame of the names of hull metrics. T/F}
+
+  \item{new.plot.window}{Whether to start a new plot window
+  and turn recording on. T/F}
+}
+\value{
+  A data frame containing the pairs of hull metrics
+}
+\description{
+  This is a wrapper function for \code{\link{lhr.scatter}}
+  that creates scatterplots for pairs of hull metrics. It
+  can quickly generate several few dozen scatterplots for
+  the purpose of visually looking for novel associations
+  between hull metrics.
+}
+\note{
+  This function generates a list of pairs of hull metrics,
+  and then calls \code{\link{lhr.scatter}} repeatedly to
+  generate the histograms. This is a quick way to visualize
+  the relationships between hull metrics.
+
+  If \code{new.plot.window} is \code{TRUE} (default), a new
+  plot window will be opened and plot recording turned on
+  so you can flip through the histograms using the PgUp and
+  PgDn keys. You may also pass a value for \code{png.dir})
+  which will create a bunch of PNG files which you can then
+  view them as a slideshow.
+}
+\seealso{
+  \code{\link{lhs.plot.scatter}}, \code{\link{hm.expr}}
+}
+

@@ -1,0 +1,67 @@
+\name{lxy.id.new}
+\alias{lxy.id.new}
+\title{Change the id value(s) in a LoCoH-xy object}
+\usage{
+  lxy.id.new(lxy, id.new, save.old.id = NULL,
+    dup.dt = c("check", "offset", "ignore")[1],
+    dup.dt.offset = 5, dt.int.round.to = 0.1,
+    tau.diff.max = 0.02, status = TRUE)
+}
+\arguments{
+  \item{lxy}{A \link{LoCoH-xy} object}
+
+  \item{id.new}{New value(s) for the id (i.e., name of the
+  individual(s)). Can be either a single character object
+  'broken_tooth', or factor or character vector of the same
+  length as the number of points}
+
+  \item{id.old.save}{Whether to save the old ids as an
+  ancillary variable. Either T/F, or the name of a column
+  in the ancillary variables data frame, see details}
+
+  \item{dup.dt}{What to do if duplicate dt values are
+  encountered in the merged object, see details}
+
+  \item{dup.dt.offset}{The maximum offset in seconds to
+  offset duplicate dt values, used only if \code{dup.dt =
+  "offset"}}
+
+  \item{dt.int.round.to}{The proportion of the median
+  sampling frequency that time intervals will be rounded to
+  when computing the frequency table of sampling intervals
+  (no change is made to the time stamps)}
+
+  \item{tau.diff.max}{The maximum deviation from tau (the
+  median delta.t of the entire dataset), expressed as a
+  proportion of tau, that time difference between two
+  points must fall for the distance between those two
+  points to be included in the calculation of the median
+  step length}
+}
+\value{
+  A \link{LoCoH-xy} object containing the original xys, dt,
+  ptid and ancillary values for each point. Other items and
+  attributes (including the comment) will be recreated or
+  set to NULL
+}
+\description{
+  Changes the id values in a LoCoH-xy object, with option
+  to save the 'old' id values as an ancillary variable
+}
+\details{
+  This function can be used to change the id value for each
+  point. Note that the id value is the name of the
+  individual animal or device, as opposed to ptid which is
+  a unique numeric integer for each point.
+
+  \code{tau.diff.max} exists to eliminate the inclusion of
+  temporal outliers in the computation of the median step
+  length. The time difference betwen points must be withint
+  \code{tau.diff.max} of tau for that pair of points to be
+  included in step length calculation.
+
+  One can also use this function to change the id (name of
+  the individual), rebuild the rw.params or table of
+  sampling frequencies
+}
+

@@ -1,0 +1,15 @@
+## This file contains a list of GIS layers that can be added to plots in T.LoCoH.R
+## layer - layer name
+## fn - shape file name (relative to working folder)
+## type - polygon, line, or point
+## lty - line type (for line features only) 0=blank, 1=solid, 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash
+## pch - plot character (for point features only), see http://rgraphics.limnology.wisc.edu/images/miscellaneous/pch.png
+## cex - size of plot character (relative to 1)
+## lwd - line width - relative to 1
+## border - border color (polygons only, to hide border set to NA)
+## color - color of the object (transparency supported)
+
+layer, fn, type, lty, pch, cex, lwd, border, col
+"boundary", "knp_boundary_36s.shp", "line", 1, 0, 1, 2, "red", NA
+"troughs", "drinking_troughs_36s.shp", "point", 0, 17, 1.5, 1, NA, "#0080c0"
+"roads", "roads_36s.shp", "line", 3, 0, 1, 2, NA, "#8B4513CC"

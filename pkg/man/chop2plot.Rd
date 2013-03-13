@@ -1,0 +1,41 @@
+\name{chop2plot}
+\alias{chop2plot}
+\title{Divides a long string into separate lines for adding to a plot}
+\usage{
+  chop2plot(str, width, char.break = " ",
+    char.break.keep = FALSE, cex = 1)
+}
+\arguments{
+  \item{str}{The string to format}
+
+  \item{width}{The maximum width of any single line in
+  inches}
+
+  \item{char.break}{The character where the string should
+  be broken}
+
+  \item{char.break.keep}{Whether to keep the char.break
+  character when the string gets broken. T/F}
+}
+\value{
+  A two-item character vector containing [1] the formatted
+  character string with \\n inserted and [2] number of
+  lines
+}
+\description{
+  Breaks a long character object into separate lines at
+  specific characters
+}
+\note{
+  This function is designed to break up a potentially long
+  character object that is going to be added to a plot
+  either as a title or text. The string will be broken at
+  the \code{char.break} characters such that each line will
+  be <= \code{width} when plotted. Breaks are replaced with
+  carriage returns. If \code{char.break.keep} is
+  \code{TRUE}, the break character will be kept, otherwise
+  it will be removed. If no occurrence of the
+  /code{char.break} is available, the line will be chopped
+  at the last character that fits.
+}
+

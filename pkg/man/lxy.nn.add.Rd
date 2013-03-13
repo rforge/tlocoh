@@ -1,0 +1,98 @@
+\name{lxy.nn.add}
+\alias{lxy.nn.add}
+\title{Identifies nearest neighbors for a LoCoH-xy object}
+\usage{
+  lxy.nn.add(lxy, id = NULL, ptid = NULL, k = NULL,
+    r = NULL, a = NULL, s = NULL, kmin = 0, ptsh = NULL,
+    ptsh.idx = 1,
+    nn.exists = c("append", "replace", "skip")[1],
+    time.term = c("vmax", "dif")[1],
+    FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2],
+    dec.places = 1, ra.init.samp.size = 30,
+    ra.init.quant = 0.8, tct = 0.05, beep = FALSE,
+    status = TRUE)
+}
+\arguments{
+  \item{lxy}{A LoCoH-xy object}
+
+  \item{id}{The name(s) of individuals to analyze}
+
+  \item{k}{Value for the fixed-k method (identify k nearest
+  neighbors of each point)}
+
+  \item{r}{Value for the fixed-r method (identify all
+  points within radius r)}
+
+  \item{a}{Value for the a method (identify all points
+  within cummulative distance a). Can also be an auto.a
+  value.}
+
+  \item{s}{The value for s for the time-scaled distance
+  metric}
+
+  \item{ptid}{A vector of ptid indicating which points
+  should have nearest neighbors identified (can be used to
+  speed up processing during testing)}
+
+  \item{kmin}{A minimum number of neighbors to identify for
+  each point}
+
+  \item{ptsh}{The desired proportion of time-selected hulls
+  [0..1], may also be 'all' if the s-ptsh map has already
+  been computed. See details.}
+
+  \item{ptsh.idx}{The index of the saved ptsh-s table. See
+  also \code{\link{summary.locoh.lhs}}}
+
+  \item{nn.exists}{What to do if nearest neighbors have
+  already been saved: "append", "replace", or "skip"}
+
+  \item{status}{Show status messages (T/F)}
+
+  \item{beep}{Beep when done (T/F)}
+
+  \item{FNN.algorithm}{The algorithm to be used in the
+  get.knnx() function in the package FNN}
+
+  \item{dec.places}{The number of decimal places that rmax
+  and amax should be rounded to}
+
+  \item{ra.init.samp.size}{How many randomly selected
+  points to use to come up with the first guess for how
+  many neighbors to find for each point to satisify a
+  (a-method only)}
+
+  \item{ra.init.quant}{The proportion of randomly selected
+  to points to use for the a value when coming up with an
+  initial guess at the number of neighbors to find for each
+  point to satisify a (a-method only)}
+}
+\value{
+  A LoCoH-xy object object with saved information about
+  each points' nearest neighbors
+}
+\description{
+  Identifies nearest neighbors for a LoCoH-xy object
+}
+\details{
+  When s > 0, the 'distance' (as defined by the time-scaled
+  distance metric') between two points is a function of
+  their separation in time as well as space.
+
+  If \code{ptsh} is provided, the script will find a value
+  of 's' such that the proportion of hulls which are
+  time-selected (e.g, consecutive points in time) is equal
+  to \code{ptsh}. In this case, no value for \code{s}
+  should be passed. If \code{ptsh="all"} and the proportion
+  of time selected hulls has already been computed, those
+  values of 's' will be used.
+}
+\examples{
+lxy <- lxy.nn.add(lxy, k=10, s=0.01)
+}
+\seealso{
+  \code{\link{summary.locoh.lxy}} to see what nearest
+  neighbors have already been identified
+  \code{\link{auto.a}} \code{\link{lxy.ptsh.add}}
+}
+

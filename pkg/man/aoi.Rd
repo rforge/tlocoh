@@ -1,0 +1,30 @@
+\name{aoi}
+\alias{aoi}
+\title{Select an area of interest on a plot using the mouse}
+\usage{
+  aoi(draw.poly = TRUE, draw.poly.col = "black",
+    status = TRUE)
+}
+\arguments{
+  \item{draw.poly}{Whether to draw the box on the plot.
+  T/F.}
+
+  \item{draw.poly.col}{The color to use if drawing the box
+  on the plot. Color value. Ignored if
+  \code{draw.poly=FALSE}.}
+
+  \item{status}{Show messages to the user}
+}
+\value{
+  A two-column xy data frame containing the upper left
+  point and the lower right point in the first and second
+  rows respectively
+}
+\description{
+  Allows the user to select an area of interest (box) by
+  clicking on the active plot window
+}
+\note{
+  This function requires a plot window to be open
+}
+

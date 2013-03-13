@@ -1,0 +1,26 @@
+\name{lhs.hsp.del}
+\alias{lhs.hsp.del}
+\title{Delete a hull scatterplot from a LoCoH-hullset object}
+\usage{
+  lhs.hsp.del(lhs, hsp.idx = "all", status = TRUE)
+}
+\arguments{
+  \item{lhs}{A LoCoH-hullset object}
+
+  \item{hsp.idx}{The index(s) of the hullsets to delete. A
+  numeric vector or 'all'}
+
+  \item{status}{Show messages, T/F}
+}
+\value{
+  A LoCoH-hullset object
+}
+\description{
+  Deletes a saved hull scatterplot from a LoCoH-hullset
+  object
+}
+\note{
+  Use the summary() command to see the indices of saved
+  hull scatterplots
+}
+

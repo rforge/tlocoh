@@ -1,0 +1,31 @@
+\name{lxy.exp.csv}
+\alias{lxy.exp.csv}
+\title{Export coordinates to a csv file}
+\usage{
+  lxy.exp.csv(lxy, file = NULL, id = NULL,
+    file.overwrite = FALSE, quote = FALSE)
+}
+\arguments{
+  \item{lxy}{A LoCoH-xy object}
+
+  \item{file}{Filename (with extension .csv)}
+
+  \item{id}{The id(s) of the locations to export}
+
+  \item{file.overwrite}{Overwrite existing file, T/F}
+
+  \item{quote}{Delimit strings in quotes, T/F}
+}
+\description{
+  Exports coordinates and date-stamps from a LoCoH-xy
+  object to a csv file
+}
+\note{
+  This function will export the id value (i.e., animal
+  name) point-id value (ptid), coordinates, and date stamp
+  (if exists) of a LoCoH-xy object to a csv file
+
+  If file is not passed, a filename will be automatically
+  constructed.
+}
+

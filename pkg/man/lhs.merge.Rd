@@ -1,0 +1,25 @@
+\name{lhs.merge}
+\alias{lhs.merge}
+\title{Merge LoCoH-hullsets}
+\usage{
+  lhs.merge(..., check.class = TRUE)
+}
+\arguments{
+  \item{....}{Two or more LoCoH-hullset objects}
+
+  \item{check.class}{Whether to enforce that all objects
+  merged belong to class locoh.lhs (T/F)}
+}
+\value{
+  A LoCoH-hullset object
+}
+\description{
+  Merge LoCoH-hullsets
+}
+\note{
+  Hullsets in different objects can be merged together, but
+  the hullsets themselves remain separate. If duplicate
+  hullsets are detected (e.g., same id, same mode, same
+  parameter value), an error message will appear.
+}
+

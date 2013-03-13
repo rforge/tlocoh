@@ -1,0 +1,97 @@
+\name{lxy.thin.byfreq}
+\alias{lxy.thin.byfreq}
+\title{Delete locations to harmonize the sampling frequency and time duration}
+\usage{
+  lxy.thin.byfreq(lxy, id = NULL, trim.ends = TRUE,
+    byfreq = TRUE, dt.start = NULL, dt.end = NULL,
+    samp.freq = "lcm", lcm.round = 120, lcm.max.iter = 300,
+    status = TRUE, dt.int.round.to = 0.1,
+    tau.diff.max = 0.02)
+}
+\arguments{
+  \item{lxy}{A \code{\link{LoCoH-xy}} object}
+
+  \item{id}{The id value(s) to be harmonized}
+
+  \item{trim.ends}{Truncate points from either end of the
+  timeline to achieve a common time window, T/F}
+
+  \item{dt.start}{The starting date-time that all
+  individual trajectories will be truncated to. If
+  \code{NULL}, the first date-time that all points have in
+  common will be used.}
+
+  \item{dt.end}{The end date-time that all individual
+  trajectories will be truncated to. If \code{NULL}, the
+  last date-time that all points have in common will be
+  used.}
+
+  \item{samp.freq}{The common time step for the output (in
+  seconds). Can also be set to \code{"lcm"}, in which case
+  the least common multiple of the median time step of each
+  individual will be computed}
+
+  \item{lcm.round}{When \code{samp.freq="lcm"}, the median
+  time step for each individual will be rounded to the
+  nearest interval of \code{lcm.round} (in seconds)}
+
+  \item{lcm.max.iter}{The maximum number of iterations to
+  be used in the algorithm that finds the least common
+  multiple of the median time steps}
+
+  \item{dt.int.round.to}{The proportion of the median
+  sampling frequency that time intervals will be rounded to
+  when computing the frequency table of sampling intervals
+  (no change is made to the time stamps)}
+
+  \item{tau.diff.max}{The maximum deviation from tau (the
+  median delta.t of the entire dataset), expressed as a
+  proportion of tau, that time difference between two
+  points must fall for the distance between those two
+  points to be included in the calculation of the median
+  step length}
+
+  \item{status}{Show messages, T/F}
+}
+\value{
+  a \code{\link{LoCoH-xy}} object
+}
+\description{
+  Standardize the sampling frequency and duration across
+  individuals in a \code{\link{LoCoH-xy}} object by
+  deleting points
+}
+\note{
+  This function processes a \code{\link{LoCoH-xy}} object
+  that contains movement data for several individuals, and
+  removes points such that the output contains a fixed
+  start and end date for each individual, as well as an
+  approximately uniform sampling frequency (time step).
+
+  Before using this function, you should clean your data of
+  all abnormally short time intervals (e.g., bursts). See
+  \code{\link{lxy.thin.bursts}}.
+
+  If you know the time interval the data was *supposed* to
+  be sampled (e.g., every 20 minutes), you should pass that
+  value for \code{samp.freq} (expressed in seconds). If
+  \code{samp.freq="lcm"}, the function will automatically
+  compute the common time step for the individuals by
+  taking the least common multiple of the median time steps
+  of each individual. You can deal with noise by rounding
+  the median sampling interval to the value of
+  \code{lcm.round} (expressed in seconds).
+
+  The function \code{\link{lxy.plot.freq}} can help you see
+  the 'actual' sampling intervals in the data (set
+  \code{by.date=TRUE}).
+
+  Because this function deletes points, the
+  nearest-neighbors lookup table of the
+  \code{\link{LoCoH-xy}} object (if any) will be deleted.
+}
+\seealso{
+  \code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}},
+  \code{\link{lxy.thin.bursts}}
+}
+
