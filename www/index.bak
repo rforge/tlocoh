@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
+
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>T-LoCoH</title>
+	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
+<style>
+     li.spaceafter {margin-bottom: 1em;}
+
+     .unused {
+         font: 13px/1.231 
+     }
+
+     body {
+         font-size: 100%;
+         font-family: "verdana",sans-serif;
+         color: rgb(68, 68, 68);
+         text-align: left;
+         margin-bottom: 1em;
+     }
+
+
+     pre {
+         font-size: 110%;
+         padding: 1em;
+         border: 1px dashed rgb(47, 111, 171);
+         color: black;
+         background-color: rgb(249, 249, 249);
+         line-height: 1.1em;
+     }
+
+</style>
+
+  </head>
+
+<body>
+
+<!-- R-Forge Logo -->
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+<tr><td>
+<a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a> </td> </tr>
+</table>
+
+<h1>Welcome to T-LoCoH!</h1>
+
+<blockquote><p><strong><a href="#overview">Overview</a> | <a href="#package">Package Features</a> | <a href="#installation">Installation</a> | <a href="resources">Resources</a></strong></p></blockquote>
+
+<h2><br>Overview</h2>
+
+<p><img src="images/ag206_isos_600x200.png" width=600 height=200 align="right" border=1>T-LoCoH (Time Local Convex Hull) is a method for constructing home ranges and exploring spatio-temporal patterns in movement data. It is built upon the LoCoH method but contains with new analytical functions for data that have time values attached (e.g., movement data).</p>
+
+<p>T-LoCoH can analyze <strong>any</strong> set of point data (with or without time stamps), but it has been tailored for data collected at regular intervals from a GPS device, such as GPS collars used in wildlife tracking studies. T-LoCoH uses the time information from each location to produce models of space-use that have strong fidelity to temporal partitioning strategies.</p>
+
+<p>T-LoCoH can generate home ranges models that differentiate internal space not only by how often the animal was seen there (the traditional approach), but also how the animal used space in terms of time-use patterns and behavior mode. You can think of this as behavior maps.</p>
+
+<p><img src="images/ag214_comp_200x400.png" width=200 height=400 align="right" border=1 hspace=10 vspace=10>T-LoCoH is not a one-click solution. To use T-LoCoH effectively, you should understand your research question, have some basic knowledge about the study system, and understand how the method works. The tutorial below does a pretty good job explaining how to use T-LoCoH intelligently for specific types of questions and applications. If you are looking for a quick and dirty home range construction method, we suggest you try the Kernel method or one of the other methods from the <a href="http://cran.r-project.org/web/packages/adehabitatHR/">AdehabitatHR</a> package.</p>
+
+
+<hr><h2>Package Features</h2>
+
+<ul>
+<li>import and visualize location data</li>
+<li>thin 'bursts' of GPS points to reduce over-sampling bias</li>
+<li>explore effects of the space-time balance used in hull construction</li>
+<li>create and evaluate hulls and density isopleths (i.e., utilization distributions)</li>
+<li>compute additional hull metrics for time use and directionality</li>
+<li>create isopleths that reflect space use or any other of hull metric including ancillary variables (e.g., temperature, heart rate, etc.)</li>
+<li>create scatterplots of hull metrics and use them as a map legend (see sample on right)</li>
+<li>create and export animations of the animal's movement, including multiple individuals tracked over the same time period</li>
+<li>display GIS files and imagery on plots</li>
+<li>export results in tabular and GIS formats</li>
+<li>getting started tutorial (below)</li>
+</ul>
+
+<a name="installation"></a>
+<hr><h2>Installation</h2>
+
+<p>The documentation for T-LoCoH is still in progress, so the package is not yet in the R-Forge repository and thus can't be installed from the R prompt. Instructions for manual installation are below:</p>
+
+<p><strong>1. Install the dependent packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
+
+<p><pre>
+dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "gpclib", "rgdal", "maptools", "png")<br>
+pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.only=T))]<br>
+install.packages(pkgs.not.installed, dependencies=TRUE)
+</pre></p>
+
+<p><img src="images/simdata_par_200x200.png" width=200 height=200 align="right" border=1 hspace=10 vspace=10><strong>2. Download the correct version of the package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
+       
+<ul>
+<li class="spaceafter">Windows: <a href="package/tlocoh_1.0.7.zip">tlocoh_1.0.7.zip</a></li>
+<li class="spaceafter">Mac and Linux (source): <a href="package/tlocoh_1.0.7.tar.gz">tlocoh_1.0.7.tar.gz</a></li>
+</ul>
+
+<p><strong>3. Install the T-LoCoH package from the R Console</strong></p>
+
+<ul>
+<li class="spaceafter">Windows: Install the package by going to the <em>Packages</em> menu on the R console and selecting <em>Install packages from local zip files</em>.</li>
+
+<li class="spaceafter">Mac: Select <em>Package Installer</em>, then select <em>Local Source Files</em>. Click the <em>Install</em> button and pick the *.tar.gz file you downloaded.</li>
+</ul>
+
+<p><strong>4. Load T-LoCoH</strong></p>
+
+<p>Once T-LoCoH is installed, you can load it into memory by typing:</p>
+
+<p><pre>require(tlocoh)</pre></p>
+
+<hr><a name="resources"></a>
+<h2>Resources</h2>
+
+<ul>
+<li class="spaceafter"><a href="tlocoh_tutorial_2013-03-10.pdf">Tutorial and Users Guide</a></li>
+
+<li class="spaceafter">Five Minute Overview of T-LoCoH <img src="images/ico_video.png" width=16 height=16> <em>- coming soon</em></li>
+
+<li class="spaceafter">Reference paper:<br>Lyons, A., Turner, W.C., and WM Getz. In press. <em>Home range plus: A space-time characterization of movement over real landscapes</em>. BMC Movement Ecology. <a href="http://www.movementecologyjournal.com">http://www.movementecologyjournal.com</a>. <a href="hrplus/">Accompanying animations</a>.</li>
+
+<li class="spaceafter"><a href="http://r-forge.r-project.org/projects/tlocoh/">Project summary page</a></li>
+
+<li class="spaceafter">Join the Email List <em>- coming soon</em></li>
+
+<li class="spaceafter">FAQs <em>- coming soon</em></li>
+
+</ul>
+
+</body>
+</html>
+
+
