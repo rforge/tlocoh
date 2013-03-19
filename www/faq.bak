@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
+
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>T-LoCoH</title>
+	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
+<style>
+
+     li.halfspaceafter {
+        margin-bottom: 0.5em;
+     }
+
+     body {
+         font-size: 100%;
+         font-family: "verdana",sans-serif;
+         color: rgb(68, 68, 68);
+         text-align: left;
+         margin-bottom: 1em;
+     }
+
+     .qtn {
+        font-weight:bold;
+        margin-bottom: 0.5em;
+     }
+
+     .ans {
+        font-size: 85%;
+        margin-bottom: 1.5em;
+     }
+
+     pre.box {
+         font-size: 110%;
+         padding: 1em;
+         border: 1px dashed rgb(47, 111, 171);
+         color: black;
+         background-color: rgb(249, 249, 249);
+         line-height: 1.1em;
+         clear: both;
+     }
+
+
+</style>
+
+  </head>
+
+<body>
+
+<!-- R-Forge Logo -->
+
+<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
+
+<h1>T-LoCoH FAQs</h1>
+
+
+<p class="qtn">Is there version of T-LoCoH for ArcGIS?</p>
+<p class="ans">No, not at this time.</p>
+
+<p class="qtn">Is T-LoCoH backward compatible with LoCoH?</p>
+<p class="ans">Yes, if you set <em>s=0</em> (time ignored), T-LoCoH should produce the same hulls and isopleths as LoCoH.</p>
+
+<p class="qtn">Is there a GUI?</p>
+<p class="ans">Not at this time.</p>
+
+<p class="qtn">What method should I use (k/a/r)?</p>
+<p class="ans">The k-method is find if all you're interested in is density isopleths (utilization distributions). For all other hull metrics, you're better off using the a-method. If in doubt, use the a-method.</p>
+
+<p class="qtn">How many points can T-LoCoH handle?</p>
+<p class="ans">R is notoriously inefficient with memory, so it depends on your hardware, amount of physical memory, other applications open, and what you're doing in T-LoCoH (creating hulls and isopleths are memory intensive). Datasets up to 15,000 points run fine on modest laptop hardware, larger datasets run but are slower. Very large datasets can produce an out of memory error. A set of functions and workflow for k/a/r parameter selection has been developed for large datasets. Thinning down points with systematic sampling (i.e., keep every nth point), or analyzing different time periods separately, are also options (see lxy.subset). You can also run T-LoCoH on powerful machines in the cloud. </p>
+
+<p class="qtn">How do I find an upper and lower bound for <em>a</em>?</p>
+<p class="ans">Try using the lxy.amin.add function with nnn=c(3,20). More to come later.</p>
+
+<p class="qtn">Can I export my results to a GIS format?</p>
+<p class="ans">Yes, see the functions <tt>lhs.exp.shp</tt> and <tt>lxy.exp.shp</tt></p>
+
+<p class="qtn">What is the data structure of a locoh-lhs object?</p>
+<p class="ans">Coming soon...</p>
+
+
+
+<p><a href="index.html">Back</a></p>
+
+</body>
+</html>
+
+
