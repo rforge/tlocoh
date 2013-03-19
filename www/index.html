@@ -10,8 +10,35 @@
 <style>
      li.spaceafter {margin-bottom: 1em;}
 
+     .boxright {
+        float: right;
+        border-style:solid;
+        border-width: 5px;
+        border-color: LightSlateGray;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: LightGray;
+        color: black;
+     }
+
+     li.halfspaceafter {
+        margin-bottom: 0.5em;
+     }
+
+     .boxtext80 {
+        font-size: 80%;
+        text-align: center;
+        color: black;
+     }
      .unused {
          font: 13px/1.231 
+        background-color: #ffff80;  
+     }
+
+     .margin-three {
+        text-align: center;
+        margin-bottom: 0px;
      }
 
      body {
@@ -30,6 +57,11 @@
          color: black;
          background-color: rgb(249, 249, 249);
          line-height: 1.1em;
+         clear: both;
+     }
+
+     hr {
+         clear: both;
      }
 
 </style>
@@ -39,40 +71,44 @@
 <body>
 
 <!-- R-Forge Logo -->
-<table border="0" width="100%" cellspacing="0" cellpadding="0">
-<tr><td>
-<a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a> </td> </tr>
-</table>
+
+<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
 
 <h1>Welcome to T-LoCoH!</h1>
 
-<blockquote><p><strong><a href="#overview">Overview</a> | <a href="#package">Package Features</a> | <a href="#installation">Installation</a> | <a href="resources">Resources</a></strong></p></blockquote>
+<blockquote><p><strong><a href="#overview">Overview</a> | <a href="#package">Package Features</a> | <a href="#installation">Installation</a> | <a href="#resources">Resources</a></strong></p></blockquote>
 
+<a name="overview"></a>
 <h2><br>Overview</h2>
 
-<p><img src="images/ag206_isos_600x200.png" width=600 height=200 align="right" border=1>T-LoCoH (Time Local Convex Hull) is a method for constructing home ranges and exploring spatio-temporal patterns in movement data. It is built upon the LoCoH method but contains with new analytical functions for data that have time values attached (e.g., movement data).</p>
+<div class="boxright"><div style="width: 600px;"><div class="boxtext80"><img src="images/ag206_isos_600x200.png" width=600 height=200 border=0><br>Utilzation distribution of a female Springbok antelope in Etosha National Park, Namibia</div></div></div>
+
+<p>T-LoCoH (Time Local Convex Hull) is a method for constructing home ranges and exploring spatio-temporal patterns in movement data. It is built upon the LoCoH method but contains with new analytical functions for data that have time values attached (e.g., movement data).</p>
 
 <p>T-LoCoH can analyze <strong>any</strong> set of point data (with or without time stamps), but it has been tailored for data collected at regular intervals from a GPS device, such as GPS collars used in wildlife tracking studies. T-LoCoH uses the time information from each location to produce models of space-use that have strong fidelity to temporal partitioning strategies.</p>
 
 <p>T-LoCoH can generate home ranges models that differentiate internal space not only by how often the animal was seen there (the traditional approach), but also how the animal used space in terms of time-use patterns and behavior mode. You can think of this as behavior maps.</p>
 
-<p><img src="images/ag214_comp_200x400.png" width=200 height=400 align="right" border=1 hspace=10 vspace=10>T-LoCoH is not a one-click solution. To use T-LoCoH effectively, you should understand your research question, have some basic knowledge about the study system, and understand how the method works. The tutorial below does a pretty good job explaining how to use T-LoCoH intelligently for specific types of questions and applications. If you are looking for a quick and dirty home range construction method, we suggest you try the Kernel method or one of the other methods from the <a href="http://cran.r-project.org/web/packages/adehabitatHR/">AdehabitatHR</a> package.</p>
+<p>T-LoCoH is not a one-click solution. To use T-LoCoH effectively, you should understand your research question, have some basic knowledge about the study system, and understand how the method works. The tutorial below does a pretty good job explaining how to use T-LoCoH intelligently for specific types of questions and applications. If you are looking for a quick and dirty home range construction method, we suggest you try the Kernel method or one of the other methods from the <a href="http://cran.r-project.org/web/packages/adehabitatHR/">AdehabitatHR</a> package.</p>
 
 
-<hr><h2>Package Features</h2>
+<a name="package"></a>
+<hr>
+<div class="boxright"><div style="width: 200px;"><img src="images/ag214_comp_200x400.png" width=200 height=400 align="right" border=0></div></div>
+<h2>Package Features</h2>
 
 <ul>
-<li>import and visualize location data</li>
-<li>thin 'bursts' of GPS points to reduce over-sampling bias</li>
-<li>explore effects of the space-time balance used in hull construction</li>
-<li>create and evaluate hulls and density isopleths (i.e., utilization distributions)</li>
-<li>compute additional hull metrics for time use and directionality</li>
-<li>create isopleths that reflect space use or any other of hull metric including ancillary variables (e.g., temperature, heart rate, etc.)</li>
-<li>create scatterplots of hull metrics and use them as a map legend (see sample on right)</li>
-<li>create and export animations of the animal's movement, including multiple individuals tracked over the same time period</li>
-<li>display GIS files and imagery on plots</li>
-<li>export results in tabular and GIS formats</li>
-<li>getting started tutorial (below)</li>
+<li class="halfspaceafter">import and visualize location data</li>
+<li class="halfspaceafter">thin 'bursts' of GPS points to reduce over-sampling bias</li>
+<li class="halfspaceafter">explore effects of the space-time balance used in hull construction</li>
+<li class="halfspaceafter">create and evaluate hulls and density isopleths (i.e., utilization distributions)</li>
+<li class="halfspaceafter">compute additional hull metrics for time use and directionality</li>
+<li class="halfspaceafter">create isopleths that reflect space use or any other of hull metric including ancillary variables (e.g., temperature, heart rate, etc.)</li>
+<li class="halfspaceafter">create scatterplots of hull metrics and use them as a map legend (see sample on right)</li>
+<li class="halfspaceafter">create and export animations of the animal's movement, including multiple individuals tracked over the same time period</li>
+<li class="halfspaceafter">display GIS files and imagery on plots</li>
+<li class="halfspaceafter">export results in tabular and GIS formats</li>
+<li class="halfspaceafter">getting started tutorial (<a href="#resources">see below</a>)</li>
 </ul>
 
 <a name="installation"></a>
@@ -88,8 +124,8 @@ pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.
 install.packages(pkgs.not.installed, dependencies=TRUE)
 </pre></p>
 
-<p><img src="images/simdata_par_200x200.png" width=200 height=200 align="right" border=1 hspace=10 vspace=10><strong>2. Download the correct version of the package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
-       
+<p><strong>2. Download the correct version of the package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
+
 <ul>
 <li class="spaceafter">Windows: <a href="package/tlocoh_1.0.7.zip">tlocoh_1.0.7.zip</a></li>
 <li class="spaceafter">Mac and Linux (source): <a href="package/tlocoh_1.0.7.tar.gz">tlocoh_1.0.7.tar.gz</a></li>
@@ -110,6 +146,20 @@ install.packages(pkgs.not.installed, dependencies=TRUE)
 <p><pre>require(tlocoh)</pre></p>
 
 <hr><a name="resources"></a>
+<div class="boxright"><div style="width: 500px;">
+<div class="margin-three"><strong>T-LoCoH Quiz</strong></div>
+<p class="margin-three"><img src="images/simdata_par_360x360.png" width=360 height=360 border=0></p>
+<div style="font-size:85%">
+<p style="margin-bottom:0px; margin-top:1em; text-align:left;">The image above represents:</p>
+<ol style="list-style-type:lower-alpha;">
+<li class="halfspaceafter">A schematic illustrating the diffusion of ideas between red states and blue states.</li>
+<li class="halfspaceafter">A MRI showing tendonitis in the lead programmer's left arm.</li>
+<li class="halfspaceafter">A T-LoCoH space-use model from simulated data revealing areas of directional travel and temporal-partitioning.</li>
+</ol>
+<p>Answer: See Figure 10 in <a href="hrplus/lyons_turner_getz_2013_homerange-plus.pdf">the paper</a>.</p>
+</div>
+</div></div>
+
 <h2>Resources</h2>
 
 <ul>
@@ -121,9 +171,9 @@ install.packages(pkgs.not.installed, dependencies=TRUE)
 
 <li class="spaceafter"><a href="http://r-forge.r-project.org/projects/tlocoh/">Project summary page</a></li>
 
-<li class="spaceafter">Join the Email List <em>- coming soon</em></li>
+<li class="spaceafter"><a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/tlocoh-info">Join the Email List</a></li>
 
-<li class="spaceafter">FAQs <em>- coming soon</em></li>
+<li class="spaceafter"><a href="faq.html">FAQs</a></li>
 
 </ul>
 
