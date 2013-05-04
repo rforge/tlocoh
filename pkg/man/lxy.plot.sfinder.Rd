@@ -4,8 +4,8 @@
 \usage{
   lxy.plot.sfinder(lxy, id = NULL, delta.t = "auto",
     delta.t.auto.n = 8, delta.t.err = 0.01,
-    outline = FALSE, debug = FALSE, desc = c(0, 1, 3)[2],
-    cex.desc = 0.8, col.desc = "darkgreen",
+    outline = FALSE, desc = c(0, 1, 3)[2], cex.desc = 0.8,
+    col.desc = "darkgreen",
     time.term = c("vmax", "dif")[1],
     mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
     mgp = c(1.8, 0.5, 0), figs.per.page = NULL,

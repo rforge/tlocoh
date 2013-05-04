@@ -3,13 +3,13 @@
 \title{Delete locations to harmonize the sampling frequency and time duration}
 \usage{
   lxy.thin.byfreq(lxy, id = NULL, trim.ends = TRUE,
-    byfreq = TRUE, dt.start = NULL, dt.end = NULL,
+    dt.start = NULL, dt.end = NULL, byfreq = TRUE,
     samp.freq = "lcm", lcm.round = 120, lcm.max.iter = 300,
     status = TRUE, dt.int.round.to = 0.1,
     tau.diff.max = 0.02)
 }
 \arguments{
-  \item{lxy}{A \code{\link{LoCoH-xy}} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The id value(s) to be harmonized}
 
@@ -25,6 +25,9 @@
   trajectories will be truncated to. If \code{NULL}, the
   last date-time that all points have in common will be
   used.}
+
+  \item{byfreq}{Delete points to achieve a common sampling
+  frequency (\code{samp.freq}), T/F}
 
   \item{samp.freq}{The common time step for the output (in
   seconds). Can also be set to \code{"lcm"}, in which case
@@ -54,16 +57,16 @@
   \item{status}{Show messages, T/F}
 }
 \value{
-  a \code{\link{LoCoH-xy}} object
+  a \link{LoCoH-xy} object
 }
 \description{
   Standardize the sampling frequency and duration across
-  individuals in a \code{\link{LoCoH-xy}} object by
-  deleting points
+  individuals in a \link{LoCoH-xy} object by deleting
+  points
 }
 \note{
-  This function processes a \code{\link{LoCoH-xy}} object
-  that contains movement data for several individuals, and
+  This function processes a \link{LoCoH-xy} object that
+  contains movement data for several individuals, and
   removes points such that the output contains a fixed
   start and end date for each individual, as well as an
   approximately uniform sampling frequency (time step).
@@ -87,8 +90,8 @@
   \code{by.date=TRUE}).
 
   Because this function deletes points, the
-  nearest-neighbors lookup table of the
-  \code{\link{LoCoH-xy}} object (if any) will be deleted.
+  nearest-neighbors lookup table of the \link{LoCoH-xy}
+  object (if any) will be deleted.
 }
 \seealso{
   \code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}},

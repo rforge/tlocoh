@@ -6,7 +6,7 @@
 #' @param fn Optional filename
 #' @param save.as The name of the saved object, if NULL the original object name will be used
 #' @param dir Directory for the output file (relative to the working directory), ignored if fn passed
-#' @param suffix A suffix that will be used in the construction of the filename, ignored if fn is passed
+#' @param suf A suffix that will be used in the construction of the filename, ignored if fn is passed
 #' @param compress Compress file (T/F)
 #' @param auto.num.files Use a numeric token as part of the constructed filename to get a unique filename(T/F)
 #' @param width The number of digits in auto.num.files
@@ -64,4 +64,3 @@ lxy.save <- function (lxy, fn=NULL, save.as=NULL, dir=".", suf=NULL, compress=TR
     cat("LoCoH-xy ", deparse(substitute(lxy)), " saved as ", save.as, " to:\n  ", normalizePath(path.expand(fn.full)), "\n", sep="")
 
 }
-                                          

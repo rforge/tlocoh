@@ -3,7 +3,8 @@
 #' Computes revisitation rate based on a minimum and maximum time away period
 #'
 #' @param lhs A LoCoH-hullset object
-#' @param ta.min ta.max Minimum and maximum values for time away in seconds (numeric vector)
+#' @param ta.min Minimum value(s) for time away in seconds (numeric vector)
+#' @param ta.max Maximum value(s) for time away in seconds (numeric vector)
 #' @param ta.cuts A numeric vector of time values in seconds that define the time-away intervals
 #' @param status Show status messages. T/F
 #'

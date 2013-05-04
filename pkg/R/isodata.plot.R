@@ -31,7 +31,7 @@ isodata.plot <- function(isoc.info, plotme=c("isoarea","isoear")[1], figs.per.pa
     x.mat <- matrix(kar.vals.all, ncol=length(iso.levels.all), nrow=length(kar.vals.all))
     y.mat <- matrix(NA, ncol=length(iso.levels.all), nrow=length(kar.vals.all))
     
-    isoc.info <- transform(isoc.info, kar=as.factor(kar), iso.level=as.factor(iso.level))
+    isoc.info <- transform(isoc.info, kar=as.factor(isoc.info$kar), iso.level=as.factor(isoc.info$iso.level))
     iso2colidx <- match(levels(isoc.info[["iso.level"]]), as.character(iso.levels.all))
     paramval2rowidx <- match(levels(isoc.info[["kar"]]), as.character(kar.vals.all))
     

@@ -100,6 +100,8 @@
   inside the plot area itself, as opposed to the title
   area. Ignored if panel.num is NULL. T/F}
 
+  \item{bg}{Background color}
+
   \item{legend.space}{The amount of additional space on the
   lower end of the x-axis to make room for the legend.
   Expressed as a proportion of the range of the x-axis

@@ -38,7 +38,7 @@
     status = TRUE)
 }
 \arguments{
-  \item{lxy}{A \code{\link{LoCoH-xy}} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The id value(s) to be on the plot}
 
@@ -52,6 +52,19 @@
 
   \item{all.ids.col}{A named list of color values; the
   element names must match the name(s) of the ids}
+
+  \item{all.ids.legend}{Where to place a legend showing the
+  color of each id (for an animation showing the movement
+  of multiple individuals simultaneously): 'bottomright',
+  'bottom', 'bottomleft', 'left', 'topleft', 'top',
+  'topright', 'right', or 'center'. May also be
+  \code{NULL}, in which case the legend will not be
+  displayed. Ignored if \code{ids.legend.bln=FALSE} or
+  \code{all.ids.col.unique = FALSE}.}
+
+  \item{all.ids.legend.cex}{The character expansion factor
+  for the id legend. See parameter \code{all.ids.legend}
+  above.}
 
   \item{dt.start}{The starting date-time. An object of
   class POSIXt or one that can be coerced to POSIXt. If
@@ -105,14 +118,50 @@
   \item{mgp.map}{Locations of the axes elements for the
   map, see \code{\link{par}}}
 
+  \item{col.xys.active}{Color of the active point. Ignored
+  if \code{col.by.hour.of.day = TRUE}.}
+
+  \item{col.xys.background}{Color of the non-active points.
+  To hide non-active points, set to \code{NA}.}
+
+  \item{cex.xys.active}{The character expansion factor of
+  the active point}
+
+  \item{cex.xys.background}{The character expansion factor
+  of non-active points}
+
   \item{tz.local}{The name of the time zone of the study
   area}
 
   \item{tz.local.check}{Check whether tz.local is a valid
   timezone name (not implemented) T/F.}
 
+  \item{col.by.hour.of.day}{Whether to color the active
+  point by the hour of day (i.e., dark colors at night,
+  orange for day time locations). T/F}
+
+  \item{col.hod}{A vector of 24 color values used to
+  symbolize the color of the active point by the hour of
+  day. Ignored if \code{col.by.hour.of.day = FALSE}.}
+
   \item{screen.test}{Create up to three sample frame(s) on
   the screen (instead of PNG files)}
+
+  \item{width}{The width of each frame in pixels (if
+  \code{screen.test=FALSE}) or inches (if
+  \code{screen.test=TRUE}).}
+
+  \item{height}{The height of each frame in pixels (if
+  \code{screen.test=FALSE}) or inches (if
+  \code{screen.test=TRUE}).}
+
+  \item{max.frames}{The maximum number of frames to
+  produce.}
+
+  \item{png.pointsize}{The pointsize (in pixels) for the
+  PNG image, equivalent to the height or width of a
+  character in pixels (increase to make labels appear
+  larger)}
 
   \item{tmp.dir}{A directory where temporary PNG files for
   each frame will be created, character.}
@@ -178,6 +227,9 @@
   \item{col.db}{A single color value for the date bar axes
   / tick labels, character}
 
+  \item{cex.axis.db}{Character expansion factor for the
+  labels on the date bar axis.}
+
   \item{beep}{Beep when one, T/F}
 
   \item{report.time}{Show the time taken when done, T/F}
@@ -198,8 +250,9 @@
   To create the animation, two and only two of the
   following parameters must be passed: \code{duration},
   \code{fps}, and \code{skip}. The third parameter will be
-  computed. To include every frame, pass \code{fps}, set
-  \code{skip=1}, and leave \code{duration} out.
+  computed based on the other two. To include every frame,
+  pass \code{fps}, set \code{skip=1}, and leave
+  \code{duration} out.
 
   Larger values for \code{fps} will result in the animation
   running 'faster'. Values between 10 and 20 often work
@@ -211,7 +264,7 @@
   interger values of \code{skip} are allowed.
 
   One will normally want to run the function a few times
-  without actually encoding to tweak the frame layout
+  without actually encoding to tweak the frame design
   (e.g., where the date label and legend appear). To see
   what a frame in the output will *approximately* look
   like, set \code{screen.test=TRUE}. Once the screen sample
@@ -219,9 +272,10 @@
   \code{tmp.dir="."} (or another folder),
   \code{create.mov=FALSE}, and
   \code{tmp.files.delete=FALSE}. This will generate a few
-  sample frames in PNG files and not delete them so you can
-  inspect them. Once these look good, create the full
-  animation by setting \code{create.mov=TRUE}.
+  sample frames as PNG files but not delete them so you can
+  inspect them using an image viewer. Once these look good,
+  create the full animation by setting
+  \code{create.mov=TRUE} and \code{max.frames=NULL}.
 
   If frame.method is 'auto', the script will use time-based
   frames when multiple individuals are being animated
@@ -239,25 +293,27 @@
   \code{date.bar=0}.
 
   The output animation is encoded in QuickTime format. The
-  Quicktime file is encoded using the 'animation' codec, a
-  lossless format that 'scrubs' well (i.e., you can drag
-  the scroll bar to view frame by frame). This requires
-  installing the open source encoding program ffmpeg.
-  ffmpeg is a command line program that Linux and Windows
-  users can download from http://ffmpeg.org/download.html.
-  Windows users should save the ffmpeg.exe file to the
-  working directory or a directory on the path environment
-  variable (e.g., c:\\windows). Mac users can download
-  ffmpegX from http://ffmpegx.com/download.html but this
-  has not been tested (pass name to \code{ffmpeg}).
+  Quicktime file is encoded using Quicktime's 'animation'
+  codec, a lossless format that 'scrubs' well (i.e., you
+  can drag the scroll bar to view frame by frame). Encoding
+  requires installing the open source encoding program
+  ffmpeg. ffmpeg is a command line program that Linux and
+  Windows users can download from
+  http://ffmpeg.org/download.html. Windows users should
+  save the ffmpeg.exe file to the working directory or a
+  directory on Window's path environment variable (e.g.,
+  c:\\windows). Mac users can download ffmpegX from
+  http://ffmpegx.com/download.html but this has not been
+  tested (pass a value to \code{ffmpeg}).
 
   If ffmpeg is not available, you can still use this
   function to generate the individual frames and then use
   another utility (e.g., ImageMagick, Quicktime Pro) to
   combine the frames into a video file. For best results
   use a 'lossless' compression method in the encoding
-  program. To create the individual frames only, set
-  \code{tmp.dir="."} (the working directory) and
+  program. To create the individual frames only for
+  encoding with another utility, set \code{tmp.dir="."}
+  (the working directory) and
   \code{tmp.files.delete=FALSE}.
 
   If \code{fn.mov.exists = "auto.increment"}, a two-digit

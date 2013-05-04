@@ -43,9 +43,10 @@
 #' @param hue.offset A number between 0 and 2*pi for the color wheel rotation (in radians), which controls the color of points directly to the right of the center.
 #' @param center.method Determines how the center of the color will be computed. "bbox" = the center of the bounding box of the full range of points; "mean" = the mean of the data splot
 #' @param cex Expansion factor for the points on the scatterplot
+#' @param type The type of plot: 'p'=points only, 'l'=line, 'b'=both
 #' @param ufat Whether to substitute user-friendly axis titles. T/F.
 #' @param figs.per.page The number of plots per page
-#' @param add= Whether to add to the current plot device. T/F.
+#' @param add Whether to add to the current plot device. T/F.
 #' @param regions Determines whether the user will be prompted to draw regions (polygons) on the scatterplot window with the mouse, that will be saved as part of the scatterplot objecr returned. Values can be 1) a number whereby the user will be prompted to create N regions with randomly assigned colors, or 2) a vector of color values in which case the regions will be assigned those colors.
 #' @param prompt.labels Whether the user should be prompted to also enter labels for each of the regions drawn. Ignored if regions = NULL. T/F.
 #' @param hsp Either the index(s) of a hull scatterplot(s) saved in lhs (use summary() command to which how many hsp objects have been saved), or a list of objects of class locoh.hsp. When passed, the parameters in hsp will be used to create the scatterplot
@@ -67,7 +68,8 @@
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot, used when the plot will be part of a multi-frame graphic (as in publications). Character.
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself (as opposed to the title area). T/F.
 #' @param hmap A named list of hull metric auxillary parameters, the name of each list element is the name of the variable.
-#' @param hmap.in.subtitle Include the hmap value(s) in the plot subtitle. T/F.
+#' @param hmap.in.subtitle Include the hmap value(s) in the plot subtitle. T/F
+#' @param check.ap.value.in.hmparams Check to make sure that hull metrics have been computed for the hull metric auxillary parameter values passed (either as separate arguments or in \code{hmap})  
 #' @param ... Other parameters, including any auxillary parameters required by certain hull metrics
 #'
 #' @note
@@ -595,10 +597,10 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                                 ##for (i in 1:length(hs[[hs.name]][["spc.reg"]][[spc.reg.idx]][["regs"]])) {
                                 for (i in 1:length(regions)) {
                                     col.use <- col2rgb(regions[[i]][["col"]])
-                                    col.use <- rgb(r=col.use[1], g=col.use[2], b=col.use[3], maxColorValue = 255, alpha=0.3 * 255)
+                                    col.use <- rgb(red=col.use[1], green=col.use[2], blue=col.use[3], maxColorValue = 255, alpha=0.3 * 255)
                                     pts <- regions[[i]][["poly.pts"]]
                                     if (hsp.reg.out) polygon(pts, col=col.use)
-                                    if (hsp.reg.lbl) text(x=mean(range(pts[,1])), y=mean(range(pts[,2])), labels=as.character(i), col=tcc)
+                                    if (hsp.reg.lbl) text(x=mean(range(pts[,1])), y=mean(range(pts[,2])), labels=regions[[i]][["label"]], col=tcc)
                                 }
                             }
             

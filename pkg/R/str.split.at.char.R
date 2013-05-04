@@ -1,12 +1,24 @@
-#' str.split.at.char
+#' Split a character object into multiple lines 
+#'
+#' Split a character object at a specific character to wrap to multiple lines for plotting
+#'
+#' @param object Input character vector (should be length 1)
+#' @param size The maximum number of characters in one piece
+#' @param char The character to split the input string at
+#' @param separator The character to use as a separator in the returned object
+#' @param ... Other arguments (unused)
+#'
+#' @details
+#' This will take a long character object and split it into pieces at character \code{char} such that the length of each piece is <= \code{size}.
+#' If \code{separator} is passed, the individual pieces will be concatenated using the \code{separator} character and returned as a character vector of length 1.
+#' Otherwise each piece will be returned as a separate element of a character vector.
+#'
 #' @export
-str.split.at.char <-
-function(str, size, char=".", separator=paste("\n", char, sep="")) {
 
-    ## Takes a long string and splits it into pieces at character char such that the length of each piece is <= size
-    ## If separator is passed, concatenates the pieces into a single character, else returns 
-    ## each piece as a separate element of a character vector
 
+str.split.at.char <- function(object, size, char=".", separator=paste("\n", char, sep=""), ...) {
+
+    str <- object; rm(object)
     str.split <- strsplit(str, split=char, fixed=TRUE)
     str.split.cumlen <- cumsum(sapply(str.split[[1]], function(x) length(char) + nchar(x)))
     build <- NULL

@@ -5,9 +5,14 @@
 #'
 #' @return A \link{LoCoH-xy} object 
 #'
-#' @seealso \code{\link{CRS-class}}
+#' @details This function will add projection information to a \link{LoCoH-xy} object. Note this does 
+#' not reproject coordinates, it only adds or changes the projection information. Any existing projection
+#' information will be overwritten.
+#' 
+#' @seealso \code{\link{CRS-class}} for arguments accepted by the \code{\link{CRS}} function.
 #' @examples
-#' lxy <- lxy.proj.add(lxy, CRS("+proj=utm +south +zone=34"))
+#' # lxy <- lxy.proj.add(lxy, CRS("+proj=utm +south +zone=34"))
+#'
 #' @export
 
 lxy.proj.add <- function(lxy, proj4string=CRS(as.character(NA))) {

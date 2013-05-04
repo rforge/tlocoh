@@ -46,6 +46,16 @@
 
   \item{id}{The id value(s) to be on the plot}
 
+  \item{k}{The k value of hullsets to export}
+
+  \item{r}{The r value of hullsets to export}
+
+  \item{a}{The a value of hullsets to export}
+
+  \item{s}{The s value of hullsets to export}
+
+  \item{hs.names}{The name(s) of saved hullsets to export}
+
   \item{all.ids.at.once}{Display all the individual ids
   simultaneously. If False, an animation will be created
   for each id. T/F.}
@@ -56,6 +66,19 @@
 
   \item{all.ids.col}{A named list of color values; the
   element names must match the name(s) of the ids}
+
+  \item{all.ids.legend}{Where to place a legend showing the
+  color of each id (for an animation showing the movement
+  of multiple individuals simultaneously): 'bottomright',
+  'bottom', 'bottomleft', 'left', 'topleft', 'top',
+  'topright', 'right', or 'center'. May also be
+  \code{NULL}, in which case the legend will not be
+  displayed. Ignored if \code{ids.legend.bln=FALSE} or
+  \code{all.ids.col.unique = FALSE}.}
+
+  \item{all.ids.legend.cex}{The character expansion factor
+  for the id legend. See parameter \code{all.ids.legend}
+  above.}
 
   \item{dt.start}{The starting date-time. An object of
   class POSIXt or one that can be coerced to POSIXt. If
@@ -90,6 +113,10 @@
   \item{dt.label.y}{The y-coordinate for the date label
   (ignored if \code{dt.label=FALSE})}
 
+  \item{dt.label.col.bg}{The background color for the date
+  label (\code{NA} for transparent background, ignored if
+  \code{dt.label=FALSE})}
+
   \item{title}{A title for the map}
 
   \item{title.show}{Whether to show the title. T/F.}
@@ -114,6 +141,47 @@
 
   \item{tz.local.check}{Check whether tz.local is a valid
   timezone name (not implemented) T/F.}
+
+  \item{col.by.hour.of.day}{Whether to color the active
+  point by the hour of day (i.e., dark colors at night,
+  orange for day time locations). T/F}
+
+  \item{col.hod}{A vector of 24 color values used to
+  symbolize the color of the active point by the hour of
+  day. Ignored if \code{col.by.hour.of.day = FALSE}.}
+
+  \item{rtd.center}{Whether to center the start and end
+  time of the first frame around the time stamp of the
+  first location, to help ensure that each frame has only
+  one hull in it. T/F.}
+
+  \item{clean.multihull.frames}{A numeric value that
+  determines whether and how much a hull can be time
+  shifted to avoid having two active hulls in the same
+  frame. Pass \code{0} to disable cleaning multi-hull
+  frames. See details.}
+
+  \item{col.hull.active}{The color of the active hull}
+
+  \item{col.hull.alpha}{A number 0..255 for the alpha value
+  for the hull color (semi-transparency); 0=completely
+  transparent, 255=opaque}
+
+  \item{width}{The width of each frame in pixels (if
+  \code{screen.test=FALSE}) or inches (if
+  \code{screen.test=TRUE}).}
+
+  \item{height}{The height of each frame in pixels (if
+  \code{screen.test=FALSE}) or inches (if
+  \code{screen.test=TRUE}).}
+
+  \item{max.frames}{The maximum number of frames to
+  produce.}
+
+  \item{png.pointsize}{The pointsize (in pixels) for the
+  PNG image, equivalent to the height or width of a
+  character in pixels (increase to make labels appear
+  larger)}
 
   \item{screen.test}{Create up to three sample frame(s) on
   the screen (instead of PNG files)}
@@ -181,6 +249,9 @@
 
   \item{col.db}{A single color value for the date bar axes
   / tick labels, character}
+
+  \item{cex.axis.db}{Character expansion factor for the
+  labels on the date bar axis.}
 
   \item{beep}{Beep when one, T/F}
 
@@ -256,6 +327,23 @@
   which is the real-time duration of a single frame in
   seconds (e.g., \code{frame.rtd=3600} means each frame
   will represent 1 hour).
+
+  Passing a positive value for
+  \code{clean.multihull.frames} (default value is 4)
+  enables time-shifting hulls if needed to prevent two
+  hulls appearing in one frame and no hulls in the previous
+  or next frame (which produces jerky playback when
+  animated). The maximum amount of time a hull can be
+  shifted is calculated by \code{frame.rtd /
+  clean.multihull.frames}. Thus for example if
+  \code{frame.rtd=7200} (two hours), and
+  \code{clean.multihull.frames=4}, then if a frame has two
+  hulls appearing in it and the parent point of one of
+  those hulls lies within 30 minutes (2 hours / 4) of the
+  beginning or end of the frame, \emph{and} there is no
+  hull in the adjacent frame, that hull will be moved to
+  the earlier / later frame. To disable this effect, set
+  \code{clean.multihull.frames = 0}.
 
   If \code{date.bar} is too small or too large, you might
   get a 'margins too large' error. Try values around 1, or

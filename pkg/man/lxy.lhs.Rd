@@ -11,7 +11,7 @@
     save.enc.pts = TRUE)
 }
 \arguments{
-  \item{lxy}{A \code{\link{LoCoH-xy}} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The id value(s) of \code{lxy} for which
   hullsets will be created. If \code{NULL} all ids will be
@@ -58,12 +58,20 @@
   distributions (density isopleths), T/F}
 
   \item{iso.levels}{Isopleth levels (see also
-  \code{\link{lhs.iso}}), numeric vector. Ignored if
+  \code{\link{lhs.iso.add}}), numeric vector. Ignored if
   |code{ud=FALSE}.}
 
-  \item{beep}{Beep when done. T/F.}
+  \item{pbo.style}{Progress bar style (see pbapply
+  package)}
 
-  \item{status}{Show messages. T/F.}
+  \item{beep}{Beep when done. T/F}
+
+  \item{status}{Show messages. T/F}
+
+  \item{save.hulls}{Whether to save the hulls. T/F}
+
+  \item{save.enc.pts}{Whether to save the enclosed points.
+  T/F}
 }
 \value{
   A LoCoH-hullset object (class "locoh.lhs")
@@ -80,11 +88,17 @@
   isopleths, directional routes, generating scatterplots,
   etc. Note that a nearest neighbors points must have
   already been identified and saved in the input
-  \code{\link{LoCoH-lxy}} object.
+  \link{LoCoH-xy} object.
+
+  When working with a large dataset where memory limts may
+  affect performance, you can choose to not save the hulls
+  or enclosed points by setting \code{save.hulls=FALSE} and
+  \code{save.enc.pts=FALSE}. See the workflow for working
+  with large datasets.
 }
 \seealso{
   \code{\link{xyt.lxy}} for creating LoCoH-xy objects
-  \code{\link{lhs.iso}} for adding isopleths
+  \code{\link{lhs.iso.add}} for adding isopleths
   \code{\link{lhs.ellipses.add}} for computing bounding
   ellipses \code{\link{lhs.visit.add}} for computing
   time-use metrics \code{\link{lhs.plot.scatter}} for

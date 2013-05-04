@@ -45,6 +45,9 @@
   \item{allpts}{Export all points (as a point shapefile).
   T/F}
 
+  \item{nn}{Export nearest neighbors (as a multipoint
+  shapefile). T/F}
+
   \item{dir}{The directory where the shapefiles will be
   placed (use "." for the working directory, and "~" for
   the user directory)}
@@ -55,12 +58,6 @@
   \item{file.base.auto}{Whether to automatically generate
   the file name base from the id, s-value, and k-a-r value.
   Ignored if \code{file.base} is passed. T/F}
-
-  \item{projargs}{A character string that contains info
-  about the coordinate system the data are projected in}
-
-  \item{prj.file}{The name of an existing ArcView *.prj
-  file, which contains projection info}
 
   \item{avl.file}{The name of an existing avl (ArcView
   legend) file}
@@ -111,24 +108,6 @@
   included in exported of hull parent points. Only hull
   parent points will have the corresponding hull metrics
   included in the attribute table.
-
-  Passing a value for \code{projargs} will not re-project
-  the data, only describe the existing projection. The
-  projarg string must follow the format exactly as in the
-  PROJ.4 documentation, in particular there cannot be any
-  white space in the syntax '+<arg>=<value> strings', and
-  successive such strings can only be separated by blanks.
-  An example is \code{"+proj=utm +south +zone=33"}. See
-  also
-  \link{http://hosho.ees.hokudai.ac.jp/~kubo/Rdoc/library/sp/html/CRS-class.html}
-  and the main users manual for PROJ available at
-  \link{http://trac.osgeo.org/proj}.
-
-  In lieu of projargs, you can supply an argument for
-  \code{prj.file} (but not both). The script will make a
-  copy of prj.file with the same base name as the
-  shapefile. Prj.file is presumed to be relative to the
-  working directory.
 
   avl.file is an ArcView 3.x file that contains symbology
   info. If a value is passed, the script will make a copy

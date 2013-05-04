@@ -1,11 +1,35 @@
 \name{str.split.at.char}
 \alias{str.split.at.char}
-\title{str.split.at.char}
+\title{Split a character object into multiple lines}
 \usage{
-  str.split.at.char(str, size, char = ".",
-    separator = paste("\n", char, sep = ""))
+  str.split.at.char(object, size, char = ".",
+    separator = paste("\n", char, sep = ""), ...)
+}
+\arguments{
+  \item{object}{Input character vector (should be length
+  1)}
+
+  \item{size}{The maximum number of characters in one
+  piece}
+
+  \item{char}{The character to split the input string at}
+
+  \item{separator}{The character to use as a separator in
+  the returned object}
+
+  \item{...}{Other arguments (unused)}
 }
 \description{
-  str.split.at.char
+  Split a character object at a specific character to wrap
+  to multiple lines for plotting
+}
+\details{
+  This will take a long character object and split it into
+  pieces at character \code{char} such that the length of
+  each piece is <= \code{size}. If \code{separator} is
+  passed, the individual pieces will be concatenated using
+  the \code{separator} character and returned as a
+  character vector of length 1. Otherwise each piece will
+  be returned as a separate element of a character vector.
 }
 

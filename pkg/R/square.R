@@ -1,6 +1,7 @@
 #' square
+#' @param x Input object
 #' @export
-square <-
-function(x) {
+
+square <- function(x) {
     x^2
 }

@@ -15,6 +15,9 @@
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
 
+  \item{id}{The id(s) of the hullsets to create isopleths
+  for}
+
   \item{k}{The k value of hullsets to create isopleths for}
 
   \item{r}{The r value of hullsets to create isopleths for}
@@ -51,7 +54,7 @@
   maximum of the sort.metric value. This is used in
   conjunction iso.method='hm.vals', to produce isopleths as
   the aggregation of hulls whose sort.metric value is >=
-  i\% of the maximum, where i is the isopleth level. T/F.}
+  i\% of the maximum, where i is the isopleth level. T/F}
 
   \item{subset.metric}{The name of a hull metric that will
   be used to create subsets of isopleths}
@@ -70,9 +73,14 @@
   equal number of hulls is in each strata}
 
   \item{allow.gpc}{Allow functions from the gpclib package
-  if the functions from rgeos fail. See details. T/F.}
+  if the functions from rgeos fail. See details. T/F}
 
-  \item{status}{Show status messages (T/F)}
+  \item{beep}{Beep when done. T/F}
+
+  \item{status}{Show status messages. T/F}
+
+  \item{...}{Additional auxillary parameters for the hull
+  sort metric}
 }
 \value{
   A LoCoH-hullset object (class "locoh.lhs")
@@ -149,11 +157,11 @@
 \examples{
 # Create 0.5 and 0.95 isopleths. By not specifying the sort.metric, density isopleths will be created
 # by default, with hulls sorted by area (k-method) or number of enclosed points (r and a method)
-lhs <- lhs.iso.add(lhs, iso.levels=c(0.5, 0.95))
+# lhs <- lhs.iso.add(lhs, iso.levels=c(0.5, 0.95))
 
 # Compute hull metrics for a 24 hour inter-visit gap, then produce isopleths with hulls sorted by
 # the number of separate visits (e.g., visitation)
-lhs <- lhs.visit.add(lhs, ivg=3600.24)
-lhs <- lhs.iso.add(lhs, sort.metric="nsv", ivg=3600*24)
+# lhs <- lhs.visit.add(lhs, ivg=3600.24)
+# lhs <- lhs.iso.add(lhs, sort.metric="nsv", ivg=3600*24)
 }
 

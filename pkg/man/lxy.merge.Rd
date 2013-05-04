@@ -17,6 +17,11 @@
   in the merged object, whether to save the original ptid
   values as an ancillary variable, T/F}
 
+  \item{new.id}{A new id value for the merged object}
+
+  \item{save.old.id}{A boolean or the name of a ancillary
+  variable where the old id values will be saved}
+
   \item{dt.int.round.to}{The proportion of the median
   sampling frequency that time intervals will be rounded to
   when computing the frequency table of sampling intervals

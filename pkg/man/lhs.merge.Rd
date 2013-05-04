@@ -5,7 +5,7 @@
   lhs.merge(..., check.class = TRUE)
 }
 \arguments{
-  \item{....}{Two or more LoCoH-hullset objects}
+  \item{...}{Two or more LoCoH-hullset objects}
 
   \item{check.class}{Whether to enforce that all objects
   merged belong to class locoh.lhs (T/F)}

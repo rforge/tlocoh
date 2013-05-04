@@ -2,7 +2,7 @@
 #'
 #' @description Creates a LoCoH-hullset object (class "locoh.lhs") containing one or more sets of hulls.
 #'
-#' @param lxy A \code{\link{LoCoH-xy}} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) of \code{lxy} for which hullsets will be created. If \code{NULL} all ids will be used.
 #' @param s Value(s) for the s term in the time-scaled-distance equation for point-to-point distance. When \code{s=0} time is excluded and TSD is equivalent to Euclidean distance. Numeric vector or comma-separated string. Can also be 'all'
 #' @param a Value(s) for the adaptive method. Numeric vector or comma-separated string. \code{a} also be the results of the \code{\link{auto.a}} function, see notes.
@@ -14,19 +14,25 @@
 #' @param anv.copy Copy the ancillary variables data frame (if exists), T/F
 #' @param velocity.metrics Compute the velocity hull metrics
 #' @param ud Whether to also create the default utilization distributions (density isopleths), T/F
-#' @param iso.levels Isopleth levels (see also \code{\link{lhs.iso}}), numeric vector. Ignored if |code{ud=FALSE}.
-#' @param beep Beep when done. T/F.
-#' @param status Show messages. T/F.
+#' @param iso.levels Isopleth levels (see also \code{\link{lhs.iso.add}}), numeric vector. Ignored if |code{ud=FALSE}.
+#' @param pbo.style Progress bar style (see pbapply package) 
+#' @param beep Beep when done. T/F
+#' @param status Show messages. T/F
+#' @param save.hulls Whether to save the hulls. T/F
+#' @param save.enc.pts Whether to save the enclosed points. T/F
 #'
 #' @note
 #' This is main function that creates a \code{\link{LoCoH-hullset}} object. Other functions allow you to do things with the
 #' these hulls, including computing additional hull metrics, constructing isopleths, directional routes, generating  scatterplots, etc.
-#' Note that a nearest neighbors points must have already been identified and saved in the input \code{\link{LoCoH-lxy}} object.
+#' Note that a nearest neighbors points must have already been identified and saved in the input \link{LoCoH-xy} object.
+#'
+#' When working with a large dataset where memory limts may affect performance, you can choose to not save the hulls or enclosed points by 
+#' setting \code{save.hulls=FALSE} and \code{save.enc.pts=FALSE}. See the workflow for working with large datasets.
 #'
 #' @return A LoCoH-hullset object (class "locoh.lhs")
 #'
 #' @seealso \code{\link{xyt.lxy}} for creating LoCoH-xy objects
-#' \code{\link{lhs.iso}} for adding isopleths
+#' \code{\link{lhs.iso.add}} for adding isopleths
 #' \code{\link{lhs.ellipses.add}} for computing bounding ellipses
 #' \code{\link{lhs.visit.add}} for computing time-use metrics
 #' \code{\link{lhs.plot.scatter}} for creating scatterplots of hull metrics
@@ -526,14 +532,6 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
         cat("Total time:", round(time.taken,1), units(time.taken), "\n", sep = " ")
         flush.console()
     }
-
-    ## Create default utilization distributions
-    #if (ud) {
-    #    if (status) cat("\n")
-    #    res <- lhs.iso.add(res, iso.levels=iso.levels, status=status)
-    #}
-
-
        
     if (beep) {
         flush.console()

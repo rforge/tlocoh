@@ -16,11 +16,10 @@
 #' @param iso.idx Numeric vector of the indices of the isopleths that will be exported (acts a filter)
 #' @param ellipses Export ellipses (as a polygon shapefile). T/F
 #' @param allpts Export all points (as a point shapefile). T/F
+#' @param nn Export nearest neighbors (as a multipoint shapefile). T/F
 #' @param dir The directory where the shapefiles will be placed (use "." for the working directory, and "~" for the user directory)
 #' @param file.base The base of the file name without any extension (the script will append to this)
 #' @param file.base.auto Whether to automatically generate the file name base from the id, s-value, and k-a-r value. Ignored if \code{file.base} is passed. T/F
-#' @param projargs A character string that contains info about the coordinate system the data are projected in
-#' @param prj.file The name of an existing ArcView *.prj file, which contains projection info
 #' @param avl.file The name of an existing avl (ArcView legend) file
 #' @param status Show messages. T/F
 #' @param show.time Report time for script to complete. T/F
@@ -40,17 +39,6 @@
 #' so they wouldn't be included in exported of hull parent points. Only hull parent points will have the
 #' corresponding hull metrics included in the attribute table.
 #'
-#' Passing a value for \code{projargs} will not re-project the data, only describe the existing projection. 
-#' The projarg string must follow the format exactly as in the PROJ.4 documentation, in particular 
-#' there cannot be any white space in the syntax '+<arg>=<value> strings', and successive such strings 
-#' can only be separated by blanks. An example is \code{"+proj=utm +south +zone=33"}. 
-#' See also \link{http://hosho.ees.hokudai.ac.jp/~kubo/Rdoc/library/sp/html/CRS-class.html}
-#' and the main users manual for PROJ available at \link{http://trac.osgeo.org/proj}. 
-#'
-#' In lieu of projargs, you can supply an argument for \code{prj.file} (but not both). The script
-#' will make a copy of prj.file with the same base name as the shapefile. Prj.file is presumed 
-#' to be relative to the working directory.
-#'
 #' avl.file is an ArcView 3.x file that contains symbology info. If a value is passed, 
 #' the script will make a copy of prj.file with the same base name as the shapefile, so that 
 #' symbology will automatically created in ArcMap. avl.file is presumed to be relative
@@ -64,7 +52,7 @@ lxy.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                dir=".", file.base="", file.base.auto=TRUE, avl.file = NULL, status = TRUE,
                show.time=TRUE, hm="all", anv=NULL, hsp=NULL, metadata=TRUE) {
 
-    stop("Not yet working")
+    stop("This function needs some checking")
 
 # taken out: prj.file = NULL, proj4string
 

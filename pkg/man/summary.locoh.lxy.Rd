@@ -2,21 +2,29 @@
 \alias{summary.locoh.lxy}
 \title{Show a summary of a LoCoH-xy object}
 \usage{
-  summary.locoh.lxy(lxy, file = "", dt.int = FALSE,
-    round.coords = 1, ptsh = FALSE)
+  \method{summary}{locoh.lxy} (object, file = "",
+    dt.int = FALSE, round.coords = 1, ptsh = FALSE, ...)
 }
 \arguments{
-  \item{lxy}{\code{\link{LoCoH-xy object}}}
+  \item{object}{A \link{LoCoH-xy} object}
 
   \item{file}{A file name where the results will be saved}
 
   \item{dt.int}{Whether to show a summary of the sampling
   interval}
+
+  \item{round.coords}{The number of digits to display for
+  the coordinates of the spatial extent}
+
+  \item{ptsh}{Show table of 's' and proportion of time
+  selected hulls values (if available)}
+
+  \item{...}{Other arguments}
 }
 \description{
   Prints a summary of a locoh xy object (set of locations)
 }
 \seealso{
-  \code{\link{lxy.plot.freq}}
+  \code{\link{lxy.plot.freq}}, \code{\link{lxy.ptsh.add}}
 }
 

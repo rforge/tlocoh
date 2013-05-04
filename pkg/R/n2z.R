@@ -1,4 +1,5 @@
-#' Convert nulls to zero
+#' Convert NULL to a zero
+#' @param x Input object
 #' @export
 
 n2z <- function(x) {

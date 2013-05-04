@@ -7,7 +7,9 @@
     tau.diff.max = 0.02)
 }
 \arguments{
-  \item{lxy}{A LoCoH-xy object}
+  \item{lxy}{A \link{LoCoH-xy} object}
+
+  \item{id}{The id value(s) to include in the subset}
 
   \item{ptid}{A vector of ptid values for the subset of
   points}
@@ -32,12 +34,15 @@
   step length}
 }
 \value{
-  A LoCoH-xy object
+  A \link{LoCoH-xy} object
 }
 \description{
-  Returns a subset of lxy based on ptid, idx, or dates
+  Returns a subset of a LoCoH-xy object based on the id,
+  ptid, idx, or dates
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{lxy.repair}}
+  \code{\link{xyt.lxy}}, \code{\link{lxy.repair}},
+  \code{\link{lxy.thin.byfreq}},
+  \code{\link{lxy.thin.bursts}}, \code{\link{lxy.merge}}
 }
 

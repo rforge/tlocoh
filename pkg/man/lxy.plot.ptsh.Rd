@@ -16,7 +16,7 @@
     png.pointsize = 12 + (png.width - 480)/80, ...)
 }
 \arguments{
-  \item{lxy}{A LoCoH-xy object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The name(s) of individuals to plot}
 
@@ -77,8 +77,7 @@
   area. T/F}
 
   \item{png.dir}{The directory for a PNG file (filename
-  will be constructed automatically). Ignored if png.fn is
-  passed}
+  will be constructed automatically).}
 
   \item{png.dir.make}{Whether to create png.dir if it
   doesn't exist. T/F}
@@ -142,9 +141,9 @@
   each and every point.
 }
 \examples{
-data(toni.lxy)
-toni.lxy <- lxy.ptsh.add(toni.lxy)
-lxy.plot.ptsh(toni.lxy)
+# data(toni.lxy)
+# toni.lxy <- lxy.ptsh.add(toni.lxy)
+# lxy.plot.ptsh(toni.lxy)
 }
 \seealso{
   \code{\link{lxy.ptsh.add}}, \code{\link{lxy.nn.add}}

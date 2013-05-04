@@ -8,11 +8,11 @@
 #'
 #' @examples
 #' ## Display a scatter plot and manually draw four regions on it
-#' hsp <- lhs.plot.scatter(lhs, x="area", y="par", regions=4)
+#' ## hsp <- lhs.plot.scatter(lhs, x="area", y="par", regions=4)
 #' 
 #' ## Save hull scatter plot as part of the hullset
-#' lhs <- lhs.hsp.add(lhs, hsp.lst=hsp)
-#' summary(lhs)
+#' ## lhs <- lhs.hsp.add(lhs, hsp.lst=hsp)
+#' ## summary(lhs)
 #' 
 #' @export
 

@@ -1,6 +1,6 @@
 #' Plots the proportion of time-selected hulls over 's'
 #'
-#' @param lxy A LoCoH-xy object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The name(s) of individuals to plot
 #' @param ptsh.idx The index number of the saved ptsh table to use (ignored if \code{use.nn=TRUE})
 #' @param use.nn Whether to create the plot based on nearest neighbor sets (as opposed to saved ptsh tables, see Details). T/F.
@@ -19,7 +19,7 @@
 #' @param figs.per.page The number of plots per page.
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. T/F
-#' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed
+#' @param png.dir The directory for a PNG file (filename will be constructed automatically).
 #' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F
 #' @param png.width The width of the PNG image
 #' @param png.height The height of the PNG image
@@ -48,9 +48,9 @@
 #' @seealso \code{\link{lxy.ptsh.add}}, \code{\link{lxy.nn.add}}
 #'
 #' @examples
-#' data(toni.lxy)
-#' toni.lxy <- lxy.ptsh.add(toni.lxy)
-#' lxy.plot.ptsh(toni.lxy)
+#' # data(toni.lxy)
+#' # toni.lxy <- lxy.ptsh.add(toni.lxy)
+#' # lxy.plot.ptsh(toni.lxy)
 #'
 #' @export
 

@@ -4,8 +4,9 @@
 #'
 #' @param lxy A LoCoH-xy object
 #' @param id The id(s) of the individual(s) to include in the plot
-#' @param deltat.by.date Produce a plot of the sampling interval by date, T/F
-#' @param cp Produce a plot of the cummulative proportion curve of sampling frequencies, T/F
+#' @param deltat.by.date Produce a plot of the sampling interval by date. T/F
+#' @param samp.by.date Produce a scatterplot showing the number of samples by date. T/F
+#' @param cp Produce a plot of the cummulative proportion of sampling frequencies. T/F
 #' @param cp.min The minimum sampling frequency (expressed as a proportion of tau) shown on the plot
 #' @param cp.max The maximum sampling frequency (expressed as a proportion of tau) shown on the plot
 #' @param time.unit A unit of time that will be used on the y-axis when plotting frequency by date
@@ -25,8 +26,10 @@
 #' @param mar The plot margins. A four item numeric vector
 #' @param mgp The distance away from the edge of the plot for the 1) label, 2) tick marks, and 3) axis line. A three-item numeric vector
 #' @param figs.per.page The number of plots per page.
+#' @param status Show status messages. T/F
 #' @param title The title to be displayed. Character. If NULL a title will be constructed.
-#' @param title.show Whether to show the title. T/F.
+#' @param title.show Whether to show the title. T/F
+#' @param subtitle The plot subtitle. If 'auto' a default subtitle will be used, or pass an empty string \code{''} to omit. Character
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. T/F
 #' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed

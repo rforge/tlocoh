@@ -1,8 +1,9 @@
 #' Repair a LoCoH-xy object
 #'
-#' Recreates a LoCoH-xy object
+#' Recreates a \link{LoCoH-xy} object
 #'
 #' @param lxy A LoCoH-xy object
+#' @param fix.dup.ptid Generate new ptid value(s) if there are any duplicates
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when 
 #' computing the frequency table of sampling intervals (no change is made to the time stamps)
 #' @param tau.diff.max The maximum deviation from tau (the median delta.t of the entire dataset), expressed as a proportion of tau, that 
@@ -12,14 +13,16 @@
 #' This will return a new lxy object containing the original xys, dt, and ptid from lxy. All other items and attributes (including the comment) 
 #' will be recreated or set to NULL
 #'
+#' Set \code{fix.dup.ptid=TRUE} to automatically generate new ptid values if any duplcates are detected. If \code{fix.dup.ptid=FALSE} and duplicate ptid values are detected, an error message will result.
+#'
 #' \code{tau.diff.max} exists to eliminate the inclusion of temporal outliers in the computation of the median step length. The time difference betwen points must be withint \code{tau.diff.max} of tau for that pair of points to be included in step length calculation.
 #'
-#' @return A LoCoH-xy object
+#' @return A \link{LoCoH-xy} object
 #'
-#' @seealso \code{\link{lxy.id.new}}
+#' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.id.new}}, \code{\link{lxy.merge}}
 #' @export
 
-lxy.repair <- function(lxy, fix.dup.ptid=FALSE, fix.anv=FALSE, dt.int.round.to=0.1, tau.diff.max=0.02) {
+lxy.repair <- function(lxy, fix.dup.ptid=FALSE, dt.int.round.to=0.1, tau.diff.max=0.02) {
     
     if (class(lxy)=="LoCoH.lxy") class(lxy) <- "locoh.lxy"
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
@@ -42,18 +45,6 @@ lxy.repair <- function(lxy, fix.dup.ptid=FALSE, fix.anv=FALSE, dt.int.round.to=0
                 cat(" - duplicate ptid values detected...new values generated\n")
             } else {
                 stop(cw("Duplicate ptid values detected. To repair by generating new ptid values, set fix.dup.ptid=T", final.cr=FALSE, exdent=2))
-            }
-        }
-    }
-
-    if (!is.null(lxy[["anv"]])) {
-        if (!identical(names(lxy[["anv"]]),  c("anv","desc"))) {
-            if (nrow(lxy[["anv"]]) != nrow(lxy[["xys"]])) {
-                if (fix.anv) {
-                    lxy[["anv"]] <- NULL
-                } else {
-                    stop(cw("The number of rows in the ancillary variables data frame is different than the number of points. To correct this by deleting the ancillary variables table, set fix.anv=TRUE", final.cr=FALSE, exdent=2))
-                }
             }
         }
     }

@@ -1,18 +1,51 @@
 #' Add hull metrics for association analysis
 #'
-#' @param lhs A LoCoH-hullset object
+#' @param lhs A \link{LoCoH-hullset} object
 #' @param save.hso Whether to save the hull intersection list, T/F
 #' @param skip.dups Skip duplicate hulls (faster)
 #'
-#' @return A LoCoH-hullset object
+#' @param id A character vector of the hullset ids to compute metrics for. Can also be \code{'all'}.
+#' @param hs2.id A character vector of the hullset ids to use as the comparison hullsets. Can also be \code{'all'}.
+#' @param tbuff A temporal overlap threshhold (in seconds). See details.
+#' @param ivg The intervisit gap period used to collapse intersecting hulls into discrete visits, see details
+#' @param test A two-element numeric vector containing the number of hulls in hullset 1 and hullset 2 respectively to identify intersections
+#' @param status Show status messages. T/F
+#' @param piFUN The function to use to identify which pairs of hulls intersect: 'pIntersect' or 'pIntersectSat'
+#'
+#' @return A \link{LoCoH-hullset} object
+#'
+#' @details 
+#' This function computes hull metrics for the spatially overlapping hulls from two ids. Typically this would be used
+#' when you have hullset from two individuals (i.e., two animals) and you want to see the spatial and temporal patterns of shared space use.
+#'
+#' You can impose a temporal overlap requirement as well by passing a value for \code{tbuff}. Two hulls will be considered spatially overlapping only if their parent
+#' points also were recorded within \code{tbuff} seconds of each other. This essentially produces metrics for spatially and temporally overlapping hulls.
+#'
+#' Hullset metrics are computed for each pair of ids. Thus if a hullset has hulls for three unique ids, 
+#' each hull will have spatial overlap metrics computed for each of the other two hullsets. You can narrow which
+#' id(s) to compute metrics for, and which hullset(s) to use as the comparison, with 
+#' the \code{id} and \code{hs2.id} arguments.
+#' 
+#' Up to three spatial overlap metrics are computed. \code{so.count} is simply the number of hulls in hullset 2 that overlap. 
+#' \code{so.dtmin} is the minimum amount of time (expressed in seconds) that passes between overlapping hulls. This reflects temporal partitioning 
+#' of shared space - low values of \code{so.dtmin} suggest the two individuals don't mind being in the same area at the same time.
+#' \code{so.nsv} (number of separate visits) is similiar to \code{so.count}, but collapses overlapping hulls 
+#' into discrete visits based on an intervisit gap period \code{ivg}. \code{so.nsv}
+#' is only computed if a value for \code{ivg} is passed.
+#'
+#' \code{pIntersect} and \code{pIntersectSat} are two functions that identify which pairs of hulls actually intersect. Neither are 
+#' terribly fast, but \code{pIntersect} appears to work faster than \code{pIntersectSat}.
+#' 
 #'
 #' @export
 
 
 lhs.so.add <- function(lhs, id="all", hs2.id="all", tbuff=0, ivg=NULL, test=0, skip.dups=TRUE, save.hso=TRUE,
-                       status=TRUE, fn.log="segment.intersections.txt", piFUN=c("pIntersect", "pIntersectSat")[1]) {
+                       status=TRUE, piFUN=c("pIntersect", "pIntersectSat")[1]) {
 
-    ## Test is a length two numeric vector containing the number of hulls in hs1 and hs2 respectively to identify intersections
+
+
+
     ## In my tests, pIntersect is a lot faster than pIntersectSat
     
 
@@ -37,7 +70,9 @@ lhs.so.add <- function(lhs, id="all", hs2.id="all", tbuff=0, ivg=NULL, test=0, s
     if (length(test)==1) test <- rep(test,2)
     if (length(test) !=2 ) stop("Test must be a one or two-element numeric vector")
 
+    ## Performance testing code
     #assign("pInter.log", NULL, envir=.GlobalEnv)
+    ## fn.log="segment.intersections.txt", 
     #if (length(fn.log) > 0) assign("con.seg.test", file(fn.log, open = "a"), envir=.GlobalEnv)
     
     
@@ -98,7 +133,7 @@ lhs.so.add <- function(lhs, id="all", hs2.id="all", tbuff=0, ivg=NULL, test=0, s
                         if (test[2]>0) hulls2.sp <- hulls2.sp[1:min(length(hulls2.sp),test[2]),]
                         
                         h2.tau <- lhs[[h2]][["rw.params"]][["time.step.median"]][1]
-                        if (tbuff > 0 && tbuff < hs.tau) stop("tbuff should be larger than the median sampling interval")
+                        if (tbuff > 0 && tbuff < h2.tau) stop("tbuff should be larger than the median sampling interval")
                         
                         h2.pp.dt.int <- as.integer(lhs[[h2]][["pts"]][["dt"]][lhs[[h2]][["hulls"]][["pts.idx"]]])
 
@@ -226,7 +261,6 @@ lhs.so.add <- function(lhs, id="all", hs2.id="all", tbuff=0, ivg=NULL, test=0, s
                             
 
                         }
-
 
                         ## Save the hull intersection list
                         if (save.hso) {

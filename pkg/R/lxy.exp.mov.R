@@ -1,10 +1,12 @@
 #' Create a Quicktime animation from a LoCoH-xy object
 #'
-#' @param lxy A \code{\link{LoCoH-xy}} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to be on the plot
 #' @param all.ids.at.once Display all the individual ids simultaneously. If False, an animation will be created for each id. T/F.
 #' @param all.ids.col.unique Whether to use unique colors for each individual when plotting multiple individuals simultaneously, T/F
 #' @param all.ids.col A named list of color values; the element names must match the name(s) of the ids
+#' @param all.ids.legend Where to place a legend showing the color of each id (for an animation showing the movement of multiple individuals simultaneously): 'bottomright', 'bottom', 'bottomleft', 'left', 'topleft', 'top', 'topright', 'right', or 'center'. May also be \code{NULL}, in which case the legend will not be displayed. Ignored if \code{ids.legend.bln=FALSE} or \code{all.ids.col.unique = FALSE}.
+#' @param all.ids.legend.cex The character expansion factor for the id legend. See parameter \code{all.ids.legend} above.
 #' @param dt.start The starting date-time. An object of class POSIXt or one that can be coerced to POSIXt. If NULL, the earliest date-time in the series will be used.
 #' @param dt.end The ending date-time. An object of class POSIXt or one that can be coerced to POSIXt. If NULL, the last date-time in the series will be used.
 #' @param frame.method How each frame should be defined temporally, "time" - each frame represents a fixed amount of time, "location" each frame is a point in the series
@@ -22,10 +24,19 @@
 #' @param axes.titles Whether to show axes titles. T/F.
 #' @param mar.map Margin settings for the map, see \code{\link{par}}
 #' @param mgp.map Locations of the axes elements for the map, see \code{\link{par}}
+#' @param col.xys.active Color of the active point. Ignored if \code{col.by.hour.of.day = TRUE}.
+#' @param col.xys.background Color of the non-active points. To hide non-active points, set to \code{NA}.
+#' @param cex.xys.active The character expansion factor of the active point
+#' @param cex.xys.background The character expansion factor of non-active points
 #' @param tz.local The name of the time zone of the study area
 #' @param tz.local.check Check whether tz.local is a valid timezone name (not implemented) T/F.
+#' @param col.by.hour.of.day Whether to color the active point by the hour of day (i.e., dark colors at night, orange for day time locations). T/F
+#' @param col.hod A vector of 24 color values used to symbolize the color of the active point by the hour of day. Ignored if \code{col.by.hour.of.day = FALSE}.
 #' @param screen.test Create up to three sample frame(s) on the screen (instead of PNG files)
-
+#' @param width The width of each frame in pixels (if \code{screen.test=FALSE}) or inches (if \code{screen.test=TRUE}).
+#' @param height The height of each frame in pixels (if \code{screen.test=FALSE}) or inches (if \code{screen.test=TRUE}).
+#' @param max.frames The maximum number of frames to produce.
+#' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
 #' @param tmp.dir A directory where temporary PNG files for each frame will be created, character.
 #' @param tmp.files.delete Delete the temporary PNG files when done, T/F
 #' @param prompt.continue Whether to present a summary of the encoding settings and get user confirmation before continuing, T/F
@@ -45,21 +56,23 @@
 #' @param date.bar The height of the lower section of the plot to devote to the time bar, in inches. To hide the time bar completely, set \code{date.bar=0}.
 #' @param date.bar.bins The target number of bins (tick marks + 1) on the time bar (integer)
 #' @param col.db A single color value for the date bar axes / tick labels, character
+#' @param cex.axis.db Character expansion factor for the labels on the date bar axis.
 #' @param beep Beep when one, T/F
 #' @param report.time Show the time taken when done, T/F
 #' @param status Show progress bar and status messages 
 #'
 #' @note To create the animation, two and only two of the following parameters must be passed: \code{duration}, \code{fps}, and \code{skip}. 
-#' The third parameter will be computed. To include every frame, pass \code{fps}, set \code{skip=1}, and leave \code{duration} out.
+#' The third parameter will be computed based on the other two. To include every frame, pass \code{fps}, set \code{skip=1}, and leave \code{duration} out.
 #'
 #' Larger values for \code{fps} will result in the animation running 'faster'. Values between 10 and 20 often work well; beyond 30 fps the eye can't keep up with the motion
 #' Note if you pass values for \code{fps} and \code{duration}, an appropriate value for \code{skip} will be computed but 
 #' the final duration of the animation may not be exactly equal to \code{duration} because only interger values of \code{skip} are allowed.
 #'
-#' One will normally want to run the function a few times without actually encoding to tweak the frame layout (e.g., where the date label and legend appear).
+#' One will normally want to run the function a few times without actually encoding to tweak the frame design (e.g., where the date label and legend appear).
 #' To see what a frame in the output will *approximately* look like, set \code{screen.test=TRUE}. Once the screen sample looks good, next set \code{max.frames=3}, 
-#' \code{tmp.dir="."} (or another folder), \code{create.mov=FALSE}, and \code{tmp.files.delete=FALSE}. This will generate a few sample frames in PNG files 
-#' and not delete them so you can inspect them. Once these look good, create the full animation by setting \code{create.mov=TRUE}. 
+#' \code{tmp.dir="."} (or another folder), \code{create.mov=FALSE}, and \code{tmp.files.delete=FALSE}. This will generate a few sample frames as PNG files 
+#' but not delete them so you can inspect them using an image viewer. Once these look good, create the full animation by setting \code{create.mov=TRUE} and 
+#' \code{max.frames=NULL}. 
 #'
 #' If frame.method is 'auto', the script will use time-based frames when multiple individuals are being animated simultaneously, and location-based frames otherwise.
 #'
@@ -69,16 +82,16 @@
 #' If \code{date.bar} is too small or too large, you might get a 'margins too large' error. Try values around 1, or 
 #' hide the date bar completely by setting \code{date.bar=0}.
 #'
-#' The output animation is encoded in QuickTime format. The Quicktime file is encoded using the 'animation' codec, a lossless format that 'scrubs' 
+#' The output animation is encoded in QuickTime format. The Quicktime file is encoded using Quicktime's 'animation' codec, a lossless format that 'scrubs' 
 #' well (i.e., you can drag the scroll bar 
-#' to view frame by frame). This requires installing the open source encoding program ffmpeg. ffmpeg is a command line program that 
+#' to view frame by frame). Encoding requires installing the open source encoding program ffmpeg. ffmpeg is a command line program that 
 #' Linux and Windows users can download from http://ffmpeg.org/download.html.
-#' Windows users should save the ffmpeg.exe file to the working directory or a directory on the path environment variable (e.g., c:\\windows).
-#' Mac users can download ffmpegX from http://ffmpegx.com/download.html but this has not been tested (pass name to \code{ffmpeg}).
+#' Windows users should save the ffmpeg.exe file to the working directory or a directory on Window's path environment variable (e.g., c:\\windows).
+#' Mac users can download ffmpegX from http://ffmpegx.com/download.html but this has not been tested (pass a value to \code{ffmpeg}).
 #'
 #' If ffmpeg is not available, you can still use this function to generate the individual frames and then use another utility (e.g., ImageMagick, Quicktime Pro) 
 #' to combine the frames into a video file. For best results use a 'lossless' compression method in the encoding program.
-#' To create the individual frames only, set \code{tmp.dir="."} (the working directory) and \code{tmp.files.delete=FALSE}. 
+#' To create the individual frames only for encoding with another utility, set \code{tmp.dir="."} (the working directory) and \code{tmp.files.delete=FALSE}. 
 #'
 #' If \code{fn.mov.exists = "auto.increment"}, a two-digit number will be appended to the *.mov filename to avoid overwriting an existing file
 #'
@@ -138,7 +151,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
     if (!is.null(duration) && !is.null(fps) && !is.null(skip)) stop(cw("You can pass at most two of the following parameters: duration, fps, and skip"), final.cr=F)
     if (!screen.test && is.null(duration) && is.null(fps) && is.null(skip)) stop("You must only pass two of the following parameters: duration, fps, and skip")    
     if (length(col.hod) != 0 && length(col.hod) != 24) stop("col.hod must be a vector with 24 color values or NULL")
-    if (!is.null(tz.local) && tz.local.check) {if (!tz.valid(tz.local)) stop("Unknown value for tz")}
+    ## if (!is.null(tz.local) && tz.local.check) {if (!tz.valid(tz.local)) stop("Unknown value for tz")}
     if (!is.null(dt.end) && !is(dt.end, "POSIXt")) stop("dt.end must be of class POSIXt")
     if (!is.null(dt.start) && !is(dt.start, "POSIXt")) stop("dt.start must be of class POSIXt")
     if (frame.method=="auto") frame.method <- if (length(id) > 1 && all.ids.at.once) "time" else "location"
@@ -183,7 +196,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
             if (is.null(all.ids.col)) {
                 ids.cols <- rainbow(length(id))
             } else {
-                if (!is.list(all.ids.col) || length(all.ids.col) != length(ids)) stop("all.ids.col must be a named list with a color value for each id")
+                if (!is.list(all.ids.col) || length(all.ids.col) != length(id)) stop("all.ids.col must be a named list with a color value for each id")
                 if (FALSE %in% (names(all.ids.col) %in% levels(lxy[["pts"]][["id"]]))) stop(cw("The names of the elements in all.ids.col must match the names of the individuals in lxy", final.cr=FALSE))
                 ids.cols <- rep(NA, nlevels(lxy[["pts"]][["id"]]))
                 for (id.name in names(all.ids.col)) ids.cols[which(levels(lxy[["pts"]][["id"]])==id.name)] <- all.ids.col[[id.name]]
@@ -573,7 +586,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 dev.off()
                 
                 ## Create a new png device for just the figure area
-                png(file=fn.background.png, width=plot.region.pixels[1], height=plot.region.pixels[2], pointsize=png.pointsize)
+                png(filename=fn.background.png, width=plot.region.pixels[1], height=plot.region.pixels[2], pointsize=png.pointsize)
                 
                 ## Create a blank plot with no margins and no axes
                 par(mar=c(0,0,0,0))

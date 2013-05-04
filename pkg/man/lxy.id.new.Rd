@@ -15,9 +15,9 @@
   'broken_tooth', or factor or character vector of the same
   length as the number of points}
 
-  \item{id.old.save}{Whether to save the old ids as an
-  ancillary variable. Either T/F, or the name of a column
-  in the ancillary variables data frame, see details}
+  \item{save.old.id}{Whether to save the old ids as an
+  ancillary variable. Can be T/F, or the name of a column
+  in the ancillary variables data frame, see Details}
 
   \item{dup.dt}{What to do if duplicate dt values are
   encountered in the merged object, see details}
@@ -37,6 +37,8 @@
   points must fall for the distance between those two
   points to be included in the calculation of the median
   step length}
+
+  \item{status}{Show status messages. T/F}
 }
 \value{
   A \link{LoCoH-xy} object containing the original xys, dt,

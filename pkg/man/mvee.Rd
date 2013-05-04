@@ -31,6 +31,9 @@
   returned. A value of 2 means a list of NAs will be
   returned which is more useful if these values will be
   stored in a data frame.}
+
+  \item{checks}{Check \code{xy} object for the correct data
+  type and remove any duplicate points. T/F}
 }
 \value{
   A list containing the "center form" matrix equation of

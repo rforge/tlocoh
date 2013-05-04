@@ -4,6 +4,9 @@
 \usage{
   square(x)
 }
+\arguments{
+  \item{x}{Input object}
+}
 \description{
   square
 }

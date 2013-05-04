@@ -2,10 +2,21 @@
 #'
 #' Returns a list of expression objects that when evaluated in functions will return various hull metrics
 #'
-#' @param names.only Return only the names of hull metrics. T/F.
+#' @param names.only Return only the names of hull metrics (not the expressions themselves). T/F.
+#' @param desc Include descriptions of the hull metrics in the object returned. T/F.
+#' @param print Display the list of hull metrics on the console. T/F.
 #' 
-#' @details Hull metrics are used in many tlocoh functions. This function serves as a central source for expressions that return hull metrics.
-#' About Hull Metrics...
+#' @details Hull metrics are used by many functions. This function returns a list of the expressions to 'pull out' hull metric values from 
+#' the data structure of a \code{\link{LoCoH-hullset}} object and other properties of hull metrics. These objects are used
+#' by other T-LoCoH functions for plotting, exporting, creating isopleths, and other things you can do with hull metrics.
+#'
+#' Most users will not need to use this function other than to see a list of hull metric names (which you need to know to specify a 
+#' hull metric in a plotting function for example) and the hull metric descriptions.
+#' 
+#' This function does not compute any hull metrics, only provide a comprehensive list of all possible metrics. 
+#' Some hull metrics are computed by default when you create a hullset (see \code{\link{lxy.lhs}}).
+#' Others metrics must be computed with a special function (e.g., \code{\link{lhs.ellipses.add}}. To see which hull metrics exist for a specific LoCoH-hullset, 
+#' use \code{\link{summary.locoh.lhs}}.
 #'
 #' @return A named list with the following elements:
 #' \enumerate{
@@ -19,8 +30,8 @@
 #' \item zero2na Whether 0 values should be colored as NA (i.e., hidden) when classifying hull parent points, T/F
 #' \item discrete Whether the metric assumes discrete (integer) values, used in classifying hull parent points T/F
 #' \item auto.jiggle The maximum value of a uniform distribution used to apply a random offset to the metric when plotted on scatterplots to better see point density
-#' \item spao.x include the metric as a default for the x-axis when the 'auto' option is used in \code{\link{scatter.plot.auto}}
-#' \item spao.y include the metric as a default for the y-axis when the 'auto' option is used in \code{\link{scatter.plot.auto}}
+#' \item spao.x include the metric as a default for the x-axis when the 'auto' option is used in \code{\link{lhs.plot.scatter.auto}}
+#' \item spao.y include the metric as a default for the y-axis when the 'auto' option is used in \code{\link{lhs.plot.scatter.auto}}
 #' \item req.metrics The underlying metric(s) that need to be saved in the hullset for successful computation. Character vector. This will usually simply be the name of the metric itself, but may be different in the case of derived metrics such as perimeter-area ratio.
 #' \item req.ap The name(s) of required auxillary variables that are needed to extract the metric. Character vector.
 #' \item req.ap.def A named list of default values of any required auxillary variables 
@@ -43,7 +54,6 @@ hm.expr <- function(names.only=TRUE, desc=names.only, print=names.only) {
     DU <- "Duration of Use Distribution"
     ED <- "Elongation Distribution"
     VD <- "Velocity Distribution"
-    
     
     ivg.desc <- list(ivg=expression(paste("Separate visits defined by an inter-visit gap period >= ", hmap[hmap.idx, "ivg"], "(", secs.fmt(hmap[hmap.idx, "ivg"]), "). ", sep="")))
     ivg.subtitle <- list(ivg=expression(paste("ivg=", hmap[hmap.idx, "ivg"], "(", secs.fmt(hmap[hmap.idx, "ivg"]), ")", sep="")))

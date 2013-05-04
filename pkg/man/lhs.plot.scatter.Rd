@@ -193,12 +193,15 @@
   \item{cex}{Expansion factor for the points on the
   scatterplot}
 
+  \item{type}{The type of plot: 'p'=points only, 'l'=line,
+  'b'=both}
+
   \item{ufat}{Whether to substitute user-friendly axis
   titles. T/F.}
 
   \item{figs.per.page}{The number of plots per page}
 
-  \item{add=}{Whether to add to the current plot device.
+  \item{add}{Whether to add to the current plot device.
   T/F.}
 
   \item{regions}{Determines whether the user will be
@@ -285,7 +288,12 @@
   the variable.}
 
   \item{hmap.in.subtitle}{Include the hmap value(s) in the
-  plot subtitle. T/F.}
+  plot subtitle. T/F}
+
+  \item{check.ap.value.in.hmparams}{Check to make sure that
+  hull metrics have been computed for the hull metric
+  auxillary parameter values passed (either as separate
+  arguments or in \code{hmap})}
 
   \item{...}{Other parameters, including any auxillary
   parameters required by certain hull metrics}

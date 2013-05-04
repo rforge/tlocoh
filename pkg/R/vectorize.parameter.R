@@ -1,7 +1,3 @@
-#' vectorize.parameter
-
-#' @export
-
 vectorize.parameter <- function (x, n2z=FALSE, type=c("numeric", "character")[1], sort.res=TRUE) {
 
     ## converts a comma delimited character string to a vector with option to sort

@@ -2,13 +2,14 @@
 #'
 #' Thin out closely-timed bursts of locations
 #'
-#' @param lxy A \code{\link{LoCoH-xy}} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to be thinned
 #' @param thresh The threshhold for delta.t below which a pair of points is considered to be part of a burst, expressed either as a proportion of the median sampling frequency (0..1) or an absolute unit of time (in seconds)
 #' @param replace The burst replacement method ('mean' or 'median')
 #' @param info.only Show information about number of bursts (only)
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when computing the frequency table of sampling intervals (no change is made to the time stamps)
 #' @param tau.diff.max The maximum deviation from tau (the median delta.t of the entire dataset), expressed as a proportion of tau, that time difference between two points must fall for the distance between those two points to be included in the calculation of the median step length
+#' @param status Show status messages. T/F
 #'
 #' @note This function processes 'bursts' of locations, where a 'burst' is a series of locations captured 
 #' close together in time. Each group of points in a burst is replaced with a single point. This of course presumes the
@@ -21,22 +22,22 @@
 #' \code{thresh} is a value for the sampling interval for identifying which points should be considered part of 
 #' a burst. \code{thresh} can be a proportion of the median sampling frequency (0..1) or an absolute unit of time (in seconds).
 #'
-#' To identify whether there are bursts in a \code{\link{LoCoH-xy}} dataset, and the sampling frequency of those bursts (i.e., the value 
-# 'you should use for \code{thresh}), run \code{\link{lxy.plot.freq}} with \code{cp=TRUE}.
+#' To identify whether there are bursts in a \link{LoCoH-xy} dataset, and the sampling frequency of those bursts (i.e., the value 
+# 'you should use for \code{thresh}), run \code{\link{lxy.plot.byfreq}} with \code{cp=TRUE}.
 #'
 #' The two replacement methods are /code{replace="mean"}, in which case a burst of locations is replaced by a single point consisting of the 
 #' spatial and temporal average of the burst, or /code{replace="median"} in which case a burst of locations is replaced by the location
 #' at the temporal median of the burst. If /code{replace="mean"}, then any ancillary variables for the 'new' points will be set to \code{NA}.
 #'
-#' Because this function deletes points, the nearest neighbor lookup table of the \code{\link{LoCoH-xy}} object (if any) will be deleted, 
+#' Because this function deletes points, the nearest neighbor lookup table of the \link{LoCoH-xy} object (if any) will be deleted, 
 #' and the parameters for random walk model will be recomputed.
 #'
-#' @return a \code{\link{LoCoH-xy}} object
-#' @seealso \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.freq}}
+#' @return a \link{LoCoH-xy} object
+#' @seealso \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.byfreq}}
 #' @export
 
-lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median")[2], info.only=FALSE, status=TRUE,
-                             dt.int.round.to=0.1, tau.diff.max=0.02) {
+lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median")[2], info.only=FALSE, 
+                             dt.int.round.to=0.1, tau.diff.max=0.02, status=TRUE) {
 
     if (!require(sp)) stop("package sp required")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")

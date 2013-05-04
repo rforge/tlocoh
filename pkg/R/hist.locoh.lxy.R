@@ -2,7 +2,8 @@
 #'
 #' Displays histogram(s) of point-to-point step length, velocity, and sampling frequency for a LoCoH-xy object
 #'
-#' @param lxy A LoCoH-xy object
+#' @param x A \link{LoCoH-xy} object
+#' @param id The id value(s) to be plotted
 #' @param dt Include a histogram of the number of locations over time) (T/F)
 #' @param d Include a histogram of distance travelled per adjacent points (i.e., step length) (T/F)
 #' @param delta.t Include a histogram of the time between points (i.e., sampling frequency) (T/F)
@@ -15,16 +16,18 @@
 #' @param delta.t.num.sd Number of standard deviations for delta.t to be included in the histogram. To omit outliers from appearing in the histogram (which can make the central data more difficult to discern, set delta.t.num.sd to ~2. Ignored if delta.t=F.
 #' @param time.unit The unit of time on the x-axis (character). Ignored if delta.t=F.
 #' @param overlay.median Plot the median value on the histogram (T/F)
+#' @param breaks Argument passed to the \code{\link{hist}} function, see \code{\link{hist}} 
 #'
 #' @return A list of frequencies with one element for each of the histograms plotted.
 #'
+#' @method hist locoh.lxy
 #' @export
 
-hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
+hist.locoh.lxy <- function(x, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
                            dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,
                            delta.t.num.sd=NULL, d.tct=1.2, time.unit="auto", overlay.median=TRUE, breaks=20) {
 
-
+    lxy <- x; rm(x)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!require(sp)) stop("package sp required")
     if (delta.t && is.null(lxy[["pts"]][["dt"]])) stop("No time stamps in this dataset, can't plot delta.t")
@@ -103,7 +106,7 @@ hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, 
                 subtitle <- NULL
             } else {
                 delta.t.idx <- (delta.t >= (tau - delta.t.num.sd * sd(delta.t.thisid)) & delta.t <= (tau + delta.t.num.sd * sd(delta.t.thisid)))
-                subtitle <- paste("showing dts within ", num.sd, " sd(s) of median", sep="")
+                subtitle <- paste("showing dts within ", delta.t.num.sd, " sd(s) of median", sep="")
             }
     
             hist.obj <- hist(delta.t.thisid[delta.t.idx] / time.factor.int, xlab=paste("time interval between samples (", time.unit, "s)", sep=""), ylab="freq",

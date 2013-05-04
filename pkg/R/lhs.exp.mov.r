@@ -2,9 +2,16 @@
 #'
 #' @param lhs A \code{\link{LoCoH-hullset}} object
 #' @param id The id value(s) to be on the plot
+#' @param k The k value of hullsets to export
+#' @param r The r value of hullsets to export
+#' @param a The a value of hullsets to export
+#' @param s The s value of hullsets to export
+#' @param hs.names The name(s) of saved hullsets to export
 #' @param all.ids.at.once Display all the individual ids simultaneously. If False, an animation will be created for each id. T/F.
 #' @param all.ids.col.unique Whether to use unique colors for each individual when plotting multiple individuals simultaneously, T/F
 #' @param all.ids.col A named list of color values; the element names must match the name(s) of the ids
+#' @param all.ids.legend Where to place a legend showing the color of each id (for an animation showing the movement of multiple individuals simultaneously): 'bottomright', 'bottom', 'bottomleft', 'left', 'topleft', 'top', 'topright', 'right', or 'center'. May also be \code{NULL}, in which case the legend will not be displayed. Ignored if \code{ids.legend.bln=FALSE} or \code{all.ids.col.unique = FALSE}.
+#' @param all.ids.legend.cex The character expansion factor for the id legend. See parameter \code{all.ids.legend} above.
 #' @param dt.start The starting date-time. An object of class POSIXt or one that can be coerced to POSIXt. If NULL, the earliest date-time in the series will be used.
 #' @param dt.end The ending date-time. An object of class POSIXt or one that can be coerced to POSIXt. If NULL, the last date-time in the series will be used.
 #' @param frame.method How each frame should be defined temporally, "time" - each frame represents a fixed amount of time, "location" each frame is a point in the series
@@ -15,6 +22,7 @@
 #' @param dt.label.col A color value/name for the date label (ignored if \code{dt.label=FALSE})
 #' @param dt.label.x The x-coordinate for the date label (ignored if \code{dt.label=FALSE})
 #' @param dt.label.y The y-coordinate for the date label (ignored if \code{dt.label=FALSE})
+#' @param dt.label.col.bg The background color for the date label (\code{NA} for transparent background, ignored if \code{dt.label=FALSE})
 #' @param title A title for the map
 #' @param title.show Whether to show the title. T/F.
 #' @param axes.show Whether to show the axes (ticks, labels and titles). Can be over-written by \code{axes.ticks} and \code{axes.titles}. T/F.
@@ -24,8 +32,18 @@
 #' @param mgp.map Locations of the axes elements for the map, see \code{\link{par}}
 #' @param tz.local The name of the time zone of the study area
 #' @param tz.local.check Check whether tz.local is a valid timezone name (not implemented) T/F.
+#' @param col.by.hour.of.day Whether to color the active point by the hour of day (i.e., dark colors at night, orange for day time locations). T/F
+#' @param col.hod A vector of 24 color values used to symbolize the color of the active point by the hour of day. Ignored if \code{col.by.hour.of.day = FALSE}.
+#' @param rtd.center Whether to center the start and end time of the first frame around the time stamp of the first location, to help ensure that each frame has only 
+#' one hull in it. T/F.
+#' @param clean.multihull.frames A numeric value that determines whether and how much a hull can be time shifted to avoid having two active hulls in the same frame. Pass \code{0} to disable cleaning multi-hull frames. See details.
+#' @param col.hull.active The color of the active hull
+#' @param col.hull.alpha A number 0..255 for the alpha value for the hull color (semi-transparency); 0=completely transparent, 255=opaque
+#' @param width The width of each frame in pixels (if \code{screen.test=FALSE}) or inches (if \code{screen.test=TRUE}).
+#' @param height The height of each frame in pixels (if \code{screen.test=FALSE}) or inches (if \code{screen.test=TRUE}).
+#' @param max.frames The maximum number of frames to produce.
+#' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
 #' @param screen.test Create up to three sample frame(s) on the screen (instead of PNG files)
-
 #' @param tmp.dir A directory where temporary PNG files for each frame will be created, character.
 #' @param tmp.files.delete Delete the temporary PNG files when done, T/F
 #' @param prompt.continue Whether to present a summary of the encoding settings and get user confirmation before continuing, T/F
@@ -45,6 +63,7 @@
 #' @param date.bar The height of the lower section of the plot to devote to the time bar, in inches. To hide the time bar completely, set \code{date.bar=0}.
 #' @param date.bar.bins The target number of bins (tick marks + 1) on the time bar (integer)
 #' @param col.db A single color value for the date bar axes / tick labels, character
+#' @param cex.axis.db Character expansion factor for the labels on the date bar axis.
 #' @param beep Beep when one, T/F
 #' @param report.time Show the time taken when done, T/F
 #' @param status Show progress bar and status messages 
@@ -54,9 +73,6 @@
 #' @param tiff.bands A vector of threee integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, green and blue color guns respectively.
 #' @param tiff.buff A numeric buffer distance that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
 #' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
-
-
-
 #'
 #' @note To create the animation, two and only two of the following parameters must be passed: \code{duration}, \code{fps}, and \code{skip}. 
 #' The third parameter will be computed. To include every frame, pass \code{fps}, set \code{skip=1}, and leave \code{duration} out.
@@ -75,6 +91,12 @@
 #' \code{duration} (the duration of the animation in seconds) should not be confused with \code{frame.rtd} which is the real-time duration 
 #' of a single frame in seconds (e.g., \code{frame.rtd=3600} means each frame will represent 1 hour).
 #'
+#' Passing a positive value for \code{clean.multihull.frames} (default value is 4) enables time-shifting hulls if needed to prevent two hulls appearing in one frame and 
+#' no hulls in the previous or next frame (which produces jerky playback when animated). The maximum amount of time a hull can be shifted is calculated by 
+#' \code{frame.rtd / clean.multihull.frames}. Thus for example if \code{frame.rtd=7200} (two hours), and \code{clean.multihull.frames=4}, then if a frame has two hulls appearing in it
+#' and the parent point of one of those hulls lies within 30 minutes (2 hours / 4) of the beginning or end of the frame, \emph{and} there is no hull in the adjacent frame, that
+#' hull will be moved to the earlier / later frame. To disable this effect, set \code{clean.multihull.frames = 0}.
+#' 
 #' If \code{date.bar} is too small or too large, you might get a 'margins too large' error. Try values around 1, or 
 #' hide the date bar completely by setting \code{date.bar=0}.
 #'
@@ -172,7 +194,7 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
     if (!is.null(duration) && !is.null(fps) && !is.null(skip)) stop(cw("You can pass at most two of the following parameters: duration, fps, and skip"), final.cr=F)
     if (!screen.test && is.null(duration) && is.null(fps) && is.null(skip)) stop("You must only pass two of the following parameters: duration, fps, and skip")    
     if (length(col.hod) != 0 && length(col.hod) != 24) stop("col.hod must be a vector with 24 color values or NULL")
-    if (!is.null(tz.local) && tz.local.check) {if (!tz.valid(tz.local)) stop("Unknown value for tz")}
+    ## if (!is.null(tz.local) && tz.local.check) {if (!tz.valid(tz.local)) stop("Unknown value for tz")}
     if (!is.null(dt.end) && !is(dt.end, "POSIXt")) stop("dt.end must be of class POSIXt")
     if (!is.null(dt.start) && !is(dt.start, "POSIXt")) stop("dt.start must be of class POSIXt")
     if (frame.method=="auto") frame.method <- if (length(hs) > 1 && all.ids.at.once) "time" else "location"
@@ -776,7 +798,7 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                 dev.off()
                 
                 ## Create a new png device for just the figure area
-                png(file=fn.background.png, width=plot.region.pixels[1], height=plot.region.pixels[2], pointsize=png.pointsize)
+                png(filename=fn.background.png, width=plot.region.pixels[1], height=plot.region.pixels[2], pointsize=png.pointsize)
                 
                 ## Create a blank plot with no margins and no axes
                 par(mar=c(0,0,0,0))

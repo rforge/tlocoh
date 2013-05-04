@@ -16,7 +16,6 @@
 #' @param hm The name of hull metric(s) that will be exported. Character vector or comma separated string.
 #' @param anv The name(s) of ancillary variables(s) of the parent point of each hull to be exported. Default is NULL, can also be set to 'all'. Character vector or comma separated string.
 #' @param hsp A list containing one hull scatterplot object with regions saved (i.e., object returned by \code{\link{lhs.plot.scatter}}), or the index of a hull scatter plot saved in the hullset (see \code{\link{lhs.hsp.add}}). If passed, a column for the region number will be included in the attribute table. Applicable only to hulls and hull parent points. 
-#' @param metadata Export field descriptions in a meta data file (not yet supported)
 #' @param status Show messages. T/F
 #'
 #' @return List (one list element for each hullset) of data frames of hull metrics and possibly ancillary variables
@@ -35,6 +34,8 @@
 lhs.exp.csv <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL,
                csv.save=TRUE, dir=".", csv.fn.pre=NULL, csv.fn.mid=c("none","short","long")[2],
                hm="all", anv=NULL, hsp=NULL, status = TRUE) {
+
+    # metadata - export field descriptions in a meta data file (not yet supported)
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!require(sp)) stop("package sp required")

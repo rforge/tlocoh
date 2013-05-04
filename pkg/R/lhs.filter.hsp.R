@@ -9,6 +9,9 @@
 #' @param hs.names The name(s) of saved hullsets to create isopleths for
 #' @param hsp Either the index of a hull scatterplot(s) saved in lhs (use \code{\link{summary.locoh.lhs}} to which how many hsp 
 #' objects have been saved), or a list of objects of class \code{locoh.hsp} (i.e., the return value of \code{\link{lhs.plot.scatter}}. 
+#' @param reg.idx A numeric vector of the indices of the regions in \code{hsp} to include in the filter
+#' @param label Character vector of the labels to use for each subset. If not passed, the saved label values in \code{hsp} will be used
+#' @param col Vector of color values (one per region). If omitted the colors saved in \code{hsp} will be used
 #'
 #' @details 
 #' This will return a list that defines subsets of hulls grouped according to which manually-digitized region in scatterplot 
@@ -28,27 +31,15 @@
 #'    \item{col}{the color of the region in hsp}
 #' }
 #' 
-#' @examples
-#' # Load a hullset
-#' data(toni.lhs)
-#'
-#' # View a hull scatter plot, manually define 4 regions using the mouse, and give each region a name
-#' hsp <- lhs.plot.scatter(toni.lhs, x.axis="area", y.axis="par", regions=4)
-#' 
-#' # For the hulls in each manually defined region, create a separate scatter plot of day and hour
-#' toni.hsp.grps <- lhs.filter.hsp(toni.lhs, hsp=hsp)
-#' lhs.plot.scatter(toni.lhs, x.axis="dt", y.axis="dt.hour", filter=toni.hsp.grps, figs.per.page=4, desc=0, title.hs.name.include=F)
-
-#'
 #' @export
 
 lhs.filter.hsp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
-                               hsp=NULL, reg.idx=NULL, label=NULL, col=NULL, short.list=TRUE) {
+                               hsp=NULL, reg.idx=NULL, label=NULL, col=NULL) {
   
     ## hsp can be either the index of a hsp saved in lhs, or A LIST OF objects of class locoh.hsp. 
     ## ONLY ONE HSP CAN BE PASSED
     ## A filter list element will be returned for each region in hsp. 
-    ## label is an optional character vector for the labels for each subset. If not passed, the label values in regions will be used
+    ## 
     ## col is an optional vector of color values, if not passed the stored color values in the regions will be used
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
@@ -132,6 +123,8 @@ lhs.filter.hsp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
     for (i in 1:length(reg.idx)) {
         poly.pts <- regions[[reg.idx[i]]][["poly.pts"]]
         
+        ## short.list used to be an argument, but since it seems to be faster we have made it standard
+        short.list <- TRUE
         if (short.list) {
             # My tests have shown that using the short list is a lot faster
             poly.pts.x.range <- range(poly.pts[,1])

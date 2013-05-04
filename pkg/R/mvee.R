@@ -10,6 +10,7 @@
 #' @param max.iter Maximum number of iterations before giving up. If the script tries this number of iterations but still can't get to the tolerance value, it displays an error message and returns NULL
 #' @param shiftxy Apply a shift to the coordinates to make them smaller and speed up the matrix calculations, then reverse the shift to the center point of the resulting ellipoid (T/F)
 #' @param no.ellipse.val Determines what the function returns if a mvee can not be found (e.g., if the points are colinear). The default value 1 means a NULL will be returned. A value of 2 means a list of NAs will be returned which is more useful if these values will be stored in a data frame.
+#' @param checks Check \code{xy} object for the correct data type and remove any duplicate points. T/F
 #'
 #' @return A list containing the "center form" matrix equation of the ellipse.
 #' i.e. a 2x2 matrix "A" and a 2x1 vector "C" representing the center of the ellipse such that:

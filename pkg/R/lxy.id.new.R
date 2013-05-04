@@ -5,14 +5,15 @@
 #' @param lxy A \link{LoCoH-xy} object
 #' @param id.new New value(s) for the id (i.e., name of the individual(s)). Can be either a single character object 'broken_tooth', or 
 #' factor or character vector of the same length as the number of points
-#' @param id.old.save Whether to save the old ids as an ancillary variable. Either T/F, or the name of a column in the 
-#' ancillary variables data frame, see details
+#' @param save.old.id Whether to save the old ids as an ancillary variable. Can be T/F, or the name of a column in the 
+#' ancillary variables data frame, see Details
 #' @param dup.dt What to do if duplicate dt values are encountered in the merged object, see details
 #' @param dup.dt.offset The maximum offset in seconds to offset duplicate dt values, used only if \code{dup.dt = "offset"} 
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when computing the frequency 
 #' table of sampling intervals (no change is made to the time stamps)
 #' @param tau.diff.max The maximum deviation from tau (the median delta.t of the entire dataset), expressed as a proportion of tau, that time 
 #' difference between two points must fall for the distance between those two points to be included in the calculation of the median step length
+#' @param status Show status messages. T/F
 #'
 #' @details
 #' This function can be used to change the id value for each point. Note that the id value is the name of the individual animal or device, as opposed to ptid 

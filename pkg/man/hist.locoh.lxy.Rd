@@ -2,16 +2,18 @@
 \alias{hist.locoh.lxy}
 \title{Plot histograms of properties of a LoCoH-xy object}
 \usage{
-  hist.locoh.lxy(lxy, id = NULL, dt = TRUE, d = TRUE,
-    delta.t = TRUE, v = TRUE, figs.per.page = NULL,
-    col = "gray80",
+  \method{hist}{locoh.lxy} (x, id = NULL, dt = TRUE,
+    d = TRUE, delta.t = TRUE, v = TRUE,
+    figs.per.page = NULL, col = "gray80",
     dt.bins.base = c("secs", "mins", "hours", "days")[4],
     dt.bins.width = 3600 * 24 * 7, delta.t.num.sd = NULL,
     d.tct = 1.2, time.unit = "auto", overlay.median = TRUE,
     breaks = 20)
 }
 \arguments{
-  \item{lxy}{A LoCoH-xy object}
+  \item{x}{A \link{LoCoH-xy} object}
+
+  \item{id}{The id value(s) to be plotted}
 
   \item{dt}{Include a histogram of the number of locations
   over time) (T/F)}
@@ -52,6 +54,9 @@
 
   \item{overlay.median}{Plot the median value on the
   histogram (T/F)}
+
+  \item{breaks}{Argument passed to the \code{\link{hist}}
+  function, see \code{\link{hist}}}
 }
 \value{
   A list of frequencies with one element for each of the

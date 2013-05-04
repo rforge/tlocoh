@@ -1,4 +1,4 @@
-xyt.rw.params.dt.int <- function(id, xys, dt, dt.int.round.to=0.1, tau.diff.max=0.02, step.len.central.tendency=c("median","mean")[1]) {
+xyt.rw.params.dt.int <- function(id, xy, dt, dt.int.round.to=0.1, tau.diff.max=0.02, step.len.central.tendency=c("median","mean")[1]) {
 
     ## Called by lxy.subset, and xyt.lxy
     
@@ -19,9 +19,9 @@ xyt.rw.params.dt.int <- function(id, xys, dt, dt.int.round.to=0.1, tau.diff.max=
 
     for (idVal in levels(id)) {
         
-        ## Filter xys and dt
+        ## Filter xy and dt
         thisid.idx <- which(id == idVal)
-        xys.thisid <- xys[thisid.idx,]
+        xys.thisid <- xy[thisid.idx,]
         dt.thisid.int <- as.numeric(dt[thisid.idx])
         n <- length(thisid.idx)
 

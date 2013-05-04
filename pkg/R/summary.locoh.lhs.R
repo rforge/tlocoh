@@ -2,19 +2,25 @@
 #'
 #' Prints a summary of a LoCoH-hullset object
 #'
-#' @param lhs A LoCoH-hullset object
+#' @param object A \link{LoCoH-hullset} object
 #' @param file A file name
 #' @param id The name(s) of individuals to summarize
 #' @param k The k value of hullsets to summarize
 #' @param r The r value of hullsets to summarize
 #' @param a The a value of hullsets to summarize
 #' @param s The s value of hullsets to summarize
-
+#' @param hs.names The name(s) of hullsets to summarize
+#' @param iso.details Display details of the isopleths. T/F
+#' @param desc Display the hullset description. T/F
+#' @param compact Use a compact format. T/F
+#' @param ... Other arguments
 #'
 #' @export
+#' @method summary locoh.lhs
 
-summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, desc=FALSE, compact=FALSE) {
+summary.locoh.lhs <- function(object, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, desc=FALSE, compact=FALSE, ...) {
 
+    lhs <- object; rm(object)
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!is.null(lhs[[1]][["xys"]])) stop("Old data structure detected")
     if (!require(sp)) stop("package sp required")

@@ -2,11 +2,9 @@
 \alias{lxy.gridanv.add}
 \title{Add ancillary variable(s) to a LoCoH-xy object from a raster}
 \usage{
-  lxy.gridanv.add(lxy, layer = 1, dtfn = NULL, fn = NULL,
-    anv.name = NULL, anv.desc = NULL, overwrite = FALSE)
-
-  lxy.gridanv.add(lxy, layer = 1, dtfn = NULL, fn = NULL,
-    anv.name = NULL, anv.desc = NULL, overwrite = FALSE)
+  lxy.gridanv.add(lxy, band = 1, dtfn = NULL, fn = NULL,
+    anv.name = NULL, anv.desc = NULL,
+    date.match = c("closest", "before")[1])
 }
 \arguments{
   \item{lxy}{\link{LoCoH-xy} object}
@@ -16,34 +14,22 @@
   \item{dtfn}{A two-column data frame containing a date and
   filename}
 
+  \item{fn}{Filename of a raster}
+
   \item{anv.name}{The name(s) of the ancillary variable(s)
   (one per band)}
 
   \item{anv.desc}{A character vector of descriptions}
 
-  \item{overwrite}{Whether to overwrite existing variables
-  with the same names (T/F)}
-
-  \item{lxy}{\link{LoCoH-xy} object}
-
-  \item{anv}{vector, named list or data frame with the same
-  number of values as points}
-
-  \item{anv.desc}{A character vector of descriptions}
-
-  \item{overwrite}{Whether to overwrite existing variables
-  with the same names (T/F)}
+  \item{date.match}{How to match dates when \code{dtfn} is
+  used: \code{'closest'} or \code{'before'}. See note.}
 }
 \value{
-  A \link{LoCoH-xy} object
-
   A \link{LoCoH-xy} object
 }
 \description{
   Add ancillary variable(s) to a LoCoH-xy object from a
   raster
-
-  Add ancillary variable(s) to a LoCoH-xy object
 }
 \note{
   This function will create new ancillary variables and
@@ -51,15 +37,17 @@
   image should be in the same coordinate system as the
   points. Current the script does not check this. Any
   points that fall beyond the edges of the image will be
-  given 'NA' values.
+  given 'NA' values. If an ancillary variable with the same
+  name already exists, it will be overwritten.
 
-  The image / raster must be in a format supported by
-  \code{\link{readGDAL}} in the rdgal package. Multi-band
-  formats are support. If the image has multiple bands, you
-  can specify which band(s) to read using the \code{band}
-  parameter. A separate ancillary variable will be created
-  for each band. You can provide name(s) for the ancillary
-  variable(s) with the \code{anv.name parameter}.
+  The image / raster specified by \code{fn} be in a format
+  supported by the \code{readGDAL} function in the rdgal
+  package. Multi-band formats are support. If the image has
+  multiple bands, you can specify which band(s) to read
+  using the \code{band} parameter. A separate ancillary
+  variable will be created for each band. You can provide
+  name(s) for the ancillary variable(s) with the
+  \code{anv.name parameter}.
 
   You can also pass a time-series of images, and the
   function will use the image that is the closest match in

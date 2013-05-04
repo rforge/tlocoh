@@ -18,8 +18,8 @@
 #' @seealso \code{\link{lxy.nn.add}}
 #'
 #' @examples
-#' lxy <- lxy.nn.add(lxy, ptsh=0.5, a=auto.a())
-#' 
+#' # lxy <- lxy.nn.add(lxy, ptsh=0.5, a=auto.a())
+#'
 #' @export
 
 #auto.a <- function(a.pp=0.98, a.nn=2, a.h=1, a.tct=1.05, a.meth = "nn") {

@@ -50,9 +50,6 @@
   region number will be included in the attribute table.
   Applicable only to hulls and hull parent points.}
 
-  \item{metadata}{Export field descriptions in a meta data
-  file (not yet supported)}
-
   \item{status}{Show messages. T/F}
 }
 \value{

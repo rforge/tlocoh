@@ -11,3 +11,5 @@ citEntry(entry="Manual",
         year = year,
         note = vers,
         textVersion = paste("Andrew Lyons, Wayne Getz, and the R Development Core Team (", year, "). ", title, ". ", vers, ".", sep="")
+        )
+        

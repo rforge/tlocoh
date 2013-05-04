@@ -1,12 +1,24 @@
-#' Computes statistics on the hull-to-hull centroid distance for time-overlapped hulls
+#' Computes statistics on the centroid distances for time-overlapped hulls
+#'
+#' Computes statistics on the hull-to-hull centroid distance for time-overlapped hulls, with an option to plot and overlay the distribution of centroid distances for random pairs of hulls 
 #'
 #' @param lhs A LoCoH-hullset object
+#' @param id1 Hullset 1 id value(s). Can also be \code{'all'}.
+#' @param id2 Hullset 2 id value(s). Can also be \code{'all'}.
 #' @param n The number of randomly selected paired hulls to use as the NULL model of no association. Can also be "all"
-#' @param iso.lower Is the lower isopleth level
-#' @param iso.upper Is the upper isopleth level
+#' @param iso.oz Apply isopleth filter to hs1 using the isopleths from hs2. T/F.
+#' @param iso.lower The lower level isopleth for the isopleth filter
+#' @param iso.upper The upper level isopleth for the isopleth filter
 #' @param iso.sort.metric The name of a hull metric that was used to sort hulls in the construction of the
 #' isopleths to be used as filters. If \code{auto} (default) it will pick the default sort metric used for density
-#' isopleths (i.e., area for the k-method, and number of enclosed points for the a and r methods"
+#' isopleths (i.e., area for the k-method, and number of enclosed points for the a and r methods)
+#' @param to.comp.hist Draw a histogram of the centroid distances of temporally overlapping hulls
+#' @param breaks The number of breaks in the histgram (or another valid value for breaks, see \code{\link{hist}}).
+#' @param to.mcd.outline.only Show the outline only of the histogram of the mean centroid distance for temporally overlapping hulls. T/F.
+#' @param lwd.outline The line width of the histogram outline (ignored if \code{to.mcd.outline.only=F}).
+#' @param hist.type The type of histogram to plot: 'density' or 'counts'.
+#' @param col.to.mcd The color of the outline of the histogram of the distribution of the centroid distances of temporally overlapping hulls.
+#' @param col.h2h.cd The color of the outline of the histogram of the distribution of the centroid distances for randomly paired hulls.
 #' @param title The title to be displayed. Character. If NULL a title will be constructed.
 #' @param title.show Whether to show the title. T/F.
 #' @param title.id.only Whether to construct the title from the id values only. T/F. Ignored if \code{title} is passed or \code{title.show=FALSE}
@@ -24,6 +36,7 @@
 #' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
 #' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in 
 #' pixels (increase to make labels appear larger)
+#' @param status Display status messages. T/F
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
 #' @return A list object
@@ -44,7 +57,7 @@
 
 
 lhs.to.stats <- function(lhs, id1="all", id2="all", n="all", iso.lower=NULL, iso.upper=NULL, iso.oz=TRUE, iso.sort.metric="auto", 
-                       to.comp=TRUE, to.comp.hist=TRUE, breaks=20, to.mcd.outline.only=FALSE, lwd.outline=3, hist.type=c("density","counts")[1],
+                       to.comp.hist=TRUE, breaks=20, to.mcd.outline.only=FALSE, lwd.outline=3, hist.type=c("density","counts")[1],
                        col.to.mcd="blue", col.h2h.cd="red", 
                        title=NULL, title.show=TRUE, title.id.only=FALSE, title.sub.iso.enc=TRUE, 
                        mar=c(3,3, if (title.show) 1.5 + (if(title.sub.iso.enc) 1.3 else 0) else 0.5, 0.5), mgp=c(1.8, 0.5, 0), figs.per.page=1,
@@ -265,8 +278,6 @@ lhs.to.stats <- function(lhs, id1="all", id2="all", n="all", iso.lower=NULL, iso
                                 h2h.cd.hist <- hist(h2h.cd, breaks=breaks, plot=FALSE) 
                                 to.mcd.hist <- hist(to.mcd, breaks=breaks, plot=FALSE) 
                                 
-                                #print("Lets check");browser()
-                                
                                 ## Make a blank plot for the combined histograms
                                 xlim <- c(min(min(h2h.cd.hist[["breaks"]]), min(to.mcd.hist[["breaks"]])), max(max(h2h.cd.hist[["breaks"]]), max(to.mcd.hist[["breaks"]])))
                                 ylim <- c(0, max(max(h2h.cd.hist[[hist.type]]), max(to.mcd.hist[[hist.type]])))
@@ -319,10 +330,6 @@ lhs.to.stats <- function(lhs, id1="all", id2="all", n="all", iso.lower=NULL, iso
                                 }
     
                                 plot(NULL, xlim=xlim, ylim=ylim, xlab="hull-to-hull centroid distance", ylab=hist.type, main=title.str)
-                                
-                                #print("got the blank plot made"); browser()
-                                
-                                #ltop.mat <- matrix(c(x$breaks[i:(i+1)], rep(x$counts[i],2)), ncol=2 )
                                 
                                 if (to.mcd.outline.only) {
                                     ## Plot the outline of the histogram of the mean centroid distance for temporally overlapping hulls

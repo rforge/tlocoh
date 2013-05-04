@@ -1,14 +1,15 @@
 #' Delete locations to harmonize the sampling frequency and time duration
 #'
-#' Standardize the sampling frequency and duration across individuals in a \code{\link{LoCoH-xy}} object by deleting points
+#' Standardize the sampling frequency and duration across individuals in a \link{LoCoH-xy} object by deleting points
 #'
-#' @param lxy A \code{\link{LoCoH-xy}} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to be harmonized
 #' @param trim.ends Truncate points from either end of the timeline to achieve a common time window, T/F
 #' @param dt.start The starting date-time that all individual trajectories will be truncated to. If \code{NULL}, the first date-time that 
 #' all points have in common will be used.
 #' @param dt.end The end date-time that all individual trajectories will be truncated to. If \code{NULL}, the last date-time that 
 #' all points have in common will be used.
+#' @param byfreq Delete points to achieve a common sampling frequency (\code{samp.freq}), T/F
 #' @param samp.freq The common time step for the output (in seconds). Can also be set to \code{"lcm"}, in which case the least common multiple
 #' of the median time step of each individual will be computed
 #' @param lcm.round When \code{samp.freq="lcm"}, the median time step for each individual will be rounded to the nearest interval of \code{lcm.round} 
@@ -21,7 +22,7 @@
 #' two points to be included in the calculation of the median step length
 #' @param status Show messages, T/F
 #'
-#' @note This function processes a \code{\link{LoCoH-xy}} object that contains movement data for several individuals, and removes points
+#' @note This function processes a \link{LoCoH-xy} object that contains movement data for several individuals, and removes points
 #' such that the output contains a fixed start and end date for each individual, as well as an approximately uniform sampling frequency (time step).
 #' 
 #' Before using this function, you should clean your data of all abnormally short time intervals (e.g., bursts). See \code{\link{lxy.thin.bursts}}.
@@ -34,17 +35,16 @@
 #'
 #' The function \code{\link{lxy.plot.freq}} can help you see the 'actual' sampling intervals in the data (set \code{by.date=TRUE}).
 #'
-#' Because this function deletes points, the nearest-neighbors lookup table of the \code{\link{LoCoH-xy}} object (if any) will be deleted.
+#' Because this function deletes points, the nearest-neighbors lookup table of the \link{LoCoH-xy} object (if any) will be deleted.
 #'
-#' @return a \code{\link{LoCoH-xy}} object
+#' @return a \link{LoCoH-xy} object
 #' @export
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.bursts}}
 
 # You can thin by dt.start / end, deltat, or both
 
-lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, byfreq=TRUE, 
-                              dt.start=NULL, dt.end=NULL, 
-                             samp.freq="lcm", lcm.round=120, lcm.max.iter=300,
+lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, dt.start=NULL, dt.end=NULL, 
+                             byfreq=TRUE, samp.freq="lcm", lcm.round=120, lcm.max.iter=300,
                              status=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
@@ -121,7 +121,7 @@ lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, byfreq=TRUE,
         
         if (trim.ends) {
             ## Since we truncated some points, need to recompute rw.params (to get new taus)
-            rwp.df <- xyt.rw.params.dt.int(id=lxy[["pts"]][["id"]][idx.comb], xys=coordinates(lxy[["pts"]])[idx.comb,], dt=lxy[["pts"]][["dt"]][idx.comb], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max)[["rw.params"]] 
+            rwp.df <- xyt.rw.params.dt.int(id=lxy[["pts"]][["id"]][idx.comb], xy=coordinates(lxy[["pts"]])[idx.comb,], dt=lxy[["pts"]][["dt"]][idx.comb], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max)[["rw.params"]] 
         } else {
             rwp.df <- lxy[["rw.params"]]
         }

@@ -4,8 +4,7 @@
 \usage{
   lhs.filter.hsp(lhs, id = NULL, k = NULL, r = NULL,
     a = NULL, s = NULL, hs.names = NULL, hsp = NULL,
-    reg.idx = NULL, label = NULL, col = NULL,
-    short.list = TRUE)
+    reg.idx = NULL, label = NULL, col = NULL)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -29,6 +28,16 @@
   which how many hsp objects have been saved), or a list of
   objects of class \code{locoh.hsp} (i.e., the return value
   of \code{\link{lhs.plot.scatter}}.}
+
+  \item{reg.idx}{A numeric vector of the indices of the
+  regions in \code{hsp} to include in the filter}
+
+  \item{label}{Character vector of the labels to use for
+  each subset. If not passed, the saved label values in
+  \code{hsp} will be used}
+
+  \item{col}{Vector of color values (one per region). If
+  omitted the colors saved in \code{hsp} will be used}
 }
 \value{
   A list that defines subsets of hulls, with one element
@@ -63,16 +72,5 @@
   parameters (e.g., \code{id}, \code{hs.names}, \code{k},
   \code{r}, and/or \code{a}) are passed to select one and
   only one of the hullsets in \code{lhs}.
-}
-\examples{
-# Load a hullset
-data(toni.lhs)
-
-# View a hull scatter plot, manually define 4 regions using the mouse, and give each region a name
-hsp <- lhs.plot.scatter(toni.lhs, x.axis="area", y.axis="par", regions=4)
-
-# For the hulls in each manually defined region, create a separate scatter plot of day and hour
-toni.hsp.grps <- lhs.filter.hsp(toni.lhs, hsp=hsp)
-lhs.plot.scatter(toni.lhs, x.axis="dt", y.axis="dt.hour", filter=toni.hsp.grps, figs.per.page=4, desc=0, title.hs.name.include=F)
 }
 

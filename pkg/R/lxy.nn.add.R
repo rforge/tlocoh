@@ -11,12 +11,14 @@
 #' @param ptsh The desired proportion of time-selected hulls [0..1], may also be 'all' if the s-ptsh map has already been computed. See details.
 #' @param ptsh.idx The index of the saved ptsh-s table. See also \code{\link{summary.locoh.lhs}}
 #' @param nn.exists What to do if nearest neighbors have already been saved: "append", "replace", or "skip"
-#' @param status Show status messages (T/F)
-#' @param beep Beep when done (T/F)
+#' @param time.term The space-time transformation to use in the TSD distance metric: 'vmax' for the maximum velocity transformation (default) or 'dif' for the diffusion transformation
 #' @param FNN.algorithm  The algorithm to be used in the get.knnx() function in the package FNN
 #' @param dec.places The number of decimal places that rmax and amax should be rounded to
 #' @param ra.init.samp.size How many randomly selected points to use to come up with the first guess for how many neighbors to find for each point to satisify a (a-method only)
 #' @param ra.init.quant The proportion of randomly selected to points to use for the a value when coming up with an initial guess at the number of neighbors to find for each point to satisify a (a-method only)
+#' @param tct Temporal continuity threshhold used when \code{a=\link{auto.a}}
+#' @param beep Beep when done (T/F)
+#' @param status Show status messages (T/F)
 #'
 #' @details
 #' When s > 0, the 'distance' (as defined by the time-scaled distance metric') between two points is a function of 
@@ -33,7 +35,7 @@
 #' \code{\link{lxy.ptsh.add}}
 #'
 #' @examples
-#' lxy <- lxy.nn.add(lxy, k=10, s=0.01)
+#' # lxy <- lxy.nn.add(lxy, k=10, s=0.01)
 #'
 #' @export
 
@@ -62,6 +64,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
     } else {
         if (FALSE %in% (id %in% levels(lxy[["pts"]][["id"]]))) stop(paste("Can't find the following ID(s) in lxy: ", paste(id[!(id %in% levels(lxy[["pts"]][["id"]]))], collapse=", ", sep=""), sep=""))
     }
+    if (!time.term %in% c("vmax", "dif")) stop("Unknown value for time.term")
     
     ## Figure out the mode
     if (is.null(a) && is.null(r) && !is.null(k)) {
@@ -143,7 +146,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
             
             if (blnNeedToAddPtsh) {
                 cat("  - Finding s values that correspond to target proportions of time-selected hulls \n");flush.console
-                lxy <- lxy.ptsh.add(lxy, id=idVal, k=10, n=200, ptsh.target=if (identical(ptsh, "all")) 1:9/10 else ptsh, plotme=FALSE, nn=FALSE, save=TRUE)
+                lxy <- lxy.ptsh.add(lxy, id=idVal, k=10, n=200, ptsh.target=if (identical(ptsh, "all")) 1:9/10 else ptsh, plotme=FALSE, nn.add=FALSE, save=TRUE)
                 ptsh.idx <- length(lxy[["ptsh"]][[idVal]])
             }
             
@@ -464,9 +467,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         
                         if (a[a.idx, "meth"] == "enc") {
                             kVal.tmp <- a[a.idx, "nnn"]
-                            xxx
-
-
 
                         } else if (a[a.idx, "meth"] == "nn") {
                             kVal.tmp <- a[a.idx, "nnn"]

@@ -27,10 +27,13 @@
   the plot}
 
   \item{deltat.by.date}{Produce a plot of the sampling
-  interval by date, T/F}
+  interval by date. T/F}
 
-  \item{cp}{Produce a plot of the cummulative proportion
-  curve of sampling frequencies, T/F}
+  \item{samp.by.date}{Produce a scatterplot showing the
+  number of samples by date. T/F}
+
+  \item{cp}{Produce a plot of the cummulative proportion of
+  sampling frequencies. T/F}
 
   \item{cp.min}{The minimum sampling frequency (expressed
   as a proportion of tau) shown on the plot}
@@ -84,10 +87,16 @@
 
   \item{figs.per.page}{The number of plots per page.}
 
+  \item{status}{Show status messages. T/F}
+
   \item{title}{The title to be displayed. Character. If
   NULL a title will be constructed.}
 
-  \item{title.show}{Whether to show the title. T/F.}
+  \item{title.show}{Whether to show the title. T/F}
+
+  \item{subtitle}{The plot subtitle. If 'auto' a default
+  subtitle will be used, or pass an empty string \code{''}
+  to omit. Character}
 
   \item{panel.num}{A number or letter to display in the
   upper left hand corner of the plot when the plot will be

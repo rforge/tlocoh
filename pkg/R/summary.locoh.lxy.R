@@ -2,16 +2,21 @@
 #'
 #' Prints a summary of a locoh xy object (set of locations)
 #'
-#' @param lxy \code{\link{LoCoH-xy object}}
+#' @param object A \link{LoCoH-xy} object
 #' @param file A file name where the results will be saved
 #' @param dt.int Whether to show a summary of the sampling interval
+#' @param round.coords The number of digits to display for the coordinates of the spatial extent
+#' @param ptsh Show table of 's' and proportion of time selected hulls values (if available)
+#' @param ... Other arguments
 #'
-#' @seealso \code{\link{lxy.plot.freq}}
+#' @seealso \code{\link{lxy.plot.freq}}, \code{\link{lxy.ptsh.add}}
 #'
+#' @method summary locoh.lxy
 #' @export
 
-summary.locoh.lxy <- function(lxy, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE) {
+summary.locoh.lxy <- function(object, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
 
+    lxy <- object; rm(object)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
     if (!require(sp)) stop("package sp required")
@@ -65,7 +70,7 @@ summary.locoh.lxy <- function(lxy, file="", dt.int=FALSE, round.coords=1, ptsh=F
         cat("***Movement properties \n")
         rw.params.df <- lxy[["rw.params"]]
         rownames(rw.params.df) <- paste("   ", rownames(rw.params.df), sep="")
-        rw.params.df <- transform(rw.params.df, time.step.median=paste(time.step.median, " (", sapply(time.step.median, secs.fmt), ")",sep=""))
+        rw.params.df <- transform(rw.params.df, time.step.median=paste(rw.params.df$time.step.median, " (", sapply(rw.params.df$time.step.median, secs.fmt), ")",sep=""))
         print(formatdf4print(rw.params.df, indent=3), row.names=FALSE)
     }
 

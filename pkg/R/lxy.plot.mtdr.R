@@ -17,14 +17,20 @@
 #' @param col.desc The color of the descriptive text. Color value.
 #' @param mar The plot margins. A four item numeric vector
 #' @param mgp The distance away from the edge of the plot for the 1) label, 2) tick marks, and 3) axis line. A three-item numeric vector
+#' @param figs.per.page The number of plots per page.
+#' @param title The title to be displayed. Character. If NULL a title will be constructed.
+#' @param title.show Whether to show the title. T/F
+#' @param title.obj.name Whether to add the name of the lxy object to the plot title (ignored if \code{title} is passed). T/F
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. T/F
+#' @param no.sci.notation Whether to avoid the use of scientific notation on labels on the x-axis. T/F
 #' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed
 #' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F
 #' @param png.width The width of the PNG image
 #' @param png.height The height of the PNG image
 #' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
 #' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
+#' @param status Display status messages. T/F
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
 #' @details This function plots the ratio of the maximum theoretical distance the individual could have traveled (multiplied by 's') over the 
@@ -42,9 +48,9 @@
 #'
 #' @examples
 #' ## Identify a range of 's' values from space-selection to time-selection, and find 10 nearest neighbors for each value of 's'
-#' lxy <- lxy.ptsh(lxy, nn=TRUE)
+#' # lxy <- lxy.ptsh(lxy, nn=TRUE)
 #' ## Plot the ratio of maximum theoretical distance travel to TSD 
-#' lxy.plot.mtdr(lxy)
+#' # lxy.plot.mtdr(lxy)
 #'
 #' @export
 
@@ -52,7 +58,7 @@ lxy.plot.mtdr <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, type=c("mtd.tsd",
                              id=NULL, show.samp.size=TRUE, outline=FALSE,
                              desc=c(0,1,3)[2], cex.desc=0.8, col.desc="darkgreen",
                              mar=c(3, 3, if (title.show) 3 else 0.7, 0.5), mgp=c(1.9, 0.5, 0), figs.per.page=NULL, title=NULL, title.show=TRUE, title.obj.name=FALSE,
-                             panel.num=NULL, panel.num.inside.plot=!title.show, xaxis.no.sci.notation=FALSE,
+                             panel.num=NULL, panel.num.inside.plot=!title.show, no.sci.notation=FALSE,
                              png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, status=TRUE, ...) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
@@ -104,7 +110,7 @@ lxy.plot.mtdr <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, type=c("mtd.tsd",
     ## Convert date stamps to integers (num secs since 1970 in UTC)
     lxy.dt.int <- as.numeric(lxy[["pts"]][["dt"]])
 
-    xaxt <- if (xaxis.no.sci.notation) "n" else NULL
+    xaxt <- if (no.sci.notation) "n" else NULL
 
     for (idVal in id) {
         cat("Computing maximum theoretical distance over ", str.title.lst[[type]], " for ", idVal, "\n", sep=""); flush.console()
@@ -243,7 +249,7 @@ lxy.plot.mtdr <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, type=c("mtd.tsd",
         
         ## Create the plot        
         bp.info <- boxplot(mtd.ratio, outline=outline, ylim=ylim, main=title.str, xlab="s", ylab=paste("MTD / ", str.title.lst[[type]], sep=""), xaxt=xaxt, ...)
-        if (xaxis.no.sci.notation) axis(side=1, at=1:length(mtd.ratio), labels=format(as.numeric(names(mtd.ratio)), scientific=FALSE, trim=T, drop0trailing=T), ...)
+        if (no.sci.notation) axis(side=1, at=1:length(mtd.ratio), labels=format(as.numeric(names(mtd.ratio)), scientific=FALSE, trim=T, drop0trailing=T), ...)
         if (show.samp.size) text(x=1:length(sdf.idx), y=bp.info[["stats"]][5,] , labels=paste("n=", sapply(mtd.ratio, length), sep=""), pos=3, cex=0.8)
 
 

@@ -1,6 +1,6 @@
 #' Create a LoCoH-xy object
 #'
-#' Creates a \code{\link{LoCoH-xy}} object from a set of location data 
+#' Creates a \link{LoCoH-xy} object from a set of location data 
 #'
 #' @param xy A two-column matrix or data frame containing the xy coordinates of the points
 #' @param dt Optional vector of date-time values (either POSIXct objects or objects that can be coerced to POSIXct)
@@ -37,7 +37,7 @@
 #' 
 #' The time zone paramter \code{tz} is optional. If \code{tz} is omitted, R will try to get the timezone from
 #' dt, and if there is no timezone specified set it to \code{UTC}. Valid timezone names
-#' are to some extent OS specific, see \link{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
+#' are to some extent OS specific, see \url{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
 #' If dt is of class POSIXct (which stores the time zone) and a different value for \code{tz} is passed,
 #' a prompt will ask whether date values should be converted.
 #'
@@ -57,7 +57,7 @@
 #' plot(xy, pch=20, type="b", lty=1)
 #' timestamps <- Sys.time() + 3600 * (1:n-1)
 #'
-#' #Combine the xy locations and timestamps into a \code{\link{LoCoH-xy}} object
+#' #Combine the xy locations and timestamps into a \link{LoCoH-xy} object
 #' lxy <- xyt.lxy(xy=xy, dt=timestamps, id="broken_tooth")
 #' summary(lxy)
 #'

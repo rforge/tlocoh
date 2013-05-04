@@ -2,11 +2,11 @@
 \alias{lxy.amin.add}
 \title{Finds the value of a such that p percent of points are a nearest neighbor for at least one hull}
 \usage{
-  lxy.amin.add(lxy, id = NULL, s = NULL, ptp = 1,
-    max.iter = 20, nnn = 2, prec = NULL, status = TRUE)
+  lxy.amin.add(lxy, id = NULL, s = NULL, ptp = 0.98,
+    nnn = 2, prec = NULL, max.iter = 20, status = TRUE)
 }
 \arguments{
-  \item{lxy}{A \code{\link{LoCoH-xy}} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The id value(s) to analyze. If \code{NULL} all
   ids will be used.}
@@ -18,12 +18,16 @@
   \item{ptp}{The proportion of total points that should be
   a nearest neighbor for at least one hull (0..1]}
 
-  \item{max.iter}{The maximum number of iterations to try}
+  \item{nnn}{The minimum number of nearest neighbors each
+  point should have (can pass a vector of several values)}
 
   \item{prec}{A numeric value in map units to which the
   value of 'a' will be found. If \code{NULL}, will default
   to one-half of the median step legnth of the entire
   dataset}
+
+  \item{max.iter}{The maximum number of iterations to try
+  to get within \code{prec} of the minimum value}
 
   \item{status}{Show messages, T/F}
 }

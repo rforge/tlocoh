@@ -8,8 +8,11 @@
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
 
-  \item{ta.min}{ta.max Minimum and maximum values for time
-  away in seconds (numeric vector)}
+  \item{ta.min}{Minimum value(s) for time away in seconds
+  (numeric vector)}
+
+  \item{ta.max}{Maximum value(s) for time away in seconds
+  (numeric vector)}
 
   \item{ta.cuts}{A numeric vector of time values in seconds
   that define the time-away intervals}

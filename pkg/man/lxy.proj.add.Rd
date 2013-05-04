@@ -17,10 +17,18 @@
   Add ancillary variable(s) to a LoCoH-xy object from a
   raster
 }
+\details{
+  This function will add projection information to a
+  \link{LoCoH-xy} object. Note this does not reproject
+  coordinates, it only adds or changes the projection
+  information. Any existing projection information will be
+  overwritten.
+}
 \examples{
-lxy <- lxy.proj.add(lxy, CRS("+proj=utm +south +zone=34"))
+# lxy <- lxy.proj.add(lxy, CRS("+proj=utm +south +zone=34"))
 }
 \seealso{
-  \code{\link{CRS-class}}
+  \code{\link{CRS-class}} for arguments accepted by the
+  \code{\link{CRS}} function.
 }
 

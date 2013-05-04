@@ -1,6 +1,6 @@
 #' Merge LoCoH-hullsets
 #'
-#' @param .... Two or more LoCoH-hullset objects
+#' @param ... Two or more LoCoH-hullset objects
 #' @param check.class Whether to enforce that all objects merged belong to class locoh.lhs (T/F)
 #'
 #' @return A LoCoH-hullset object

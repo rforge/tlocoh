@@ -1,5 +1,4 @@
-regions.draw <-
-function(n, col=NULL, draw.reg=TRUE, alpha=0.5, prompt.labels=TRUE) {
+regions.draw <- function(n, col=NULL, draw.reg=TRUE, alpha=0.5, prompt.labels=TRUE) {
     ## Returns a list with n items where each item is a list containing two elements:
     ##     1) a data frame of points of a closed polygon drawn by the user on the current plot window
     ##     2) a color object (string)
@@ -25,7 +24,7 @@ function(n, col=NULL, draw.reg=TRUE, alpha=0.5, prompt.labels=TRUE) {
         pts <- poly.from.plot(draw.poly=FALSE, status=FALSE)
         if (draw.reg) {
           col.use <- col2rgb(col[i])
-          col.use <- rgb(r=col.use[1], g=col.use[2], b=col.use[3], maxColorValue = 255, alpha=alpha * 255)
+          col.use <- rgb(red=col.use[1], green=col.use[2], blue=col.use[3], maxColorValue = 255, alpha=alpha * 255)
           polygon(pts, col=col.use)
         }
         if (prompt.labels) {

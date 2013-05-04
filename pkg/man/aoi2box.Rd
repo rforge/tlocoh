@@ -1,10 +1,36 @@
 \name{aoi2box}
 \alias{aoi2box}
-\title{Converts upper-left / lower-right to a closed polygon}
+\title{Converts a dataframe with upper-left / lower-right coordinates of a box to a closed polygon}
 \usage{
   aoi2box(aoi)
 }
+\arguments{
+  \item{aoi}{A two-column two-row data frame or matrix with
+  x in the first column and y in the second columm. The
+  upper left point and the lower right point in the first
+  and second rows respectively}
+}
+\value{
+  Two column dataframe containing the xy coordinates of a
+  closed rectangle that can be plotted using
+  \code{\link{points}} or \code{\link{polygons}}
+}
 \description{
-  Converts upper-left / lower-right to a closed polygon
+  Converts a dataframe with upper-left / lower-right
+  coordinates of a box to a closed polygon
+}
+\note{
+  You can use the \code{aoi} function to select two
+  coordinates on the active plot window with the mouse.
+  This function facilitates plotting that rectangle.
+}
+\examples{
+\dontrun{
+myaoi <- aoi()
+polygons(myaoi)
+}
+}
+\seealso{
+  \code{\link{aoi}}
 }
 

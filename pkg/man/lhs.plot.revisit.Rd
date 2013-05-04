@@ -15,8 +15,7 @@
     png.fn.pre = NULL, png.fn.suf = NULL,
     png.overwrite = TRUE, panel.num = NULL,
     panel.num.inside.plot = !title.show, bg = "white",
-    legend.space = if (legend) 0.05 else 0, status = TRUE,
-    ...)
+    legend.space = if (legend) 0.05 else 0, ...)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -36,7 +35,28 @@
   \item{s}{The s value(s) of nearest neighbor sets to
   include in the plot. If NULL, all values will be used}
 
-  \item{hs.names}{The name(s) of saved hullsets to analyze}
+  \item{hs.names}{The name(s) of saved hullsets to plot}
+
+  \item{ta.min}{The minimum time away (in seconds) to
+  include on the histogram , can also be 'auto'}
+
+  \item{ta.max}{The maximum time away (in seconds) to
+  include. If NULL then no upper limit will be imposed}
+
+  \item{ta.min.auto.tau}{The minimum time away to include
+  in 'auto' expressed as the number of median sampling
+  intervals. Ignored if \code{ta.min} is not
+  \code{'auto'}.}
+
+  \item{xaxis.vals}{A numeric vector of time-away values
+  (in seconds) that will be labeled on the x-axis.}
+
+  \item{breaks}{A value for 'breaks' that will be passed to
+  the \code{hist} function (see help function for breaks)}
+
+  \item{col}{A color value for the histogram bars}
+
+  \item{bg}{A color value for the plot background}
 
   \item{figs.per.page}{Number of plots per page}
 
@@ -101,14 +121,33 @@
   values}
 
   \item{...}{Additional parameters that will be passed to
-  the \code{\link{plot}} function}
+  the \code{\link{hist}} function}
 }
 \value{
   A list of objects of class histogram (one for each
   hullset plotted)
 }
 \description{
-  Creates a plot of the area of isopleths in a
-  LoCoH-hullset area
+  Plots a histogram of the revisit times a LoCoH-hullset
+  area
+}
+\details{
+  This function will plot a histogram of the revisitation
+  times for a hullset. Revisitation time is simply the time
+  between points enclosed in a hull. Basically, all points
+  enclosed by each hull are examined and their time
+  intervals computed. This may help reveal where there are
+  natural temporal cycles in revisitation, for example if
+  you see a spike in revisitation around 24 hours there may
+  be daily revisitation pattern in some of the hulls. You
+  can specify the minimum amount of time-away to show in
+  the histogram (e.g., if enclosed points that are
+  separated by the median sampling interval are of little
+  interest), as well as the maximum time-away period. Note
+  that revisition metrics do *not* have to be computed for
+  the hullset for the histogram to be computed.
+}
+\seealso{
+  \code{\link{lhs.visit.add}}
 }
 

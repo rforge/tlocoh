@@ -83,7 +83,7 @@
   \tab \code{data.frame} \tab a data frame\cr \tab
   \code{range.expand} \tab a two-element numeric vector
   that will be added to both xlim and ylim in
-  \link{plot.LoCoH.lxy}. To reduce the range on the x-axis,
+  \link{plot.locoh.lxy}. To reduce the range on the x-axis,
   for example to make space for labels, the first element
   should be negative.\cr } }
 

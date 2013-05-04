@@ -1,11 +1,26 @@
-#' Add hull metrics for association analysis
+#' Compute hull metrics for temporally overlapping hulls
 #'
-#' @param lhs A LoCoH-hullset object
-#' @param save.hto Whether to save the list of hull indices that temporally overlap, T/F
-#' @param maxdt The maximum difference in time (in seconds) for two hulls to be considered 'overlapping' in time. Can also be \code{auto},
-#' in which case half ot the smallest median sampling interval will be used.
+#' Compute hull metrics for pairs of temporally overlapping hulls of separate individuals 
+#'
+#' @param lhs A \link{LoCoH-hullset} object
+#' @param id A character vector of the hullset ids to compute metrics for. Can also be \code{'all'}.
+#' @param hs2.id A character vector of the hullset ids to use as the comparison hullsets. Can also be \code{'all'}.
+#' @param maxdt The maximum difference in time (in seconds) for two hulls to be considered 'overlapping' in time. Can also be \code{'auto'},
+#' in which case half of the smallest of the two median sampling intervals will be used.
+#' @param save.hto Whether to save the list of hull indices that temporally overlap in the hullset, T/F
+#' @param status Show status messages, T/F
+#'
+#' @details This will compute hull metrics for pairs of hulls from two individuals. This only works for a LoCoH-hullset object 
+#' that contains hulls from two or more individuals (id's). For each hull for individual A, for example,
+#' it will identify the hulls in individual B that temporally overlap, and compute the mean centroid distance (hull metric name = to.mcd).
+#' By default \emph{to.mcd} is computed for all pairs of individuals, but you can specify specific pairs by passing values for \code{id} and \code{hs2.id}.
+#'
+#' This metric is used for association analysis. You can use this metric for example to look for spatial and temporal patterns in how close individuals get to each other.
+#' Other association metrics exist for spatially overlapping hulls (see \code{\link{lhs.so.add}}).
 #'
 #' @return A LoCoH-hullset object
+#'
+#' @seealso \code{\link{lhs.so.add}}, \code{\link{lhs.merge}}
 #'
 #' @export
 

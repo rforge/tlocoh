@@ -2,7 +2,7 @@
 \alias{plot.locoh.lhs}
 \title{Plot a LoCoH-hullset object}
 \usage{
-  plot.locoh.lhs(lhs, id = NULL, k = NULL, r = NULL,
+  plot.locoh.lhs(x, id = NULL, k = NULL, r = NULL,
     a = NULL, s = NULL, hs.names = NULL, iso = FALSE,
     hulls = FALSE, hpp = FALSE, dr = FALSE, nn = FALSE,
     ellipses = FALSE, allpts = FALSE, ptid = NULL,
@@ -48,12 +48,11 @@
     png.pointsize = 12 + (png.width - 480)/80,
     png.overwrite = TRUE, sp = 0, status = TRUE,
     panel.num = NULL, panel.num.inside.plot = !title.show,
-    hmap = NULL, use.saved.nn = FALSE, hmap.grp = NULL,
-    iso.level = NULL, xlim = NULL, ylim = NULL,
-    check.ap.value.in.hmparams = TRUE, ...)
+    hmap = NULL, iso.level = NULL, xlim = NULL,
+    ylim = NULL, check.ap.value.in.hmparams = TRUE, ...)
 }
 \arguments{
-  \item{lhs}{A LoCoH-hullset object}
+  \item{x}{A \link{LoCoH-hullset} object}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}
@@ -108,7 +107,7 @@
 
   \item{aoi}{An area-of-interest object (e.g., box), used
   to 'zoom in' to specific parts of the plot. aoi objects
-  may be created by the function aoi().}
+  may be created by the function \code{aoi()}.}
 
   \item{iso.idx}{The index(s) of the isopleths to plot. Use
   the summary() function to see the indices of the
@@ -145,6 +144,8 @@
 
   \item{lwd.dr}{The line width of directional routes.}
 
+  \item{pch.allpts}{The plot character for all points}
+
   \item{cex.nn}{The expansion factor for nearest neighbor
   points.}
 
@@ -162,6 +163,10 @@
   \item{col.hpp}{The color of hull parent points. Either a
   single color value or a vector of color values of the
   same length as the number of hulls.}
+
+  \item{col.hpp.na}{The color of hull parent points that
+  have no value of the metric specified by
+  \code{hpp.classify}. Single color value.}
 
   \item{col.hulls.border}{The outline color of hulls.
   Either a single color value or a vector of color values
@@ -310,43 +315,43 @@
 
   \item{layers}{The name(s) of layers in shp.csv to display
   in the background. Will be displayed using the symbology
-  in shp.csv. Character vector or comma delimited string.}
+  in shp.csv. Character vector or comma delimited string}
 
   \item{png.fn}{The path and name of the PNG file to create
-  (instead of displaying in a plot window).}
+  (instead of displaying in a plot window)}
 
   \item{png.dir}{The directory for a PNG file (filename
   will be constructed automatically). Ignored if png.fn is
-  passed.}
+  passed}
 
   \item{png.dir.make}{Whether to create png.dir if it
-  doesn't exist. T/F.}
+  doesn't exist. T/F}
 
   \item{png.fn.pre}{A prefix that will be used in the
   construction of the PNG filename. Ignored if png.fn is
-  passed.}
+  passed}
 
   \item{png.fn.mid}{A mid-fix that will be used in the
   construction of the PNG filename. Ignored if png.fn is
-  passed.}
+  passed}
 
   \item{png.fn.suf}{A suffix that will be used in the
   construction of the PNG filename. Ignored if png.fn is
-  passed.}
+  passed}
 
   \item{png.fn.incld.hs.name}{Whether to include the
   hullset name as part of the PNG filename. (T/F). Ignored
-  if png.fn is passed.}
+  if png.fn is passed}
 
   \item{png.each.plot.separate}{Whether to make each plot
   in a separate plot / PNG. T/F. Ignored if png.fn is
-  passed.}
+  passed}
 
   \item{png.width}{The width of the PNG image. Ignored if
-  png.fn is passed.}
+  png.fn is passed}
 
   \item{png.height}{The height of the PNG image. Ignored if
-  png.fn is passed.}
+  png.fn is passed}
 
   \item{png.pointsize}{The pointsize (in pixels) for the
   PNG image (increase to make labels appear larger).
@@ -354,24 +359,37 @@
   pixels.}
 
   \item{png.overwrite}{Whether to overwrite an existing PNG
-  file if it exists. T/F.}
+  file if it exists. T/F}
 
   \item{sp}{Special plot number (not used)}
 
-  \item{status}{Whether to show messages. T/F.}
+  \item{status}{Whether to show messages. T/F}
 
   \item{panel.num}{A number or letter to display in the
   upper left hand corner of the plot when the plot will be
   used as part of a multi-frame graphic (as in
-  publications). Character.}
+  publications). Character}
 
   \item{panel.num.inside.plot}{Whether to display panel.num
   inside the plot area itself, as opposed to the title
-  area.}
+  area}
 
   \item{hmap}{A named list of hull metric auxillary
   parameters, the name of each list element is the name of
-  the variable.}
+  the variable}
+
+  \item{iso.level}{The isopleth levels to plot, numeric
+  vector}
+
+  \item{xlim}{The lower and upper limit of the x-axis,
+  two-element numeric vector}
+
+  \item{ylim}{The lower and upper limit of the y-axis,
+  two-element numeric vector}
+
+  \item{check.ap.value.in.hmparams}{Whether to check if
+  hull metrics exist for the auxillary parameters passed.
+  T/F}
 
   \item{...}{Other parameters, including any auxillary
   parameters required by certain hull metrics}
@@ -410,7 +428,7 @@
   plot some of the isopleths, you can specify which one(s)
   to plot with the parameters \code{iso.idx} (the index(s)
   of the isopleths to plot, see
-  \code{\link{summary.locoh.lhs)}}) or
+  \code{\link{summary.locoh.lhs}}) or
   \code{iso.sort.metric}.
 
   The plot title can be manually set with the \code{title}

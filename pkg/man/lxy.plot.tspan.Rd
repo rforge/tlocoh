@@ -54,11 +54,25 @@
   \item{col.desc}{The color of the descriptive text. Color
   value.}
 
+  \item{col.hist}{The color of the histogram bars. Color
+  value.}
+
   \item{mar}{The plot margins. A four item numeric vector}
 
   \item{mgp}{The distance away from the edge of the plot
   for the 1) label, 2) tick marks, and 3) axis line. A
   three-item numeric vector}
+
+  \item{figs.per.page}{The number of plots per page.}
+
+  \item{title}{The title to be displayed. Character. If
+  NULL a title will be constructed.}
+
+  \item{title.show}{Whether to show the title. T/F}
+
+  \item{title.obj.name}{Whether to add the name of the lxy
+  object to the plot title (ignored if \code{title} is
+  passed). T/F}
 
   \item{panel.num}{A number or letter to display in the
   upper left hand corner of the plot when the plot will be
@@ -71,6 +85,9 @@
 
   \item{panel.num.cex}{The expansion factor for the panel
   number. Ignored if panel.num is NULL.}
+
+  \item{no.sci.notation}{Whether to avoid the use of
+  scientific notation on labels on the x-axis. T/F}
 
   \item{png.dir}{The directory for a PNG file (filename
   will be constructed automatically). Ignored if png.fn is
@@ -90,6 +107,8 @@
   PNG image, equivalent to the height or width of a
   character in pixels (increase to make labels appear
   larger)}
+
+  \item{status}{Show progress bar and status messages. T/F}
 
   \item{...}{Additional parameters that will be passed to
   the \code{\link{plot}} function}

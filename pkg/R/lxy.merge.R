@@ -5,6 +5,8 @@
 #' @param ... \link{LoCoH-xy} objects
 #' @param pts.flds A character vector of column names to include in the merged object, can also be \code{"all"} or \code{NULL}
 #' @param save.ptid If duplicate ptid values are encounted in the merged object, whether to save the original ptid values as an ancillary variable, T/F
+#' @param new.id A new id value for the merged object
+#' @param save.old.id A boolean or the name of a ancillary variable where the old id values will be saved
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when 
 #' computing the frequency table of sampling intervals (no change is made to the time stamps)
 #' @param tau.diff.max The maximum deviation from tau (the median delta.t of the entire dataset), expressed as a proportion of tau, that 
@@ -26,7 +28,7 @@
 lxy.merge <- function (..., pts.flds="all", save.ptid=FALSE, new.id=NULL, save.old.id=NULL, dt.int.round.to=0.1, tau.diff.max=0.02) {
 
     if (!require(sp)) stop("package sp required")
-    if (!is.null(new.id) || !is.null(save.old.id)) stop(cw("These parameters not yet coded, but will allow you to assign a new id to the merged object and save the old ids as an ancillary variable", final.cr=F))
+    if (!is.null(new.id) || !is.null(save.old.id)) stop(cw("These options are not yet working, but will allow you to assign a new id to the merged object and save the old ids as an ancillary variable", final.cr=F))
     
     lxy.lst <- list(...)
     if (length(lxy.lst)==1) stop("Can't merge one object")

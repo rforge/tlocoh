@@ -47,9 +47,10 @@
   \item{nn.exists}{What to do if nearest neighbors have
   already been saved: "append", "replace", or "skip"}
 
-  \item{status}{Show status messages (T/F)}
-
-  \item{beep}{Beep when done (T/F)}
+  \item{time.term}{The space-time transformation to use in
+  the TSD distance metric: 'vmax' for the maximum velocity
+  transformation (default) or 'dif' for the diffusion
+  transformation}
 
   \item{FNN.algorithm}{The algorithm to be used in the
   get.knnx() function in the package FNN}
@@ -66,6 +67,13 @@
   to points to use for the a value when coming up with an
   initial guess at the number of neighbors to find for each
   point to satisify a (a-method only)}
+
+  \item{tct}{Temporal continuity threshhold used when
+  \code{a=\link{auto.a}}}
+
+  \item{beep}{Beep when done (T/F)}
+
+  \item{status}{Show status messages (T/F)}
 }
 \value{
   A LoCoH-xy object object with saved information about
@@ -88,7 +96,7 @@
   values of 's' will be used.
 }
 \examples{
-lxy <- lxy.nn.add(lxy, k=10, s=0.01)
+# lxy <- lxy.nn.add(lxy, k=10, s=0.01)
 }
 \seealso{
   \code{\link{summary.locoh.lxy}} to see what nearest

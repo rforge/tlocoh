@@ -1,10 +1,13 @@
 \name{n2z}
 \alias{n2z}
-\title{Convert nulls to zero}
+\title{Convert NULL to a zero}
 \usage{
   n2z(x)
 }
+\arguments{
+  \item{x}{Input object}
+}
 \description{
-  Convert nulls to zero
+  Convert NULL to a zero
 }
 

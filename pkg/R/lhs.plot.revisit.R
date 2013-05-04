@@ -1,6 +1,6 @@
 #' Plot distribution of revisit times
 #'
-#' Creates a plot of the area of isopleths in a LoCoH-hullset area
+#' Plots a histogram of the revisit times a LoCoH-hullset area
 #'
 #' @param lhs A LoCoH-hullset object
 #' @param id The id(s) of the individual(s) to include in the plot
@@ -8,7 +8,14 @@
 #' @param r A r-value for the number of nearest neighbors around each point to include in the plot
 #' @param a A a-value for the number of nearest neighbors around each point to include in the plot
 #' @param s The s value(s) of nearest neighbor sets to include in the plot. If NULL, all values will be used
-#' @param hs.names The name(s) of saved hullsets to analyze
+#' @param hs.names The name(s) of saved hullsets to plot
+#' @param ta.min The minimum time away (in seconds) to include on the histogram , can also be 'auto'
+#' @param ta.max The maximum time away (in seconds) to include. If NULL then no upper limit will be imposed
+#' @param ta.min.auto.tau The minimum time away to include in 'auto' expressed as the number of median sampling intervals. Ignored if \code{ta.min} is not \code{'auto'}.
+#' @param xaxis.vals A numeric vector of time-away values (in seconds) that will be labeled on the x-axis.
+#' @param breaks A value for 'breaks' that will be passed to the \code{hist} function (see help function for breaks)
+#' @param col A color value for the histogram bars
+#' @param bg  A color value for the plot background
 #' @param figs.per.page Number of plots per page
 #' @param legend Whether to include a legend. T/F.
 #' @param title The title to be displayed. Character. If NULL a title will be constructed.
@@ -28,9 +35,13 @@
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. Ignored if panel.num is NULL. T/F
 #' @param legend.space The amount of additional space on the lower end of the x-axis to make room for the legend. Expressed as a proportion of the range of the x-axis values
-#' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
+#' @param ... Additional parameters that will be passed to the \code{\link{hist}} function
 #'
 #' @return A list of objects of class histogram (one for each hullset plotted)
+#'
+#' @details This function will plot a histogram of the revisitation times for a hullset. Revisitation time is simply the time between points enclosed in a hull. Basically, all points enclosed by each hull are examined and their time intervals computed. This may help reveal where there are natural temporal cycles in revisitation, for example if you see a spike in revisitation around 24 hours there may be daily revisitation pattern in some of the hulls. You can specify the minimum amount of time-away to show in the histogram (e.g., if enclosed points that are separated by the median sampling interval are of little interest), as well as the maximum time-away period. Note that revisition metrics do *not* have to be computed for the hullset for the histogram to be computed.
+#'
+#' @seealso \code{\link{lhs.visit.add}}
 #'
 #' @export
 
@@ -40,7 +51,7 @@ lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                              mar=c(2.8, 3.2, if (title.show) (if (subtitle) 3.2 else 2.3) else 0.5, 0.5), mgp=c(1, 0.7, 0), 
                              png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.pointsize=12+(png.width-480)/80,
                              png.fn.pre=NULL, png.fn.suf=NULL, png.overwrite=TRUE,
-                             panel.num=NULL, panel.num.inside.plot=!title.show, bg="white", legend.space=if (legend) 0.05 else 0, status=TRUE, ...) {
+                             panel.num=NULL, panel.num.inside.plot=!title.show, bg="white", legend.space=if (legend) 0.05 else 0, ...) {
 
   ## If overlay=T, all series are combined on one axis
   ## Taken out: series=c("hullsets","iso.levels")[ifelse(length(lhs)==1,1,2)], 
@@ -69,7 +80,7 @@ lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
     }
     
     if (is.null(png.dir) && is.null(png.fn)) {
-        opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp)
+        opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, bg=bg)
         on.exit(par(opar))
     }
     
@@ -97,7 +108,6 @@ lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
             ta.min.use <- ta.min
         }
 
-        # print("Lets look at this");browser()        
         cat("  Computing revisit times for ", names(hs)[hs.idx], "\n", sep="")
         all.revisit.times <- unlist(pblapply(hs[[hs.idx]][["enc.pts"]][["idx"]], function(x) diff(dt.int[x])))        
         
@@ -116,9 +126,6 @@ lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
             title.use <- NULL
         }
         
-        #print("lets go");browser()
-        #hist.obj <- hist(all.revisit.times, breaks=breaks, axes=FALSE, xlab="time away", ylab="frequency", main=title.use, col=col, ...)
-
         ## Compute the histogram. We won't actually print just yet because we are adding labels manually and 
         ## may need to enlarge the xlim to include '0' 
         hist.obj <- hist(all.revisit.times, breaks=breaks, plot=FALSE)
@@ -134,10 +141,9 @@ lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
         ## Now plot the histogram specifying xlim but without axes
         plot(hist.obj, axes=FALSE, xlab="time away", ylab="frequency", main=title.use, col=col, xlim=range(c(xaxis.at, hist.obj$breaks)), ...)
         
+        ## Add the axes manually
         axis(side=1, cex.axis=0.9, pos=0, at=xaxis.at, labels=xaxis.labels)
-        #axis(side=2, cex.axis=0.9, pos=hist.obj[["breaks"]][1])
         axis(side=2, cex.axis=0.9, pos=xaxis.at[1])
-        
 
         ## Add panel.num
         if (!is.null(panel.num)) {

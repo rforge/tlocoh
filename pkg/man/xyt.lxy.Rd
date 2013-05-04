@@ -62,8 +62,8 @@
   A object of class \code{\link{locoh.lxy}}
 }
 \description{
-  Creates a \code{\link{LoCoH-xy}} object from a set of
-  location data
+  Creates a \link{LoCoH-xy} object from a set of location
+  data
 }
 \note{
   At a minimum, a locoh-xy object contains a set of points.
@@ -98,7 +98,7 @@
   dt, and if there is no timezone specified set it to
   \code{UTC}. Valid timezone names are to some extent OS
   specific, see
-  \link{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
+  \url{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
   If dt is of class POSIXct (which stores the time zone)
   and a different value for \code{tz} is passed, a prompt
   will ask whether date values should be converted.
@@ -117,7 +117,7 @@ xy <- data.frame(x=start[1]+cumsum(stepsize * cos(theta)), y=start[2]+cumsum(ste
 plot(xy, pch=20, type="b", lty=1)
 timestamps <- Sys.time() + 3600 * (1:n-1)
 
-#Combine the xy locations and timestamps into a \\code{\\link{LoCoH-xy}} object
+#Combine the xy locations and timestamps into a \\link{LoCoH-xy} object
 lxy <- xyt.lxy(xy=xy, dt=timestamps, id="broken_tooth")
 summary(lxy)
 }

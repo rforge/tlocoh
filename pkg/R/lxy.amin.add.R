@@ -1,11 +1,12 @@
 #' Finds the value of a such that p percent of points are a nearest neighbor for at least one hull
 #'
-#' @param lxy A \code{\link{LoCoH-xy}} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to analyze. If \code{NULL} all ids will be used.
 #' @param s Value(s) for the s term in the time-scaled-distance equation for point-to-point distance
 #' @param ptp The proportion of total points that should be a nearest neighbor for at least one hull (0..1]
-#' @param max.iter The maximum number of iterations to try
+#' @param nnn The minimum number of nearest neighbors each point should have (can pass a vector of several values)
 #' @param prec A numeric value in map units to which the value of 'a' will be found. If \code{NULL}, will default to one-half of the median step legnth of the entire dataset
+#' @param max.iter The maximum number of iterations to try to get within \code{prec} of the minimum value
 #' @param status Show messages, T/F
 #'
 #' @details This function finds the value of 'a' (within a specified threshhold \code{prec}) such that the 
@@ -19,7 +20,7 @@
 #'
 #' @export
 
-lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=NULL, status=TRUE) {
+lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=0.98, nnn=2, prec=NULL, max.iter=20, status=TRUE) {
 
     if (!require(pbapply)) stop("pbapply package required")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
@@ -56,10 +57,11 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=N
             prec.use <- prec
         }
         
+        if (is.null(lxy[["nn"]])) stop("No nearest neighbor tables found")
+        if (is.null(lxy[["nn"]][[1]][["time.term"]])) stop("Old data structure detected. Fix with lxy.repair")
         nn.info <- do.call(rbind, lapply(lxy[["nn"]], function(x) data.frame(id=x[["id"]], tt=x[["time.term"]], s=x[["s"]], n=length(x[["ptid"]]), kmax=x[["kmax"]], rmax=x[["rmax"]], amax=x[["amax"]])))
-        
         if (is.null(nn.info)) stop(paste("No nearest neighbor tables found for id=", idVal, sep=""))
-        
+                                                                                                    
         ## Find those nn sets that have the same value of id
         nn.info.idVal.idx <- which(nn.info[["id"]] == idVal)
         
@@ -90,8 +92,6 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=N
 
                     for (ptpVal in ptp) {
                         if (status) cat(cw(paste("- Finding the value of 'a' (within ", prec.use, ") where ", ptpVal * 100, "% or more points are a nearest neighbor in at least one hull when k=", nnnVal, sep=""), final.cr=TRUE, indent=2, exdent=3))
-
-                        #print("lets look at this");browser()
 
                         ## First thing we need to do is to find an upper value of 'a' that results in 100% of points being a nearest neighbor
                         a2 <- lxy[["nn"]][[nn.idx]][["nn.df"]][["tsd.cumsum"]][lxy[["nn"]][[nn.idx]][["nn.df"]][["nn.rank"]]==nnnVal]
@@ -141,8 +141,6 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=N
 
                         }
 
-                        #cat("Initial a.low=", a.low, " (", atest.ppe, "), a.high=", a.high, "\n", sep="")
-
                         ## So now we have a.low and a.high such that somewhere between them ptpVal points or more will be enclosed
                         ## We want to shrink the difference between a.low and a.high until it is <= prec.use
 
@@ -158,7 +156,6 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=N
                             less.than.atest <- lxy[["nn"]][[nn.idx]][["nn.df"]][["tsd.cumsum"]] <= a.mid
 
                             ## Of these rows, split into list by pp.idx
-                            #nnidx.lst <- with(lxy[["nn"]][[nn.idx]][["nn.df"]][less.than.atest, ], split(nn.idx, pp.idx))
                             nnidx.lst <- split(lxy[["nn"]][[nn.idx]][["nn.df"]][["nn.idx"]][less.than.atest], lxy[["nn"]][[nn.idx]][["nn.df"]][["pp.idx"]][less.than.atest])
 
                             ## The valid ones are those which are left with three or more points
@@ -170,11 +167,6 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=N
                             ## Compute the proportion of enclosed points
                             atest.ppe <- length(nn.pts) / idVal.num.pts
 
-                            #suminfo <- rbind(suminfo, data.frame(atest=a.mid, nep=length(nn.pts), ptp=atest.ppe))
-                            #amin.lst[[as.character(a.mid)]] <- nn.pts
-
-                            #num.pts.enclosed <- length(unique(lxy[["nn"]][[nn.idx]][["nn.df"]][lxy[["nn"]][[nn.idx]][["nn.df"]][["tsd.cumsum"]] <= a.mid , "nn.idx"]))
-
                             if (atest.ppe >= ptpVal) {
                                 a.high <- a.mid
                             } else {
@@ -185,7 +177,6 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=1, max.iter=20, nnn=2, prec=N
 
                         cat("   Done: a.min = ", a.high, "\n", sep=""); flush.console()
 
-                        #print("right here what we should do is to save this in nn");browser()
                         aa.df <- data.frame(meth="enc", ptp=ptpVal, nnn=nnnVal, tct=NA, aVal=a.high)
                         lxy[["nn"]][[nn.idx]][["auto.a.df"]] <- unique(rbind(lxy[["nn"]][[nn.idx]][["auto.a.df"]], aa.df))
 

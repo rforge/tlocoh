@@ -7,7 +7,9 @@
     figs.per.page = NULL, ...)
 }
 \arguments{
-  \item{lxy}{A \code{\link{locoh-xy}} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
+
+  \item{id}{The id value(s) to include on the plot}
 
   \item{idx}{An optional vector of indices of points that
   the plot will be restricted to. See notes}
@@ -18,6 +20,8 @@
   \item{vline.trunc.units.to}{A character value: "secs",
   "mins", "hours", or "days". Determines where the first
   vertical grid lines will appear}
+
+  \item{figs.per.page}{The number of figures per page}
 
   \item{...}{Additional parameters that will be passed to
   the \code{\link{plot}} function}
@@ -48,6 +52,6 @@
   cycles of a specific frequency.
 }
 \seealso{
-  \code{\link{lxy.sfinder}}
+  \code{\link{lxy.plot.sfinder}}
 }
 

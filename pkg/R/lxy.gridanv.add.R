@@ -3,16 +3,18 @@
 #' @param lxy \link{LoCoH-xy} object
 #' @param band Numeric vector of which band(s) to read
 #' @param dtfn A two-column data frame containing a date and filename
+#' @param fn Filename of a raster
 #' @param anv.name The name(s) of the ancillary variable(s) (one per band)
 #' @param anv.desc A character vector of descriptions 
-#' @param overwrite Whether to overwrite existing variables with the same names (T/F)
+#' @param date.match How to match dates when \code{dtfn} is used: \code{'closest'} or \code{'before'}. See note.
 #'
 #' @note
 #' This function will create new ancillary variables and fill it with the value of the pixel at each point.
 #' The image should be in the same coordinate system as the points. Current the script does not check this.
-#' Any points that fall beyond the edges of the image will be given 'NA' values.
+#' Any points that fall beyond the edges of the image will be given 'NA' values. If an ancillary variable with the
+#' same name already exists, it will be overwritten.
 #'
-#' The image / raster must be in a format supported by \code{\link{readGDAL}} in the rdgal package. Multi-band 
+#' The image / raster specified by \code{fn} be in a format supported by the \code{readGDAL} function in the rdgal package. Multi-band 
 #' formats are support. If the image has multiple bands, you can specify which band(s) to read using the \code{band} parameter.
 #' A separate ancillary variable will be created for each band. You can provide name(s) for the ancillary variable(s) with the
 #' \code{anv.name parameter}.

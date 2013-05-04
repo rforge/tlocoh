@@ -16,6 +16,9 @@
 
   \item{char.break.keep}{Whether to keep the char.break
   character when the string gets broken. T/F}
+
+  \item{cex}{The character expansion factor that will be
+  used to display the text}
 }
 \value{
   A two-item character vector containing [1] the formatted
@@ -29,9 +32,14 @@
 \note{
   This function is designed to break up a potentially long
   character object that is going to be added to a plot
-  either as a title or text. The string will be broken at
-  the \code{char.break} characters such that each line will
-  be <= \code{width} when plotted. Breaks are replaced with
+  either as a title or text. Line breaks will be inserted
+  so that the string will wrap appropriately at
+  \code{width} inches when plotted with \code{cex}
+  character expansion factor.
+
+  The character object will be broken at the
+  \code{char.break} characters such that each line will be
+  <= \code{width} when plotted. Breaks are replaced with
   carriage returns. If \code{char.break.keep} is
   \code{TRUE}, the break character will be kept, otherwise
   it will be removed. If no occurrence of the

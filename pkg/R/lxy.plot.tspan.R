@@ -14,17 +14,24 @@
 #' @param desc Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.
 #' @param cex.desc The expansion factor for the descriptive text. Numeric value.
 #' @param col.desc The color of the descriptive text. Color value.
+#' @param col.hist The color of the histogram bars. Color value.
 #' @param mar The plot margins. A four item numeric vector
 #' @param mgp The distance away from the edge of the plot for the 1) label, 2) tick marks, and 3) axis line. A three-item numeric vector
+#' @param figs.per.page The number of plots per page.
+#' @param title The title to be displayed. Character. If NULL a title will be constructed.
+#' @param title.show Whether to show the title. T/F
+#' @param title.obj.name Whether to add the name of the lxy object to the plot title (ignored if \code{title} is passed). T/F
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. Ignored if panel.num is NULL. T/F
 #' @param panel.num.cex The expansion factor for the panel number. Ignored if panel.num is NULL. 
+#' @param no.sci.notation Whether to avoid the use of scientific notation on labels on the x-axis. T/F
 #' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed
 #' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F
 #' @param png.width The width of the PNG image
 #' @param png.height The height of the PNG image
 #' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
 #' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
+#' @param status Show progress bar and status messages. T/F
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
 #' @return A list of plots created, with one element per id, and each element consisting of another 

@@ -17,8 +17,8 @@
   \item{dir}{Directory for the output file (relative to the
   working directory), ignored if fn passed}
 
-  \item{suffix}{A suffix that will be used in the
-  construction of the filename, ignored if fn is passed}
+  \item{suf}{A suffix that will be used in the construction
+  of the filename, ignored if fn is passed}
 
   \item{compress}{Compress file (T/F)}
 

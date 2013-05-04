@@ -3,6 +3,7 @@
 #' Adds isopleth(s) to a LoCoH-hullset object 
 #'
 #' @param lhs A LoCoH-hullset object
+#' @param id The id(s) of the hullsets to create isopleths for 
 #' @param k The k value of hullsets to create isopleths for
 #' @param r The r value of hullsets to create isopleths for
 #' @param a The a value of hullsets to create isopleths for
@@ -17,15 +18,17 @@
 #' will be 'capped'. Ignored when \code{iso.method="hm.vals"}. See details.
 #' @param scale.iso.levels.to.hm.vals Whether to linearly scale iso.levels (presumed to be 0..1) to the minimum 
 #' and maximum of the sort.metric value. This is used in conjunction iso.method='hm.vals', to produce 
-#' isopleths as the aggregation of hulls whose sort.metric value is >= i\% of the maximum, where i is the isopleth level. T/F. 
+#' isopleths as the aggregation of hulls whose sort.metric value is >= i\% of the maximum, where i is the isopleth level. T/F
 #' @param subset.metric The name of a hull metric that will be used to create subsets of isopleths
 #' @param subset.vals A two-column data frame (or matrix) containing the lower and upper bounds of the hull metric in subset.metric, 
 #' from which subsets of hulls will be extract for separate isopleth construction. Ignored if subset.metric is not provided. 
 #' Can also be a character string in the form of "equal intervals, n", or "quantitles, n" where n is the number of strata desired
 #' (shorthand versions of these commands are "ei,n" and "q,n" where n is a number). The script will compute the break points either 
 #' spread equally between the minimum and maximum subset metric value (equal interval) or so an equal number of hulls is in each strata
-#' @param allow.gpc Allow functions from the gpclib package if the functions from rgeos fail. See details. T/F.
-#' @param status Show status messages (T/F)
+#' @param allow.gpc Allow functions from the gpclib package if the functions from rgeos fail. See details. T/F
+#' @param beep Beep when done. T/F
+#' @param status Show status messages. T/F
+#' @param ... Additional auxillary parameters for the hull sort metric 
 #'
 #' @details
 #' This function creates isopleth(s) for a LoCoH-hullset object. This involves sorting hulls by one of the hull metrics, 
@@ -63,12 +66,12 @@
 #' @examples
 #' # Create 0.5 and 0.95 isopleths. By not specifying the sort.metric, density isopleths will be created
 #' # by default, with hulls sorted by area (k-method) or number of enclosed points (r and a method)
-#' lhs <- lhs.iso.add(lhs, iso.levels=c(0.5, 0.95))
+#' # lhs <- lhs.iso.add(lhs, iso.levels=c(0.5, 0.95))
 #'
 #' # Compute hull metrics for a 24 hour inter-visit gap, then produce isopleths with hulls sorted by
 #' # the number of separate visits (e.g., visitation)
-#' lhs <- lhs.visit.add(lhs, ivg=3600.24)
-#' lhs <- lhs.iso.add(lhs, sort.metric="nsv", ivg=3600*24)
+#' # lhs <- lhs.visit.add(lhs, ivg=3600.24)
+#' # lhs <- lhs.iso.add(lhs, sort.metric="nsv", ivg=3600*24)
 #'
 #' @export
 

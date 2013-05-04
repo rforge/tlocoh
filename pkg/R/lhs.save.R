@@ -4,16 +4,18 @@
 #'
 #' @param lhs A LoCoH-hullset object
 #' @param fn Optional filename. If omitted a sensible filename will be constructed
-#' @param dir Directory for the output file (relative to the working directory), ignored if fn passed
-#' @param suffix A suffix that will be used in the construction of the filename, ignored if fn is passed
-#' @param compress Compress file. T/F.
-#' @param auto.num.files Use a number as part of the constructed filename. T/F.
-#' @param width The number of digits of the auto-number token in the filename (ignored if auto.num.files=F)
+#' @param dir Directory for the output file (relative to the working directory), ignored if \code{fn} passed
+#' @param suf A suffix that will be used in the construction of the filename, ignored if \code{fn} is passed
+#' @param compress Compress file. T/F
+#' @param auto.num.files Use a number as part of the constructed filename. T/F
+#' @param width The number of digits of the auto-number token in the filename (ignored if \code{auto.num.files=F})
+#' @param save.as The name of the object when saved (default is the same as the original)
 #'
 #' @export
 #' @seealso \code{\link{lxy.save}}
 
-lhs.save <- function (lhs, fn=NULL, dir=".", save.as=NULL, suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2) {
+lhs.save <- function (lhs, fn=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, save.as=NULL) {
+
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!require(sp)) stop("package sp required")
     

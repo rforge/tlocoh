@@ -2,11 +2,12 @@
 \alias{hist.locoh.lhs}
 \title{Plot histograms of hull metrics}
 \usage{
-  hist.locoh.lhs(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL, metric = "area",
+  \method{hist}{locoh.lhs} (x, id = NULL, k = NULL,
+    r = NULL, a = NULL, s = NULL, hs.names = NULL,
+    metric = "area", include.missing.hulls = TRUE,
     hmap = NULL, hmap.in.title = TRUE,
-    include.missing.hulls = TRUE, hs.name.in.title = TRUE,
-    title = NULL, title.show = TRUE, figs.per.page = NULL,
+    hs.name.in.title = TRUE, title = NULL,
+    title.show = TRUE, figs.per.page = NULL,
     mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
     mgp = c(1.8, 0.5, 0), same.axes.for.all = FALSE,
     ufat = TRUE, breaks = "Sturges", col = "gray80",
@@ -19,7 +20,7 @@
     ...)
 }
 \arguments{
-  \item{lhs}{A LoCoH hullset object}
+  \item{x}{A \link{LoCoH-hullset} object}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}
@@ -50,18 +51,21 @@
   parameters, the name of each list element is the name of
   the variable.}
 
-  \item{hmap.in.subtitle}{Include the hmap value(s) in the
-  plot subtitle. T/F.}
+  \item{hmap.in.title}{Include the hmap value(s) in the
+  plot subtitle. T/F}
 
-  \item{title.two.id}{An adhoc way to construct a title
-  consisting of the ids of the hullset and hs2}
+  \item{hs.name.in.title}{Include the name of the hullset
+  in the plot subtitle. T/F}
 
-  \item{...}{Other parameters, including any auxillary
-  parameters required by certain hull metrics}
+  \item{title}{A title for the plot (over-writes the
+  construction of a title)}
+
+  \item{title.show}{Whether to add a title on the plot.
+  T/F}
 
   \item{include.missing.hulls}{Whether to include missing
   hulls on the histogram (using the default value assigned
-  to missing hulls by the hull metrics). T/F.}
+  to missing hulls by the hull metrics). T/F}
 
   \item{figs.per.page}{Number of plots per page}
 
@@ -75,7 +79,7 @@
   the axes for all histograms generated (helps to visually
   see differences)}
 
-  \item{ufat}{User-friendly axis title. T/F.}
+  \item{ufat}{User-friendly axis title. T/F}
 
   \item{breaks}{Number of breaks or a clustring function.
   See \code{\link{hist}}.}
@@ -86,7 +90,7 @@
   will be constructed automatically).}
 
   \item{png.dir.make}{Whether to create png.dir if it
-  doesn't exist. T/F.}
+  doesn't exist. T/F}
 
   \item{png.width}{The width of the PNG image. Ignored if
   png.fn is passed.}
@@ -95,10 +99,10 @@
   png.fn is passed.}
 
   \item{png.overwrite}{Whether to overwrite an existing PNG
-  file if it exists. T/F.}
+  file if it exists. T/F}
 
   \item{title.two.id}{Construct a title with the names of
-  two ids (for so.* and to.* assocation metrics)}
+  two ids (for so.* and to.* assocation metrics). T/F}
 
   \item{indicate.missing.hulls.in.axis.lbl}{Specify whether
   missing hulls are excluded in the axes label, T/F}
@@ -116,8 +120,8 @@
   PNG image (increase to make labels appear larger).
   Determines the height or width of a character in pixels.}
 
-  \item{...}{Additional parameters needed for the hull
-  metric}
+  \item{...}{Other parameters, including any auxillary
+  parameters to specify particular hull metrics}
 }
 \value{
   A named list of values of the hull metrics. There is one

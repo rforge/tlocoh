@@ -2,11 +2,14 @@
 \alias{lxy.repair}
 \title{Repair a LoCoH-xy object}
 \usage{
-  lxy.repair(lxy, fix.dup.ptid = FALSE, fix.anv = FALSE,
+  lxy.repair(lxy, fix.dup.ptid = FALSE,
     dt.int.round.to = 0.1, tau.diff.max = 0.02)
 }
 \arguments{
   \item{lxy}{A LoCoH-xy object}
+
+  \item{fix.dup.ptid}{Generate new ptid value(s) if there
+  are any duplicates}
 
   \item{dt.int.round.to}{The proportion of the median
   sampling frequency that time intervals will be rounded to
@@ -21,16 +24,21 @@
   step length}
 }
 \value{
-  A LoCoH-xy object
+  A \link{LoCoH-xy} object
 }
 \description{
-  Recreates a LoCoH-xy object
+  Recreates a \link{LoCoH-xy} object
 }
 \details{
   This will return a new lxy object containing the original
   xys, dt, and ptid from lxy. All other items and
   attributes (including the comment) will be recreated or
   set to NULL
+
+  Set \code{fix.dup.ptid=TRUE} to automatically generate
+  new ptid values if any duplcates are detected. If
+  \code{fix.dup.ptid=FALSE} and duplicate ptid values are
+  detected, an error message will result.
 
   \code{tau.diff.max} exists to eliminate the inclusion of
   temporal outliers in the computation of the median step
@@ -39,6 +47,7 @@
   included in step length calculation.
 }
 \seealso{
-  \code{\link{lxy.id.new}}
+  \code{\link{xyt.lxy}}, \code{\link{lxy.id.new}},
+  \code{\link{lxy.merge}}
 }
 

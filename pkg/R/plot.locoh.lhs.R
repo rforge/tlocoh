@@ -2,7 +2,7 @@
 #'
 #' Multi-purpose plotting function for a LoCoH-hullset object
 #'
-#' @param lhs A LoCoH-hullset object
+#' @param x A \link{LoCoH-hullset} object
 #' @param id The names of the individual(s) to include in the plot.
 #' @param k The k value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
 #' @param r The r value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
@@ -19,7 +19,7 @@
 #' @param ptid One or more ptid (point id) values. A separate plot will be drawn 'zoomed in' to each point indicated. Can also be "auto", in which case ptid will be selected at random. Used primarily to inspect the hull, nearest neighbors, and/or ellipse for specific hulls.
 #' @param ptid.highlight Whether to highlight the point specified by ptid. T/F.
 #' @param add Whether to add to the existing plot. T/F.
-#' @param aoi An area-of-interest object (e.g., box), used to 'zoom in' to specific parts of the plot. aoi objects may be created by the function aoi().
+#' @param aoi An area-of-interest object (e.g., box), used to 'zoom in' to specific parts of the plot. aoi objects may be created by the function \code{aoi()}.
 #' @param iso.idx The index(s) of the isopleths to plot. Use the summary() function to see the indices of the isopleths.
 #' @param iso.sort.metric The sort metric(s) of the isopleths that will be displayed. Character.
 #' @param iso.legend Whether to include a legend for the isopleths.
@@ -29,6 +29,7 @@
 #' @param dr.thresh.type The threshhold type for the directional routes to be displayed (acts to filter on which directional routes are displayed). See \code{\link{lhs.dr.add}}
 #' @param dr.smooth The smoothing factor for the directional routes to be displayed (acts to filter on which directional routes are displayed). See \code{\link{lhs.dr.add}}
 #' @param lwd.dr The line width of directional routes.
+#' @param pch.allpts The plot character for all points
 #' @param cex.nn The expansion factor for nearest neighbor points.
 #' @param cex.hpp The expansion factor for hull parent-points.
 #' @param cex.allpts The expansion factor for all points.
@@ -36,6 +37,7 @@
 #' @param cex.axis The expansion factor for axis labels.
 #' @param cex.legend The expansion factor for the legend.
 #' @param col.hpp The color of hull parent points. Either a single color value or a vector of color values of the same length as the number of hulls.
+#' @param col.hpp.na The color of hull parent points that have no value of the metric specified by \code{hpp.classify}. Single color value. 
 #' @param col.hulls.border The outline color of hulls. Either a single color value or a vector of color values of the same length as the number of hulls.
 #' @param col.hulls.fill The fill color of hulls. 
 #' @param col.ellipses The outline color of bounding ellipses. Either a single color value or a vector of color values of the same length as the number of hulls.
@@ -79,26 +81,30 @@
 #' @param tiff.buff A numeric buffer distance that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
 #' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
 #' @param shp.csv The path and filename of a csv file that contains information about shapefiles, including layer names, file, and symbology.
-#' @param layers The name(s) of layers in shp.csv to display in the background. Will be displayed using the symbology in shp.csv. Character vector or comma delimited string.
-#' @param png.fn The path and name of the PNG file to create (instead of displaying in a plot window).
-#' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed.
-#' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F.
-#' @param png.fn.pre A prefix that will be used in the construction of the PNG filename. Ignored if png.fn is passed.
-#' @param png.fn.mid A mid-fix that will be used in the construction of the PNG filename. Ignored if png.fn is passed.
-#' @param png.fn.suf A suffix that will be used in the construction of the PNG filename. Ignored if png.fn is passed.
-#' @param png.fn.incld.hs.name Whether to include the hullset name as part of the PNG filename. (T/F). Ignored if png.fn is passed.
-#' @param png.each.plot.separate Whether to make each plot in a separate plot / PNG. T/F. Ignored if png.fn is passed.
-#' @param png.width The width of the PNG image. Ignored if png.fn is passed.
-#' @param png.height The height of the PNG image. Ignored if png.fn is passed.
+#' @param layers The name(s) of layers in shp.csv to display in the background. Will be displayed using the symbology in shp.csv. Character vector or comma delimited string
+#' @param png.fn The path and name of the PNG file to create (instead of displaying in a plot window)
+#' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed
+#' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F
+#' @param png.fn.pre A prefix that will be used in the construction of the PNG filename. Ignored if png.fn is passed
+#' @param png.fn.mid A mid-fix that will be used in the construction of the PNG filename. Ignored if png.fn is passed
+#' @param png.fn.suf A suffix that will be used in the construction of the PNG filename. Ignored if png.fn is passed
+#' @param png.fn.incld.hs.name Whether to include the hullset name as part of the PNG filename. (T/F). Ignored if png.fn is passed
+#' @param png.each.plot.separate Whether to make each plot in a separate plot / PNG. T/F. Ignored if png.fn is passed
+#' @param png.width The width of the PNG image. Ignored if png.fn is passed
+#' @param png.height The height of the PNG image. Ignored if png.fn is passed
 #' @param png.pointsize The pointsize (in pixels) for the PNG image (increase to make labels appear larger). Equivalent 
 #' to the height or width of a character in pixels.
-#' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F.
+#' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
 #' @param sp Special plot number (not used)
-#' @param status Whether to show messages. T/F.
+#' @param status Whether to show messages. T/F
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part 
-#' of a multi-frame graphic (as in publications). Character.
-#' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area.
-#' @param hmap A named list of hull metric auxillary parameters, the name of each list element is the name of the variable.
+#' of a multi-frame graphic (as in publications). Character
+#' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area
+#' @param hmap A named list of hull metric auxillary parameters, the name of each list element is the name of the variable
+#' @param iso.level The isopleth levels to plot, numeric vector
+#' @param xlim The lower and upper limit of the x-axis, two-element numeric vector
+#' @param ylim The lower and upper limit of the y-axis, two-element numeric vector
+#' @param check.ap.value.in.hmparams Whether to check if hull metrics exist for the auxillary parameters passed. T/F
 #' @param ... Other parameters, including any auxillary parameters required by certain hull metrics
 #'
 #' @note
@@ -113,7 +119,7 @@
 #' routes (\code{\link{lhs.dr.add}}) have been computed can have these elements plotted by setting \code{ellipses=TRUE}) 
 #' and \code{dr=TRUE}) respectively. If isopleths have been constructed (\code{\link{lhs.iso.add}}), these 
 #' can be plotted by setting \code{iso=TRUE}. If you only want to plot some of the isopleths, you can specify which one(s) to plot 
-#' with the parameters \code{iso.idx} (the index(s) of the isopleths to plot, see \code{\link{summary.locoh.lhs)}}) or 
+#' with the parameters \code{iso.idx} (the index(s) of the isopleths to plot, see \code{\link{summary.locoh.lhs}}) or 
 #' \code{iso.sort.metric}.
 #' 
 #' The plot title can be manually set with the \code{title} parameter. If no value for \code{title} is passed, a title will be constructed. You can define
@@ -140,7 +146,7 @@
 #'
 #' @export
 
-plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
+plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
     iso=FALSE, hulls=FALSE, hpp=FALSE, dr=FALSE, nn=FALSE, ellipses=FALSE, allpts=FALSE, ptid=NULL, ptid.highlight=TRUE, add=FALSE, 
     aoi=NULL, iso.idx=NULL, iso.sort.metric=NULL, iso.legend=TRUE, legend.space=0.25, 
     dr.metric=NULL, dr.thresh.val=NULL, dr.thresh.type=NULL, dr.smooth=NULL, lwd.dr=2,
@@ -162,7 +168,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     shp.csv=NULL, layers=NULL, 
     png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.fn.pre=NULL, png.fn.mid=NULL, png.fn.suf=NULL, png.fn.incld.hs.name=TRUE, 
     png.each.plot.separate=TRUE, png.width=800, png.height=png.width, png.pointsize=12+(png.width-480)/80, png.overwrite=TRUE, 
-    sp=0, status=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, hmap=NULL, use.saved.nn=FALSE, hmap.grp=NULL,
+    sp=0, status=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, hmap=NULL, 
     iso.level=NULL, xlim=NULL, ylim=NULL, check.ap.value.in.hmparams=TRUE, ...) {
 
     ## removed: spc.reg.det.xaxis=NULL, spc.reg.det.yaxis=NULL, spc.reg.det.layout="auto", spc.reg.det.layout.map.nrow=2, spc.reg.det.layout.det.ncol=NULL,
@@ -234,7 +240,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     ## col.nn.pp is the color that will be used to plot the parent point when nearest neighbors are displayed
     
     ## sp=special plot
-    
+    lhs <- x; rm(x)
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!require(sp)) stop("package sp required")
     if (!require(pbapply)) stop("package pbapply required")
@@ -310,13 +316,6 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     if (hpp) {
         if (length(hpp.classify) != 1) stop("Only one value for hpp.classify allowed")
         
-        if (!is.null(hmap.grp)) {
-            err.msg <- "Invalid list format for hmap.grp"
-            if (FALSE %in% names((hmap.grp) %in% c("kernal.idx", "col.ramp", "ord"))) stop(err.msg) 
-            if (length(hmap.grp[["kernal.idx"]]) != length(hmap.grp[["ord"]])) stop(err.msg)
-        
-        }
-        
         ## Identify all of the hull metrics that will be used
         if (hpp.classify != "none") {
             if (hpp.classify == "hsp") {
@@ -371,13 +370,12 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
         }
     }
 
-    if (nn && use.saved.nn && (TRUE %in% sapply(hs, function(x) is.null(x$nn)))) stop("Nearest neighbors haven't been saved, can't plot them")
     if (ellipses && (TRUE %in% sapply(hs, function(x) is.null(x[["ellipses"]])))) stop("Ellipses haven't been created. Try running lhs.ellipses.add")
     if (iso && length(unlist(lapply(hs, function(x) names(x$isos)))) == 0) stop("No isopleths found in lhs")
 
     ## If hpp, create color values for the color ramp
     
-    if (hpp && hpp.classify!="none" && hpp.classify!="hsp" && !hme[[hpp.classify]][["discrete"]] && is.null(hmap.grp)) {
+    if (hpp && hpp.classify!="none" && hpp.classify!="hsp" && !hme[[hpp.classify]][["discrete"]]) {
         if (identical(col.ramp, "rainbow")) {
             col.hpp.use <- rainbow(hpp.classify.bins, end=5/6)
         } else {
@@ -1111,12 +1109,9 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                                 xys.in.aoi <- rep(TRUE, nrow(hpp.xys))
                             }
                             
-                            ## Move this to the tippy top
-                            if (is.null(hmap.grp)) {
-                                hmap.grp.iter <- NA
-                            } else {
-                                hmap.grp.iter <- hmap.grp[["ord"]]
-                            }
+                            ## This object sets up a loop that has since been removed from the package
+                            ## To put it back in, see "plot.locoh.lhs.still-has-code-for-hmap.grp.R"
+                            # hmap.grp.iter <- NA
                             
                             ## Take note of hmap.idx so we can restore it later
                             hmap.idx.orig <- hmap.idx
@@ -1125,35 +1120,35 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                             #print("going to loop");browser()
                             
                             ## Loop through the group of auxillary parameters
-                            for (hg.idx in hmap.grp.iter) {
-                            
-                                ## Change the color ramp and the value of hmap.idx                            
-                                if (!is.na(hg.idx)) {
-                                    
-                                    hmap.idx <- hmap.idx.orig + hmap.grp[["kernal.idx"]][hg.idx]
-                                    col.ramp <- hmap.grp[["col.ramp"]][hg.idx]
-                                    
-                                    if (hme[[hpp.classify]][["discrete"]]) {
-
-                                        col.hpp.use <- rep(NA, length(hpp.possible.vals))
-                                    
-                                        if (identical(col.ramp, "rainbow")) {
-                                            col.hpp.use[chpv.idx] <- rainbow(length(chpv.idx), end=5/6)
-                                        } else {
-                                            col.hpp.use[chpv.idx] <- colorRampPalette(vectorize.parameter(col.ramp, type="character", sort.res=FALSE))(length(chpv.idx))
-                                        }
-                                    
-                                    
-                                    } else {
-                                        if (identical(hmap.grp[["col.ramp"]][[hg.idx]], "rainbow")) {
-                                            col.hpp.use <- rainbow(hpp.classify.bins, end=5/6)
-                                        } else {
-                                            col.hpp.use <- colorRampPalette(vectorize.parameter(col.ramp, type="character", sort.res=FALSE))(hpp.classify.bins)
-                                        }
-
-                                    }
-                                    
-                                }
+                            #for (hg.idx in hmap.grp.iter) {
+                           
+                               ### Change the color ramp and the value of hmap.idx                            
+                               #if (!is.na(hg.idx)) {
+                               #    
+                               #    hmap.idx <- hmap.idx.orig + hmap.grp[["kernal.idx"]][hg.idx]
+                               #    col.ramp <- hmap.grp[["col.ramp"]][hg.idx]
+                               #    
+                               #    if (hme[[hpp.classify]][["discrete"]]) {
+                               #
+                               #        col.hpp.use <- rep(NA, length(hpp.possible.vals))
+                               #    
+                               #        if (identical(col.ramp, "rainbow")) {
+                               #            col.hpp.use[chpv.idx] <- rainbow(length(chpv.idx), end=5/6)
+                               #        } else {
+                               #            col.hpp.use[chpv.idx] <- colorRampPalette(vectorize.parameter(col.ramp, type="character", sort.res=FALSE))(length(chpv.idx))
+                               #        }
+                               #    
+                               #    
+                               #    } else {
+                               #        if (identical(hmap.grp[["col.ramp"]][[hg.idx]], "rainbow")) {
+                               #            col.hpp.use <- rainbow(hpp.classify.bins, end=5/6)
+                               #        } else {
+                               #            col.hpp.use <- colorRampPalette(vectorize.parameter(col.ramp, type="character", sort.res=FALSE))(hpp.classify.bins)
+                               #        }
+                               #
+                               #    }
+                               #    
+                               #}
                                 
                                 if (hmap.idx >= 1 && hmap.idx <= nrow(hmap)) {
                             
@@ -1375,8 +1370,10 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                                 }
                                 
                             
-                            }
                             
+                            
+                            ## end loop for (hg.idx in hmap.grp.iter) 
+                            ## }
                             
                             ## Restore hmap.idx
                             hmap.idx <- hmap.idx.orig

@@ -4,11 +4,11 @@
 \usage{
   lxy.thin.bursts(lxy, id = NULL, thresh = NULL,
     replace = c("mean", "median")[2], info.only = FALSE,
-    status = TRUE, dt.int.round.to = 0.1,
-    tau.diff.max = 0.02)
+    dt.int.round.to = 0.1, tau.diff.max = 0.02,
+    status = TRUE)
 }
 \arguments{
-  \item{lxy}{A \code{\link{LoCoH-xy}} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The id value(s) to be thinned}
 
@@ -35,9 +35,11 @@
   points must fall for the distance between those two
   points to be included in the calculation of the median
   step length}
+
+  \item{status}{Show status messages. T/F}
 }
 \value{
-  a \code{\link{LoCoH-xy}} object
+  a \link{LoCoH-xy} object
 }
 \description{
   Thin out closely-timed bursts of locations
@@ -63,9 +65,9 @@
   sampling frequency (0..1) or an absolute unit of time (in
   seconds).
 
-  To identify whether there are bursts in a
-  \code{\link{LoCoH-xy}} dataset, and the sampling
-  frequency of those bursts (i.e., the value
+  To identify whether there are bursts in a \link{LoCoH-xy}
+  dataset, and the sampling frequency of those bursts
+  (i.e., the value
 
   The two replacement methods are /code{replace="mean"}, in
   which case a burst of locations is replaced by a single
@@ -77,11 +79,12 @@
   set to \code{NA}.
 
   Because this function deletes points, the nearest
-  neighbor lookup table of the \code{\link{LoCoH-xy}}
-  object (if any) will be deleted, and the parameters for
-  random walk model will be recomputed.
+  neighbor lookup table of the \link{LoCoH-xy} object (if
+  any) will be deleted, and the parameters for random walk
+  model will be recomputed.
 }
 \seealso{
-  \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.freq}}
+  \code{\link{lxy.plot.freq}},
+  \code{\link{lxy.thin.byfreq}}
 }
 

@@ -90,6 +90,8 @@
   \item{png.exists}{What to do if a PNG with the same
   filename already exists: "overwrite" or "skip"}
 
+  \item{progress.bar}{Display a progress bar. T/F}
+
   \item{test.sample}{An optional number of randomly
   selected pairs of hull metrics to generate for testing
   purposes. Or NULL.}
@@ -99,22 +101,31 @@
 
   \item{new.plot.window}{Whether to start a new plot window
   and turn recording on. T/F}
+
+  \item{hmap}{A named list of hull metric auxillary
+  parameters (for hull metrics that involve additional
+  parameters such as an intervisit gap period). These can
+  also be passed on their own (e.g., \code{ivg=3600*24})}
+
+  \item{...}{Additional parameters that will be passed to
+  the \code{\link{hist}} function}
 }
 \value{
   A data frame containing the pairs of hull metrics
 }
 \description{
-  This is a wrapper function for \code{\link{lhr.scatter}}
-  that creates scatterplots for pairs of hull metrics. It
-  can quickly generate several few dozen scatterplots for
-  the purpose of visually looking for novel associations
-  between hull metrics.
+  This is a wrapper function for
+  \code{\link{lhs.plot.scatter}} that creates scatterplots
+  for pairs of hull metrics. It can quickly generate
+  several few dozen scatterplots for the purpose of
+  visually looking for novel associations between hull
+  metrics.
 }
 \note{
   This function generates a list of pairs of hull metrics,
-  and then calls \code{\link{lhr.scatter}} repeatedly to
-  generate the histograms. This is a quick way to visualize
-  the relationships between hull metrics.
+  and then calls \code{\link{lhs.plot.scatter}} repeatedly
+  to generate the histograms. This is a quick way to
+  visualize the relationships between hull metrics.
 
   If \code{new.plot.window} is \code{TRUE} (default), a new
   plot window will be opened and plot recording turned on

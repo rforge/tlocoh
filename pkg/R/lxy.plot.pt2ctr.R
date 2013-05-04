@@ -2,10 +2,12 @@
 #'
 #' Produces a plot of the distance of each point to the centroid over time to see 'natural' periodicities in the data
 #'
-#' @param lxy A \code{\link{locoh-xy}} object
+#' @param lxy A \link{LoCoH-xy} object
+#' @param id The id value(s) to include on the plot
 #' @param idx An optional vector of indices of points that the plot will be restricted to. See notes
 #' @param vline An interval of time (in seconds) for the vertical grid lines
 #' @param vline.trunc.units.to A character value: "secs", "mins", "hours", or "days". Determines where the first vertical grid lines will appear
+#' @param figs.per.page The number of figures per page
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
 #' @note
@@ -20,7 +22,7 @@
 #' of when the point series started. This can be helpful for seeing cycles of a specific frequency.
 #' 
 #' @export
-#' @seealso \code{\link{lxy.sfinder}}
+#' @seealso \code{\link{lxy.plot.sfinder}}
 
 lxy.plot.pt2ctr <- function(lxy, id=NULL, idx=NULL, vline=NULL, vline.trunc.units.to = c("secs", "mins", "hours", "days")[4], figs.per.page=NULL, ...) {
     

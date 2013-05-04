@@ -12,7 +12,7 @@
     title = NULL, title.show = TRUE,
     title.obj.name = FALSE, panel.num = NULL,
     panel.num.inside.plot = !title.show,
-    xaxis.no.sci.notation = FALSE, png.dir = NULL,
+    no.sci.notation = FALSE, png.dir = NULL,
     png.dir.make = TRUE, png.width = 800,
     png.height = png.width, png.overwrite = TRUE,
     png.pointsize = 12 + (png.width - 480)/80,
@@ -66,6 +66,17 @@
   for the 1) label, 2) tick marks, and 3) axis line. A
   three-item numeric vector}
 
+  \item{figs.per.page}{The number of plots per page.}
+
+  \item{title}{The title to be displayed. Character. If
+  NULL a title will be constructed.}
+
+  \item{title.show}{Whether to show the title. T/F}
+
+  \item{title.obj.name}{Whether to add the name of the lxy
+  object to the plot title (ignored if \code{title} is
+  passed). T/F}
+
   \item{panel.num}{A number or letter to display in the
   upper left hand corner of the plot when the plot will be
   used as part of a multi-frame graphic (as in
@@ -74,6 +85,9 @@
   \item{panel.num.inside.plot}{Whether to display panel.num
   inside the plot area itself, as opposed to the title
   area. T/F}
+
+  \item{no.sci.notation}{Whether to avoid the use of
+  scientific notation on labels on the x-axis. T/F}
 
   \item{png.dir}{The directory for a PNG file (filename
   will be constructed automatically). Ignored if png.fn is
@@ -93,6 +107,8 @@
   PNG image, equivalent to the height or width of a
   character in pixels (increase to make labels appear
   larger)}
+
+  \item{status}{Display status messages. T/F}
 
   \item{...}{Additional parameters that will be passed to
   the \code{\link{plot}} function}
@@ -127,8 +143,8 @@
 }
 \examples{
 ## Identify a range of 's' values from space-selection to time-selection, and find 10 nearest neighbors for each value of 's'
-lxy <- lxy.ptsh(lxy, nn=TRUE)
+# lxy <- lxy.ptsh(lxy, nn=TRUE)
 ## Plot the ratio of maximum theoretical distance travel to TSD
-lxy.plot.mtdr(lxy)
+# lxy.plot.mtdr(lxy)
 }
 

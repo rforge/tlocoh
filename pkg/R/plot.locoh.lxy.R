@@ -1,11 +1,49 @@
-#' plot.locoh.lxy
+#' Plot LoCoH-xy object
 #'
 #' Multi-purpose plotting function for a LoCoH-xy object
 #'
+#' @param x A \link{LoCoH-xy} object
+#' @param id A vector of the id value(s) to plot
+#' @param cex Character expansion factor for the points
+#' @param show.start Whether to highlight the starting location (if time stamps are present) in green. T/F.
+#' @param show.end Whether to highlight the end location (if time stamps are present) in red. T/F.
+#' @param col A single value or vector of color values. Can also be 'auto' in which case the colors saved in \code{lxy} will be used (which are rainbow by default).
+#' @param connect.dots Whether to draw line segments between consecutive locations. T/F.
+#' @param overlay Whether to overlay the plots of all individuals in \code{lxy} on one pair of axes (map). T/F.
+#' @param status Display status messages. T/F.
+#' @param title The title to be displayed. Character. If NULL a title will be constructed.
+#' @param title.show Whether to show the title. T/F.
+#' @param axes.show Whether to show the axes. T/F.
+#' @param axes.titles Whether to show axes titles. T/F.
+#' @param axes.ticks Whether to show the tick marks and labels on the axes. T/F.
+#' @param mar The plot margins. A four item numeric vector
+#' @param mgp The distance away from the edge of the plot for the 1) label, 2) tick marks, and 3) axis line. A three-item numeric vector
+#' @param lo.save Whether to save and reset the plot device margin settings (some wrapper functions that call this function don't want device settings reset). T/F.
+#' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
+#' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. T/F
+#' @param png.fn The path and name of the PNG file to create (instead of displaying in a plot window)
+#' @param png.dir The directory for a PNG file (filename will be constructed automatically). Ignored if png.fn is passed
+#' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F
+#' @param png.width The width of the PNG image
+#' @param png.height The height of the PNG image
+#' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
+#' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
+#' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
+#' @param tiff.bands A vector of threee integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, green and blue color guns respectively.
+#' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
+#' @param tiff.buff A numeric buffer distance that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
+#' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
+#' @param layers The name(s) of layers in shp.csv to display in the background. Will be displayed using the symbology in shp.csv. Character vector or comma delimited string
+#' @param shp.csv The path and filename of a csv file that contains information about shapefiles, including layer names, file, and symbology.
+#' @param xlim The lower and upper limit of the x-axis, two-element numeric vector
+#' @param ylim The lower and upper limit of the y-axis, two-element numeric vector
+#' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
+#'
 #' @export
+#' @method plot locoh.lxy
 
-plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
-                           overlay=FALSE, show.aux=TRUE, status=TRUE, title=NULL, title.show=TRUE, 
+plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
+                           overlay=FALSE, status=TRUE, title=NULL, title.show=TRUE, 
                            axes.show=TRUE, axes.titles=axes.show, axes.ticks=axes.show,
                            mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5), 
                            mgp=c(2, 0.7, 0), lo.save=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show,
@@ -24,6 +62,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
     ## NEW: layers can also be a list of lists, see comments in shp.layers
     ## If provided, these layers will be displayed in the background according to the symbology listed in shp.csv
     
+    lxy <- x; rm(x)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!require(sp)) stop("package sp required")
     
@@ -32,7 +71,6 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
     } else {
         if (FALSE %in% (id %in% levels(lxy[["pts"]][["id"]]))) stop("id not found")
     }
-    #if (is.null(figs.per.page)) figs.per.page <- if (overlay) 1 else length(id)
     
     ## Prepare the tiff file
     if (is.null(tiff.fn)) {

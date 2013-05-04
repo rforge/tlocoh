@@ -29,6 +29,7 @@
 #' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F.
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part of a multi-frame graphic (as in publications). Character
 #' @param panel.num.inside.plot Whether to display panel.num inside the plot area itself, as opposed to the title area. Ignored if panel.num is NULL. T/F
+#' @param bg Background color
 #' @param legend.space The amount of additional space on the lower end of the x-axis to make room for the legend. Expressed as a proportion of the range of the x-axis values
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
@@ -65,21 +66,6 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
             stop(paste(png.dir, " doesn't exist and png.dir.make is False, so can not continue."))
         }
     }
-    
-    #if (is.null(ivg)) ivg <- 0
-    
-    ## Construct a 'catalog' data frame with info about all the isos saved in this lhs
-    #isos.lst.df <- NULL
-    #for (hs.idx in 1:length(hs)) {
-    #    if (!is.null(hs[[hs.idx]][["isos"]])) {
-    #        for (iso.idx in 1:length(hs[[hs.idx]][["isos"]])) {
-    #                isos.lst.df <- rbind(isos.lst.df, data.frame(id=hs[[hs.idx]][["id"]], k=hs[[hs.idx]]$k, r=hs[[hs.idx]]$r, 
-    #                                     a=hs[[hs.idx]]$a, s=hs[[hs.idx]]$s, hs.idx=hs.idx, iso.idx=iso.idx, 
-    #                                     sort.metric=hs[[hs.idx]][["isos"]][[iso.idx]]$sort.metric,
-    #                                     ivg= n2z(hs[[hs.idx]][["isos"]][[iso.idx]]$ivg)))
-    #        } 
-    #    }
-    #}
 
     ## Error check sort.metric.all and filter isos.lst.df if needed
     sort.metric.all <- hm.expr(names.only=T, desc=F, print=F)
@@ -96,12 +82,13 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
     opar <- NULL
 
     ## So basically we have a lot of hullsets with different methods and k/a/r values, and presumably isopleths
-    ## We need all unique combinations of id, method, s, and sort.metric. For each unique combo, we need a matrix
+    ## We need all unique combinations of id, method, s, and sort.metric. For each unique combo, we need a row in a data frame
     ## in the form 
     ## iso.level, param.val, area
     ## We start by building a data frame of id, method, sort.metric, param.val, iso.level, area
     
     iso.info.all <- do.call(rbind, lapply(hs, function(myhs) do.call(rbind, lapply(myhs$isos, function(myiso) data.frame(id=myhs[["id"]], mode=myhs[["mode"]], s=myhs[["s"]], param.val=myhs[[myhs[["mode"]]]], sort.metric=myiso[["sort.metric"]], myiso[["polys"]]@data[ c("iso.level", "area")])))))
+    if (is.null(iso.info.all)) stop("This hullset does not have isopleths")
     row.names(iso.info.all) <- NULL
     
     id.mode.metric <- with(iso.info.all, paste(id, "|", mode, "|", sort.metric, "|", s, sep=""))
@@ -115,7 +102,7 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
          x.mat <- matrix(param.vals.immVal, ncol=length(iso.levels.immVal), nrow=length(param.vals.immVal))
          y.mat <- matrix(NA, ncol=length(iso.levels.immVal), nrow=length(param.vals.immVal))
          
-         iso.info.immVal <- transform(iso.info.immVal, param.val=as.factor(param.val), iso.level=as.factor(iso.level))
+         iso.info.immVal <- transform(iso.info.immVal, param.val=as.factor(iso.info.immVal$param.val), iso.level=as.factor(iso.info.immVal$iso.level))
          iso2colidx <- match(levels(iso.info.immVal[["iso.level"]]), as.character(iso.levels.immVal))
          paramval2rowidx <- match(levels(iso.info.immVal[["param.val"]]), as.character(param.vals.immVal))
 
@@ -138,7 +125,7 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
               png(filename=png.fn.use, height=png.height, width=png.width, pointsize=png.pointsize, bg=bg)
               res <- c(res, png.fn.use)
           }
-          if (is.null(opar)) opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp)
+          if (is.null(opar)) opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, bg=bg)
 
           #hs.mode <- attr(hs, "mode")
           #param.element <- substr(hs.mode, nchar(hs.mode), nchar(hs.mode))
