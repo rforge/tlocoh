@@ -18,7 +18,7 @@ Suggests:
 Description: Constructs homeranges and explores time use patterns from location
     data.
 License: BSD
-URL: http://tlocoh.r-forge.r-project.org
+URL: http://locoh.cnr.berkeley.edu/tlocoh
 Collate:
     'aoi.R'
     'aoi2box.R'

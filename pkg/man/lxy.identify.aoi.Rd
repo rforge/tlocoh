@@ -1,0 +1,39 @@
+\name{lxy.identify.aoi}
+\alias{lxy.identify.aoi}
+\title{Identify the points that fall within a bounding box}
+\usage{
+  lxy.identify.aoi(lxy, aoi)
+}
+\arguments{
+  \item{lxy}{A LoCoH-xy object}
+
+  \item{aoi}{Area-of-interest, a two-column xy data frame
+  containing the upper left point and the lower right point
+  in the first and second rows respectively.}
+}
+\value{
+  A dataframe containing the ptid values and indices of the
+  points from \code{lxy} that fall within \code{aoi}
+}
+\description{
+  Identify the points that fall within a bounding box
+}
+\note{
+  This function can be used to identify specific points on
+  a plot. For example, you see a cluster of points on a
+  locoh-xy plot, and want to know when those points were
+  recorded, and so on. To do this, you can use the
+  \code{\link{aoi}} function to define an area of interest
+  box on the plot window, and then use
+  \code{\link{lxy.identify.aoi}} to grab the indices and
+  ptid values for that cluster of points. You can then use
+  this information as a parameter in
+  \code{\link{lxy.subset}} function to create a
+  \code{locoh-xy} object containing just that cluster of
+  points.
+}
+\seealso{
+  \code{\link{aoi}}, \code{\link{plot.locoh.lxy}},
+  \code{\link{lxy.subset}}
+}
+

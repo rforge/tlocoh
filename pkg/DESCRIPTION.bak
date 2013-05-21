@@ -1,8 +1,8 @@
 Package: tlocoh
 Type: Package
 Title: Constructs homeranges and explores time use patterns from location data
-Version: 1.0.8
-Date: 2013-04-06
+Version: 1.0.7
+Date: 2013-03-13
 Author: Andy Lyons
 Maintainer: Andy Lyons <ajlyons@berkeley.edu>
 Imports:
@@ -18,7 +18,7 @@ Suggests:
 Description: Constructs homeranges and explores time use patterns from location
     data.
 License: BSD
-URL: http://tlocoh.r-forge.r-project.org
+URL: http://locoh.cnr.berkeley.edu/tlocoh
 Collate:
     'aoi.R'
     'aoi2box.R'
@@ -85,6 +85,7 @@ Collate:
     'lhs.pep.add.R'
     'lxy.plot.pt2ctr.R'
     'plot.locoh.lhs.R'
+    'lxy.lhs.wiz.R'
     'fn.unique.R'
     'lhs.exp.csv.R'
     'toni.R'
@@ -95,12 +96,14 @@ Collate:
     'lhs.merge.R'
     'lxy.anv.add.R'
     'lhs.so.add.R'
+    'lxy.grab.R'
     'lxy.ptsh.add.R'
     'pIntersect.R'
     'pIntersectSat.R'
     'tsd.zvals.R'
     'lxy.plot.ptsh.R'
     'get.vals.R'
+    'hmap.grp.R'
     'hulls2iso.gpc.R'
     'hulls2iso.rgeos.R'
     'lhs.plot.isoear.R'
@@ -125,5 +128,3 @@ Collate:
     'lxy.proj.add.R'
     'lhs.to.stats.R'
     'multi.proportion.col.R'
-    'locoh.lhs.R'
-    'lxy.identify.aoi.R'
