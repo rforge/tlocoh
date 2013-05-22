@@ -114,7 +114,20 @@
 <a name="installation"></a>
 <hr><h2>Installation</h2>
 
-<p>The documentation for T-LoCoH is still in progress, so the package is not yet in the R-Forge repository and thus can't be installed from the R prompt. Instructions for manual installation are below:</p>
+<h3>Installation from R-Forge (recommended)</h3>
+
+<p>To install T-LoCoH, type the command below at the R console. If you get stuck, see the steps for manual installation.</p>
+
+<p><pre>
+install.packages("tlocoh", dependencies=TRUE, repos=c("http://R-Forge.R-project.org", "http://cran.cnr.berkeley.edu"))<br>
+require(tlocoh)
+</pre></p>
+
+<p>Note: the above command uses two repositories because T-LoCoH is on R-Forge while the dependent packages are on CRAN mirrors. If you are not in the US, you can substitute an alternate CRAN repository.</p>
+
+<p>Windows users: if you have trouble installing the 'gpclib' package, see note below.</p>
+
+<h3>Manual Installation</h3>
 
 <p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
 
@@ -137,8 +150,9 @@ if (!require(gpclib)) install.packages("gpclib", type="source")
 <p><strong>3. Download the correct version of the T-LoCoH package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
 
 <ul>
-<li class="spaceafter">Windows: <a href="package/tlocoh_1.0.7.zip">tlocoh_1.0.7.zip</a></li>
-<li class="spaceafter">Mac and Linux (source): <a href="package/tlocoh_1.0.7.tar.gz">tlocoh_1.0.7.tar.gz</a></li>
+<li class="spaceafter">Windows (binary): <a href="http://download.r-forge.r-project.org/bin/windows/contrib/latest/tlocoh_1.0.8.zip">tlocoh_1.0.8.zip</a></li>
+<li class="spaceafter">Mac (binary): <a href="http://download.r-forge.r-project.org/bin/macosx/leopard/contrib/latest/tlocoh_1.0.8.tgz">tlocoh_1.0.8.tgz</a> (if this link doesn't work, download and install the source package using the 'Linux' instructions below)</li>
+<li class="spaceafter">Linux (source): <a href="http://download.r-forge.r-project.org/src/contrib/tlocoh_1.0.8.tar.gz">tlocoh_1.0.8.tar.gz</a></li>
 </ul>
 
 <p><strong>4. Install the T-LoCoH package from the R Console</strong></p>
@@ -146,7 +160,9 @@ if (!require(gpclib)) install.packages("gpclib", type="source")
 <ul>
 <li class="spaceafter">Windows: Install the package by going to the <em>Packages</em> menu on the R console and selecting <em>Install packages from local zip files</em>.</li>
 
-<li class="spaceafter">Mac: Select <em>Package Installer</em>, then select <em>Local Source Files</em>. Click the <em>Install</em> button and pick the *.tar.gz file you downloaded.</li>
+<li class="spaceafter">Mac: Select <em>Package Installer</em>, then select <em>Local Binary Files</em>. Click the <em>Install</em> button and pick the *.tgz file you downloaded.</li>
+
+<li class="spaceafter">Linux: Select <em>Package Installer</em>, then select <em>Local Source Files</em>. Click the <em>Install</em> button and pick the *.tar.gz file you downloaded.</li>
 </ul>
 
 <p><strong>5. Load T-LoCoH</strong></p>
@@ -154,6 +170,7 @@ if (!require(gpclib)) install.packages("gpclib", type="source")
 <p>Once T-LoCoH is installed, you can load it into memory by typing:</p>
 
 <p><pre>require(tlocoh)</pre></p>
+
 
 <hr><a name="resources"></a>
 <div class="boxright"><div style="width: 500px;">
