@@ -116,22 +116,32 @@
 
 <p>The documentation for T-LoCoH is still in progress, so the package is not yet in the R-Forge repository and thus can't be installed from the R prompt. Instructions for manual installation are below:</p>
 
-<p><strong>1. Install the dependent packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
+<p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
 
 <p><pre>
-dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "gpclib", "rgdal", "maptools", "png")<br>
+dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "rgdal", "maptools", "png")<br>
 pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.only=T))]<br>
 install.packages(pkgs.not.installed, dependencies=TRUE)
 </pre></p>
 
-<p><strong>2. Download the correct version of the package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
+<p><strong>2. Package <a href="http://cran.r-project.org/web/packages/gpclib/index.html">gpclib</a> is a special case because a binary version does not exist for Windows. If you can't get this package to install, don't panic, T-LoCoH will still work in most cases.</strong></p>
+
+<p><pre>
+## Mac OS
+if (!require(gpclib)) install.packages("gpclib")
+
+## Windows
+if (!require(gpclib)) install.packages("gpclib", type="source")
+</pre></p>
+
+<p><strong>3. Download the correct version of the T-LoCoH package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
 
 <ul>
 <li class="spaceafter">Windows: <a href="package/tlocoh_1.0.7.zip">tlocoh_1.0.7.zip</a></li>
 <li class="spaceafter">Mac and Linux (source): <a href="package/tlocoh_1.0.7.tar.gz">tlocoh_1.0.7.tar.gz</a></li>
 </ul>
 
-<p><strong>3. Install the T-LoCoH package from the R Console</strong></p>
+<p><strong>4. Install the T-LoCoH package from the R Console</strong></p>
 
 <ul>
 <li class="spaceafter">Windows: Install the package by going to the <em>Packages</em> menu on the R console and selecting <em>Install packages from local zip files</em>.</li>
@@ -139,7 +149,7 @@ install.packages(pkgs.not.installed, dependencies=TRUE)
 <li class="spaceafter">Mac: Select <em>Package Installer</em>, then select <em>Local Source Files</em>. Click the <em>Install</em> button and pick the *.tar.gz file you downloaded.</li>
 </ul>
 
-<p><strong>4. Load T-LoCoH</strong></p>
+<p><strong>5. Load T-LoCoH</strong></p>
 
 <p>Once T-LoCoH is installed, you can load it into memory by typing:</p>
 
@@ -167,7 +177,7 @@ install.packages(pkgs.not.installed, dependencies=TRUE)
 
 <li class="spaceafter">Five Minute Overview of T-LoCoH <img src="images/ico_video.png" width=16 height=16> <em>- coming soon</em></li>
 
-<li class="spaceafter">Reference paper:<br>Lyons, A., Turner, W.C., and WM Getz. In press. <a href="hrplus/lyons_turner_getz_2013_homerange-plus.pdf"><em>Home range plus: A space-time characterization of movement over real landscapes</em></a>. BMC Movement Ecology. <a href="http://www.movementecologyjournal.com">http://www.movementecologyjournal.com</a>. <a href="hrplus/">Accompanying animations</a>.</li>
+<li class="spaceafter">Reference paper:<br>Lyons, A., Turner, W.C., and WM Getz. In press. <a href="hrplus/lyons_turner_getz_2013_homerange-plus.pdf"><em>Home range plus: A space-time characterization of movement over real landscapes</em></a>. <a href="http://www.movementecologyjournal.com">BMC Movement Ecology</a>. <a href="hrplus/">Accompanying animations</a>.</li>
 
 <li class="spaceafter"><a href="http://r-forge.r-project.org/projects/tlocoh/">Project summary page</a></li>
 
