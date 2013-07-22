@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
+
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>T-LoCoH Manual Install</title>
+	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
+<style>
+     li.spaceafter {margin-bottom: 1em;}
+
+     .boxright {
+        float: right;
+        border-style:solid;
+        border-width: 5px;
+        border-color: LightSlateGray;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: LightGray;
+        color: black;
+     }
+
+     li.halfspaceafter {
+        margin-bottom: 0.5em;
+     }
+
+     .boxtext80 {
+        font-size: 80%;
+        text-align: center;
+        color: black;
+     }
+     .unused {
+         font: 13px/1.231 
+        background-color: #ffff80;  
+     }
+
+     .margin-three {
+        text-align: center;
+        margin-bottom: 0px;
+     }
+
+     body {
+         font-size: 100%;
+         font-family: "verdana",sans-serif;
+         color: rgb(68, 68, 68);
+         text-align: left;
+         margin-bottom: 1em;
+     }
+
+
+     pre {
+         font-size: 110%;
+         padding: 1em;
+         border: 1px dashed rgb(47, 111, 171);
+         color: black;
+         background-color: rgb(249, 249, 249);
+         line-height: 1.1em;
+         clear: both;
+     }
+
+     hr {
+         clear: both;
+     }
+
+</style>
+
+  </head>
+
+<body>
+
+<!-- R-Forge Logo -->
+
+<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
+
+<p><a href="index.html">Home</a></p>
+
+<h2>T-LoCoH Manual Install</h2>
+
+<p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
+
+<p><pre>
+dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "rgdal", "maptools", "png")<br>
+pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.only=T))]<br>
+install.packages(pkgs.not.installed, dependencies=TRUE)
+</pre></p>
+
+<p><strong>2. Package <a href="http://cran.r-project.org/web/packages/gpclib/index.html">gpclib</a> is a special case because a binary version does not exist for Windows. If you can't get this package to install, don't panic, T-LoCoH will still work in most cases.</strong></p>
+
+<p><pre>
+## Mac OS
+if (!require(gpclib)) install.packages("gpclib")
+
+## Windows
+if (!require(gpclib)) install.packages("gpclib", type="source")
+</pre></p>
+
+<p><strong>3. Download the correct version of the T-LoCoH package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
+
+<ul>
+<li class="spaceafter">Windows (binary): <a href="http://download.r-forge.r-project.org/bin/windows/contrib/latest/tlocoh_1.0.8.zip">tlocoh_1.0.8.zip</a></li>
+<li class="spaceafter">Mac (binary): <a href="http://download.r-forge.r-project.org/bin/macosx/leopard/contrib/latest/tlocoh_1.0.8.tgz">tlocoh_1.0.8.tgz</a> (if this link doesn't work, download and install the source package using the 'Linux' instructions below)</li>
+<li class="spaceafter">Linux (source): <a href="http://download.r-forge.r-project.org/src/contrib/tlocoh_1.0.8.tar.gz">tlocoh_1.0.8.tar.gz</a></li>
+</ul>
+
+<p><strong>4. Install the T-LoCoH package from the R Console</strong></p>
+
+<ul>
+<li class="spaceafter">Windows: Install the package by going to the <em>Packages</em> menu on the R console and selecting <em>Install packages from local zip files</em>.</li>
+
+<li class="spaceafter">Mac: Select <em>Package Installer</em>, then select <em>Local Binary Files</em>. Click the <em>Install</em> button and pick the *.tgz file you downloaded.</li>
+
+<li class="spaceafter">Linux: Select <em>Package Installer</em>, then select <em>Local Source Files</em>. Click the <em>Install</em> button and pick the *.tar.gz file you downloaded.</li>
+</ul>
+
+<p><strong>5. Load T-LoCoH</strong></p>
+
+<p>Once T-LoCoH is installed, you can load it into memory by typing:</p>
+
+<p><pre>require(tlocoh)</pre></p>
+
+
+
+</body>
+</html>
+
+

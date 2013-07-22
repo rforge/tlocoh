@@ -116,7 +116,7 @@
 
 <h3>Installation from R-Forge (recommended)</h3>
 
-<p>To install T-LoCoH, type the command below at the R console. If you get stuck, see the steps for manual installation.</p>
+<p>To install T-LoCoH, type the command below at the R console. If you get stuck, see the steps for <a href="manual_install.html">manual installation</a>.</p>
 
 <p><pre>
 install.packages("tlocoh", dependencies=TRUE, repos=c("http://R-Forge.R-project.org", "http://cran.cnr.berkeley.edu"))<br>
@@ -125,62 +125,17 @@ require(tlocoh)
 
 <p>Note: the above command uses two repositories because T-LoCoH is on R-Forge while the dependent packages are on CRAN mirrors. If you are not in the US, you can substitute an alternate CRAN repository.</p>
 
-<p>Windows users: if you have trouble installing the 'gpclib' package, see note below.</p>
-
-<h3>Manual Installation</h3>
-
-<p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
-
-<p><pre>
-dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "rgdal", "maptools", "png")<br>
-pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.only=T))]<br>
-install.packages(pkgs.not.installed, dependencies=TRUE)
-</pre></p>
-
-<p><strong>2. Package <a href="http://cran.r-project.org/web/packages/gpclib/index.html">gpclib</a> is a special case because a binary version does not exist for Windows. If you can't get this package to install, don't panic, T-LoCoH will still work in most cases.</strong></p>
-
-<p><pre>
-## Mac OS
-if (!require(gpclib)) install.packages("gpclib")
-
-## Windows
-if (!require(gpclib)) install.packages("gpclib", type="source")
-</pre></p>
-
-<p><strong>3. Download the correct version of the T-LoCoH package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
-
-<ul>
-<li class="spaceafter">Windows (binary): <a href="http://download.r-forge.r-project.org/bin/windows/contrib/latest/tlocoh_1.0.8.zip">tlocoh_1.0.8.zip</a></li>
-<li class="spaceafter">Mac (binary): <a href="http://download.r-forge.r-project.org/bin/macosx/leopard/contrib/latest/tlocoh_1.0.8.tgz">tlocoh_1.0.8.tgz</a> (if this link doesn't work, download and install the source package using the 'Linux' instructions below)</li>
-<li class="spaceafter">Linux (source): <a href="http://download.r-forge.r-project.org/src/contrib/tlocoh_1.0.8.tar.gz">tlocoh_1.0.8.tar.gz</a></li>
-</ul>
-
-<p><strong>4. Install the T-LoCoH package from the R Console</strong></p>
-
-<ul>
-<li class="spaceafter">Windows: Install the package by going to the <em>Packages</em> menu on the R console and selecting <em>Install packages from local zip files</em>.</li>
-
-<li class="spaceafter">Mac: Select <em>Package Installer</em>, then select <em>Local Binary Files</em>. Click the <em>Install</em> button and pick the *.tgz file you downloaded.</li>
-
-<li class="spaceafter">Linux: Select <em>Package Installer</em>, then select <em>Local Source Files</em>. Click the <em>Install</em> button and pick the *.tar.gz file you downloaded.</li>
-</ul>
-
-<p><strong>5. Load T-LoCoH</strong></p>
-
-<p>Once T-LoCoH is installed, you can load it into memory by typing:</p>
-
-<p><pre>require(tlocoh)</pre></p>
-
+<p>Windows users: if you have trouble installing the 'gpclib' package, see step two in the <a href="manual_install.html">manual installation</a> instructions.</p>
 
 <hr><a name="resources"></a>
 <div class="boxright"><div style="width: 500px;">
 <div class="margin-three"><strong>T-LoCoH Quiz</strong></div>
 <p class="margin-three"><img src="images/simdata_par_360x360.png" width=360 height=360 border=0></p>
 <div style="font-size:85%">
-<p style="margin-bottom:0px; margin-top:1em; text-align:left;">The image above represents:</p>
+<p style="margin-bottom:0px; margin-top:1em; text-align:left;">The image above illustrates:</p>
 <ol style="list-style-type:lower-alpha;">
-<li class="halfspaceafter">A schematic illustrating the diffusion of ideas between red states and blue states.</li>
-<li class="halfspaceafter">A MRI showing tendonitis in the lead programmer's left arm.</li>
+<li class="halfspaceafter">A schematic showing the diffusion of election workers between red states and blue states.</li>
+<li class="halfspaceafter">A MRI of tendonitis in the lead programmer's left arm.</li>
 <li class="halfspaceafter">A T-LoCoH space-use model from simulated data revealing areas of directional travel and temporal-partitioning.</li>
 </ol>
 <p>Answer: See Figure 10 in <a href="hrplus/lyons_turner_getz_2013_homerange-plus.pdf">the paper</a>.</p>
@@ -194,7 +149,12 @@ if (!require(gpclib)) install.packages("gpclib", type="source")
 
 <li class="spaceafter">Five Minute Overview of T-LoCoH <img src="images/ico_video.png" width=16 height=16> <em>- coming soon</em></li>
 
-<li class="spaceafter">Reference paper:<br>Lyons, A., Turner, W.C., and WM Getz. In press. <a href="hrplus/lyons_turner_getz_2013_homerange-plus.pdf"><em>Home range plus: A space-time characterization of movement over real landscapes</em></a>. <a href="http://www.movementecologyjournal.com">BMC Movement Ecology</a>. <a href="hrplus/">Accompanying animations</a>.</li>
+<li class="spaceafter">Reference paper:<br><br>Lyons, A., Turner, W.C., and WM Getz. 2013. <em>Home range plus: A space-time characterization of movement over real landscapes</a>. <a href="http://www.movementecologyjournal.com/content/1/1/2">BMC Movement Ecology 1:2</a>, <a href="http://dx.doi.org/10.1186/2051-3933-1-2">doi:10.1186/2051-3933-1-2</a>.</li>
+
+<ul>
+<li><a href="hrplus/lyons_turner_getz_2013_homerange-plus.pdf">Single PDF with text and supporting material combined</a></li>
+<li class="spaceafter"><a href="hrplus/">Accompanying animations</a></li>
+</ul>
 
 <li class="spaceafter"><a href="http://r-forge.r-project.org/projects/tlocoh/">Project summary page</a></li>
 
