@@ -1,0 +1,59 @@
+\name{lxy.reproject}
+\alias{lxy.reproject}
+\title{Project or reproject coordinates}
+\usage{
+  lxy.reproject(lxy, proj, dt.int.round.to = 0.1,
+    tau.diff.max = 0.02, status = TRUE)
+}
+\arguments{
+  \item{lxy}{A \link{LoCoH-xy} object}
+
+  \item{proj}{Projection object of class
+  \code{\link{CRS-class}}}
+
+  \item{dt.int.round.to}{The proportion of the median
+  sampling frequency that time intervals will be rounded to
+  when computing the frequency table of sampling intervals
+  (no change is made to the time stamps)}
+
+  \item{tau.diff.max}{The maximum deviation from tau
+  (expressed as a proportion of tau) that a point-to-point
+  time difference must fall within for the point-to-point
+  distance to be included in the calculation of the median
+  step length}
+
+  \item{status}{Show status messages (T/F)}
+}
+\description{
+  Project or reproject coordinates of a \link{LoCoH-xy}
+  object
+}
+\details{
+  This function will reproject the locations to a new
+  coordinate system. In order for this to work,
+
+  \itemize{ \item The coordinate system of the current
+  locations must be recorded. To see the current coordinate
+  system, run \code{\link{summary.locoh.lxy}}. To add
+  projection information (which you need to get from the
+  source of the data), use \code{\link{lxy.proj.add}}.
+  \item Argument \code{proj4string} which is an object of
+  class \code{\link{CRS-class}} containing information
+  about the new projection system }
+
+  Note that not all coordinate systems can be projected
+  into all other coordinate systems. If you get an error
+  message like \emph{'non finite transformation detected'},
+  the coordinate system you are trying to project into may
+  not be compatible with the existing coordinate system.
+}
+\examples{
+\dontrun{
+lxy.utm <- lxy.reproject(lxy, CRS("+proj=utm +north +zone=18 +ellps=WGS84"))
+}
+}
+\seealso{
+  \code{\link{lxy.proj.add}},
+  \code{\link{summary.locoh.lxy}}, \code{\link{CRS}}
+}
+

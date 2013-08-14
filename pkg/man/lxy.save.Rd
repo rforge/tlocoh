@@ -7,7 +7,7 @@
     width = 2)
 }
 \arguments{
-  \item{lxy}{A LoCoH-xy object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{fn}{Optional filename}
 

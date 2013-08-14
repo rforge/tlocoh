@@ -6,17 +6,18 @@
 #' @param dt Optional vector of date-time values (either POSIXct objects or objects that can be coerced to POSIXct)
 #' @param id Optional character vector or factor containing the name(s) of the individual(s) of each location.
 #' @param ptid Optional integer vector of point id values
-#' @param proj4string projection string of class \code{\link{CRS-class}}
+#' @param proj4string Projection string object of class \code{\link{CRS-class}}
 #' @param anv Optional ancillary variables for each point (data frame with same number of records as xy)
 #' @param anv.desc Optional character vector with descriptions of the ancillary variables (in the same order as they appear in \code{anv})
 #' @param tz The name of the time zone that will be assigned if not explicit in dt.
-#' @param del.dup.xyt Whether to delete duplicate rows with the same x, y, dt, and id value. (F/T)
+#' @param del.dup.xyt Whether to delete duplicate rows with the same x, y, dt, and id value. (T/F)
 #' @param dup.dt.check Whether to check to make sure there are no duplicate date values for the same id
 #' @param col Optional vector of color values (one for each point), or a single color value
-#' @param status Show status messages (T/F)
-#' @param req.id Require a value for id (T/F)
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when computing the frequency table of sampling intervals (no change is made to the time stamps)
 #' @param tau.diff.max The maximum deviation from tau (expressed as a proportion of tau) that a point-to-point time difference must fall within for the point-to-point distance to be included in the calculation of the median step length
+#' @param req.id Require a value for id (T/F)
+#' @param warn.latlong Show a warning message if coordinates appear to be in geographic coordinates (T/F)
+#' @param status Show status messages (T/F)
 #'
 #' @note
 #' At a minimum, a locoh-xy object contains a set of points. It can also contain date-time values for each point, the name of 
@@ -63,8 +64,9 @@
 #'
 #' @export
 
-xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(as.character(NA)), anv=NULL, anv.desc=NULL, col=NULL, 
-                     del.dup.xyt=TRUE, dup.dt.check=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, status=TRUE) {
+xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(NA), anv=NULL, anv.desc=NULL, col=NULL, 
+                     del.dup.xyt=TRUE, dup.dt.check=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, 
+                     warn.latlong=TRUE, status=TRUE) {
                      
     if (!require(sp)) stop("package sp required")
     
@@ -76,7 +78,7 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
          xy <- as.data.frame(xy)
     }
     if (is.data.frame(xy) && length(xy) != 2) stop(err.msg)
-    if (min(xy[,1]) >= -180 && max(xy[,1]) <= 180 && min(xy[,2]) >= -90 && max(xy[,2]) <= 90) warning(cw("Your data appear to be in geographic coordinates (latitude-longitude). You can use T-LoCoH with geographic coordinates, but it isn't recommended because length and area are not meaningful. See manual for details.", final.cr=F, exdent=2))
+    if (warn.latlong && min(xy[,1]) >= -180 && max(xy[,1]) <= 180 && min(xy[,2]) >= -90 && max(xy[,2]) <= 90) warning(cw("Your data appear to be in geographic coordinates (latitude-longitude). You can use T-LoCoH with geographic coordinates, but it isn't recommended because length and area in degrees are not meaningful. Consider projecting your data with lxy.reproject. See manual for details.", final.cr=F, exdent=2))
     names(xy) <- c("x","y")
     
     if (is.null(id)) {

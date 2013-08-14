@@ -14,16 +14,15 @@
 #' @method summary locoh.lxy
 #' @export
 
-summary.locoh.lxy <- function(object, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
+summary.locoh.lxy <- function(lxy, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
 
-    lxy <- object; rm(object)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
     if (!require(sp)) stop("package sp required")
     if (file!="") sink(file=file)
 
     cat("Summary of LoCoH-xy object:", deparse(substitute(lxy)), "\n")
-
+    
     cat("***Locations\n")
     ids.df <- do.call(rbind, lapply(levels(lxy[["pts"]][["id"]]), function(id) data.frame(id=id, num.pts=sum(lxy[["pts"]][["id"]]==id), dups=length(which(duplicated(coordinates(lxy[["pts"]][lxy[["pts"]][["id"]]==id, ]))))   )))
     print(formatdf4print(ids.df, indent=3), row.names=FALSE)

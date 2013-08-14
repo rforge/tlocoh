@@ -24,8 +24,9 @@
   points within radius r)}
 
   \item{a}{Value for the a method (identify all points
-  within cummulative distance a). Can also be an auto.a
-  value.}
+  within cummulative distance a). Can also be a data frame
+  of parameters returned by the \code{\link{auto.a}}
+  function.}
 
   \item{s}{The value for s for the time-scaled distance
   metric}

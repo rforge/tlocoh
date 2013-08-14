@@ -2,7 +2,7 @@
 #'
 #' Saves a LoCoH-xy object to disk, constructing a filename if needed that reflects the contents
 #'
-#' @param lxy A LoCoH-xy object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param fn Optional filename
 #' @param save.as The name of the saved object, if NULL the original object name will be used
 #' @param dir Directory for the output file (relative to the working directory), ignored if fn passed

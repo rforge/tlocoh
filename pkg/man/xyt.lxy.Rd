@@ -3,10 +3,10 @@
 \title{Create a LoCoH-xy object}
 \usage{
   xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
-    proj4string = CRS(as.character(NA)), anv = NULL,
-    anv.desc = NULL, col = NULL, del.dup.xyt = TRUE,
-    dup.dt.check = TRUE, dt.int.round.to = 0.1,
-    tau.diff.max = 0.02, req.id = TRUE, status = TRUE)
+    proj4string = CRS(NA), anv = NULL, anv.desc = NULL,
+    col = NULL, del.dup.xyt = TRUE, dup.dt.check = TRUE,
+    dt.int.round.to = 0.1, tau.diff.max = 0.02,
+    req.id = TRUE, warn.latlong = TRUE, status = TRUE)
 }
 \arguments{
   \item{xy}{A two-column matrix or data frame containing
@@ -21,7 +21,7 @@
 
   \item{ptid}{Optional integer vector of point id values}
 
-  \item{proj4string}{projection string of class
+  \item{proj4string}{Projection string object of class
   \code{\link{CRS-class}}}
 
   \item{anv}{Optional ancillary variables for each point
@@ -35,17 +35,13 @@
   if not explicit in dt.}
 
   \item{del.dup.xyt}{Whether to delete duplicate rows with
-  the same x, y, dt, and id value. (F/T)}
+  the same x, y, dt, and id value. (T/F)}
 
   \item{dup.dt.check}{Whether to check to make sure there
   are no duplicate date values for the same id}
 
   \item{col}{Optional vector of color values (one for each
   point), or a single color value}
-
-  \item{status}{Show status messages (T/F)}
-
-  \item{req.id}{Require a value for id (T/F)}
 
   \item{dt.int.round.to}{The proportion of the median
   sampling frequency that time intervals will be rounded to
@@ -57,6 +53,13 @@
   time difference must fall within for the point-to-point
   distance to be included in the calculation of the median
   step length}
+
+  \item{req.id}{Require a value for id (T/F)}
+
+  \item{warn.latlong}{Show a warning message if coordinates
+  appear to be in geographic coordinates (T/F)}
+
+  \item{status}{Show status messages (T/F)}
 }
 \value{
   A object of class \code{\link{locoh.lxy}}

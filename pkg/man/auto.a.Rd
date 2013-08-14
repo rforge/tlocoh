@@ -2,7 +2,7 @@
 \alias{auto.a}
 \title{Parameters to select a reasonable value of 'a'}
 \usage{
-  auto.a(meth = c("enc", "nn")[1], ptp = 1, nnn = 2,
+  auto.a(meth = c("enc", "nn")[1], ptp = 0.98, nnn = 2,
     tct = 1.05)
 }
 \arguments{

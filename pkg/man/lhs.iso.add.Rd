@@ -83,7 +83,7 @@
   sort metric}
 }
 \value{
-  A LoCoH-hullset object (class "locoh.lhs")
+  A \link{LoCoH-hullset} object
 }
 \description{
   Adds isopleth(s) to a LoCoH-hullset object

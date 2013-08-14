@@ -24,7 +24,7 @@
 
 #auto.a <- function(a.pp=0.98, a.nn=2, a.h=1, a.tct=1.05, a.meth = "nn") {
 
-auto.a <- function(meth=c("enc", "nn")[1], ptp=1, nnn=2, tct=1.05) {
+auto.a <- function(meth=c("enc", "nn")[1], ptp=0.98, nnn=2, tct=1.05) {
 
     if (min(ptp)<=0 || max(ptp)>1) stop("ptp must be between 0 and 1")
     if (!meth %in% c("enc", "nn")) stop("Unknown value for 'meth'")

@@ -1,8 +1,8 @@
 Package: tlocoh
 Type: Package
 Title: Constructs homeranges and explores time use patterns from location data
-Version: 1.0.8
-Date: 2013-05-20
+Version: 1.0.9
+Date: 2013-08-01
 Author: Andy Lyons
 Maintainer: Andy Lyons <ajlyons@berkeley.edu>
 Imports:
@@ -127,3 +127,7 @@ Collate:
     'multi.proportion.col.R'
     'locoh.lhs.R'
     'lxy.identify.aoi.R'
+    'lxy.reproject.R'
+    'iso2raster.R'
+    'lhs.rast.add.R'
+    'move.lxy.R'

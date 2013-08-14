@@ -4,7 +4,7 @@
 #' @param id The name(s) of individuals to analyze
 #' @param k Value for the fixed-k method (identify k nearest neighbors of each point)
 #' @param r Value for the fixed-r method (identify all points within radius r)
-#' @param a Value for the a method (identify all points within cummulative distance a). Can also be an auto.a value.
+#' @param a Value for the a method (identify all points within cummulative distance a). Can also be a data frame of parameters returned by the \code{\link{auto.a}} function.
 #' @param s The value for s for the time-scaled distance metric
 #' @param ptid A vector of ptid indicating which points should have nearest neighbors identified (can be used to speed up processing during testing)
 #' @param kmin A minimum number of neighbors to identify for each point
@@ -82,7 +82,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
             a <- vectorize.parameter(a)
         } else if (is.data.frame(a)) { 
             mode <- "Auto-a"
-            #auto.a.names <- c("a.meth", "a.pp", "a.nn", "a.h", "a.tct")
             auto.a.names <- c("meth", "ptp", "nnn", "tct")
             if (!identical(sort(auto.a.names), sort(names(a)))) stop(paste("a must contain these columns:", paste(auto.a.names, collapse=", ")))
             if (min(a[["ptp"]]) <= 0 || max(a[,"ptp"]) > 1) stop("a$ptp must be between 0 and 1")
@@ -253,7 +252,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                                 
                                 ## See if there is already a row in the data frame of saved auto.a
                                 if (!is.null(lxy[["nn"]][[nn.names.idx]][["auto.a.df"]])) {
-                                    #matching.saved.auto.a <- with(lxy[["nn"]][[nn.names.idx]][["auto.a.df"]], which(a.meth==a[a.idx, "a.meth"] & a.pp==a[a.idx, "a.pp"] & a.nn==a[a.idx, "a.nn"] & a.h==a[a.idx, "a.h"] & a.tct==a[a.idx, "a.tct"]))
                                     matching.saved.auto.a <- with(lxy[["nn"]][[nn.names.idx]][["auto.a.df"]], which(meth==a[a.idx, "meth"] & ptp==a[a.idx, "ptp"] & nnn==a[a.idx, "nnn"] & tct==a[a.idx, "tct"]))
                                     
                                     if (length(matching.saved.auto.a) > 0) {

@@ -2,7 +2,7 @@
 \alias{summary.locoh.lxy}
 \title{Show a summary of a LoCoH-xy object}
 \usage{
-  \method{summary}{locoh.lxy} (object, file = "",
+  \method{summary}{locoh.lxy} (lxy, file = "",
     dt.int = FALSE, round.coords = 1, ptsh = FALSE, ...)
 }
 \arguments{

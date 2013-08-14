@@ -1,26 +1,21 @@
 #' @name locoh.lxy
-#' @aliases LoCoH-xy
+#' @aliases LoCoH-xy locoh.lxy-class
 #'
-#' @title Class for a series of locations
+#' @title Class for location data
 #'
-#' @description Class for locations with associated dates, nearest neighbor info, parameters for a random walk null model, and assorted meta-data
+#' @description Data class for locations with associated dates, nearest neighbor info, parameters for a random walk null model, and assorted meta-data
 #'
 #' @details
 #' An object of class LoCoH.lxy is a list containing a series of point locations and ancillary
 #' variables that go with those locations (e.g., time stamps, point IDs, animal IDs). These items
-#' are bundled together and 'ready to go' as inputs into T-LoCoH functions.
-#'
-#' The reasons for bundling all of the objects related to a set of point locations in a single list
-#' object includes:
+#' are bundled together and 'ready to go' as inputs into T-LoCoH functions. The benefits of bundling all 
+#' of the objects related to a set of point locations in a single list object includes:
 #'
 #' \itemize{
-#'
-#'     \item the cleaning and error checking only has to be done once when the lxy object is created with the xyt.lxy function
-#'
+#'     \item cleaning and error checking only has to be done once when the lxy object is created (e.g., with \code{\link{xyt.lxy}})
 #'     \item having all of the ancillary variables together simplifies the task of passing parameters to other functions as well as saving/retrieving your work to disk
-#'
-#'     \item it allows re-use of the nearest neighbor lookup-table (which can take a long time to compute)
-#'
+#'     \item the nearest neighbor lookup-table (which can take a long time to compute) can be reused
+#'     \item locations for multiple individuals can be saved in one object
 #'     }
 #'
 #' In code examples, objects of class LoCoH.lxy are often named 'lxy'. 
@@ -30,31 +25,22 @@
 #' The named elements in the list include:
 #'
 #' \describe{
-#'    \item{xys}{a two-column data frame containing the x and y coordinates of each point}
+#'    \item{pts}{a \link{SpatialPointsDataFrame} of the locations. Columns in the associated data frame vary but typically include:}
 #'
-#'    \item{col}{a vector (or factor) of color values. May also be NULL}
+#'         \itemize{
+#'            \item \emph{ptid} - an integer vector of unique id values for each point
+#'            \item \emph{id} - a character vector or factor containing the ids of the individuals (e.g., name of the animal, GPS device) associated with each point
+#'            \item \emph{dt} - a vector of date-stamps (class POSIXct) for each point
+#'            \item \emph{col} - a vector (or factor) of color values
+#'            \item various other ancillary variables associated with each location
+#'         }
 #'
-#'    \item{ptid}{an integer vector of unique id values for each point}
 #'
-#'    \item{id}{a character vector or factor containing the ids of the individuals (e.g., name of the animal, GPS device) associated with each points }
-#'
-#'    \item{dt}{a vector of date-stamps (class POSIXct) for each point. May also be NULL.}
-#'
-#'    \item{anv}{a data frame of ancillary variables for each location, each column is a variable, and the number of rows equals the number of points}
+#'    \item{anv}{A data frame of meta data of the ancillary variables associated with each point (or NULL if none). Column names are \emph{anv} (corresponding to the column name in \code{pts} and \emph{desc} (description)}
 #'
 #'    \item{dt.int}{a four-column data frame containing a frequency table of the time interval between points. Columns include: id, interval, count, and rtn (where rtn is the round-to-nearest value (in seconds) that was used in binning the delta.t values).}
 #'
-#'    \item{rw.params}{a three-column data frame containing the parameters used to compute the predicted 'diffusion distance' for any pair of points as a function of the difference in time. Columns of the data frame includ: id, time.step.median and d.bar (median step-length)}
-#'
-#'    \item{aux}{either NULL or a list object of auxillary data associated with the points. This can include spatial elements to be overlaid when lxy is plotted, or other meta-data associated with the lxy. There is one list element per ID, and each of those elements is another list containing two named elements: \code{type}, and \code{data}:
-#'       \tabular{rll}{
-#'       \tab \strong{type} \tab \strong{data}\cr
-#'       \tab \code{text} \tab a data frame with columns x, y, label, pos\cr
-#'       \tab \code{lines} \tab a list containing named elements 'xy' and 'lty' and 'col'\cr
-#'       \tab \code{data.frame} \tab a data frame\cr
-#'       \tab \code{range.expand} \tab a two-element numeric vector that will be added to both xlim and ylim in \link{plot.locoh.lxy}. To reduce the range on the x-axis, for example to make space for labels, the first element should be negative.\cr
-#'       }
-#'   }
+#'    \item{rw.params}{a four-column data frame containing the parameters used to compute the predicted 'diffusion distance' for any pair of points as a function of the difference in time. Columns of the data frame includ: \emph{id}, \emph{time.step.median}, \emph{d.bar} (median step-length), and \emph{vmax} (maximum observed velocity)}
 #'
 #'    \item{comment}{a named list of descriptive text. One list element per id; the item name is the id. The default is a constructed string consisting of the ID(s) and number of points per ID. May also be NULL.}
 #'
@@ -101,9 +87,13 @@
 #'
 #'    }
 #'
+#'    \item{ptsh}{List of the proportion of time-selected hulls for different values of s (created with lxy.ptsh.add), based on a random sample of hulls. One 
+#'                list element for each id, and in each of those there will be an (unnamed) list element for each time lxy.ptsh was run. 
+#'                Each of those will be a list containing elements: \emph{id, samp.idx, n, k, target.ptsh, target.s, s.ptsh, time.taken}.
+#'                See \code{\link{lxy.ptsh.add}}.}
 #'
 #' }
 #'
-#' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}, \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}
+#' @seealso \code{\link{xyt.lxy}}, \code{\link{move2lxy}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}, \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}
 
 NULL

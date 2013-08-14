@@ -1,6 +1,6 @@
 \name{lxy.proj.add}
 \alias{lxy.proj.add}
-\title{Add ancillary variable(s) to a LoCoH-xy object from a raster}
+\title{Specify the projection system for a LoCoH-xy object}
 \usage{
   lxy.proj.add(lxy, proj4string = CRS(as.character(NA)))
 }
@@ -14,8 +14,7 @@
   A \link{LoCoH-xy} object
 }
 \description{
-  Add ancillary variable(s) to a LoCoH-xy object from a
-  raster
+  Specify the projection system for a LoCoH-xy object
 }
 \details{
   This function will add projection information to a
