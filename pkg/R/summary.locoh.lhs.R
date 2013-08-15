@@ -2,7 +2,7 @@
 #'
 #' Displays a summary of a LoCoH-hullset object
 #'
-#' @param object A \link{LoCoH-hullset} object
+#' @param lhs A \link{LoCoH-hullset} object
 #' @param file A file name
 #' @param id The name(s) of individuals to summarize
 #' @param k The k value of hullsets to summarize

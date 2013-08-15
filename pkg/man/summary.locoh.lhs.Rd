@@ -8,7 +8,7 @@
     compact = FALSE, ...)
 }
 \arguments{
-  \item{object}{A \link{LoCoH-hullset} object}
+  \item{lhs}{A \link{LoCoH-hullset} object}
 
   \item{file}{A file name}
 

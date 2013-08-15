@@ -112,6 +112,7 @@
   hull metrics (see also xxx).
 }
 \examples{
+\dontrun{
 #Create an unbounded random walk as a sample dataset
 n <- 500; stepsize <- 5
 theta <- runif(n, min=0, max=2*pi)
@@ -123,6 +124,7 @@ timestamps <- Sys.time() + 3600 * (1:n-1)
 #Combine the xy locations and timestamps into a \\link{LoCoH-xy} object
 lxy <- xyt.lxy(xy=xy, dt=timestamps, id="broken_tooth")
 summary(lxy)
+}
 }
 \seealso{
   \code{\link{lxy.nn.add}}, \code{\link{lxy.repair}},

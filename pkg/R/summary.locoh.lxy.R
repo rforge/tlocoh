@@ -2,7 +2,7 @@
 #'
 #' Prints a summary of a locoh xy object (set of locations)
 #'
-#' @param object A \link{LoCoH-xy} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param file A file name where the results will be saved
 #' @param dt.int Whether to show a summary of the sampling interval
 #' @param round.coords The number of digits to display for the coordinates of the spatial extent

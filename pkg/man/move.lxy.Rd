@@ -53,6 +53,9 @@
 
   \item{req.id}{Require a value for id (T/F).}
 
+  \item{warn.latlong}{Show a warning message if it detects
+  coordinates may be in latitude-longitude (T/F).}
+
   \item{status}{Show status messages (T/F).}
 }
 \value{
@@ -64,7 +67,7 @@
 }
 \note{
   Move and MoveStack are formal classes from the
-  \link{move} package for storage of movement data for a
+  \emph{Move} package for storage of movement data for a
   single (Move) or multiple (MoveStack) indviduals.
   \code{move.lxy} will convert these objects to
   \link{LoCoH-xy} objects. To import the attribute data

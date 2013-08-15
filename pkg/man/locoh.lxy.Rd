@@ -126,7 +126,7 @@
   }
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{move2lxy}},
+  \code{\link{xyt.lxy}}, \code{\link{move.lxy}},
   \code{\link{lxy.repair}}, \code{\link{lxy.subset}},
   \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}
 }

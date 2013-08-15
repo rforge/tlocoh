@@ -6,7 +6,7 @@
     dt.int = FALSE, round.coords = 1, ptsh = FALSE, ...)
 }
 \arguments{
-  \item{object}{A \link{LoCoH-xy} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{file}{A file name where the results will be saved}
 

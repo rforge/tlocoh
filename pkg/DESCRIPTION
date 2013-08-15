@@ -129,5 +129,6 @@ Collate:
     'lxy.identify.aoi.R'
     'lxy.reproject.R'
     'iso2raster.R'
-    'lhs.rast.add.R'
     'move.lxy.R'
+    'lhs.iso.rast.R'
+    'startup.R'

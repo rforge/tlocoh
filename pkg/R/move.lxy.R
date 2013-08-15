@@ -14,9 +14,10 @@
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when computing the frequency table of sampling intervals (no change is made to the time stamps).
 #' @param tau.diff.max The maximum deviation from tau (expressed as a proportion of tau) that a point-to-point time difference must fall within for the point-to-point distance to be included in the calculation of the median step length.
 #' @param req.id Require a value for id (T/F).
+#' @param warn.latlong Show a warning message if it detects coordinates may be in latitude-longitude (T/F).
 #' @param status Show status messages (T/F).
 #'
-#' @note Move and MoveStack are formal classes from the \link{move} package for storage of movement data for a single (Move) or multiple (MoveStack) indviduals. 
+#' @note Move and MoveStack are formal classes from the \emph{Move} package for storage of movement data for a single (Move) or multiple (MoveStack) indviduals. 
 #' \code{move.lxy} will convert these objects to \link{LoCoH-xy} objects. To import the attribute data associated with 
 #' each point (termed ancillary variables in T-LoCoH), set \code{anv.flds} to the names of the field(s) you wish to import (or \code{anv.flds="all"}). 
 #' Note that the Move and MoveStack classes store a lot more metadata than
@@ -112,8 +113,10 @@ move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NUL
         id <- move.obj@trackId
     } else {
         id <- move.obj@idData[["individual.local.identifier"]]
+        
     }
     if (length(id)==0) {
+        print("can't find id");browser()
         warning("Can not find the id(s) for this individual")    
         id <- "1"
     }    
