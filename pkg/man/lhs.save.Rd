@@ -2,21 +2,21 @@
 \alias{lhs.save}
 \title{Save a LoCoH-hullset object to disk}
 \usage{
-  lhs.save(lhs, fn = NULL, dir = ".", suf = NULL,
+  lhs.save(lhs, file = NULL, dir = ".", suf = NULL,
     compress = TRUE, auto.num.files = TRUE, width = 2,
     save.as = NULL)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
 
-  \item{fn}{Optional filename. If omitted a sensible
+  \item{file}{Optional filename. If omitted a sensible
   filename will be constructed}
 
   \item{dir}{Directory for the output file (relative to the
-  working directory), ignored if \code{fn} passed}
+  working directory), ignored if \code{file} passed}
 
   \item{suf}{A suffix that will be used in the construction
-  of the filename, ignored if \code{fn} is passed}
+  of the filename, ignored if \code{file} is passed}
 
   \item{compress}{Compress file. T/F}
 

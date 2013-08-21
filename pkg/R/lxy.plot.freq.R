@@ -353,6 +353,7 @@ lxy.plot.freq <- function(lxy, id=NULL, deltat.by.date=F, samp.by.date=F, cp=F, 
         }
         
         plot(x=xs, y=ys.int, type="p", pch=20, cex=cex.pts, xlab="date", ylab="id", yaxt="n", xaxt="n", main=title.str, ...)
+        
         xs.ticks <- dateticks(range(xs), max.ticks=8)
         
         axis(side=1, at=xs.ticks[["tick.all"]], labels=format(xs.ticks[["tick.all"]], format=xs.ticks[["format.str"]]))

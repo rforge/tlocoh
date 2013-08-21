@@ -2,14 +2,15 @@ citHeader("To cite package 'tlocoh' in publications use:")
 
 year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 vers <- paste("R package version", meta$Version)
+pkg_title <- "T-LoCoH: Time Local Convex Hull Homerange and Time Use Analysis"
 
 citEntry(entry="Manual", 
-         title = "T-LoCoH: Time Local Convex Hull Homerange and Time Use Analysis",
+         title = pkg_title,
          author = personList(as.person("Andrew Lyons"),
                               as.person("Wayne Getz"),
                               person("R Development Core Team")),
         year = year,
         note = vers,
-        textVersion = paste("Andrew Lyons, Wayne Getz, and the R Development Core Team (", year, "). ", title, ". ", vers, ".", sep="")
+        textVersion = paste("Andrew Lyons, Wayne Getz, and the R Development Core Team (", year, "). ", pkg_title, ". ", vers, ".", sep="")
         )
         

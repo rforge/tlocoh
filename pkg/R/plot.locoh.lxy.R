@@ -115,7 +115,7 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
         ## Create png device if needed
         if (!is.null(png.dir)) {
             if (is.null(png.fn)) {
-                fn <- file.path(png.dir, paste(trim(paste(unlist(lxy[["comment"]][id]), collapse = ".", sep = "")), ".xy.png", sep=""))
+                fn <- file.path(png.dir, paste(strTrim(paste(unlist(lxy[["comment"]][id]), collapse = ".", sep = "")), ".xy.png", sep=""))
             } else {
                 fn <- png.fn
             }

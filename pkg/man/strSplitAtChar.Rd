@@ -1,8 +1,8 @@
-\name{str.split.at.char}
-\alias{str.split.at.char}
+\name{strSplitAtChar}
+\alias{strSplitAtChar}
 \title{Split a character object into multiple lines}
 \usage{
-  str.split.at.char(object, size, char = ".",
+  strSplitAtChar(object, size, char = ".",
     separator = paste("\n", char, sep = ""), ...)
 }
 \arguments{

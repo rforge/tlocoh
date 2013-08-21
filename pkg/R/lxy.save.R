@@ -1,25 +1,25 @@
 #' Save a LoCoH-xy object to disk
 #'
-#' Saves a LoCoH-xy object to disk, constructing a filename if needed that reflects the contents
+#' Saves a LoCoH-xy object to disk, constructing a file name if needed that reflects the contents
 #'
 #' @param lxy A \link{LoCoH-xy} object
-#' @param fn Optional filename
+#' @param file Optional file name
 #' @param save.as The name of the saved object, if NULL the original object name will be used
-#' @param dir Directory for the output file (relative to the working directory), ignored if fn passed
-#' @param suf A suffix that will be used in the construction of the filename, ignored if fn is passed
+#' @param dir Directory for the output file (relative to the working directory), ignored if \code{file} passed
+#' @param suf A suffix that will be used in the construction of the file name, ignored if \code{file} is passed
 #' @param compress Compress file (T/F)
-#' @param auto.num.files Use a numeric token as part of the constructed filename to get a unique filename(T/F)
+#' @param auto.num.files Use a numeric token as part of the constructed file name to get a unique file name(T/F)
 #' @param width The number of digits in auto.num.files
 #'
 #' @export
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lhs.save}}
 
-lxy.save <- function (lxy, fn=NULL, save.as=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2) {
+lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
 
-    if (!is.null(fn)) {
-        fn.full <- fn
+    if (!is.null(file)) {
+        fn.full <- file
     } else {
         ## Build the pieces of a file name
         strids <- paste(unique(lxy[["pts"]][["id"]]), collapse="-", sep="")

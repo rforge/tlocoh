@@ -52,9 +52,6 @@ lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, dt.start=NULL, dt.end
     if (byfreq && !require(FNN)) stop("Package FNN is required")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't harmonize the temporal frequency without date-time values")
     if (!trim.ends && !byfreq) stop("Don't know what to do. trim.ends and/or byfreq must be TRUE")
-
-    ## if (byfreq && is.null(deltat)) stop("Please provide a value for deltat (the disired sampling frequency)")
-    #if (trim.ends && (is.null(dt.start) || is.null(dt.end))) stop("To trim the start and end dates, you must pass dt.start and dt.end")
     
     if (is.null(id)) {
         id <- levels(lxy[["pts"]][["id"]])

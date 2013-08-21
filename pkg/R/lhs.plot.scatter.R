@@ -294,7 +294,7 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
             }
             
             ## Create the 'opposite' color from the background color to use as the color for labels and axes
-            tcc <- text.contrast.color(bg)
+            tcc <- textContrastColor(bg)
             if (is.null(col.desc)) col.desc <- if (bg =="white" || lo.bg.as.box) "darkgreen" else tcc
             
             if (is.null(filter)) {

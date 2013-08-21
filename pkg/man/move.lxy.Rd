@@ -11,7 +11,8 @@
 \arguments{
   \item{move.obj}{A object of class Move or MoveStack.}
 
-  \item{use.utm}{Import UTM coordinates if found (T/F).}
+  \item{use.utm}{Import UTM coordinates if found \emph{and}
+  all points fall within the same UTM zone (T/F).}
 
   \item{xcoord}{The name of a field in the data table for
   the x-coordinates. If NULL, the default coordinates will

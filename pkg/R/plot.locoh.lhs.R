@@ -1042,8 +1042,8 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
                         
                         } else {
                             ## For appearance sake, split the plot tile at a period if too long
-                            #plot.title <- paste(hs.name, "\n", str.split.at.char(names(hs[[hs.name]][["isos"]])[iso.idx], char=".", size=round(65 /par("mfrow")[2])), sep="")
-                            title.feats.str <- c(title.feats.str, paste(str.split.at.char(names(hs[[hs.name]][["isos"]])[iso.idx], char=".", size=round(65 /par("mfrow")[2])), sep=""))
+                            #plot.title <- paste(hs.name, "\n", strSplitAtChar(names(hs[[hs.name]][["isos"]])[iso.idx], char=".", size=round(65 /par("mfrow")[2])), sep="")
+                            title.feats.str <- c(title.feats.str, paste(strSplitAtChar(names(hs[[hs.name]][["isos"]])[iso.idx], char=".", size=round(65 /par("mfrow")[2])), sep=""))
 
                         }
 

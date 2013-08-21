@@ -80,7 +80,7 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(N
          xy <- as.data.frame(xy)
     }
     if (is.data.frame(xy) && length(xy) != 2) stop(err.msg)
-    if (warn.latlong && min(xy[,1]) >= -180 && max(xy[,1]) <= 180 && min(xy[,2]) >= -90 && max(xy[,2]) <= 90) warning(cw("Your data appear to be in geographic coordinates (latitude-longitude). You can use T-LoCoH with geographic coordinates, but it isn't recommended because length and area in degrees are not meaningful. Consider projecting your data with lxy.reproject. See manual for details.", final.cr=F, exdent=2))
+    if (warn.latlong && min(xy[,1]) >= -180 && max(xy[,1]) <= 180 && min(xy[,2]) >= -90 && max(xy[,2]) <= 90) warning(cw("Your data appear to be in geographic coordinates (latitude-longitude). You can use T-LoCoH with geographic coordinates, but it isn't recommended because length and area in degrees are not meaningful. Consider projecting your data to a planar coordinate system with lxy.reproject().", final.cr=F, exdent=2))
     names(xy) <- c("x","y")
     
     if (is.null(id)) {

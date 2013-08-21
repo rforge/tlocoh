@@ -10,7 +10,7 @@ vectorize.parameter <- function (x, n2z=FALSE, type=c("numeric", "character")[1]
           return(x)
        }
     }
-    if (is.character(x)) x <- get(paste("as.", type, sep=""))(unlist(strsplit(trim(x), " *, *")))
+    if (is.character(x)) x <- get(paste("as.", type, sep=""))(unlist(strsplit(strTrim(x), " *, *")))
     
     return(if (sort.res) sort(x) else x)
 }

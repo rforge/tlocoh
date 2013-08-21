@@ -1,21 +1,47 @@
 \name{iso2raster}
 \alias{iso2raster}
-\title{Converts a SpatialPolygonsDataFrame to a raster
-This presumes the SPDF contains isopleths ordered from lowest level to highest
-ext is an extent object or NULL
-dimSize is numeric. dimSize is only used if raster is not set. dimSize is interpreted as the number of cells along the largest dimension of the track. The according raster will be calculated internally. Default is 10}
+\title{Convert isopleths to raster}
 \usage{
   iso2raster(polys, raster = NULL, ext = NULL,
     dimSize = 100, cell.size = NULL, sf.cell.size = 2,
     ll.round = TRUE, status = TRUE, debug = FALSE)
 }
+\arguments{
+  \item{polys}{A SpatialPolygonsDataFrame containing
+  isopleths sorted by isopleth level (smallest to largest)}
+
+  \item{raster}{A RasterStack object to be used to set the
+  extent and resolution for the output raster.}
+
+  \item{ext}{An extent object or NULL. Ignored if
+  \code{raster} is passed.}
+
+  \item{dimSize}{Numeric value used as the number of cells
+  along the largest dimension of the data is numeric.
+  Ignored if \code{raster} is passed.}
+
+  \item{cell.size}{. Ignored if \code{raster} is passed.}
+
+  \item{sf.cell.size}{. Ignored if \code{raster} is
+  passed.}
+
+  \item{ll.round}{Anchor the lower left coordinate of the
+  raster extent to a multiple of the cell size. Ignored if
+  \code{raster} is passed.}
+
+  \item{status}{Show status messages and progress bar}
+
+  \item{debug}{Show debugging info}
+}
 \description{
-  Converts a SpatialPolygonsDataFrame to a raster This
-  presumes the SPDF contains isopleths ordered from lowest
-  level to highest ext is an extent object or NULL dimSize
-  is numeric. dimSize is only used if raster is not set.
-  dimSize is interpreted as the number of cells along the
-  largest dimension of the track. The according raster will
-  be calculated internally. Default is 10
+  Converts isopleths in a SpatialPolygonsDataFrame object
+  to a RasterLayer
+}
+\details{
+  This presumes the SPDF contains isopleths ordered from
+  lowest level to highest. The cell values of the resulting
+  raster will sum up to the largest isopleth leve. In order
+  for the resulting raster to sum to 1, the 100% isopleth
+  must be part of the input.
 }
 

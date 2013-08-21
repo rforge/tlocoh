@@ -1,8 +1,8 @@
-\name{trim}
-\alias{trim}
+\name{strTrim}
+\alias{strTrim}
 \title{Trim leading and/or trailing blanks from a character object}
 \usage{
-  trim(str, side = "both")
+  strTrim(str, side = "both")
 }
 \arguments{
   \item{str}{Input string}

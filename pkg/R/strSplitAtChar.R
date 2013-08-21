@@ -16,7 +16,7 @@
 #' @export
 
 
-str.split.at.char <- function(object, size, char=".", separator=paste("\n", char, sep=""), ...) {
+strSplitAtChar <- function(object, size, char=".", separator=paste("\n", char, sep=""), ...) {
 
     str <- object; rm(object)
     str.split <- strsplit(str, split=char, fixed=TRUE)

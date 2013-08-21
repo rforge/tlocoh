@@ -1,8 +1,8 @@
-\name{text.contrast.color}
-\alias{text.contrast.color}
+\name{textContrastColor}
+\alias{textContrastColor}
 \title{Choose a white or black plot background for a particular color of text}
 \usage{
-  text.contrast.color(x, ...)
+  textContrastColor(x, ...)
 }
 \arguments{
   \item{x}{A color value}

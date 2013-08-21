@@ -18,7 +18,10 @@
 lxy.proj.add <- function(lxy, proj4string=CRS(as.character(NA))) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!is(x, "CRS")) stop("proj4string should be a class 'CRS'. Type ?lxy.proj.add for more info.")
+
+    ## See if the proj4string is valid type
+    if (!is(proj4string, "CRS")) stop("proj4string should be a class 'CRS'")
+    
     lxy[["pts"]]@proj4string <- proj4string 
     
     return(lxy)

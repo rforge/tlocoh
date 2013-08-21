@@ -5,7 +5,7 @@
   lhs.iso.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
     s = NULL, hs.names = NULL,
     sort.metric = c("auto", hm.expr(names.only = T, desc = F, print = F))[1],
-    iso.levels = 0.15 + 0:8 * 0.1,
+    iso.levels = c(0.1, 0.25, 0.5, 0.75, 0.95),
     iso.method = c("pt.quantiles", "hm.vals")[1],
     iso.cap.method = c(">=", "<=")[1],
     scale.iso.levels.to.hm.vals = (iso.method == "hm.vals" && max(iso.levels <= 1)),

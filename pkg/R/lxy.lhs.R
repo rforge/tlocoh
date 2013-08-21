@@ -42,7 +42,7 @@
 
 lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy=TRUE, 
                     decimal.places=1, offset.dups=1, velocity.metrics=TRUE,
-                    ud=FALSE, iso.levels=0.15+0:8*0.10, pbo.style=3, beep=FALSE, status=TRUE, 
+                    ud=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), pbo.style=3, beep=FALSE, status=TRUE, 
                     save.hulls=TRUE, save.enc.pts=TRUE) {
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")

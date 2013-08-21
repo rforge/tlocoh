@@ -26,14 +26,11 @@
 
 lhs.dr.add <- function(lhs, metric=c("ecc","par")[2], thresh.val=0.95, thresh.type=c("q","v")[1], smooth=1, status=TRUE, show.elong.hist=FALSE) {
 
-    cat("Still need to implement a temporal connectivity threshhold (proportion of median sampling frequency) for smoothing \n")
+    #cat("Still need to implement a temporal connectivity threshhold (proportion of median sampling frequency) for smoothing \n")
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
     if (thresh.type=="q" && (thresh.val > 1 || thresh.val < 0)) stop("thresh.val is the proportion of points, must be between 0 and 1")
     if (!metric %in% c("ecc","par")) stop("Unknown value for 'metric'")
-    
-    ## if (!require(pbapply)) stop("package pbapply required")
     
     for (hs.name in names(lhs)) {
         if (is.null(lhs[[hs.name]][["dr"]])) lhs[[hs.name]][["dr"]] <- list()

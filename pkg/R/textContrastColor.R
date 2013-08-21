@@ -3,6 +3,6 @@
 #' @param ... Other arguments (not used)
 #' @export
 
-text.contrast.color <- function(x, ...) {
+textContrastColor <- function(x, ...) {
     ifelse( mean(col2rgb(x)) > 127, "black", "white")
 }

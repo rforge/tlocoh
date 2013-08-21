@@ -59,7 +59,7 @@ lxy.merge <- function (..., pts.flds="all", save.ptid=FALSE, new.id=NULL, save.o
         lxy1[["pts"]] <- rbind(lxy1[["pts"]][ , pts.flds], lxy2[["pts"]][ , pts.flds])
         
         ## The following command corrects a bug in package sp whereby rbind inserts a leading space the @proj4string@projargs 
-        lxy1[["pts"]]@proj4string@projargs <- trim(lxy1[["pts"]]@proj4string@projargs)
+        lxy1[["pts"]]@proj4string@projargs <- strTrim(lxy1[["pts"]]@proj4string@projargs)
     }
     
     ## Assign new ptid values if duplicates found

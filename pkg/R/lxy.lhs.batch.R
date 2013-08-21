@@ -1,5 +1,5 @@
 
-lxy.lhs.batch <- function(lxy, a=NULL, k=NULL, r=NULL, s, dir=".", suf=NULL, ud=T, iso.levels=0.15+0:8*0.10, save.hulls=TRUE, save.enc.pts=TRUE) {
+lxy.lhs.batch <- function(lxy, a=NULL, k=NULL, r=NULL, s, dir=".", suf=NULL, ud=T, iso.levels=c(0.1,0.25,0.5,0.75,0.95), save.hulls=TRUE, save.enc.pts=TRUE) {
 
     ## Creates separate locoh hullsets for each parameter value and saves them to disk.
     ## For use with large datasets where memory limits make it difficult to create a hullset collection with multiple hullsets

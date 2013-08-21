@@ -1,0 +1,69 @@
+\name{lxy.exp.kml}
+\alias{lxy.exp.kml}
+\title{Export a lxy object to kml (Google Earth)}
+\usage{
+  lxy.exp.kml(lxy, file, id = NULL, skip = 1,
+    overwrite = TRUE, compress = TRUE, pt.scale = 0.5,
+    col = NULL, show.path = TRUE, path.col = NULL,
+    path.opaque = 80, path.lwd = 3)
+}
+\arguments{
+  \item{lxy}{A LoCoH-xy object}
+
+  \item{file}{The name of the kml file to be created
+  (relative to the working folder). The .kml extension will
+  be added if needed.}
+
+  \item{id}{The id(s) of the individual(s) to include in
+  the plot}
+
+  \item{skip}{The skip factor to use to reduce the number
+  of points exported (i.e., every nth point exported where
+  n=\code{skip})}
+
+  \item{overwrite}{Whether to overwrite an existing kml
+  file (T/F)}
+
+  \item{compress}{Whether to copmress the kml file and
+  create a kmz file (T/F)}
+
+  \item{pt.scale}{The relative size of the placemark
+  symbols}
+
+  \item{col}{The point colors (one per id)}
+
+  \item{show.path}{Whether to include the point path in the
+  kml file (T/F)}
+
+  \item{path.col}{The path colors (one per id), ignored if
+  \code{show.path=FALSE}}
+
+  \item{path.opaque}{The opacity of the path
+  (0=transparent, 255=fully opaque), ignored if
+  \code{show.path=FALSE}}
+
+  \item{path.lwd}{The width of the path, ignored if
+  \code{show.path=FALSE}}
+}
+\value{
+  The file name of the kml/kmz file
+}
+\description{
+  Export a lxy object to a format that can be animated in
+  Google Earth
+}
+\note{
+  This function will export the locations in a
+  \link{LoCoH-xy} object to a kml file that can be opened
+  in Google Earth for animation. The kml format is not
+  optimized for large datasets, but this works reasonably
+  well for moderate datasets (e.g., <1000). To create
+  animations of larger datasets, use a \code{skip} value >
+  1 or see \code{\link{lxy.exp.mov}}.
+
+  Adapated from plotKML package
+}
+\seealso{
+  \code{\link{lxy.exp.mov}}
+}
+

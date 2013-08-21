@@ -7,8 +7,6 @@ dateticks <- function(dt, max.ticks=13, dtint.unit=c(NA, "sec", "min", "hour", "
     
     if (is.na(dtint.unit)) dtint.unit <- time.unit.from.val(dtlim.diff / max.ticks, buff = buff)
     
-    #cat("dtint.unit=", dtint.unit, "\n")
-    
     if (dtint.unit == "sec") {
         dtint.secs <- 1
         tick.initial <- trunc(dtlim[1], units="secs") + ifelse(enclose, 0, dtint.secs)
@@ -43,7 +41,12 @@ dateticks <- function(dt, max.ticks=13, dtint.unit=c(NA, "sec", "min", "hour", "
         
         dt.last <- as.POSIXlt(trunc(dtlim[2], units="days"))
         dt.last$mday <- 1        
-        dt.last$mon  <- (dt.last$mon + ifelse(enclose, 1, 0)) %% 12
+        dt.last$mon  <- dt.last$mon + ifelse(enclose, 1, 0)
+        if (dt.last$mon >= 12) {
+            dt.last$mon <- dt.last$mon %% 12
+            dt.last$year <- dt.last$year + 1
+        }
+        
         dtlast.minus.tick.initial <- as.numeric(difftime(dt.last, time2=tick.initial, units="secs")) 
         num.int <- round(dtlast.minus.tick.initial / (3600 * 24 * 30))
         

@@ -3,9 +3,9 @@
 #' Saves a LoCoH-hullset object to disk, constructing a filename if needed that reflects the contents
 #'
 #' @param lhs A LoCoH-hullset object
-#' @param fn Optional filename. If omitted a sensible filename will be constructed
-#' @param dir Directory for the output file (relative to the working directory), ignored if \code{fn} passed
-#' @param suf A suffix that will be used in the construction of the filename, ignored if \code{fn} is passed
+#' @param file Optional filename. If omitted a sensible filename will be constructed
+#' @param dir Directory for the output file (relative to the working directory), ignored if \code{file} passed
+#' @param suf A suffix that will be used in the construction of the filename, ignored if \code{file} is passed
 #' @param compress Compress file. T/F
 #' @param auto.num.files Use a number as part of the constructed filename. T/F
 #' @param width The number of digits of the auto-number token in the filename (ignored if \code{auto.num.files=F})
@@ -14,12 +14,12 @@
 #' @export
 #' @seealso \code{\link{lxy.save}}
 
-lhs.save <- function (lhs, fn=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, save.as=NULL) {
+lhs.save <- function (lhs, file=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, save.as=NULL) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!require(sp)) stop("package sp required")
     
-    if (is.null(fn)) {
+    if (is.null(file)) {
         ## Build the pieces of a file name
         id.df <- unique(do.call(rbind, lapply(lhs, function(x) data.frame(id=x[["id"]], num.pts=length(x[["pts"]])))))
         fn.id <- tolower(paste(id.df[["id"]], ".n", id.df$num.pts, collapse = ".", sep=""))
@@ -48,7 +48,7 @@ lhs.save <- function (lhs, fn=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.f
         fn.base.full <- file.path(dir, fn.base.fileonly)
         fn.full <- paste(fn.base.full, if (auto.num.files) ".01" else NULL, ".RData", sep="")
     } else {
-        fn.full <- fn
+        fn.full <- file
     }
 
     ## See if the file already exists

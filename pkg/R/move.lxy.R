@@ -3,7 +3,7 @@
 #' Converts a Move or MoveStack object from the move package to a LoCoH-xy object
 #'
 #' @param move.obj A object of class Move or MoveStack.
-#' @param use.utm Import UTM coordinates if found (T/F).
+#' @param use.utm Import UTM coordinates if found \emph{and} all points fall within the same UTM zone (T/F).
 #' @param xcoord The name of a field in the data table for the x-coordinates. If NULL, the default coordinates will be used. 
 #' @param ycoord The name of a field in the data table for the y-coordinates. If NULL, the default coordinates will be used. 
 #' @param proj Projection object of class \code{\link{CRS-class}}. Used *only* to specify the coordinate system when the coordinates being imported are coming from the data table
@@ -38,7 +38,10 @@
 move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NULL, anv.flds=NULL, ptid=NULL, 
                      del.dup.xyt=TRUE, dup.dt.check=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, warn.latlong=TRUE, status=TRUE) {
 
+    ## Still to come - convert burts to separate ids / sub-ids, or an ancillary variable field in the data frame
 
+    if (!require(move)) stop("move package is required for this function")
+    
     ## Check for correct class type
     if (!is(move.obj,"Move") && !is(move.obj,"MoveStack")) stop("move.obj must be of class Move")
     
@@ -48,25 +51,34 @@ move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NUL
     
     if (use.utm) {
         if (!is.null(xcoord) || !is.null(ycoord) || !is.null(proj)) {
-            stop("To automatically import utm coordinates, do not pass the name of the x and y coordinates or proj")
+            stop(cw("To automatically import utm coordinates, do not pass the name of the x and y coordinates or proj", final.cr=FALSE))
         }
 
         ## Check that UTM coordinates exist in the data table
         xcoord <- "utm.easting"; ycoord <- "utm.northing"
         if (FALSE %in% (c(xcoord,ycoord) %in% names(move.obj@data))) stop("Can't find columns in data table for UTM northing and UTM easting")
 
-        ## Check that there is one and only one utm.zone in the data table
-        if (! "utm.zone" %in% names(move.obj@data)) stop("Can't find 'utm.zone' field in Move dataframe")
-        utm.zone <- unique(as.character(x@data[["utm.zone"]]))
-        if (length(utm.zone) != 1) stop("Can only import utm coordinates if they all fall within the same UTM zone")
+        ## Get the utm zone
+        if ("utm.zone" %in% names(idData(move.obj))) {
+            utm.zone <- unique(as.character(idData(move.obj)[["utm.zone"]]))
+        } else {
+            if ("utm.zone" %in% names(move.obj@data)) {
+                utm.zone <- unique(as.character(move.obj@data[["utm.zone"]]))
+            } else {
+                stop("Can't find 'utm.zone' field in Move object")    
+            }
+        }
+        if (length(utm.zone) != 1) stop(cw("Can only import utm coordinates if they all fall within the same UTM zone, which does not seem to be the case", final.cr=FALSE))
         
         ## Parse out the utm.zone into zone number and hemisphere
         north.south <- substr(utm.zone, nchar(utm.zone), nchar(utm.zone))
-        if (!north.south %in% c("N","S")) stop("Can not determine UTM zone hemisphere. Try use.utm=FALSE")
+        if (!north.south %in% c("N","S")) stop("Can not determine the UTM zone hemisphere")
         if (north.south == "N") utm.ns <- "+north" else utm.ns <- "+south"
+        
         utm.zone.num <- substr(utm.zone, 1, nchar(utm.zone)-1)
-        if (length(grep("[^0-9\\.]", utm.zone.num, value = TRUE)) != 0) stop("Can not determine UTM zone number. Try use.utm=FALSE")
+        if (length(grep("[^0-9\\.]", utm.zone.num, value = TRUE)) != 0) stop("Can not determine UTM zone number")
         utm.zone.num <- paste("+zone=", utm.zone.num, sep="")
+        
         proj4string <- paste("+proj=utm", utm.ns, utm.zone.num, sep=" ")
         
         ## See if the proj4string is valid
@@ -106,19 +118,19 @@ move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NUL
     }
 
     ## Get the time stamps
-    dt <- move.obj@timestamps
+    dt <- timestamps(move.obj)
     
     ## Get id value
-    if ("trackId" %in% slotNames(move.obj)) {
+    if (is(move.obj, "MoveStack")) {
         id <- move.obj@trackId
     } else {
-        id <- move.obj@idData[["individual.local.identifier"]]
-        
+        #id <- move.obj@idData[["individual.local.identifier"]] #or 'local_identifier'
+        id <- rownames(idData(move.obj))
     }
     if (length(id)==0) {
         print("can't find id");browser()
         warning("Can not find the id(s) for this individual")    
-        id <- "1"
+        id <- "a"
     }    
 
     ## Get ancillary variables
@@ -149,7 +161,5 @@ move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NUL
 
     lxy <- xyt.lxy(xy=xy, dt=dt, id=id, ptid=ptid, proj4string=proj, anv=anv.df, warn.latlong=warn.latlong)
     return(lxy)
-
-    ## Need to check if we got the time zone correct
 
 }

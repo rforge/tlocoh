@@ -74,6 +74,7 @@ lxy.subset <- function(lxy, id=NULL, ptid=NULL, idx=NULL, dt.start=NULL, dt.end=
         }
 
         lxy[["nn"]] <- NULL
+        lxy[["ptsh"]] <- NULL
         
         ## Calculate frequency table and median value of time interval for each id
         rwp.dti.lst <- xyt.rw.params.dt.int(id=lxy[["pts"]][["id"]], xy=coordinates(lxy[["pts"]]), dt=lxy[["pts"]][["dt"]], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max) 
