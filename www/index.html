@@ -56,7 +56,7 @@
          border: 1px dashed rgb(47, 111, 171);
          color: black;
          background-color: rgb(249, 249, 249);
-         line-height: 1.1em;
+         line-height: 0.9em;      
          clear: both;
      }
 
@@ -117,16 +117,26 @@
 
 <h3>Installation from R-Forge (recommended)</h3>
 
-<p>To install T-LoCoH, type the command below at the R console. If you get stuck, see the steps for <a href="manual_install.html">manual installation</a>.</p>
+<p>To install T-LoCoH, type one of the following commands below at the R console. If you get stuck, see the steps for <a href="manual_install.html">manual installation</a>.</p>
 
 <p><pre>
+<strong># Windows:</strong><br>
 install.packages("tlocoh", dependencies=TRUE, repos=c("http://R-Forge.R-project.org", "http://cran.cnr.berkeley.edu"))<br>
+require(tlocoh)<br><br>
+
+<strong># Mac:</strong><br>
+install.packages("tlocoh", dependencies=TRUE, repos=c("http://R-Forge.R-project.org", "http://cran.cnr.berkeley.edu"), type="source")<br>
 require(tlocoh)
 </pre></p>
 
-<p>Note: the above command uses two repositories because T-LoCoH is on R-Forge while the dependent packages are on CRAN mirrors. If you are not in the US, you can substitute an alternate CRAN repository.</p>
 
-<p>Windows users: if you have trouble installing the 'gpclib' package, see step two in the <a href="manual_install.html">manual installation</a> instructions.</p>
+<p>Notes</p>
+
+<ul>
+<li>the above command uses two repositories because T-LoCoH is on R-Forge while the dependent packages are on CRAN mirrors. If you are not in the US, you can substitute an alternate CRAN repository.</li>
+<li>R-Forge currently does not build Mac binaries, that's why Mac users have to add the type='source' argument.</li>
+<li>Windows users: if you have trouble installing the 'gpclib' package, see step two in the <a href="manual_install.html">manual installation</a> instructions.<br></li>
+</ul>
 
 <hr><a name="resources"></a>
 <div class="boxright"><div style="width: 500px;">
