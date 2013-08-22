@@ -81,7 +81,7 @@
 <p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
 
 <p><pre>
-dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "rgdal", "maptools", "png")<br>
+dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "rgdal", "maptools", "png", "move", "raster", "XML")<br>
 pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.only=T))]<br>
 install.packages(pkgs.not.installed, dependencies=TRUE)
 </pre></p>
@@ -96,13 +96,14 @@ if (!require(gpclib)) install.packages("gpclib")
 if (!require(gpclib)) install.packages("gpclib", type="source")
 </pre></p>
 
-<p><strong>3. Download the correct version of the T-LoCoH package below (right-click and select 'Save As...'). Remember where you save the file, but do not unzip or expand it.</strong></p>
+<p><strong>3. Download the latest version of the T-LoCoH package below (scroll down the list until you see tlocoh, right-click and select 'Save As...'). Remember where you save the file, but <strong>do not</strong> unzip or expand it.</strong></p>
 
 <ul>
-<li class="spaceafter">Windows (binary): <a href="http://download.r-forge.r-project.org/bin/windows/contrib/latest/tlocoh_1.0.8.zip">tlocoh_1.0.8.zip</a></li>
-<li class="spaceafter">Mac (binary): <a href="http://download.r-forge.r-project.org/bin/macosx/leopard/contrib/latest/tlocoh_1.0.8.tgz">tlocoh_1.0.8.tgz</a> (if this link doesn't work, download and install the source package using the 'Linux' instructions below)</li>
-<li class="spaceafter">Linux (source): <a href="http://download.r-forge.r-project.org/src/contrib/tlocoh_1.0.8.tar.gz">tlocoh_1.0.8.tar.gz</a></li>
+<li class="spaceafter"><a href="http://download.r-forge.r-project.org/bin/windows/contrib/latest/">Windows (binary)</a></li>
+<li class="spaceafter"><a href="http://download.r-forge.r-project.org/src/contrib/">Source (Mac and Linux)</a></li>
 </ul>
+
+<blockquote><p>Note: R-Forge has <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=4400">discontinued building Mac binaries</a> for the time being.</p></blockquote>
 
 <p><strong>4. Install the T-LoCoH package from the R Console</strong></p>
 
