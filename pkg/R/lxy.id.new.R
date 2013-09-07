@@ -24,11 +24,13 @@
 #'
 #' One can also use this function to change the id (name of the individual), rebuild the rw.params or table of sampling frequencies
 #'
-#' @return A \link{LoCoH-xy} object containing the original xys, dt, ptid and ancillary values for each point. Other items and attributes (including the comment) will be recreated or set to NULL
+#' @return A \link{LoCoH-xy} object containing the original xys, dt, ptid and ancillary values for each point. Other items and 
+#' attributes (including the comment) will be recreated or set to NULL
 #'
 #' @export
 
-lxy.id.new <- function(lxy, id.new, save.old.id=NULL, dup.dt=c("check", "offset", "ignore")[1], dup.dt.offset=5, dt.int.round.to=0.1, tau.diff.max=0.02, status=TRUE) {
+lxy.id.new <- function(lxy, id.new, save.old.id=NULL, dup.dt=c("check", "offset", "ignore")[1], dup.dt.offset=5, dt.int.round.to=0.1, 
+                       tau.diff.max=0.02, status=TRUE) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]])) stop("Old data structure detected, please update with lxy.repair()")

@@ -3,10 +3,11 @@
 \title{Create a LoCoH-xy object}
 \usage{
   xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
-    proj4string = CRS(NA), anv = NULL, anv.desc = NULL,
-    col = NULL, del.dup.xyt = TRUE, dup.dt.check = TRUE,
-    dt.int.round.to = 0.1, tau.diff.max = 0.02,
-    req.id = TRUE, warn.latlong = TRUE, status = TRUE)
+    proj4string = CRS(as.character(NA)), anv = NULL,
+    anv.desc = NULL, col = NULL, del.dup.xyt = TRUE,
+    dup.dt.check = TRUE, dt.int.round.to = 0.1,
+    tau.diff.max = 0.02, req.id = TRUE,
+    warn.latlong = TRUE, status = TRUE)
 }
 \arguments{
   \item{xy}{A two-column matrix or data frame containing

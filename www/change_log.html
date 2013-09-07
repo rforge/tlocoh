@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
+
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>T-LoCoH Change Log</title>
+	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
+<style>
+
+     body {
+         font-size: 100%;
+         font-family: "verdana",sans-serif;
+         color: rgb(68, 68, 68);
+         text-align: left;
+         margin-bottom: 1em;
+     }
+
+
+     pre {
+         display: inline;
+         font-size: 120%;
+         color: black;
+         
+     }
+
+     .unused {
+	 border: 1px dashed rgb(47, 111, 171);
+     }    
+
+     hr {
+         clear: both;
+     }
+
+</style>
+
+  </head>
+
+<body>
+
+<!-- R-Forge Logo -->
+
+<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
+
+<p><a href="index.html">Home</a></p>
+
+<h2>T-LoCoH Change Log</h2>
+
+<p><strong>Version 1.12</strong></p>
+<ul>
+<li>Added support for rasterized isopleths to <pre>summary.locoh.lhs</pre> and <pre>plot.locoh.lhs</pre>.</li>
+<li>Add creation functions to the output of <pre>hm.expr</pre>.</li>
+<li>Created help page for LoCoH-hullset (class <pre>locoh.lhs</pre>)</li>
+<li>Deprecated 'ud' argument in <pre>lxy.lhs</pre>. Replaced with <pre>iso</pre> argument.</li>
+<li>Fixed a bug in <pre>lhs.exp.shp</pre> which prevented exporting isopleths by themselves to shapefiles.</li>
+<li>Fixed a bug in <pre>plot.locoh.lhs</pre> when specifying which isopleth levels to plot.</li>
+<li>Fixed a bug in <pre>xyt.lxy</pre> which caused an error when the projection system wasn't specified.</li>
+<li>Other bug-fixes and updates to documentation.</li>
+</ul>
+
+<p><strong>Version 1.1.10</strong></p>
+<ul>
+<li>renamed 'fn' argument to 'file' in <pre>lxy.save</pre> and <pre>lhs.save</pre> for consistency with other R functions</li>
+<li>added function <pre>lxy.exp.kml</pre> to export lxy objects to KML for animation in Google Earth</li>
+</ul>
+
+<p><strong>Version 1.0.9</strong></p>
+<ul>
+<li>Added <pre>move.lxy</pre> function to import movement data from the <a href="">move</a> package</li>
+<li>Added <pre>lxy.reproject</pre> function to reproject coordinates</li>
+<li>Fixed a bug with <pre>summary</pre> functions</li>
+<li>Added checking for syntax of projection arguments</li>
+<li>Added argument to function <pre>xyt.lxy</pre> to suppress warnings if coordinates are in lat long</li>
+<li>Added function <pre>lhs.iso.rast</pre> to save isopleths to a RasterLayer</li>
+<li>Renamed <pre>trim</pre> funciton to strTrim to avoid conflict names with other packages (e.g., raster)</li>
+<li>Renamed <pre>str.text.contrast.color</pre> function to conform with S3 methods syntax</li>
+<li>Updated tutorials</li>
+</ul>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42624612-1', 'r-project.org');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
+
+

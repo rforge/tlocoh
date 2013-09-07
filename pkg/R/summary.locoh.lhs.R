@@ -11,6 +11,7 @@
 #' @param s The s value of hullsets to summarize
 #' @param hs.names The name(s) of hullsets to summarize
 #' @param iso.details Display details of the isopleths. T/F
+#' @param hsp.details Display details about saved hull scatterplots. T/F
 #' @param desc Display the hullset description. T/F
 #' @param compact Use a compact format. T/F
 #' @param ... Other arguments
@@ -18,7 +19,7 @@
 #' @export
 #' @method summary locoh.lhs
 
-summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, desc=FALSE, compact=FALSE, ...) {
+summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, hsp.details=FALSE, desc=FALSE, compact=FALSE, ...) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!is.null(lhs[[1]][["xys"]])) stop("Old data structure detected")
@@ -79,7 +80,7 @@ summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=N
             cat("    isos: ") 
             for (i in 1:length(lhs[[hs.idx]][["isos"]])) {
                 if (i > 1) cat("          ")
-                cat("[", i, "] ", names(lhs[[hs.idx]][["isos"]])[i], "\n", sep="")
+                cat("[", i, "] ", names(lhs[[hs.idx]][["isos"]])[i], if (is.null( lhs[[hs.idx]][["isos"]][[i]][["rast"]])) "" else " (+rast)", "\n", sep="")
                 if (iso.details) print(formatdf4print(lhs[[hs.idx]][["isos"]][[i]][["polys"]]@data, indent=14), row.names=FALSE)
             }
         }        
@@ -87,7 +88,23 @@ summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=N
         if (!compact) {
 
             if (!is.null(lhs[[hs.idx]][["hsp"]])) {         
-                cat(cw(paste("hsp: ", paste(sort(names(lhs[[hs.idx]][["hsp"]])), collapse=", ", sep=""), sep=""), final.cr=TRUE, indent=5, exdent=10))
+                cat("     hsp: ") 
+                for (i in 1:length(lhs[[hs.idx]][["hsp"]])) {
+                    
+                    if (i > 1) cat("          ")
+                    #cat(cw(paste("hsp: ", paste(sort(names(lhs[[hs.idx]][["hsp"]])), collapse=", ", sep=""), sep=""), final.cr=TRUE, indent=5, exdent=10))
+                    cat("[", i, "] ", names(lhs[[hs.idx]][["hsp"]])[i], "\n", sep="")
+                    #cat(cw(paste("hsp: ", paste(sort(names(lhs[[hs.idx]][["hsp"]])), collapse=", ", sep=""), sep=""), final.cr=TRUE, indent=5, exdent=10))
+                    if (hsp.details) {
+                        if (!is.null(lhs[[hs.idx]][["hsp"]][[i]][["regions"]])) {
+                            hsp.filt <- lhs.filter.hsp(lhs, hsp=i)
+                            regions.str <- paste(sapply(hsp.filt, function(x) paste(x[["label"]], " (", x[["col"]], ",n=", length(x[["idx"]]), ")", sep="")), collapse="; ")
+                            regions.str <- paste("reg: ", regions.str, sep="")
+                            cat(cw(regions.str, final.cr=TRUE, indent=14, exdent=19))
+                        }
+                    }
+                }
+            
             }        
     
             if (!is.null(lhs[[hs.idx]][["dr"]])) {         

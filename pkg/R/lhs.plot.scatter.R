@@ -22,7 +22,7 @@
 #' @param title.hs.name.include Whether to include the hullset name as part of the title. Ignored if title is passed. T/F.
 #' @param title.axes Whether to include the names of the hull metrics on the axes as part of the subtitle. Ignored if title is passed. T/F.
 #' @param title.two.id An ad-hoc way to construct a title consisting of the ids of the hullset and hs2
-#' @param filter NULL or a list of filter parameters. The code will loop through these parameters and generate scatterplots for each subsets of points. Each element of the filter list must be another list with the following elements: $idx = a vector of the indices of the hulls; $label = a label.
+#' @param filter NULL or a list of filter parameters. See details.
 #' @param filter.label.in.subtitle Whether to add the filter label to the plot subtitle. Ignored if title is passed or filter is NULL. T/F.
 #' @param filter.sampsize.in.subtitle Whether to add the filter sample size to the plot subtitle. Ignored if title is passed or filter is NULL. T/F.
 #' @param filter.col.use Whether the points will be displayed with the color(s) saved in the filter (overriding the 'col' parameter). Ignored if filter is NULL. T/F.
@@ -72,22 +72,28 @@
 #' @param check.ap.value.in.hmparams Check to make sure that hull metrics have been computed for the hull metric auxillary parameter values passed (either as separate arguments or in \code{hmap})  
 #' @param ... Other parameters, including any auxillary parameters required by certain hull metrics
 #'
-#' @note
+#' @details
 #' This function has two main purposes.
 #' 1) To make scatterplot graphics either in a plot window or PNG file
-#' 2) To create a list of objects of class "locoh.hsp", which are basically a collection of the parameters that were used to create the scatterplot and any manually digitized regions created by the user.
-#' When not being used to create PNG files, this function returns a list of "locoh.hsp" objects which can then be 'permanently' saved in the LoCoH-hullset
-#' object using \code{\link{lhs.hsp.add}}, and/or fed into other functions such as \code{\link{plot.locoh.lhs}}.
+#' 2) To create a list of objects of class "locoh.hsp", which are basically a collection of the parameters that were used to create the scatterplot including any manually drawn regions created by the user (see \code{regions}).
+#'
 #' Note that hull metrics must already have been computed. Several hull metrics are 'automatically' computed when the
 #' hullset is defined (e.g., hull area, number of enclosed points). Other hull metrics must be created separately with functions
-#' such as \code{\link{lhs.ellipses.add}} and \code{\link{lhs.visit.add}}.
+#' such as \code{\link{lhs.ellipses.add}} and \code{\link{lhs.visit.add}}. Auxillary parameters required for hull metrics can be passed either 
+#' as individual parameters (e.g., \code{ivg=3600*12}) or as a list element (e.g., \code{hmap=list(ivg=86400)}).
+#' 
+#' \code{filter}, if passed, will create scatterplots for subsets of hulls. For this to work, \code{filter} must be a list
+#' whose elements are named lists with the following elements: \emph{idx} = a vector of the indices of the hulls (in the hulls SpatialPolygonsDataFrame),
+#' \emph{label} = a label for the subset, and \emph{col} = a color value. \code{\link{lhs.filter.hsp}} can be used to
+#' create a filter list based on manually drawn regions of a hull scatterplot, and \code{\link{lhs.filter.anv}} can be used
+#' to create a filter based on ranges of values of an ancillary variable. The arguments \code{filter.sampsize.in.subtitle},
+#' \code{filter.col.use}, and \code{filter.axes.uniform} control how the subsets are treated in the scatterplot(s).
+#' 
+#' @return If \code{png.fn} or \code{png.dir} is passed, the plots are exported to PNG file(s) and the function returns a list of file names and image dimensions (in pixels).
+#' Otherwise returns a named list whose element(s) are of class \emph{locoh.hsp}. This list of \emph{locoh.hsp} objects can then be 'permanently' saved in 
+#' the LoCoH-hullset object using \code{\link{lhs.hsp.add}}, and/or fed into other functions such as \code{\link{plot.locoh.lhs}} (to symbolize hull points).
 #'
-#' Auxillary parameters required for hull metrics can be passed either as individual parameters (e.g., \code{ivg=3600*12}) or as a list element \code{hmap=list(ivg=86400)}
-#'
-#' @return If png.fn or png.dir is passed, exports the plots to a PNG file(s) and returns a list of file names, dimensions of the images produced.
-#' Otherwise returns a named list of objects of class 'locoh.hsp'.
-#'
-#' @seealso \code{\link{lhs.plot.scatter.auto}}, \code{\link{hm.expr}}, \code{\link{lhs.hsp.add}}
+#' @seealso \code{\link{lhs.plot.scatter.auto}}, \code{\link{hm.expr}}, \code{\link{lhs.hsp.add}}, \code{\link{lhs.filter.hsp}}, \code{\link{lhs.filter.anv}}
 #' @export
 
 lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
@@ -109,20 +115,7 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                 check.ap.value.in.hmparams=TRUE, ...) {
 
     #CONSIDER OPTION FOR A THIRD AXIS (3D), AS WELL AS A SINGLE-SERIES SUMMARY (E.G., HISTOGRAM)
-    
-    ## Multi-purpose function to produce scatterplots of hull metrics
-    ## If png.fn or png.dir is passed, exports the plots to a PNG file(s) and returns a list of file names and dimensions
-    ## Otherwise returns a named list of objects of class 'locoh.hsp', which can be saved in lhs
-    ##
-    ## Options for col:
-    ##   - a single color value (character)
-    ##   - a vector of colors values
-    ##   - "spiral" - a color wheel will be overlaid, see color wheel parameters below
-    ##   - note if a something is passed for hsp, col will be extracted from hsp and col will be ignored
-    ##
-    ## hsp - either the index of a hsp saved in lhs, or A LIST OF objects of class locoh.hsp. Will use the parameters saved in hsp
-    ##
-                                                                
+                                                                    
     ## Filter, if passed, is a list of filter parameters. The code will loop through these and generate scatterplots for each subsets of points 
     ## Each element of the filter list must be another list with the following elements:
     ##     $idx - a vector of the indices of the hulls 
@@ -138,15 +131,8 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
     ##  1) a number in which case the user will be prompted to create N regions that will be given randomly assigned colors
     ##  2) a vector of color values
     
-    ## jiggle.x and jiggle.y is either 'auto' or a numeric value which will be used to add an normally distributed stochastic value (mean 0, sd=jiggle.x) to
-    ## the x-axis values for better visualization of the number of points in each group (helpful when the x-values are discrete values)
-    ## limx and limy can be used if you want to fix the scale of the x and y axes resp
-
-    ## trans.x and trans.y are the name of functions that will be used to transform the data. Examples are "log", "exp", "sqrt", etc. 
-    ## Two custom functions you can use are 'square' and 'cube'
-    
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!is.null(lhs[["xys"]])) stop("Old data structure detected")
+    if (!is.null(lhs[["xys"]])) stop("Old data structure detected. Update with lxy.repair.")
     if (!require(sp)) stop("package sp required")
 
     if (add && (!is.null(png.dir) || !is.null(png.fn))) stop("You can't use the add option when creating a PNG file")

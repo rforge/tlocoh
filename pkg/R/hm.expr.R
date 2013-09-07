@@ -47,7 +47,7 @@
 
 hm.expr <- function(names.only=TRUE, desc=names.only, print=names.only) {
 
-    UD <- "Utilization Distribution"
+    DI <- "Density Isopleths"
     VD <- "Visitation Distribution"
     RD <- "Revisitation Distribution"
     PEPD <- "Proportion of Enclosed Points Distribution"
@@ -82,18 +82,18 @@ hm.expr <- function(names.only=TRUE, desc=names.only, print=names.only) {
     expr.lst[["tspan"]] <- list(ufat="time span of nearest neighbors (multiples of tau)", desc="time span of nearest neighbors as a multiple of the median sampling interval", def="time span of nearest neighbors", ufipt="Time Span of Nearest Neighbors", nhv=NA, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["tspan"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0.05, spao.x=TRUE, spao.y=FALSE, req.metrics="tspan", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2="area", iso.hm2.dec=FALSE)
 
     ## Core metrics saved in lhs object
-    expr.lst[["area"]] <- list(ufat=expression("area"), desc="area", def=NULL, ufipt=UD, nhv=NA, iso.dec=FALSE, expr=expression(hs[[hs.name]][["hulls"]][["area"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0, spao.x=FALSE, spao.y=TRUE, req.metrics="area", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2=NULL, iso.hm2.dec=FALSE)
+    expr.lst[["area"]] <- list(ufat=expression("area"), desc="area", def=NULL, ufipt=DI, nhv=NA, iso.dec=FALSE, expr=expression(hs[[hs.name]][["hulls"]][["area"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0, spao.x=FALSE, spao.y=TRUE, req.metrics="area", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2=NULL, iso.hm2.dec=FALSE)
 
-    expr.lst[["nnn"]] <- list(ufat="num nearest neighbors", desc="number of nearest neighbors", def=NULL, ufipt=UD, nhv=-1, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["nnn"]]), zero2na=FALSE, discrete=TRUE, auto.jiggle=0.15, spao.x=FALSE, spao.y=FALSE, req.metrics="nnn", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2="area", iso.hm2.dec=FALSE)
+    expr.lst[["nnn"]] <- list(ufat="num nearest neighbors", desc="number of nearest neighbors", def=NULL, ufipt=DI, nhv=-1, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["nnn"]]), zero2na=FALSE, discrete=TRUE, auto.jiggle=0.15, spao.x=FALSE, spao.y=FALSE, req.metrics="nnn", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2="area", iso.hm2.dec=FALSE)
 
-    expr.lst[["nep"]] <- list(ufat="num enclosed points", desc="number of enclosed points", def=NULL, ufipt=UD, nhv=-1, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["nep"]]), zero2na=FALSE, discrete=TRUE, auto.jiggle=0.15, spao.x=TRUE, spao.y=TRUE, req.metrics="nep", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2="area", iso.hm2.dec=FALSE)
+    expr.lst[["nep"]] <- list(ufat="num enclosed points", desc="number of enclosed points", def=NULL, ufipt=DI, nhv=-1, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["nep"]]), zero2na=FALSE, discrete=TRUE, auto.jiggle=0.15, spao.x=TRUE, spao.y=TRUE, req.metrics="nep", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2="area", iso.hm2.dec=FALSE)
 
     ## Elongation metrics
     expr.lst[["ecc"]] <- list(ufat="elongation (ecc)", desc="eccentricity of the bounding ellipse (higher ecc means more elongated)", def="eccentricity of the bounding ellipse", ufipt=ED, nhv=NA, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["ecc"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0, spao.x=TRUE, spao.y=TRUE, req.metrics="ecc", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun="lhs.ellipses.add", iso.hm2=NULL, iso.hm2.dec=FALSE)
 
     expr.lst[["par"]] <- list(ufat="elongation (par)", desc="elongation (perimeter:area ratio)", def="perimeter:area ratio", ufipt=ED, nhv=NA, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["perim"]]/hs[[hs.name]][["hulls"]][["area"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0, spao.x=TRUE, spao.y=TRUE, req.metrics=c("perim","area"), req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2=NULL, iso.hm2.dec=FALSE)
 
-    expr.lst[["perim"]] <- list(ufat="perimeter", desc="perimeter", def=NULL, ufipt=UD, nhv=NA, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["perim"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0, spao.x=FALSE, spao.y=FALSE, req.metrics="perim", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2=NULL, iso.hm2.dec=FALSE)
+    expr.lst[["perim"]] <- list(ufat="perimeter", desc="perimeter", def=NULL, ufipt="Perimeter Isopleths", nhv=NA, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][["perim"]]), zero2na=FALSE, discrete=FALSE, auto.jiggle=0, spao.x=FALSE, spao.y=FALSE, req.metrics="perim", req.ap=NULL, req.ap.def=NULL, req.ap.subtitle=NULL, req.ap.desc=NULL, fun=NULL, iso.hm2=NULL, iso.hm2.dec=FALSE)
 
     ## Inter-visit gap based metrics (requires hull metric auxillary parameter ivg)
     expr.lst[["nsv"]] <- list(ufat="visitation rate (nsv)", desc="visitation rate (number of separate visits)", def="visitation rate", ufipt=VD, nhv=-1, iso.dec=TRUE, expr=expression(hs[[hs.name]][["hulls"]][[paste("nsv.", hmap[hmap.idx, "ivg"], sep="")]]), zero2na=FALSE, discrete=TRUE, auto.jiggle=0.1, spao.x=TRUE, spao.y=TRUE, req.metrics="nsv", req.ap="ivg", req.ap.def=list(ivg="all"), req.ap.subtitle=ivg.subtitle, req.ap.desc=ivg.desc, fun="lhs.visit.add", iso.hm2="area", iso.hm2.dec=FALSE)
@@ -139,7 +139,10 @@ hm.expr <- function(names.only=TRUE, desc=names.only, print=names.only) {
 
     if (names.only) {
         if (desc) {
-            res <- data.frame(metric=names(expr.lst), desc=paste(sapply(expr.lst, function(x) if (is.null(x$def)) x$desc else x$def), sapply(expr.lst, function(x) if (is.null(x$req.ap)) "" else paste(" (requires '", paste(x$req.ap, collapse="', '", sep=""), "')", sep="")), sep=""))
+            res_desc <- sapply(expr.lst, function(x) if (is.null(x$def)) x$desc else x$def)
+            res_ap <- sapply(expr.lst, function(x) if (is.null(x$req.ap)) "" else paste(" (requires '", paste(x$req.ap, collapse="', '", sep=""), "')", sep=""))
+            res_fun <- sapply(expr.lst, function(x) if (is.null(x$fun)) "" else paste(", see ", x$fun, sep=""))
+            res <- data.frame(metric=names(expr.lst), desc=paste(res_desc, res_ap, res_fun, sep=""))
             rownames(res) <- 1:length(expr.lst)
             if (print) {
                 cat("  Hull Metrics \n")

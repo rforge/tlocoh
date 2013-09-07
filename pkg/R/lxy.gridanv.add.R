@@ -32,8 +32,6 @@
 
 lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.desc=NULL, date.match=c("closest", "before")[1]) {
 
-    cat("Still to come:\n - have a thresshold such that if there is no image within short enough time the point will get 'NA'\n - option to check proj4string \n")
-
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]])) stop("Old data structure detected, please update with lxy.repair()")
     if (!require(sp)) stop("package sp required")

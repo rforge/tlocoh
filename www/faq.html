@@ -62,13 +62,13 @@
 <p class="ans">Not at this time.</p>
 
 <p class="qtn">Is T-LoCoH backward compatible with LoCoH?</p>
-<p class="ans">Yes, if you set <em>s=0</em> (time ignored), T-LoCoH should produce the same hulls and isopleths as LoCoH.</p>
+<p class="ans">Yes, if you set <em>s=0</em> (time ignored), T-LoCoH should produce the same hulls and isopleths as <a href="http://tlocoh.r-forge.r-project.org/">LoCoH</a>.</p>
 
 <p class="qtn">What method should I use (k/a/r)?</p>
-<p class="ans">The k-method is fine if all you're interested in is density isopleths (utilization distributions). For all other hull metrics, you're better off using the a-method. If in doubt, use the a-method.</p>
+<p class="ans">The k-method is fine if all you're interested in is density isopleths (utilization distributions). For all other hull metrics (including time-use metrics), you're better off using the a-method. If in doubt, use the a-method.</p>
 
 <p class="qtn">How do I find an upper and lower bound for <em>a</em>?</p>
-<p class="ans">Try using the lxy.amin.add function with nnn=c(3,20). More to come later.</p>
+<p class="ans">Try using the <tt>lxy.amin.add</tt> function with nnn=c(3,20). More to come later.</p>
 
 <p class="qtn">Can I export my results to a format I can import into a GIS?</p>
 <p class="ans">Yes, see the functions <tt>lhs.exp.shp</tt> and <tt>lxy.exp.shp</tt></p>
@@ -81,7 +81,7 @@
 <p class="ans">The 'ptid' (point id) is simply a unique numeric value for each location (i.e., primary key). It exists to help you link points and hulls to other variables associated with each hull. For example if you have a spreadsheet with soil type at each location, and have a column in the spreadsheet with a unique id for each location, you can pass a vector of unique point id values to xyt.lxy() and then any hulls created will have those ptid values also so you can analyze the hull metrics with the soil type.</p>
 
 <p class="qtn">What is the data structure of a locoh-hullset object?</p>
-<p class="ans">Coming soon...</p>
+<p class="ans">See the help page for LoCoH-hullset <pre>help(locoh.lhs)</pre> (added version 1.12)</p>
 
 <p><a href="index.html">Back</a></p>
 

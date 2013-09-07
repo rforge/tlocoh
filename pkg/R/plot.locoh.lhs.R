@@ -2,7 +2,7 @@
 #'
 #' Multi-purpose plotting function for a LoCoH-hullset object
 #'
-#' @param x A \link{LoCoH-hullset} object
+#' @param lhs A \link{LoCoH-hullset} object
 #' @param id The names of the individual(s) to include in the plot.
 #' @param k The k value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
 #' @param r The r value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
@@ -10,6 +10,7 @@
 #' @param s The s value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
 #' @param hs.names The name(s) of saved hullsets to include in the plot
 #' @param iso Whether to display isopleths. T/F.
+#' @param rast Whether to display rasterized isopleths. T/F.
 #' @param hulls Whether to display hulls. T/F.
 #' @param hpp Whether to display hull parent-points. T/F.
 #' @param dr Whether to display directional routes. T/F.
@@ -95,7 +96,6 @@
 #' @param png.pointsize The pointsize (in pixels) for the PNG image (increase to make labels appear larger). Equivalent 
 #' to the height or width of a character in pixels.
 #' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
-#' @param sp Special plot number (not used)
 #' @param status Whether to show messages. T/F
 #' @param panel.num A number or letter to display in the upper left hand corner of the plot when the plot will be used as part 
 #' of a multi-frame graphic (as in publications). Character
@@ -108,7 +108,7 @@
 #' @param ... Other parameters, including any auxillary parameters required by certain hull metrics
 #'
 #' @note
-#' This is a multi-purpose plotting function for LoCoH-hullset objects. You specify which objects in the hullset to include on the plot by passing parameters. 
+#' This is a multi-purpose plotting function for \link{LoCoH-hullset} objects. You specify which objects in the hullset to include on the plot by passing parameters. 
 #'
 #' All hullsets have hulls and hull parent points that can be plotted (e.g., code{hulls=TRUE, hpp=TRUE}. All hullsets also have the original 
 #' locations saved and these can be added to the plot by setting \code{allpts=TRUE}. Depending how the hullset was 
@@ -146,8 +146,8 @@
 #'
 #' @export
 
-plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
-    iso=FALSE, hulls=FALSE, hpp=FALSE, dr=FALSE, nn=FALSE, ellipses=FALSE, allpts=FALSE, ptid=NULL, ptid.highlight=TRUE, add=FALSE, 
+plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
+    iso=FALSE, rast=FALSE, hulls=FALSE, hpp=FALSE, dr=FALSE, nn=FALSE, ellipses=FALSE, allpts=FALSE, ptid=NULL, ptid.highlight=TRUE, add=FALSE, 
     aoi=NULL, iso.idx=NULL, iso.sort.metric=NULL, iso.legend=TRUE, legend.space=0.25, 
     dr.metric=NULL, dr.thresh.val=NULL, dr.thresh.type=NULL, dr.smooth=NULL, lwd.dr=2,
     pch.allpts=16, cex.nn=2, cex.hpp=0.6, cex.allpts=0.5, cex.pp=2, cex.axis=0.8, cex.legend=0.8,
@@ -168,10 +168,10 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
     shp.csv=NULL, layers=NULL, 
     png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.fn.pre=NULL, png.fn.mid=NULL, png.fn.suf=NULL, png.fn.incld.hs.name=TRUE, 
     png.each.plot.separate=TRUE, png.width=800, png.height=png.width, png.pointsize=12+(png.width-480)/80, png.overwrite=TRUE, 
-    sp=0, status=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, hmap=NULL, 
+    status=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, hmap=NULL,
     iso.level=NULL, xlim=NULL, ylim=NULL, check.ap.value.in.hmparams=TRUE, ...) {
 
-    ## removed: spc.reg.det.xaxis=NULL, spc.reg.det.yaxis=NULL, spc.reg.det.layout="auto", spc.reg.det.layout.map.nrow=2, spc.reg.det.layout.det.ncol=NULL,
+    ## removed: sp=0, spc.reg.det.xaxis=NULL, spc.reg.det.yaxis=NULL, spc.reg.det.layout="auto", spc.reg.det.layout.map.nrow=2, spc.reg.det.layout.det.ncol=NULL,
     ##          sat.base=NULL, val.base=NULL, hue.offset=NULL, center.method=c("bbox","mean")[1],  
     ##          spc.reg.idx=1, spc.reg.col.default="gray80", spc.reg.col.view=NULL, 
     ##          col.hpp=c("cyan-red", "rainbow", "spiral", "reg")[1], 
@@ -186,64 +186,16 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
     ## If png.fn or png.dir is passed, will return a list of list objects with info about the PNG file(s) created: $fn, $dim, $desc
     ## Otherwise, returns a vector of desc
 
-    ## ufat, ufipt - user-friendly axis title and user-friendly plot title. Depending what lhs objects are being plotted,
-    ##              these will be used for the title, subtitle, and legend title.
-    ## desc         Where to put descriptive text. 0=none. 1=bottom, 2=left, 3=top, 4=right
-
     ## axes.show, axes.titles, and axes.ticks control which part(s) of the axes appear
     ## To hide the axes completely (along with tick markes and labels), set axes.show=F
     ## To show the axes lines but no tick marks or labels, set axes.titles=F, axes.ticks=F      
     
     ## ufat = user-friendly axis titles
     ## If record = TRUE, it will create a new device (plot window) and record the plots there
-    
-    ## TIFF.*
-    ## tiff.fn is the name of a geotiff, which will be displayed in the background. Presumed to be pre-stretched
-    ## if tiff.pct = TRUE, will convert the TIFF to a 256 indexed color image (might have quicker drawing time particularly if several plots)
-    ## tiff.buff is an additional buffer (in map units) on all sides
-    ## tiff.bands - a three element numeric vector of band numbers that will be displayed as RGB (default 4,3,2 will result in a false-color-composite if the
-    ##              source image is TM. Bands 3,2,1 will result in a true color image
-    ## tiff.fill.plot - crops the TIFF to fill the entire plot window (not just the data)
              
-    ## HULLS.PP
-    ## col.hpp is the color scheme of hull parent points, can be "cyan-red", "rainbow", "spiral", "reg" or a named color
-    ## hue.offset is a value in radians [0..2pi] for the rotation which controls the initial color of the color wheel (the color of points directly to the right of the centroid)
-    ## hpp will plot the parent point of hulls and color them according to the metric specified by hpp.classify
-    ## hpp.classify can be any of the hull metrics returned by hm.expr(), or 'hsp'. If hpp.classify=="hsp", a value for hsp must be passed
-    ## if hpp.classify is the name of a hull metric:
-    ##   hpp.classify.bins is the number of equally spaced bins the values of hpp.classify will be divided into 
-    ##   hpp.classify.chop is the proportion of values at the tails of hpp.classify to be removed before classifying
-    ##   col.ramp can be a comma separated string or vector of two named colors (see colors()) or 'rainbow'
-    ## hsp - either the index of a hsp saved in lhs, or A LIST OF objects of class locoh.hsp. Will use the parameters saved in hsp
-    
-    ## PTID
-    ## If value(s) for ptid are provided (including 'auto'), you can't plot isopleths or hpp. 
-    ## If ptid = auto, it will pick a random ptid from the first run
-    ## If you pass ptid value, you can only plot hulls, nn, and/or ellipses
-    ## If there are multiple runs in lhs and one value of ptid, then if same.axes.4all=T it will plot the ellipses, nn, or hulls
-    ## using the same scale on the axes (upper and lower limits) 
-    ## ptid can have multiple values, in which case it will loop thru them, but you can't have multiple hs with multiple ptid
-    ## allpts=T is ok
-
-    ## ISO    
-    ## If you plot isopleths, you can't plot hulls, or ellipses, or nearest neighbors. col.iso.border, if given, is the color of the isopleth borders
-    ## col.iso.fill  isopleth colors: 1-red to blue, 2-yellow to red, 3-blue to red, 4-red to yellow
-    ## col.iso.scale - if the isopleths are stratified by ecc, par, , will scale the isopleth colors to the appropriate subset of the full range
-    ## iso.idx - the indices of isos to be plotted
-        
-
-    ## Nearest Neighbors
-    ## If nn=T, will plot nearest neighbors for a given point. This requires 
-    ##    A) a value of ptid is passed 
-    ##    B) nearest neighbors were saved when the lxy.lhs was called (not the default)
-    ## col.nn is the color that will be used to plot nearest neighbros, 
-    ## col.nn.pp is the color that will be used to plot the parent point when nearest neighbors are displayed
-    
-    ## sp=special plot
-    lhs <- x; rm(x)
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
+    if (rast && !require(raster)) stop("package raster required")
 
     ## Make sure tiff.fn exists, check tiff.bands
     if (!is.null(tiff.fn)) {
@@ -258,7 +210,7 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
     if (desc != 0 && figs.per.page > 1) stop("You can't display description if figs.per.page > 1. Set desc=0.")
     if (is.null(same.axes.4all)) same.axes.4all <- (length(ptid) <= 1)
     
-    if (!iso && !nn && !hulls && !ellipses && !allpts && !hpp && !dr) stop(cw("Don't know what to plot. Set at least one of the following parameters to TRUE: iso, hulls, hpp, nn, allpts, dr, or ellipses", exdent=2))
+    if (!iso && !rast && !nn && !hulls && !ellipses && !allpts && !hpp && !dr) stop(cw("Don't know what to plot. Set at least one of the following parameters to TRUE: iso, rast, hulls, hpp, nn, allpts, dr, or ellipses", exdent=2))
     if (nn && is.null(ptid)) stop("To plot nearest neighbors you must specify a ptid")
     if ((iso || hpp) && nn) stop("You can't plot isopleths or hpp with nearest neighbors")
     if (iso && ellipses) stop("You can not plot isopleths and ellipses together")
@@ -371,7 +323,7 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
     }
 
     if (ellipses && (TRUE %in% sapply(hs, function(x) is.null(x[["ellipses"]])))) stop("Ellipses haven't been created. Try running lhs.ellipses.add")
-    if (iso && length(unlist(lapply(hs, function(x) names(x$isos)))) == 0) stop("No isopleths found in lhs")
+    if ((iso || rast) && length(unlist(lapply(hs, function(x) names(x$isos)))) == 0) stop("No isopleths found in lhs")
 
     ## If hpp, create color values for the color ramp
     
@@ -428,15 +380,9 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
     if (same.axes.4all) {
         if (is.null(aoi)) {
             if (is.null(ptid)) {
-            
-                #xy.all <- do.call("rbind", lapply(hs.ord, function(hs.idx) coordinates(hs[[hs.idx]][["pts"]])))
                 bbox.all <- do.call("rbind", lapply(1:length(hs), function(hs.idx) t(hs[[hs.idx]][["pts"]]@bbox)))
                 rx <- range(bbox.all[, 1])
                 ry <- range(bbox.all[, 2])
-                
-                #rx <- range(xy.all[, 1])
-                #ry <- range(xy.all[, 2])
-                
             } else {
                 ## There's a ptid, so we have a single parent point that exists in potentially multiple runs
                 ## Want to get all the ellipses, hulls, or nn for this point in these runs, then take the union of them to 
@@ -575,16 +521,25 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
             
             ## Set up the iso.df
             has.iso <- TRUE
-            if (iso) {
+            has.rast <- TRUE
+            if (iso || rast) {
                 num.iso.lst <- length(hs[[hs.name]][["isos"]])
                 if (num.iso.lst == 0) {
                     num.iso.lst <- 1
                     has.iso <- FALSE
+                    has.rast <- FALSE
+                } 
+                
+                if (rast) {
+                    if (TRUE %in% sapply(hs[[hs.name]][["isos"]], function(x) is.null(x[["rast"]]))) has.rast <- FALSE
                 }
             } else {
                 num.iso.lst <- 1
                 has.iso <- FALSE
+                has.rast <- FALSE
             }
+            
+            if (rast && !has.rast) stop("Rasterized isopleths not found. Use lhs.iso.rast")
             
             ## If the user passed a value for iso.idx, limit the isopleths plotted to just those
             if (is.null(iso.idx)) {
@@ -604,8 +559,6 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
             if (!is.null(iso.sort.metric)) isos.idx.use <- intersect(isos.idx.use, (1:length(hs[[hs.name]][["isos"]]))[as.vector(sapply(hs[[hs.name]][["isos"]], function(x) x[["sort.metric"]] %in% iso.sort.metric ))])
             if (length(isos.idx.use)==0 && is.null(iso.sort.metric)) cat("  ", hs.name, ": no matching isopleths found \n", sep="")
 
-            ## at this point we are in the for hs.name... loop
-            
             ## If hpp, create color values for the color ramp
             #if (hpp && hpp.classify!="none" && hpp.classify!="hsp" && !hme[[hpp.classify]][["discrete"]]) {
             #    if (identical(col.ramp, "rainbow")) {
@@ -761,7 +714,7 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
                 ylim.use <- if (is.null(ylim)) ry else ylim
                 
                 ## Create the descriptive text string
-                if (iso) {
+                if (iso || rast) {
                     desc.str <- paste(hs[[hs.name]][["isos"]][[iso.idx]][["desc"]], " ", hs[[hs.name]][["desc"]], sep="")
                 } else {
                     ## Create a string for the elements that will be on the plot
@@ -953,7 +906,7 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
                 }
                 
                 if (is.null(ptid)) {
-                    if (iso && has.iso) {
+                    if ((iso || rast) && has.iso) {
                         ## For shorthand, create a copy of the isopleth list element
                         iso.lst <- hs[[hs.name]][["isos"]][[iso.idx]]
                         
@@ -1013,46 +966,51 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
                         ## Take a subset of the colors if needed
                         if (!is.null(col.sub)) {
                             print("This part needs to be updated");browser()
-                            if (!is.null(iso.lst$par) || !is.null(iso.lst$ecc)) col.iso.fill.use <- rev(col.iso.fill.use)
-                            col.sub.start.end.idx <- 1 + round(col.sub * num.cols.for.subseting)
-                            col.iso.fill.use <- col.iso.fill.use[round(seq(from=col.sub.start.end.idx[1], to=col.sub.start.end.idx[2], length.out=num.iso))]
+                            #if (!is.null(iso.lst$par) || !is.null(iso.lst$ecc)) col.iso.fill.use <- rev(col.iso.fill.use)
+                            #col.sub.start.end.idx <- 1 + round(col.sub * num.cols.for.subseting)
+                            #col.iso.fill.use <- col.iso.fill.use[round(seq(from=col.sub.start.end.idx[1], to=col.sub.start.end.idx[2], length.out=num.iso))]
                         }
                     
-                    
-                    
-                        if (is.null(iso.level)) {
-                            plot(iso.lst[["polys"]], add=TRUE, col=col.iso.fill.use, border=col.iso.border)
+                        if (rast) {
+                            plot(iso.lst[["rast"]], add=T)
                             if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
-                        } else {
-                            if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
-                            iso.levels.thishs <- iso.lst[["polys"]]@data[["iso.level"]]
-                            iso.level.rowidx <- which(sapply(iso.levels.thishs, function(x) TRUE %in% sapply(iso.level, function(y) isTRUE(all.equal(x,y)))))
-                            ##iso.level.rowidx <- which(iso.lst[["polys"]]@data[["iso.level"]] %in% iso.level)
-                            if (length(iso.level.rowidx) > 0) {
-                                plot(iso.lst[["polys"]][iso.level.rowidx,], add=TRUE, col=NA, border=col.iso.border, lwd=2)
+                        }
+
+                        if (iso) {
+                            if (is.null(iso.level)) {
+                                plot(iso.lst[["polys"]], add=TRUE, col=col.iso.fill.use, border=col.iso.border)
+                                if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
+                            } else {
+                                if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
+                                iso.levels.thishs <- iso.lst[["polys"]]@data[["iso.level"]]
+                                iso.level.rowidx <- which(sapply(iso.levels.thishs, function(x) TRUE %in% sapply(iso.level, function(y) isTRUE(all.equal(x,y)))))
+                                if (length(iso.level.rowidx) != length(iso.level)) {
+                                  bad.levels <- paste(iso.level[!sapply(iso.level, function(x) TRUE %in% sapply(iso.levels.thishs, function(y) isTRUE(all.equal(x,y))))], sep=", ")
+                                  warning(paste("Isopleth level(s) not found: ", bad.levels, sep=""))
+                                }
+                                if (is.na(col.iso.border)) col.iso.border <- col.iso.fill.use[iso.level.rowidx]
+                                if (length(iso.level.rowidx) > 0) {
+                                    plot(iso.lst[["polys"]][iso.level.rowidx,], add=TRUE, col=NA, border=col.iso.border, lwd=2)
+                                }
+                            
                             }
-                        
                         }
+
 
                         ## Set up the plot title and subtitle
                         if (ufipt) {
                             ## Use the user-friendtly isopleth plot title saved with the iso list element
-                            #plot.title <- iso.lst[["ufipt"]]
                             title.feats.str <- c(title.feats.str, iso.lst[["ufipt"]])
                         
                         } else {
                             ## For appearance sake, split the plot tile at a period if too long
-                            #plot.title <- paste(hs.name, "\n", strSplitAtChar(names(hs[[hs.name]][["isos"]])[iso.idx], char=".", size=round(65 /par("mfrow")[2])), sep="")
                             title.feats.str <- c(title.feats.str, paste(strSplitAtChar(names(hs[[hs.name]][["isos"]])[iso.idx], char=".", size=round(65 /par("mfrow")[2])), sep=""))
 
                         }
 
-                        #subtitle <- ""
-                        
                         ## Plot allpts on top of isos
                         #if (allpts) points(hs[[hs.name]]$xys, pch=ifelse(hpp,3,16), col=col.allpts.use, cex=cex.allpts)
 
-                        
                         ## Plot points and lines gis layers on top of isos
                         for (featname in names(gis.features)[sapply(gis.features, function(x) x$type %in% c("point", "line"))]) {
                             with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
@@ -1074,12 +1032,8 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
                             with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
                         }
     
-                        if (hulls && sp != 2) {
+                        if (hulls) {
                             plot(hs[[hs.name]][["hulls"]], add=TRUE, border=col.hulls.border, col=col.hulls.fill)
-                            
-                            #for (i in 1:length(hs[[hs.name]][["hulls.polys"]])) {
-                            #    plot(noholes.poly(hs[[hs.name]][["hulls.polys"]][[i]]), poly.args=list(col=col.hulls.border), add=TRUE)
-                            #}
                         }
         
                         if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
@@ -1117,39 +1071,7 @@ plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names
                             hmap.idx.orig <- hmap.idx
                             
                             if (hpp.classify != "hsp") col.hpp.use.orig <- col.hpp.use
-                            #print("going to loop");browser()
-                            
-                            ## Loop through the group of auxillary parameters
-                            #for (hg.idx in hmap.grp.iter) {
-                           
-                               ### Change the color ramp and the value of hmap.idx                            
-                               #if (!is.na(hg.idx)) {
-                               #    
-                               #    hmap.idx <- hmap.idx.orig + hmap.grp[["kernal.idx"]][hg.idx]
-                               #    col.ramp <- hmap.grp[["col.ramp"]][hg.idx]
-                               #    
-                               #    if (hme[[hpp.classify]][["discrete"]]) {
-                               #
-                               #        col.hpp.use <- rep(NA, length(hpp.possible.vals))
-                               #    
-                               #        if (identical(col.ramp, "rainbow")) {
-                               #            col.hpp.use[chpv.idx] <- rainbow(length(chpv.idx), end=5/6)
-                               #        } else {
-                               #            col.hpp.use[chpv.idx] <- colorRampPalette(vectorize.parameter(col.ramp, type="character", sort.res=FALSE))(length(chpv.idx))
-                               #        }
-                               #    
-                               #    
-                               #    } else {
-                               #        if (identical(hmap.grp[["col.ramp"]][[hg.idx]], "rainbow")) {
-                               #            col.hpp.use <- rainbow(hpp.classify.bins, end=5/6)
-                               #        } else {
-                               #            col.hpp.use <- colorRampPalette(vectorize.parameter(col.ramp, type="character", sort.res=FALSE))(hpp.classify.bins)
-                               #        }
-                               #
-                               #    }
-                               #    
-                               #}
-                                
+
                                 if (hmap.idx >= 1 && hmap.idx <= nrow(hmap)) {
                             
                                     if (hpp.classify == "none") {

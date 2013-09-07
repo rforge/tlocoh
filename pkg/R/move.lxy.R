@@ -91,7 +91,7 @@ move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NUL
     ## If the xcoord and ycoord are passed, we can't assume they have the same projection system
     ## as move.obj@coords. So set proj to NA
     if (!is.null(xcoord) && !is.null(ycoord) && is.null(proj)) {
-        proj <- CRS(NA)
+        proj <- CRS(as.character(NA))
         warning("Coordinate system not known. Please add coordinate system info using lxy.proj.add")
     }
     

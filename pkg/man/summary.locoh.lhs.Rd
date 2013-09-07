@@ -4,8 +4,9 @@
 \usage{
   \method{summary}{locoh.lhs} (lhs, file = "", id = NULL,
     k = NULL, r = NULL, a = NULL, s = NULL,
-    hs.names = NULL, iso.details = FALSE, desc = FALSE,
-    compact = FALSE, ...)
+    hs.names = NULL, iso.details = FALSE,
+    hsp.details = FALSE, desc = FALSE, compact = FALSE,
+    ...)
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -25,6 +26,9 @@
   \item{hs.names}{The name(s) of hullsets to summarize}
 
   \item{iso.details}{Display details of the isopleths. T/F}
+
+  \item{hsp.details}{Display details about saved hull
+  scatterplots. T/F}
 
   \item{desc}{Display the hullset description. T/F}
 

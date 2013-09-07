@@ -6,7 +6,7 @@
 #' @description Data class for locations with associated dates, nearest neighbor info, parameters for a random walk null model, and assorted meta-data
 #'
 #' @details
-#' An object of class LoCoH.lxy is a list containing a series of point locations and ancillary
+#' An object of class locoh.lxy is a list containing a series of point locations and ancillary
 #' variables that go with those locations (e.g., time stamps, point IDs, animal IDs). These items
 #' are bundled together and 'ready to go' as inputs into T-LoCoH functions. The benefits of bundling all 
 #' of the objects related to a set of point locations in a single list object includes:
@@ -18,7 +18,7 @@
 #'     \item locations for multiple individuals can be saved in one object
 #'     }
 #'
-#' In code examples, objects of class LoCoH.lxy are often named 'lxy'. 
+#' In code examples, objects of class locoh.lxy are often named 'lxy'. 
 #'
 #' @section Data Structure:
 #'

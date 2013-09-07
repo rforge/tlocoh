@@ -25,24 +25,27 @@
 #' @param show.time Report time for script to complete. T/F
 #' @param hm The name of hull metric(s) that will be included in the attribute table. Default is 'all'. Applicable only to hulls and hull parent points. Character vector or comma separated string.
 #' @param anv The name of ancillary variables(s) of the parent point that will be included in the attribute table. Default is NULL. Applicable only to hulls and hull parent points. Character vector or comma separated string.
-#' @param hsp A list containing one hull scatterplot object with regions saved (i.e., object returned by \code{\link{lhs.plot.scatter}}), or the index of a hull scatter plot saved in the hullset (see \code{\link{lhs.hsp.add}}). If passed, a column for the region number will be included in the attribute table. Applicable only to hulls and hull parent points. 
+#' @param hsp A list containing one hull scatterplot object with regions saved (i.e., object returned by \code{\link{lhs.plot.scatter}}), or the index
+#' of a hull scatter plot saved in the hullset (see \code{\link{lhs.hsp.add}}). If passed, a column for the region number will be included in the 
+#' attribute table. Applies only to hulls and hull parent points. 
 #' @param metadata Export field descriptions in a meta data file (not yet supported)
 #'
 #' @note 
-#' Filenames are automatically generated, but the user can specify the directory. Constructed filenames will consist 
-#' of the \code{file.base} (if provided) followed by the name of the hullset and a suffix indicating the type
-#' of feature saved (e.g., '.hulls', '.pts', ".iso", etc. ). If a shapefile already exists with this, 
-#' a unique filename will be constructed using two-digit numeric extension
+#' Filenames for the resulting shapefiles are automatically generated, but you can specify the directory with the \code{dir} argument and the 
+#' base of the file name with \code{file.base}. The constructed filenames will consist 
+#' of a base followed by the name of the hullset and a suffix indicating the type
+#' of feature saved (e.g., '.hulls', '.pts', ".iso", etc. ). If a shapefile already exists with the same name, 
+#' a unique filename will be constructed by appending a two-digit numeric extension.
 #'
 #' Most of the time, exporting hull parent points (\code{hpp=T}) is the same as exporting all 
 #' points (\code{allpts=T}), however in some cases not all points have enough neighbors to make a hull 
 #' so they wouldn't be included in exported of hull parent points. Only hull parent points will have the
 #' corresponding hull metrics included in the attribute table.
 #'
-#' avl.file is an ArcView 3.x file that contains symbology info. If a value is passed, 
-#' the script will make a copy of prj.file with the same base name as the shapefile, so that 
-#' symbology will automatically created in ArcMap. avl.file is presumed to be relative
-#' to the working folder
+#' \code{avl.file}, if passed, is the name of an ArcView 3.x legend file that contains symbology info. If a value is passed, 
+#' the script will make a copy of avl.file with the same base name as the shapefile, so that 
+#' symbology will automatically created in ArcMap. \code{avl.file} is presumed to be relative
+#' to the working folder.
 #'
 #' @seealso \code{\link{lhs.exp.csv}}
 #' @export
@@ -179,6 +182,8 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
             } 
 
             
+        } else {
+            hsp.use = NULL
         }
         
         for (hmap.idx in 1:nrow(hmap)) {
@@ -203,7 +208,6 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
             }
             
             if (!is.null(hsp.reg)) csv.data <- cbind(csv.data, hsp_reg=hsp.reg)
-            
             
             ## Construct the file name base for all of these runs
             if (file.base == "") {

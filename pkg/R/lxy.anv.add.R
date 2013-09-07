@@ -1,7 +1,7 @@
 #' Add ancillary variable(s) to a LoCoH-xy object
 #'
-#' @param lxy \link{LoCoH-xy} object
-#' @param anv vector, named list or data frame with the same number of values as points
+#' @param lxy A \link{LoCoH-xy} object
+#' @param anv A vector, named list or data frame with the same number of values as points
 #' @param anv.desc A character vector of descriptions 
 #' @param overwrite Whether to overwrite existing variables with the same names (T/F)
 #'

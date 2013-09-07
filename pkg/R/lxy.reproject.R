@@ -33,7 +33,7 @@ lxy.reproject <- function(lxy, proj, dt.int.round.to=0.1, tau.diff.max=0.02, sta
     if (!require(sp)) stop("package sp required")
     if (!require(rgdal)) stop("package rgdal required")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (identical(lxy[["pts"]]@proj4string, CRS(NA))) stop(cw("Coordinates can not be reprojected because the current coordinate system is not known. Specify the current projection system with lxy.proj.add and try again.", final.cr=FALSE))
+    if (identical(lxy[["pts"]]@proj4string, CRS(as.character(NA)))) stop(cw("Coordinates can not be reprojected because the current coordinate system is not known. Specify the current projection system with lxy.proj.add and try again.", final.cr=FALSE))
     
     if (is(proj, "CRS")) {
         crs.good <- checkCRSArgs(proj@projargs)

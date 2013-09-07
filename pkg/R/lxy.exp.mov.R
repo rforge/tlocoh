@@ -194,7 +194,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
         ## Define a vector of colors that is in the same sequence as levels(lxy[["id"]]) (if needed)
         if (all.ids.col.unique) {
             if (is.null(all.ids.col)) {
-                ids.cols <- rainbow(length(id))
+                ids.cols <- rainbow(length(id), end=5/6)
             } else {
                 if (!is.list(all.ids.col) || length(all.ids.col) != length(id)) stop("all.ids.col must be a named list with a color value for each id")
                 if (FALSE %in% (names(all.ids.col) %in% levels(lxy[["pts"]][["id"]]))) stop(cw("The names of the elements in all.ids.col must match the names of the individuals in lxy", final.cr=FALSE))

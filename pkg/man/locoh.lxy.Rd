@@ -9,7 +9,7 @@
   and assorted meta-data
 }
 \details{
-  An object of class LoCoH.lxy is a list containing a
+  An object of class locoh.lxy is a list containing a
   series of point locations and ancillary variables that go
   with those locations (e.g., time stamps, point IDs,
   animal IDs). These items are bundled together and 'ready
@@ -27,7 +27,7 @@
   compute) can be reused \item locations for multiple
   individuals can be saved in one object }
 
-  In code examples, objects of class LoCoH.lxy are often
+  In code examples, objects of class locoh.lxy are often
   named 'lxy'.
 }
 \section{Data Structure}{

@@ -2,12 +2,12 @@
 \alias{plot.locoh.lhs}
 \title{Plot a LoCoH-hullset object}
 \usage{
-  plot.locoh.lhs(x, id = NULL, k = NULL, r = NULL,
+  plot.locoh.lhs(lhs, id = NULL, k = NULL, r = NULL,
     a = NULL, s = NULL, hs.names = NULL, iso = FALSE,
-    hulls = FALSE, hpp = FALSE, dr = FALSE, nn = FALSE,
-    ellipses = FALSE, allpts = FALSE, ptid = NULL,
-    ptid.highlight = TRUE, add = FALSE, aoi = NULL,
-    iso.idx = NULL, iso.sort.metric = NULL,
+    rast = FALSE, hulls = FALSE, hpp = FALSE, dr = FALSE,
+    nn = FALSE, ellipses = FALSE, allpts = FALSE,
+    ptid = NULL, ptid.highlight = TRUE, add = FALSE,
+    aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL,
     iso.legend = TRUE, legend.space = 0.25,
     dr.metric = NULL, dr.thresh.val = NULL,
     dr.thresh.type = NULL, dr.smooth = NULL, lwd.dr = 2,
@@ -46,13 +46,13 @@
     png.each.plot.separate = TRUE, png.width = 800,
     png.height = png.width,
     png.pointsize = 12 + (png.width - 480)/80,
-    png.overwrite = TRUE, sp = 0, status = TRUE,
-    panel.num = NULL, panel.num.inside.plot = !title.show,
-    hmap = NULL, iso.level = NULL, xlim = NULL,
-    ylim = NULL, check.ap.value.in.hmparams = TRUE, ...)
+    png.overwrite = TRUE, status = TRUE, panel.num = NULL,
+    panel.num.inside.plot = !title.show, hmap = NULL,
+    iso.level = NULL, xlim = NULL, ylim = NULL,
+    check.ap.value.in.hmparams = TRUE, ...)
 }
 \arguments{
-  \item{x}{A \link{LoCoH-hullset} object}
+  \item{lhs}{A \link{LoCoH-hullset} object}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}
@@ -77,6 +77,9 @@
   in the plot}
 
   \item{iso}{Whether to display isopleths. T/F.}
+
+  \item{rast}{Whether to display rasterized isopleths.
+  T/F.}
 
   \item{hulls}{Whether to display hulls. T/F.}
 
@@ -361,8 +364,6 @@
   \item{png.overwrite}{Whether to overwrite an existing PNG
   file if it exists. T/F}
 
-  \item{sp}{Special plot number (not used)}
-
   \item{status}{Whether to show messages. T/F}
 
   \item{panel.num}{A number or letter to display in the
@@ -406,8 +407,9 @@
 }
 \note{
   This is a multi-purpose plotting function for
-  LoCoH-hullset objects. You specify which objects in the
-  hullset to include on the plot by passing parameters.
+  \link{LoCoH-hullset} objects. You specify which objects
+  in the hullset to include on the plot by passing
+  parameters.
 
   All hullsets have hulls and hull parent points that can
   be plotted (e.g., code{hulls=TRUE, hpp=TRUE}. All

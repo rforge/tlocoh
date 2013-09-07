@@ -107,12 +107,8 @@
   \item{title.two.id}{An ad-hoc way to construct a title
   consisting of the ids of the hullset and hs2}
 
-  \item{filter}{NULL or a list of filter parameters. The
-  code will loop through these parameters and generate
-  scatterplots for each subsets of points. Each element of
-  the filter list must be another list with the following
-  elements: $idx = a vector of the indices of the hulls;
-  $label = a label.}
+  \item{filter}{NULL or a list of filter parameters. See
+  details.}
 
   \item{filter.label.in.subtitle}{Whether to add the filter
   label to the plot subtitle. Ignored if title is passed or
@@ -299,41 +295,60 @@
   parameters required by certain hull metrics}
 }
 \value{
-  If png.fn or png.dir is passed, exports the plots to a
-  PNG file(s) and returns a list of file names, dimensions
-  of the images produced. Otherwise returns a named list of
-  objects of class 'locoh.hsp'.
+  If \code{png.fn} or \code{png.dir} is passed, the plots
+  are exported to PNG file(s) and the function returns a
+  list of file names and image dimensions (in pixels).
+  Otherwise returns a named list whose element(s) are of
+  class \emph{locoh.hsp}. This list of \emph{locoh.hsp}
+  objects can then be 'permanently' saved in the
+  LoCoH-hullset object using \code{\link{lhs.hsp.add}},
+  and/or fed into other functions such as
+  \code{\link{plot.locoh.lhs}} (to symbolize hull points).
 }
 \description{
   Multi-purpose scatterplot function for the hull metrics
   in a LoCoH-hullset
 }
-\note{
+\details{
   This function has two main purposes. 1) To make
   scatterplot graphics either in a plot window or PNG file
   2) To create a list of objects of class "locoh.hsp",
   which are basically a collection of the parameters that
-  were used to create the scatterplot and any manually
-  digitized regions created by the user. When not being
-  used to create PNG files, this function returns a list of
-  "locoh.hsp" objects which can then be 'permanently' saved
-  in the LoCoH-hullset object using
-  \code{\link{lhs.hsp.add}}, and/or fed into other
-  functions such as \code{\link{plot.locoh.lhs}}. Note that
-  hull metrics must already have been computed. Several
-  hull metrics are 'automatically' computed when the
-  hullset is defined (e.g., hull area, number of enclosed
-  points). Other hull metrics must be created separately
-  with functions such as \code{\link{lhs.ellipses.add}} and
-  \code{\link{lhs.visit.add}}.
+  were used to create the scatterplot including any
+  manually drawn regions created by the user (see
+  \code{regions}).
 
-  Auxillary parameters required for hull metrics can be
-  passed either as individual parameters (e.g.,
-  \code{ivg=3600*12}) or as a list element
-  \code{hmap=list(ivg=86400)}
+  Note that hull metrics must already have been computed.
+  Several hull metrics are 'automatically' computed when
+  the hullset is defined (e.g., hull area, number of
+  enclosed points). Other hull metrics must be created
+  separately with functions such as
+  \code{\link{lhs.ellipses.add}} and
+  \code{\link{lhs.visit.add}}. Auxillary parameters
+  required for hull metrics can be passed either as
+  individual parameters (e.g., \code{ivg=3600*12}) or as a
+  list element (e.g., \code{hmap=list(ivg=86400)}).
+
+  \code{filter}, if passed, will create scatterplots for
+  subsets of hulls. For this to work, \code{filter} must be
+  a list whose elements are named lists with the following
+  elements: \emph{idx} = a vector of the indices of the
+  hulls (in the hulls SpatialPolygonsDataFrame),
+  \emph{label} = a label for the subset, and \emph{col} = a
+  color value. \code{\link{lhs.filter.hsp}} can be used to
+  create a filter list based on manually drawn regions of a
+  hull scatterplot, and \code{\link{lhs.filter.anv}} can be
+  used to create a filter based on ranges of values of an
+  ancillary variable. The arguments
+  \code{filter.sampsize.in.subtitle},
+  \code{filter.col.use}, and \code{filter.axes.uniform}
+  control how the subsets are treated in the
+  scatterplot(s).
 }
 \seealso{
   \code{\link{lhs.plot.scatter.auto}},
-  \code{\link{hm.expr}}, \code{\link{lhs.hsp.add}}
+  \code{\link{hm.expr}}, \code{\link{lhs.hsp.add}},
+  \code{\link{lhs.filter.hsp}},
+  \code{\link{lhs.filter.anv}}
 }
 

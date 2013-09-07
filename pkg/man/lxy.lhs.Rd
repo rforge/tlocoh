@@ -5,7 +5,7 @@
   lxy.lhs(lxy, id = NULL, s = 0, a = NULL, r = NULL,
     k = NULL, kmin = 0, anv.copy = TRUE,
     decimal.places = 1, offset.dups = 1,
-    velocity.metrics = TRUE, ud = FALSE,
+    velocity.metrics = TRUE, ud = NULL, iso = FALSE,
     iso.levels = c(0.1, 0.25, 0.5, 0.75, 0.95),
     pbo.style = 3, beep = FALSE, status = TRUE,
     save.hulls = TRUE, save.enc.pts = TRUE)
@@ -54,8 +54,11 @@
   \item{velocity.metrics}{Compute the velocity hull
   metrics}
 
-  \item{ud}{Whether to also create the default utilization
-  distributions (density isopleths), T/F}
+  \item{ud}{Deprecated (no longer used). Use \code{iso}
+  instead}
+
+  \item{iso}{Whether to also create the default density
+  isopleths, T/F}
 
   \item{iso.levels}{Isopleth levels (see also
   \code{\link{lhs.iso.add}}), numeric vector. Ignored if

@@ -5,10 +5,10 @@
   lxy.anv.add(lxy, anv, anv.desc = NULL, overwrite = FALSE)
 }
 \arguments{
-  \item{lxy}{\link{LoCoH-xy} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
-  \item{anv}{vector, named list or data frame with the same
-  number of values as points}
+  \item{anv}{A vector, named list or data frame with the
+  same number of values as points}
 
   \item{anv.desc}{A character vector of descriptions}
 

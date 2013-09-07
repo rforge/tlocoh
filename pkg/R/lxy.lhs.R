@@ -13,7 +13,8 @@
 #' @param offset.dups A number of map units to randomly offset duplicate points. Set \code{offset.dups=0} to ignore duplicate points
 #' @param anv.copy Copy the ancillary variables data frame (if exists), T/F
 #' @param velocity.metrics Compute the velocity hull metrics
-#' @param ud Whether to also create the default utilization distributions (density isopleths), T/F
+#' @param ud Deprecated (no longer used). Use \code{iso} instead
+#' @param iso Whether to also create the default density isopleths, T/F
 #' @param iso.levels Isopleth levels (see also \code{\link{lhs.iso.add}}), numeric vector. Ignored if |code{ud=FALSE}.
 #' @param pbo.style Progress bar style (see pbapply package) 
 #' @param beep Beep when done. T/F
@@ -42,14 +43,14 @@
 
 lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy=TRUE, 
                     decimal.places=1, offset.dups=1, velocity.metrics=TRUE,
-                    ud=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), pbo.style=3, beep=FALSE, status=TRUE, 
+                    ud=NULL, iso=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), pbo.style=3, beep=FALSE, status=TRUE, 
                     save.hulls=TRUE, save.enc.pts=TRUE) {
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!require(pbapply)) stop("package pbapply required")
     if (!require(sp)) stop("package sp required")  ## for point.in.polygon()
-    
     if (is.null(lxy[["pts"]])) stop("Old data structure")
+    if (!is.null(ud)) stop("The 'ud' argument is no longer used. Use 'iso' instead")
 
     ## taken out
     ## @param save.nn Save the nearest neighbors identified for each point. T/F.
@@ -109,14 +110,14 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
     } else if (mode == "Fixed-a") { 
         if (TRUE %in% (a <= 0)) stop("a must be a positive number")
     } else if (mode == "Auto-a") { 
-        auto.a.names <- c("a.meth", "a.pp", "a.nn", "a.h", "a.tct")
+        auto.a.names <- c("meth", "ptp", "nnn", "tct")
         if (!identical(sort(auto.a.names), sort(names(a)))) stop(paste("a must contain these columns:", paste(auto.a.names, collapse=", ")))
-        if (TRUE %in% (a[,"a.pp"] <= 0) || TRUE %in% (a[,"a.pp"] > 1)) stop("a.pp must be between 0 and 1")
-        if (TRUE %in% (a[,"a.nn"] <= 0)) stop("a.nn must be greater than 0")
+        if (TRUE %in% (a[,"ptp"] <= 0) || TRUE %in% (a[,"ptp"] > 1)) stop("ptp must be between 0 and 1")
+        if (TRUE %in% (a[,"nnn"] <= 0)) stop("nnn must be greater than 0")
     }
     
     ## Make sure there are at least five points
-    if (TRUE %in% (nrow(lxy[["pts"]]) < 5)) stop("at least 5 locations are required to create hulls")
+    if (nrow(lxy[["pts"]]) < 5) stop("at least 5 locations are required to create hulls")
 
     ## create an empty list to hold the results of this function
     res <- list()

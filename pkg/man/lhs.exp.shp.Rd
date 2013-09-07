@@ -83,7 +83,7 @@
   scatter plot saved in the hullset (see
   \code{\link{lhs.hsp.add}}). If passed, a column for the
   region number will be included in the attribute table.
-  Applicable only to hulls and hull parent points.}
+  Applies only to hulls and hull parent points.}
 
   \item{metadata}{Export field descriptions in a meta data
   file (not yet supported)}
@@ -93,13 +93,15 @@
   locoh-hullset object to ESRI's shapefile format
 }
 \note{
-  Filenames are automatically generated, but the user can
-  specify the directory. Constructed filenames will consist
-  of the \code{file.base} (if provided) followed by the
-  name of the hullset and a suffix indicating the type of
-  feature saved (e.g., '.hulls', '.pts', ".iso", etc. ). If
-  a shapefile already exists with this, a unique filename
-  will be constructed using two-digit numeric extension
+  Filenames for the resulting shapefiles are automatically
+  generated, but you can specify the directory with the
+  \code{dir} argument and the base of the file name with
+  \code{file.base}. The constructed filenames will consist
+  of a base followed by the name of the hullset and a
+  suffix indicating the type of feature saved (e.g.,
+  '.hulls', '.pts', ".iso", etc. ). If a shapefile already
+  exists with the same name, a unique filename will be
+  constructed by appending a two-digit numeric extension.
 
   Most of the time, exporting hull parent points
   (\code{hpp=T}) is the same as exporting all points
@@ -109,11 +111,12 @@
   parent points will have the corresponding hull metrics
   included in the attribute table.
 
-  avl.file is an ArcView 3.x file that contains symbology
-  info. If a value is passed, the script will make a copy
-  of prj.file with the same base name as the shapefile, so
-  that symbology will automatically created in ArcMap.
-  avl.file is presumed to be relative to the working folder
+  \code{avl.file}, if passed, is the name of an ArcView 3.x
+  legend file that contains symbology info. If a value is
+  passed, the script will make a copy of avl.file with the
+  same base name as the shapefile, so that symbology will
+  automatically created in ArcMap. \code{avl.file} is
+  presumed to be relative to the working folder.
 }
 \seealso{
   \code{\link{lhs.exp.csv}}
