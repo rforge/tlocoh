@@ -13,9 +13,9 @@
 #' @param offset.dups A number of map units to randomly offset duplicate points. Set \code{offset.dups=0} to ignore duplicate points
 #' @param anv.copy Copy the ancillary variables data frame (if exists), T/F
 #' @param velocity.metrics Compute the velocity hull metrics
-#' @param ud Deprecated (no longer used). Use \code{iso} instead
-#' @param iso Whether to also create the default density isopleths, T/F
-#' @param iso.levels Isopleth levels (see also \code{\link{lhs.iso.add}}), numeric vector. Ignored if |code{ud=FALSE}.
+#' @param ud Deprecated (no longer used). Use \code{iso.add} instead
+#' @param iso.add Whether to also create density isopleths, T/F
+#' @param iso.levels Isopleth levels (see also \code{\link{lhs.iso.add}}), numeric vector. Ignored if |code{iso.add=FALSE}.
 #' @param pbo.style Progress bar style (see pbapply package) 
 #' @param beep Beep when done. T/F
 #' @param status Show messages. T/F
@@ -23,14 +23,19 @@
 #' @param save.enc.pts Whether to save the enclosed points. T/F
 #'
 #' @note
-#' This is main function that creates a \code{\link{LoCoH-hullset}} object. Other functions allow you to do things with the
-#' these hulls, including computing additional hull metrics, constructing isopleths, directional routes, generating  scatterplots, etc.
-#' Note that a nearest neighbors points must have already been identified and saved in the input \link{LoCoH-xy} object.
+#' This function creates a \link{LoCoH-hullset} object from a \link{LoCoH-xy} object. Other functions allow you to do things with 
+#' hullsets, including computing additional hull metrics, constructing isopleths, directional routes, generating scatterplots, exporting, etc.
+#' Note that before you use this function, nearest neighbors must have already been identified and saved in the 
+#' input \link{LoCoH-xy} object (see \code{\link{lxy.nn.add}}).
+#'
+#' If \code{iso.add=TRUE}, after the hulls are created the function will create density isopleths using the default 
+#' sort order (area for \emph{k-method}, number of enclosed points for the \emph{a} and \emph{r-methods}). You can 
+#' control which isopleth levels are created using the \code{iso.levels} argument.
 #'
 #' When working with a large dataset where memory limts may affect performance, you can choose to not save the hulls or enclosed points by 
-#' setting \code{save.hulls=FALSE} and \code{save.enc.pts=FALSE}. See the workflow for working with large datasets.
+#' setting \code{save.hulls=FALSE} and \code{save.enc.pts=FALSE}. See the vignette on working with large datasets.
 #'
-#' @return A LoCoH-hullset object (class "locoh.lhs")
+#' @return An object of class \link{locoh.lhs}
 #'
 #' @seealso \code{\link{xyt.lxy}} for creating LoCoH-xy objects
 #' \code{\link{lhs.iso.add}} for adding isopleths
@@ -43,14 +48,14 @@
 
 lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy=TRUE, 
                     decimal.places=1, offset.dups=1, velocity.metrics=TRUE,
-                    ud=NULL, iso=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), pbo.style=3, beep=FALSE, status=TRUE, 
+                    ud=NULL, iso.add=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), pbo.style=3, beep=FALSE, status=TRUE, 
                     save.hulls=TRUE, save.enc.pts=TRUE) {
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!require(pbapply)) stop("package pbapply required")
-    if (!require(sp)) stop("package sp required")  ## for point.in.polygon()
+    if (!require(sp)) stop("package sp required")
     if (is.null(lxy[["pts"]])) stop("Old data structure")
-    if (!is.null(ud)) stop("The 'ud' argument is no longer used. Use 'iso' instead")
+    if (!is.null(ud)) stop("The 'ud' argument is no longer used. Use 'iso.add' instead")
 
     ## taken out
     ## @param save.nn Save the nearest neighbors identified for each point. T/F.
@@ -384,38 +389,6 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                         ## Create a list of boolean vectors that indicate which of the enclosed points are also a nearest neighbor
                         enc.pts.nn <- lapply(1:length(enc.pts.idx), function(j) enc.pts.idx[[j]] %in% nn.idx.lst.lhs[[j]])
 
-                        #cat("Done.\n")
-
-                        #pip.method <- FALSE
-                        #if (pip.method) {
-                        #    cat("  Finding enclosed points with pip\n"); flush.console()
-                        #    s1 <- system.time({
-                        #    point.x <- coordinates(lxy[["pts"]])[idVal.idx,1]
-                        #    point.y <- coordinates(lxy[["pts"]])[idVal.idx,2]
-                        #    enc.pts.idx <- pblapply(hulls.coords.lst, function(p) which(point.in.polygon(point.x=point.x, point.y=point.y, pol.x=p[,1], pol.y=p[,2], mode.checked=TRUE) != 0))
-                        #    })
-                        #}
-
-                        #over.method <- TRUE
-                        #if (over.method) {
-                            #cat("  Finding enclosed points with over..."); flush.console()
-                            #s2 <- system.time({
-                            #enc.pts.idx.over <- over(hulls.sp, as(lxy[["pts"]][idVal.idx,], "SpatialPoints"), returnList=T)
-                            #})
-                            #if (status) cat("Done.\n"); flush.console()
-                        #}
-
-                        #if (over.method && pip.method) {                        
-                        #    cat("over and pip methods are identical: ", identical(enc.pts.idx, enc.pts.idx.over), "\n", sep="")
-                        #    print(s1); print(s2)
-                        #}
-                        
-                        ## Convert the indices in enc.pts.idx from those of idVal.idx to those of lxy[["pts"]]
-                        #enc.pts.idx.ref.allpts <- lapply(enc.pts.idx, function(x) idVal.idx[x])
-
-                        ## Use over() from sp package to get a list of the indices of enclosed points
-                        ## We must convert lxy[["pts"]] to SpatialPoints object to get indices rather than a dataframe
-
                     }
                     
                     #cat("\n")
@@ -492,7 +465,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                     rm(hulls.spdf, hulls.meta, enc.pts.idx, enc.pts.nn, pts.idVal)
                     
                     ## Create default utilization distributions
-                    if (ud) {
+                    if (iso.add) {
                         class(hullset) <- c("locoh.lhs")
                         if (status) cat("  Computing density isopleths \n"); flush.console()
                         hullset <- lhs.iso.add(hullset, iso.levels=iso.levels, status=FALSE)
@@ -506,7 +479,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                     
                     rm(hullset, hulls.data.df)
 
-                }     # if (length(nn.idx.lst) == 0)
+                }
                 
             }
         }
@@ -518,7 +491,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
     if (is.null(names(res))) {cat("No hullsets generated \n"); return(NULL)}
     
     attr(res, "tlocoh_ver") <- packageVersion("tlocoh")
-    class(res) <- c("locoh.lhs")
+    class(res) <- c("locoh.lhs", "list")
 
     if (status) {
         cat("The following hullsets were generated:\n")

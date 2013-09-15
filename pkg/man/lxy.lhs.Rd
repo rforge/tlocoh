@@ -5,7 +5,7 @@
   lxy.lhs(lxy, id = NULL, s = 0, a = NULL, r = NULL,
     k = NULL, kmin = 0, anv.copy = TRUE,
     decimal.places = 1, offset.dups = 1,
-    velocity.metrics = TRUE, ud = NULL, iso = FALSE,
+    velocity.metrics = TRUE, ud = NULL, iso.add = FALSE,
     iso.levels = c(0.1, 0.25, 0.5, 0.75, 0.95),
     pbo.style = 3, beep = FALSE, status = TRUE,
     save.hulls = TRUE, save.enc.pts = TRUE)
@@ -54,15 +54,15 @@
   \item{velocity.metrics}{Compute the velocity hull
   metrics}
 
-  \item{ud}{Deprecated (no longer used). Use \code{iso}
+  \item{ud}{Deprecated (no longer used). Use \code{iso.add}
   instead}
 
-  \item{iso}{Whether to also create the default density
-  isopleths, T/F}
+  \item{iso.add}{Whether to also create density isopleths,
+  T/F}
 
   \item{iso.levels}{Isopleth levels (see also
   \code{\link{lhs.iso.add}}), numeric vector. Ignored if
-  |code{ud=FALSE}.}
+  |code{iso.add=FALSE}.}
 
   \item{pbo.style}{Progress bar style (see pbapply
   package)}
@@ -77,26 +77,33 @@
   T/F}
 }
 \value{
-  A LoCoH-hullset object (class "locoh.lhs")
+  An object of class \link{locoh.lhs}
 }
 \description{
   Creates a LoCoH-hullset object (class "locoh.lhs")
   containing one or more sets of hulls.
 }
 \note{
-  This is main function that creates a
-  \code{\link{LoCoH-hullset}} object. Other functions allow
-  you to do things with the these hulls, including
-  computing additional hull metrics, constructing
-  isopleths, directional routes, generating scatterplots,
-  etc. Note that a nearest neighbors points must have
+  This function creates a \link{LoCoH-hullset} object from
+  a \link{LoCoH-xy} object. Other functions allow you to do
+  things with hullsets, including computing additional hull
+  metrics, constructing isopleths, directional routes,
+  generating scatterplots, exporting, etc. Note that before
+  you use this function, nearest neighbors must have
   already been identified and saved in the input
-  \link{LoCoH-xy} object.
+  \link{LoCoH-xy} object (see \code{\link{lxy.nn.add}}).
+
+  If \code{iso.add=TRUE}, after the hulls are created the
+  function will create density isopleths using the default
+  sort order (area for \emph{k-method}, number of enclosed
+  points for the \emph{a} and \emph{r-methods}). You can
+  control which isopleth levels are created using the
+  \code{iso.levels} argument.
 
   When working with a large dataset where memory limts may
   affect performance, you can choose to not save the hulls
   or enclosed points by setting \code{save.hulls=FALSE} and
-  \code{save.enc.pts=FALSE}. See the workflow for working
+  \code{save.enc.pts=FALSE}. See the vignette on working
   with large datasets.
 }
 \seealso{
