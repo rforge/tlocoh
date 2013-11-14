@@ -41,6 +41,7 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     if (!require(XML)) stop("package XML is required for this function")
     #if (!require(plotKML)) stop("package plotKML is required for this function")
 
+    file.name <- file
     if (substr(file.name, nchar(file.name)-3, nchar(file.name)) != ".kml") file.name <- paste(file.name, ".kml", sep="") 
     
     if (file.exists(file.name) & overwrite == FALSE) {
