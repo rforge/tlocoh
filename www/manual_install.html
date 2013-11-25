@@ -78,7 +78,7 @@
 
 <h2>T-LoCoH Manual Install</h2>
 
-<p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. This will install only packages that are not already installed.</strong></p>
+<p><strong>1. Install the dependent and suggested packages by typing the following three lines at the R prompt. These commands will only install packages that are not already installed.</strong></p>
 
 <p><pre>
 dep.pkg <- c("pbapply", "sp", "FNN", "rgeos", "rgdal", "maptools", "png", "move", "raster", "XML")<br>
@@ -86,17 +86,28 @@ pkgs.not.installed <- dep.pkg[!sapply(dep.pkg, function(p) require(p, character.
 install.packages(pkgs.not.installed, dependencies=TRUE)
 </pre></p>
 
-<p><strong>2. Package <a href="http://cran.r-project.org/web/packages/gpclib/index.html">gpclib</a> is a special case because a binary version does not exist for Windows. If you can't get this package to install, don't panic, T-LoCoH will still work in most cases.</strong></p>
+<p><br><strong>2. Package <a href="http://cran.r-project.org/web/packages/gpclib/index.html">gpclib</a> is a special case.</strong></p>
+
+<blockquote>
+<p><strong>Mac: </strong> There's a binary version of gpclib for Macs, which makes installation easy:</p>
 
 <p><pre>
 ## Mac OS
 if (!require(gpclib)) install.packages("gpclib")
+</pre></p>
 
+<p><strong>Windows: </strong> There isn't a binary version of gpclib for Windows, so you need to install from source. To install gpclib from source on Windows, you also need to have <a href="http://cran.r-project.org/bin/windows/Rtools/">RTools</a> installed <strong>and</strong> make sure that RTools is on your <a href="http://en.wikipedia.org/wiki/PATH_%28variable%29">PATH</a>. There is an option in the RTools installation program to add RTools to the path. If you're not comfortable adding RTools to the path 'permanently', you can also add it <a href="http://stackoverflow.com/questions/8042136/install-r-package-from-source-without-changing-path-windows">temporarily within an R session</a>. Then type the following:</p> 
+
+<p><pre>
 ## Windows
 if (!require(gpclib)) install.packages("gpclib", type="source")
 </pre></p>
 
-<p><strong>3. Download the latest version of the T-LoCoH package below (scroll down the list until you see tlocoh, right-click and select 'Save As...'). Remember where you save the file, but <strong>do not</strong> unzip or expand it.</strong></p>
+
+<p>If you can't get gpclib to install, don't panic, T-LoCoH will still work in most cases. gpclib is only called on when the polygon union function from rgeos fails (rare). Note also that the license for gpclib is restricted to non-commercial uses.</p>
+
+</blockquote>
+<p><br><strong>3. Download the latest version of the T-LoCoH package below (scroll down the list until you see tlocoh, right-click and select 'Save As...'). Remember where you save the file, but <strong>do not</strong> unzip or expand it.</strong></p>
 
 <ul>
 <li class="spaceafter"><a href="http://download.r-forge.r-project.org/bin/windows/contrib/latest/">Windows (binary)</a></li>
