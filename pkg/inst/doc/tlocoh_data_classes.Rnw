@@ -1,0 +1,265 @@
+\documentclass{article}
+
+\title{ T-LoCoH Data Classes }
+\author{Andy Lyons,\\
+  UC Berkeley}
+\date{January 2014}
+
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\maketitle
+
+\section*{Introduction}
+
+This vignette describes the structure of data classes used in T-LoCoH. There are two main data classes in T-LoCoH, and most of the functions in the package operate on one of these objects. A LoCoH-xy object (class \texttt{locoh.lxy}) contains locations for one or more individuals; it will often store ancillary values associated with each location (e.g., the time stamp, temperature) and/or a lookup table of nearest neighors. A LoCoH-hullset object (class \texttt{locoh.lhs}) is a collection of hulls (local MCPs) for a set of points. A LoCoH-hullset object may store multiple sets of hulls for the same set of locations if different hull methods (e.g., k, a, or r method) and/or parameter values were used. LoCoH-hullset objects also store hull metrics, isopleths (aggregations of hulls), and hull scatterplots (saved scatterplot settings).
+
+LoCoH-xy and LoCoH-hullset objects are both S3 data types (i.e., lists). The spatial objects themselves (i.e., points and polygons) are saved as data classes from the \texttt{sp} package (Pebesma and Bivand, 2005). You can use standard R methods for lists to extract information and/or manipulate LoCoH-xy and LoCoH-hullset objects, but before you do too much surgery with native R commands please check the existing functions as numerous utility functions are available for common manipulations (see appendix of the T-LoCoH tutorial). In addition, if the functionality you desire has broader applications and you notify the package author, we may be able to incorporate your function into the package. For example, one user wanted to know how many points were enclosed in each region of a saved hull scatter plot. Given knowledge of the data structure below, one could readily write an expression to return this, but it was equally easy to incorporate that functionality in the \texttt{summary} function.
+
+\section*{LoCoH-xy objects}
+
+LoCoH-xy objects (often referred to in documentation by a \textit{lxy} suffix) have class \texttt{locoh.lxy}. This data class stores 2-dimensional point locations and associated ancillary variables (e.g., time stamps, point id, animal id tag, etc.). These items are bundled together and `ready to go' as inputs into T-LoCoH functions. The benefits of bundling  in a single object all of the variables related to a set of locations include:
+
+\begin{enumerate}
+  \item Cleaning and error checking only has to be done once when the lxy object is initially created (e.g., with \texttt{xyt.lxy}).
+  \item Having all of the ancillary variables together simplifies the task of passing these values to other functions, as well as saving or retrieving your work to/from disk.
+  \item The nearest neighbor lookup table (which can take a long time to compute) can be reused.
+  \item Locations for multiple individuals can be saved in one object.
+\end{enumerate}
+
+The list elements of a LoCoH-xy object are named, and it is suggested that you always refer to elements by name rather than order because the order of elements may change over time (i.e., use \texttt{bobcat\$pts} instead of \texttt{bobcat[[1]]}). The named elements include:
+
+\begin{itemize}
+  \item \texttt{pts} A SpatialPointsDataFrame of the locations. Columns in the associated data frame vary but typically include:
+
+    \begin{itemize}
+      \item \texttt{ptid} An integer vector of unique id values for each point
+      \item \texttt{id} A factor or character vector containing the ids of the individuals (e.g., name of the animal, GPS device) associated with each point
+      \item \texttt{dt} A vector of date-stamps (class \texttt{POSIXct}) for each point
+      \item \texttt{col} A factor or character vector of color values (single value or one per location)
+      \item any other ancillary variables associated with each location (e.g., temperature, vegetation type)
+    \end{itemize}
+
+  \item \texttt{anv} A two-column data frame containing meta-data for the ancillary variables associated with each point (or NULL if none). Columns are \texttt{anv} (the name of the column in the \texttt{data} slot of the \texttt{pts} SpatialPointsDataFrame) and \texttt{desc} (a short description of the variable). See \texttt{lxy.anv.add} and \texttt{lxy.gridanv.add}.
+
+  \item \texttt{dt.int} A four-column data frame containing a frequency table of the time interval between points. Columns include \texttt{id}, \texttt{interval}, \texttt{count}, and \texttt{rtn} (where rtn is the round-to-nearest value (in seconds) that was used in binning the delta.t values).
+  
+  \item \texttt{rw.params} A four-column data frame containing the parameters used to compute the time scaled distance for any pair of points as a function of their separation in both space and time (see Eq.1 in Lyons, Turner and Getz, 2013). Columns in the data frame include: \texttt{id}, \texttt{time.step.median}, \texttt{d.bar} (median step-length), and \texttt{vmax} (maximum observed velocity). 
+
+  \item \texttt{comment} A named list of comments that describe the locations. There is one element per id, and the element names are the id values. The default comment for each id is a constructed string consisting of the id, number of points, and start/end times. May also be NULL.
+
+  \item \texttt{nn} Nearest neighbor lookup table (or NULL if no neighbors have been identified with \texttt{lxy.nn.add}). Note:
+
+  \begin{itemize}
+    \item A different set of nearest neighbors will exist for each value of \emph{s}, because \emph{s} determines how point-to-point distance is computed.
+    \item Once nearest neighbors have been identified, they can be used to construct hulls for any nearest neighbor selection method (e.g., k, r, or a method).
+    \item For a set of nearest neighbors, the maximum possible value for \emph{a}, \emph{k}, and \emph{r} are noted and saved as list elements. If you want to construct hulls for larger values of \emph{a}, \emph{k}, or \emph{r}, you must first identify additional nearest neighbors using \texttt{lxy.nn.add}.
+  \end{itemize}  
+
+\texttt{nn} is a list of lists. The name of each list element is a pipe-delimited character string that uniquely identifies the parameters for that set of neighbors (e.g., \emph{ag206|vmax|s0|n17206|kmax10|rmax4.1|amax17.3}). Each element of this list is another list with the following elements:
+
+  \begin{itemize}
+    \item \texttt{id} The id (name) of the individual.
+    \item \texttt{s} The value of \textit{s} used in the time-scaled-distance metric.
+    \item \texttt{kmax} The maximum value of \textit{k} that this set of nearest neighbors can be used to create hulls with the k-method.
+    \item \texttt{rmax} The maximum value of \textit{r} that this set of nearest neighbors can be used to create hulls with the r-method.
+    \item \texttt{amax} The maximum value of \textit{a} that this set of nearest neighbors can be used to create hulls with the a-method.
+    \item \texttt{ptid} A vector of ptid values (from \texttt{pts@data} that have nearest neighbors identified. This will normally be NULL (all points have neighbors identified) unless the \texttt{ptid} parameter was passed when \texttt{lxy.nn.add} was called.
+    \item \texttt{auto.a.df} A data frame of the auto-a values that have been calculated. See \texttt{lxy.amin.add}. Columns include:
+
+      \begin{itemize}
+        \item \texttt{meth} The method used to identify a (\texttt{enc} = enclosed).
+        \item \texttt{ptp} Proportion of total points.
+        \item \texttt{nnn} Number of nearest neighbors.        
+        \item \texttt{tct} Temporal continuity threshhold.
+        \item \texttt{aVal} The value of \emph{a} that will result in \emph{ptp} proportion of points being 1 of \emph{nnn} nearest neighbors in at least one hull.  
+      \end{itemize}  
+  
+    \item \texttt{time.taken} The time taken for the script to identify the nearest neighbors (in seconds).
+    \item \texttt{nn.df} A data frame with the following five columns:
+
+      \begin{itemize}
+        \item \texttt{pp.idx} index of the parent point (from the \texttt{pts} SpatialPointsDataFrame).
+        \item \texttt{nn.rank} Nearest neighbor rank (integer), starting from 0 for the parent point. Points with no identified neighbors will be have only the parent point itself as the 0th neighbor.
+        \item \texttt{nn.idx} Index of the nearest neighbor point (from \texttt{pts}). For the 0th neighbor this will be the same as \texttt{pp.idx}.
+        \item \texttt{tsd} Time-scaled-distance (see Eq.1 in Lyons, Turner and Getz, 2013).
+        \item \texttt{tsd.cumsum} Cumulative tsd.
+      \end{itemize}  
+
+  \end{itemize}  
+
+  \item \texttt{ptsh} List of the proportion of time-selected hulls (i.e., the proportion of hulls constructed from sequential locations) for different values of \textit{s}. This table  is normally computed from a random sample of hulls with k=10 (see \texttt{lxy.ptsh.add}), and is used as a guide to select a value for \textit{s} that balances space and time. \texttt{ptsh} is a named list with one element for each id in the LoCoH-xy object. Each list element is another list that represents the results of one computation of the ptsh table (which will differ because they are based on a random selection of parent points). List elements include:
+  
+    \begin{itemize}
+      \item \texttt{id} The id (name of the individual).
+      \item \texttt{samp.idx} A vector of the indices of the locations (from pts) that were used to compute the ptsh table.
+      \item \texttt{n} The number of the orginal locations sampled.
+      \item \texttt{k} The number of nearest neighbors found when computing the ptsh table.
+      \item \texttt{target.ptsh} The target ptsh. \texttt{lxy.ptsh.add} interatively tries to find a value of \emph{s} such that these proportions of hulls (from the sampled parent points) are time-selected).
+      \item \texttt{target.s}  The values of \emph{s} that resulted in the targetted ptsh (within a margin specified by the ptsh.buf parameter in lxy.ptsh.add).
+      \item \texttt{s.ptsh} A two-column matrix containing 1) the found values of \emph{s} and 2) the actual proportion of time-select hulls (from the sample). This matrix will include the targetted ptsh as well as others that were computed in an effort to find the targeted ptsh.
+      \item \texttt{time.taken} An object of class \texttt{difftime} that stores the amount of time it took for the script to compute the ptsh table.
+    \end{itemize}  
+
+\end{itemize}
+
+\section*{LoCoH-hullst objects}
+
+A LoCoH-hullset is an object of class \texttt{locoh.lhs} is a S3 object (named list) containing hulls and their associated objects. A hullset collection may contain hullsets for multiple individuals (ids), nearest neighbor selection methods, and/or parameter values. The name of each element of a hullset collection takes the following form:
+
+\begin{center}
+  individual name + num points + method + s value + kmin value\\
+  e.g. \textit{ag214.pts10702.a3700.s0.01.kmin0}
+\end{center}
+
+In code examples and documentation, LoCoH-hullset objects are typically noted by a \textit{lhs} suffix, and functions that are designed to work on LoCoH-hullset objects typically start with \textit{lhs}. For example, a single hullset can be extracted from a hullset collection with the \texttt{lhs.select} function, and two or more hullsets can be joined using the \texttt{lhs.merge} function. Each element of a LoCoH-hullset object is a hullset that contains:
+                                                                             
+\begin{itemize}
+
+  \item \texttt{id} The name of the individual. Hulls must always be for the same individual, to create hulls from the locations of multiple devices combined merge the locations into a single LoCoH-xy object (\texttt{lxy.merge}) and then assign them a new id (\texttt{lxy.id.new}).
+  
+  \item \texttt{pts} A SpatialPointsDataFrame of the locations. This is copied from the LoCoH-xy object (although duplicate locations will be randomly offset by a small amount if the \texttt{offset.dups} parameter was > 0 when the hullset was created, see \texttt{lxy.lhs}). Columns in the associated data frame typically include:
+
+    \begin{itemize}
+      \item \texttt{ptid}. An integer vector of unique id values for each point
+      \item \texttt{id}. A factor or character vector containing the ids of the individuals (e.g., name of the animal, GPS device) associated with each point
+      \item \texttt{dt}. A vector of date-stamps (class \texttt{POSIXct}) for each point
+      \item \texttt{col}. A factor or character vector of color values (single value or one color value per location)
+      \item any other ancillary variables associated with each location (e.g., temperature, vegetation type)
+    \end{itemize}
+
+  \item \texttt{anv}. A two-column data frame containing meta-data for the ancillary variables associated with each point (or NULL if none). Columns are \texttt{anv} (the name of the column in the \texttt{data} slot of the \texttt{pts} SpatialPointsDataFrame) and \texttt{desc} (a short description of the variable).
+
+  \item \texttt{rw.params}. A four-column data frame containing the parameters used to compute the maximum distance for any pair of points as a function of the difference in time (see Eq.1 in Lyons, Turner and Getz, 2013). Columns in the data frame include: \texttt{id}, \texttt{time.step.median}, \texttt{d.bar} (median step-length), and \texttt{vmax} (maximum observed velocity).
+
+  \item \texttt{mode} A character for the method used to make hulls: \texttt{k}, \texttt{a}, or \texttt{r}.
+  \item \texttt{k} The value of \textit{k} (NULL if k-method not used).
+  \item \texttt{r} The value of \textit{r} (NULL if r-method not used).
+  \item \texttt{a} The value of \textit{a} (NULL if a-method not used).
+  \item \texttt{auto.a} A data frame with the auto.a parameters: \texttt{meth}, \texttt{ptp}, \texttt{nnn}, and \texttt{tct}. \texttt{auto.a} is an alternative way for the user to specify the \textit{a} parameter value for the adaptive method (which is not intuitive to select because it represents a cummulative distance). The parameters tell the script to find the smallest value of \textit{a} that will result in \textit{ptp} proportion of total points having \textit{nnn} nearest neighbors, excluding those points whose temporal distance from the closest point in time is more than \textit{tct} times the median time interval for the entire series (see help page for \texttt{lxy.amin.add}).
+  \item \texttt{s} The value of the space-time scaling parameter \textit{s}. 
+  \item \texttt{kmin} The value of \textit{kmin}.
+  \item \texttt{dups} A list with two elements that records the random offset (if any) applied duplicate locations (which create problems when making hulls). The list elements include:
+    \begin{itemize}  
+      \item \texttt{dup.idx} Indices of duplicate points (NULL if no duplicates).
+      \item \texttt{offset} Displacement distance (same for all points). NULL if no duplicates, and 0 if no offset was requested. The displacement angle is not saved.
+    \end{itemize}
+  \item \texttt {desc} A short description of the hulls (automatically generated by \texttt{lxy.lhs}).
+  \item \texttt{hulls} A SpatialPolygonsDataFrame containing the hulls and hull metrics. Columns in the associated data frame include \texttt{pts.idx} (the index of the parent point taken from \texttt{pts} SpatialPointsDataFrame). Hull metrics will vary but several are automatically created (see separate vignette on hull metrics).
+  \item \texttt{hm} A named list containing meta data for the hull metrics (hull metric values themselves are saved as columns in associated data frame of \texttt{hulls}). The name of each list element is the name of a hull metric (i.e., matches a column \texttt{hulls@data}). Each list element of the list is a list with two items:
+    \begin{itemize}  
+      \item \texttt{type} The type of hull metric (e.g., \texttt{area}, \texttt{mnlv}, \texttt{nsv}). In many cases, this will simply be the name of the hull metric. But other hull metrics take one or more auxillary parameters (e.g., the number of separate visits or \texttt{nsv} metric requires an additional parameter for the inter-visit gap). In these cases, the \texttt{type} will simply be the family name of the metric (\texttt{nsv}) while the hull metric name in the SpatialPolygonsDataFrame is a concatenation of the type and the auxiliary parameter value(s) (e.g., \textit{nsv.86400} where \textit{86400} is the ivg value in seconds). See also vignette on hull metrics.
+      \item \texttt{aux} A named list of additional parameter values that were used in computing the hull metric. The name of each element is the name of the parameter, and the list elements are the parameter values for which metrics have been computed. For example, for the revisitation metrics (\textit{nsv} and \textit{mnlv}), \texttt{aux} will contain a list with one element named \textit{ivg} which contains a vector of all the ivg values that have been used (each one corresponding to a different column in the \texttt{hulls} SpatialPolygonsDataFrame. For metrics that don't take auxillary parameters (e.g., geometric properties of a polygon), \texttt{aux} will be NULL.
+    \end{itemize}  
+
+  \item \texttt{hm.params} A list of the hull metric auxiliary parameters that have been used in the computation of hull metrics. The name of each list element is the name of the parameter, while the values are the values that have been analyzed. TO BE PHASED OUT, USE HM ELEMENT ABOVE INSTEAD.
+
+\item \texttt{enc.pts} A two-element list that record the points enclosed by each hull and the points used to construct each hull:
+    \begin{itemize}  
+      \item \texttt{idx} A list of the indices (from the \texttt{pts} SpatialPointsDataFrame) of the points enclosed by each hull. There will be one list element for each hull, in the same order as the \texttt{hulls} SpatialPolygonsDataFrame. 
+      \item \texttt{nn} A list of Boolean (TRUE/FALSE) vectors that indicate whether each enclosed point was also a nearest neighbor (used in the construction of the hull as opposed to merely being enclosed by the hull). For example, if there are 22 points enclosed by hull 4, there will be 22 numeric values in \texttt{enc.pts\$idx[[4]]} (indices of the points enclosed by the hull), and 22 Boolean values in \texttt{enc.pts\$nn[[4]]} that indicate which of the 22 points in \texttt{enc.pts\$idx[[4]]} was also a nearest neighbor. When \textit{s}=0 (time ignored in point-to-point distance calculations), all enclosed points will also be nearest neighbors.
+    \end{itemize}  
+
+  \item \texttt{ellipses} A six-column data frame with parameters for the bounding ellipse for each hull (see \texttt{lhs.ellipses.add}). NULL if ellipses have not been computed or were not saved. Columns include:
+    \begin{itemize}
+      \item \texttt{pts.idx} Index of the hull parent point. Depending on the hull parameters, not every point may have a hull and therefore an ellipse. 
+      \item \texttt{cx} The x coordinate of the ellipse center.
+      \item \texttt{cy} The y coordinate of the ellipse center.
+      \item \texttt{a} Length of the semi-major axis.
+      \item \texttt{b} Length of the semi-minor axis.
+      \item \texttt{alpha} Angle of rotation from the x-axis in radians.
+    \end{itemize}
+
+
+  \item \texttt{hsp} Saved scatterplots of hull metrics, or more precisely a list of the parameters used to create  scatterplots of hull metrics. Saved hull scatterplots can be used for plot symbolizations and/or subsetting, and can also include saved regions (manually defined areas of the scatterplot space). Each list element is a S3 object of class \texttt{locoh.hsp}. List element names take the form \textit{xaxis.yaxis.hmapvars.reg-n.i}, where \textit{xaxis} and \textit{yaxis} are the names of hull metrics plotted on the x and y axes respectively, \textit{hmapvars} is a concatention of hull metric auxillary parameters (if any), \textit{reg-n} is the number of manually defined regions, and \textit{i} is an incremental counter that starts at 1. Hull scatterplot objects are returned by \texttt{lhs.plot.scatter} and added to a LoCoH-hullset object with \texttt{lhs.hsp.add}. List elements include:
+  
+  \begin{itemize}
+    \item \texttt{hs.name} The name of the set of hulls the scatterplot parameters were first generated from.
+    \item \texttt{x.axis} The hull metric for the x-axis.
+    \item \texttt{y.axis} The hull metric for the y-axis.
+    \item \texttt{limx} A vector of the lower and upper limits for the x-axis.
+    \item \texttt{limy} A vector of the lower and upper limits for the y-axis.
+    \item \texttt{trans.x} The name of a function used to transform the x-axis values.
+    \item \texttt{trans.y} The name of a function used to transform the y-axis values.
+    \item \texttt{jiggle.x} The range of a random offset for x-axis values (for better visualization of point density when x a categorical).
+    \item \texttt{hmap} A named list of auxiliary parameters that were used in computing the hull metrics. The name of each list element is the name of the parameter.
+    \item \texttt{title} A plot title.
+    \item \texttt{ufat} Whether to substitute user-friendly axis titles (pre-defined for each hull metric), T/F.
+    \item \texttt{bg} Background color.
+    \item \texttt{cex} The plot symbol expansion factor.
+    \item \texttt{col} A vector of color values or 'spiral'.
+    \item \texttt{hue.offset} The hue offset for a spiral color scheme (see \texttt{lhs.plot.scatter}).
+    \item \texttt{sat.base} The saturation base for a spiral color scheme (see \texttt{lhs.plot.scatter}).
+    \item \texttt{val.base} The value base for a spiral color scheme (see \texttt{lhs.plot.scatter}).
+    \item \texttt{center.method} How to center the spiral (see \texttt{lhs.plot.scatter}).
+    \item \texttt{regions} A list of manually defined regions in scatterplot space. Each list element is a list with three elements:
+      \begin{itemize}
+        \item \texttt{poly.pts} Data frame of xy coordinates of the nodes that define the region
+        \item \texttt{col} Color to use when plotting the region
+        \item \texttt{label} Label for the region
+      \end{itemize}
+  
+  
+  \end{itemize}
+
+  \item \texttt{isos} A list of isopleths. NULL if isopleths have not been created. The name of each list element takes the form\\ \textit{iso.sort-method.hmap-vals.iso-method.num-hulls.num-isopleth-levels}\\  
+where \textit{sort-method} is the name of the hull metric used to sort hulls, \textit{hmap-vals} is a concatenated string of any hull metric auxillary parameters used, \textit{iso-method} is point quantiles or hull metric values, \textit{num-hulls} is the total number of hulls unioned, and \textit{num-isopleth-levels} is the number of isopleths created. List elements include:
+  
+    \begin{itemize}
+      \item \texttt{desc} A short description of the isopleth (which may be used as a caption for a plot).
+      \item \texttt{ufipt} A user-friendly title for isopleth plots.
+      \item \texttt{sort.metric} The name of the hull metric that was used to sort hulls prior to unioning.
+      \item \texttt{iso.method} What the isopleth levels represent: \texttt{pt.quantiles} (quantiles of enclosed points) or \texttt{hm.vals} (hull metric values).
+      \item \texttt{hmap} A named list of hull metric auxiliary parameters that were used in computing the sort metric. The name of each list element is the name of the parameter. NULL if the sort metric didn't require additional parameters.
+      \item \texttt{polys} A SpatialPolygonsDataFrame containing the isopleths. Columns in the data frame include:
+        \begin{itemize}
+          \item \texttt{iso.level} The isopleth level (usually representing a desired proportion of total points enclosed).
+          \item \texttt{area} The isopleth area (in map units squared)
+          \item \texttt{edge.len} The total length of the isopleth perimeter (including holes)
+          \item \texttt{nep} Actual number of enclosed points.
+          \item \texttt{ptp} Actual proportion of total points enclosed.
+          \item \texttt{hm.val} The value of the sort metric in the last hull added to the isopleth.
+          \item \texttt{num.hulls} The number of hulls unioned to produce the isopleth.
+        \end{itemize}
+      
+      \item \texttt{subset.metric} Name of a second hull metric used to subset the hulls that went into the isopleth construction (i.e., stratified isopleths). NULL if not used.
+      \item \texttt{subset.vals} Numeric vector containing the lower and upper limits of \texttt{subset.metric} for each strata of hulls, where the lower bound is closed (>=) and the upper bound is open (<). NULL if not used.
+      \item \texttt{subset.vals.fr} The full range (all strata) of \texttt{subset.metric} values, used for setting the color ramp when plotting stratified isopleths.
+      \item \texttt{rast} A raster version of the isopleths (object of class \texttt{raster}). See \texttt{lhs.iso.rast}.
+    \end{itemize}
+  
+
+  \item \texttt{dr} List of directional routes (temporally contiguous hull parent points selected by an elongation hull metric above a certain threshold), created by \texttt{lhs.dr.add}. The name of each list element takes the form: \textit{dr.elongtation-metric.threshhold.smoothing-factor} (e.g., \textit{dr.par.q0.9.sm1}). List elements include:
+  
+    \begin{itemize}
+      \item \texttt{metric} The name hull metric that proxies directional movement (e.g, \textit{par} (perimeter:area ratio) or \textit{ecc} (eccentricity of the bounding ellipsoid)).
+      \item \texttt{thresh.val} The threshhold value above which a hull must fall to be considered part of a directional route.
+      \item \texttt{thresh.type} The threshhold type: \texttt{q} for quantile or \texttt{v} for hull metric value.
+      \item \texttt{smooth} Smoothing factor (see \texttt{lhs.dr.add}).
+      \item \texttt{lines} An unnamed list of indices (of \texttt{pts}) that comprise the directional route segments.
+    \end{itemize}
+
+  \item \texttt{hin} A list of hull intersections (with the hulls from another set of hulls in the same LoCoH-hullset object).  Intesecting hulls are used when computing hull metrics that use the spatial overlap of two individuals as the basis for metrics of association. For documentation purposes, the current set of hulls are called the reference hulls, and the second set of hulls are called the comparison hulls. The name of each list element in \texttt{hin} identifies the comparison set of hulls and is constructed in the form \textit{id2Val.sVal.karVal} (e.g., \textit{cilla.s0.1.k10}). Each element is a list that contains:
+
+    \begin{itemize}
+      \item \texttt{id} The id of the comparison hulls.
+      \item \texttt{s} The \textit{s} value of the comparison hulls.
+      \item \texttt{mode} The mode of the comparison hulls.
+      \item \texttt{k} The \textit{k} value of the comparison hulls.
+      \item \texttt{a} The \textit{a} value of the comparison hulls.
+      \item \texttt{r} The \textit{r} value of the comparison hulls.
+      \item \texttt{hidx} A list of length equal to the number of reference hulls containing the indices of the intersecting hulls in the comparison hulls.
+    \end{itemize}
+
+  \item \texttt{hto} A list of hull temporal overlap info with a comparison set of hulls (within the same LoCoH-hullset and presumably for a different individual). The name of each element is the name of the comparison set of hulls. List elements include:
+
+    \begin{itemize}
+      \item \texttt{id}, \texttt{s}, \texttt{mode}, \texttt{k}, \texttt{a}, and \texttt{r} Parameters that identify the comparison set of hulls.
+      \item \texttt{maxdt} The maximum temporal distance (in seconds) of the parent points for two hulls to be considered temporally overlapping.
+      \item \texttt{to.lst} A list of the indices of the temporally overlapping hulls.  
+    \end{itemize}  
+
+\end{itemize}
+
+
+\end{document}

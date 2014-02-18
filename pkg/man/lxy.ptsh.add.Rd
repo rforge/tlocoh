@@ -111,8 +111,8 @@
   \code{ptsh.buf}. If for example the vector of target
   values \code{ptsh.target} includes 0.5, and
   \code{ptsh.buf = 0.01}, the script will try to find a
-  value of \emph{s} that produces 0.49 to 0.51
-  time-selected hulls.
+  value of \emph{s} that results in a proportion of
+  time-selected hulls between 0.49 and 0.51.
 }
 \seealso{
   \code{\link{lxy.nn.add}}

@@ -12,7 +12,7 @@
 
   \item{nnn}{The number of nearest neighbors}
 
-  \item{tct}{The temporal continuity thresshold, see
+  \item{tct}{The temporal continuity threshhold, see
   details.}
 }
 \value{

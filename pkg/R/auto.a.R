@@ -5,7 +5,7 @@
 #' @param meth The name of the method for finding a (default is "nn" method for 'nearest neighbor' method.
 #' @param ptp The proportion of total points [0..1]
 #' @param nnn The number of nearest neighbors
-#' @param tct The temporal continuity thresshold, see details.
+#' @param tct The temporal continuity threshhold, see details.
 #'
 #' @details
 #' If multiple values are passed for any of the parameters, the resulting data frame will have multiple rows 
@@ -42,7 +42,3 @@ auto.a <- function(meth="nn", ptp=0.98, nnn=2, tct=1.05) {
     return(data.frame(meth=meth, ptp=ptp, nnn=nnn, tct=tct))
 
 }
-
-
-
-

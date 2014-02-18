@@ -24,17 +24,10 @@ xyt.rw.params.dt.int <- function(id, xy, dt, dt.int.round.to=0.1, tau.diff.max=0
         xys.thisid <- xy[thisid.idx,]
         dt.thisid.int <- as.numeric(dt[thisid.idx])
         n <- length(thisid.idx)
-
-        ## Compute the time step for idVal.idx points from i to i+1
-        ## dt.idVal <- diff(lxy.dt.int[idVal.idx])
         
         ## Calculate the time difference between points
         dt.thisid.diff <- diff(dt.thisid.int)
         
-        #print("lets compare"); browser()
-        #dt.thisid <- dt[thisid.idx]
-        #dt.thisid.diff.orig <- as.numeric(difftime(dt.thisid[2:n], dt.thisid[1:(n-1)], units="secs"))
-
         ## Calculate the median time interval
         tau <- median(dt.thisid.diff)
 
@@ -60,13 +53,15 @@ xyt.rw.params.dt.int <- function(id, xy, dt, dt.int.round.to=0.1, tau.diff.max=0
         
         ## In preparation for finding the median step length, identify those pairs of consecutive points whose time interval 
         ## falls within the acceptable the acceptable range of tau
-        thisid.idx.good <- which(dt.thisid.diff >= tau * (1 - tau.diff.max) & dt.thisid.diff <= tau * (1 + tau.diff.max))
-
-        ## Compute the step length from i to i+1                            
-        ## xys.step.length <- sqrt((xys.idVal[2:length(idVal.idx), 1] - xys.idVal[1:(length(idVal.idx)-1), 1])^2  + (xys.idVal[2:length(idVal.idx), 2] - xys.idVal[1:(length(idVal.idx)-1), 2])^2)
-        
-        ## Identify the time steps that are within tct of tau
-        ## dt.idVal.good <- (dt.idVal >= tau * (1 - tct)) & (dt.idVal <= tau * (1 + tct))
+        if (tau.diff.max == 0) {
+            thisid.idx.good <- 1:(n-1)
+        } else {
+            thisid.idx.good <- which(dt.thisid.diff >= tau * (1 - tau.diff.max) & dt.thisid.diff <= tau * (1 + tau.diff.max))
+            if (length(thisid.idx.good)==0) {
+                msg <- paste("tlocoh is having a problem computing the 'maximum observed point-to-point speed'. When it filters out pairs of points whose sampling interval differs from the median by more than tau.diff.max (", as.character(tau.diff.max), "), there are no pairs left! Try increasing tau.diff.max, or set tau.diff.max to zero to disabling filtering completely.", sep="")
+                stop(cw(msg, final.cr=FALSE, exdent=2))
+            }
+        }
 
         ## Calculate the distances for pairs of consecutive point sampled within the maximum time.gap
         thisid.dist.steps <- sqrt((xys.thisid[2:n,1] - xys.thisid[1:(n-1),1])^2 + (xys.thisid[2:n,2] - xys.thisid[1:(n-1),2])^2)[thisid.idx.good]

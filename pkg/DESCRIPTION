@@ -1,10 +1,10 @@
 Package: tlocoh
 Type: Package
 Title: Constructs homeranges and explores time use patterns from location data
-Version: 1.14
-Date: 2013-11-14
+Version: 1.15
+Date: 2014-02-18
 Author: Andy Lyons
-Maintainer: Andy Lyons <ajlyons@berkeley.edu>
+Maintainer: Andy Lyons <ajlyons@r-forge.r-project.org>
 Imports:
     FNN,
     pbapply,
@@ -136,3 +136,5 @@ Collate:
     'strTrim.R'
     'textContrastColor.R'
     'lxy.exp.kml.R'
+    'hulls.R'
+    'isopleths.R'

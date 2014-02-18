@@ -32,13 +32,13 @@
 #'
 #' @details
 #' This function creates isopleth(s) for a LoCoH-hullset object. This involves sorting hulls by one of the hull metrics, 
-#' and then cummulative unioning them together until you reach a certain level at which point the union is saved as an isopleth. By default, 
+#' and then cummulatively unioning them together until a certain level is reached at which point the union is saved as an isopleth. By default, 
 #' hulls will be sorted according to the area (for k-method) or number of enclosed points (r- and a-methods), producing density isopleths
 #' (i.e., utilization distributions).
 #'
 #' When \code{iso.method=="pt.quantiles"} (the default), isopleths will be defined by the proportion of points they enclose (given in
 #' \code{iso.levels}). Thus for example
-#' the 50% isopleth contains 50% of the total points. The default isopleth levels are 0.15, 0.25, ..., 0.95. To get an isopleth that encloses all 
+#' the 50\% isopleth contains 50\% of the total points. The default isopleth levels are 0.15, 0.25, ..., 0.95. To get an isopleth that encloses all 
 #' points in the dataset, \code{iso.levels} must include '1'. 
 #'
 #' When \code{iso.method=="hm.vals"}, isopleths will be defined by the value of the hull metrics (provided in \code{iso.levels}). So if for example \code{sort.metric="scg.nn.mean"} 
@@ -47,7 +47,7 @@
 #' but don't know the range of hull metric values, you can set isopleth levels between 0..1 and set \code{scale.iso.levels.to.hm.vals=TRUE}.
 #'
 #' By default, isopleths defined by quantiles of enclosed points are 'capped' as the smallest number of progressively unioned hulls that enclose a number of points equal 
-#' to or greater than the isopleth level. For example, if there are 1000 points in the dataset, the 50% isopleth would be the smallest union
+#' to or greater than the isopleth level. For example, if there are 1000 points in the dataset, the 50\% isopleth would be the smallest union
 #' of hulls that encloses 500 or more points. Alternately, when \code{iso.cap.method = "<-"}, the isopleth will be the largest number of 
 #' hulls which enclose up to but not more than the isopleth level. The actual number of points enclosed by each isopleth is included in the
 #' data table for the isopleth (which you can view by setting \code{iso.details=TRUE} when calling \code{\link{summary.locoh.lhs}}).
@@ -339,7 +339,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     } else {
                         if (identical(polys.spdf, "error")) {
                             if (allow.gpc) {
-                                if (!require(gpclib)) stop("Package gpclib not found")                                
+                                if (!require(gpclib)) stop(cw("rgeos can not handle this polygon union. Need to load gpclib package but it isn't installed. Please install gpclib and try again.", final.cr=F))
                                 if (status) cat("  Challenging geometry...switching to gpclib  \n")
                                 polys.spdf <- hulls2iso.gpc(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                    points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 

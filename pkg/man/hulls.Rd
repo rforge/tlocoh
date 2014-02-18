@@ -1,0 +1,40 @@
+\name{hulls}
+\alias{hulls}
+\title{Extract hulls from a LoCoH-hullset}
+\usage{
+  hulls(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+    s = NULL, hs.names = NULL)
+}
+\arguments{
+  \item{lhs}{A LoCoH-hullset object}
+
+  \item{id}{The name(s) of individuals}
+
+  \item{k}{The k value of hullsets}
+
+  \item{r}{The r value of hullsets}
+
+  \item{a}{The a value of hullsets}
+
+  \item{s}{The s value of hullsets}
+
+  \item{hs.names}{The name(s) of saved hullsets}
+}
+\value{
+  list of SpatialPolygonDataFrame objects
+}
+\description{
+  Extract hulls from a LoCoH-hullset
+}
+\details{
+  This function returns a list of SpatialPolygonDataFrame
+  objects that contain hulls. There will be one list
+  element for each hullset in \code{lhs}. The data table
+  will contain the hull metrics.
+}
+\seealso{
+  \code{\link{isopleths}}, \code{\link{lhs.exp.shp}},
+  \code{\link{lhs.exp.csv}}, Vignette on T-LoCoH data
+  classes
+}
+

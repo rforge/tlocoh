@@ -91,8 +91,8 @@
 \details{
   This function creates isopleth(s) for a LoCoH-hullset
   object. This involves sorting hulls by one of the hull
-  metrics, and then cummulative unioning them together
-  until you reach a certain level at which point the union
+  metrics, and then cummulatively unioning them together
+  until a certain level is reached at which point the union
   is saved as an isopleth. By default, hulls will be sorted
   according to the area (for k-method) or number of
   enclosed points (r- and a-methods), producing density
@@ -101,7 +101,7 @@
   When \code{iso.method=="pt.quantiles"} (the default),
   isopleths will be defined by the proportion of points
   they enclose (given in \code{iso.levels}). Thus for
-  example the 50% isopleth contains 50% of the total
+  example the 50\% isopleth contains 50\% of the total
   points. The default isopleth levels are 0.15, 0.25, ...,
   0.95. To get an isopleth that encloses all points in the
   dataset, \code{iso.levels} must include '1'.
@@ -123,8 +123,8 @@
   points are 'capped' as the smallest number of
   progressively unioned hulls that enclose a number of
   points equal to or greater than the isopleth level. For
-  example, if there are 1000 points in the dataset, the 50%
-  isopleth would be the smallest union of hulls that
+  example, if there are 1000 points in the dataset, the
+  50\% isopleth would be the smallest union of hulls that
   encloses 500 or more points. Alternately, when
   \code{iso.cap.method = "<-"}, the isopleth will be the
   largest number of hulls which enclose up to but not more

@@ -9,7 +9,7 @@
 #' @param r Value(s) for the r method. Numeric vector or comma separate list of values.
 #' @param k Value(s) for the k method. Numeric vector or comma separate list of values.
 #' @param kmin A minimum number of nearest neighbors for each parent point regardless of the method used. Set \code{k=2} to ensure that every point is part of a hull. Integer.
-#' @param decimal.places Yhe number of decimal places for the k/r/a parameter value used when constructing the name of a hullset. Note this has no effect on hull creation or the precision of values used, only the name of the hullset.
+#' @param decimal.places The number of decimal places for the k/r/a parameter value used when constructing the name of a hullset. Note this has no effect on hull creation or the precision of values used, only the number of digits that appear in the hullset name.
 #' @param offset.dups A number of map units to randomly offset duplicate points. Set \code{offset.dups=0} to ignore duplicate points
 #' @param anv.copy Copy the ancillary variables data frame (if exists), T/F
 #' @param velocity.metrics Compute the velocity hull metrics
@@ -370,8 +370,8 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                         hulls.data[["tspan"]] <- as.numeric(sapply(nn.idx.lst, function(x) (max(lxy.dt.int[x]) - min(lxy.dt.int[x])) / tau))
                         hulls.meta[["tspan"]] <- list(type="tspan", aux=NULL)
                         if (status) cat("Done.\n"); flush.console()
+                        if (one.loop) rm(lxy.dt.int)
                     }
-                    if (one.loop) rm(lxy.dt.int)
 
                     ## Find enclosed points for 1) nep hull metric and 2) enc.pts (list of enclosed points indices)
                     if (sVal == 0) {

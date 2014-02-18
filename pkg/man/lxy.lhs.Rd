@@ -38,11 +38,11 @@
   \code{k=2} to ensure that every point is part of a hull.
   Integer.}
 
-  \item{decimal.places}{Yhe number of decimal places for
+  \item{decimal.places}{The number of decimal places for
   the k/r/a parameter value used when constructing the name
   of a hullset. Note this has no effect on hull creation or
-  the precision of values used, only the name of the
-  hullset.}
+  the precision of values used, only the number of digits
+  that appear in the hullset name.}
 
   \item{offset.dups}{A number of map units to randomly
   offset duplicate points. Set \code{offset.dups=0} to
