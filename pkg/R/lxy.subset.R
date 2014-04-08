@@ -84,15 +84,7 @@ lxy.subset <- function(lxy, id=NULL, ptid=NULL, idx=NULL, dt.start=NULL, dt.end=
             lxy[["rw.params"]] <- rwp.dti.lst[["rw.params"]]
         }
         
-        print("We need to do a test to see if dt is present");browser()
-        #if (is.null(dt)) {
-        #    rw.params <- NULL
-        #    dt.int <- NULL
-        #}    
-        
-        
         ## Construct a 'comment'
-        
         comment <- list()
         ids.tab <- table(lxy[["pts"]][["id"]])
         for (id.name in names(ids.tab)) {
