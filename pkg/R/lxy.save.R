@@ -43,7 +43,7 @@ lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=
 
     ## See if the file already exists
     if (file.exists(fn.full)) {
-        if (!is.null(fn) || !auto.num.files) stop("File already exists. Please try a different file name.")
+        if (!is.null(file) || !auto.num.files) stop("File already exists. Please try a different file name.")
 
        # Construct a new file name by incrementing the auto-number
        i <- 1

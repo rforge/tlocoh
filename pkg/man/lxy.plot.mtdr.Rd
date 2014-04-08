@@ -2,21 +2,16 @@
 \alias{lxy.plot.mtdr}
 \title{Plot distribution of the ratio the maximum theoretical distance ratio for nearest neighbors}
 \usage{
-  lxy.plot.mtdr(lxy, s = NULL, k = NULL, a = NULL,
-    r = NULL, type = c("mtd.tsd", "mtd.ed")[1],
-    offset.dups = 1, id = NULL, show.samp.size = TRUE,
-    outline = FALSE, desc = c(0, 1, 3)[2], cex.desc = 0.8,
-    col.desc = "darkgreen",
-    mar = c(3, 3, if (title.show) 3 else 0.7, 0.5),
-    mgp = c(1.9, 0.5, 0), figs.per.page = NULL,
-    title = NULL, title.show = TRUE,
-    title.obj.name = FALSE, panel.num = NULL,
-    panel.num.inside.plot = !title.show,
-    no.sci.notation = FALSE, png.dir = NULL,
-    png.dir.make = TRUE, png.width = 800,
-    png.height = png.width, png.overwrite = TRUE,
-    png.pointsize = 12 + (png.width - 480)/80,
-    status = TRUE, ...)
+lxy.plot.mtdr(lxy, s = NULL, k = NULL, a = NULL, r = NULL,
+  type = c("mtd.tsd", "mtd.ed")[1], offset.dups = 1, id = NULL,
+  show.samp.size = TRUE, outline = FALSE, desc = c(0, 1, 3)[2],
+  cex.desc = 0.8, col.desc = "darkgreen", mar = c(3, 3, if (title.show) 3
+  else 0.7, 0.5), mgp = c(1.9, 0.5, 0), figs.per.page = NULL,
+  title = NULL, title.show = TRUE, title.obj.name = FALSE,
+  panel.num = NULL, panel.num.inside.plot = !title.show,
+  no.sci.notation = FALSE, png.dir = NULL, png.dir.make = TRUE,
+  png.width = 800, png.height = png.width, png.overwrite = TRUE,
+  png.pointsize = 12 + (png.width - 480)/80, status = TRUE, ...)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -114,32 +109,31 @@
   the \code{\link{plot}} function}
 }
 \value{
-  A list of plots created, with one element per id, and
-  each element consisting of another list with elements for
-  the filename (or NULL), filename dimensions in pixels (or
-  NULL), the MTD ratios (as a list with one element for
-  each value of s), descriptive text, and the k/a/r value
+A list of plots created, with one element per id, and each
+element consisting of another list with elements for the
+filename (or NULL), filename dimensions in pixels (or
+NULL), the MTD ratios (as a list with one element for each
+value of s), descriptive text, and the k/a/r value
 }
 \description{
-  Plot distributions of the ratio of maximum theoretical
-  distance times 's' over TSD for all unique pairs of
-  nearest neighbors
+Plot distributions of the ratio of maximum theoretical
+distance times 's' over TSD for all unique pairs of nearest
+neighbors
 }
 \details{
-  This function plots the ratio of the maximum theoretical
-  distance the individual could have traveled (multiplied
-  by 's') over the total TSD distance metric for all
-  nearests neighbors for the specified value of k/a/r for
-  different values of s. This ratio will of course never be
-  greater than one because the maximum theoretical distance
-  is one of the terms in TSD. The purpose of this function
-  is to see the effect of s on the relative contribution of
-  the time term in the TSD metric.
+This function plots the ratio of the maximum theoretical
+distance the individual could have traveled (multiplied by
+'s') over the total TSD distance metric for all nearests
+neighbors for the specified value of k/a/r for different
+values of s. This ratio will of course never be greater
+than one because the maximum theoretical distance is one of
+the terms in TSD. The purpose of this function is to see
+the effect of s on the relative contribution of the time
+term in the TSD metric.
 
-  This function requires that nearest neighbors already be
-  computed. To identify nearest neighbors for a range of
-  's' values, use \code{\link{lxy.ptsh.add}} (see
-  examples).
+This function requires that nearest neighbors already be
+computed. To identify nearest neighbors for a range of 's'
+values, use \code{\link{lxy.ptsh.add}} (see examples).
 }
 \examples{
 ## Identify a range of 's' values from space-selection to time-selection, and find 10 nearest neighbors for each value of 's'

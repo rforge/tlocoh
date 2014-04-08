@@ -2,20 +2,16 @@
 \alias{lhs.plot.isoear}
 \title{Plot the isopleth edge:area ratio as a function of k/a/r}
 \usage{
-  lhs.plot.isoear(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL,
-    sort.metric = NULL, iso.idx = NULL, figs.per.page = 1,
-    legend = TRUE, title = NULL, title.show = TRUE,
-    subtitle = TRUE,
-    mar = c(3.3, 3.2, if (title.show) (if (subtitle) 3.2 else 2.3) else 0.5, 0.5),
-    mgp = c(2, 0.7, 0), png.fn = NULL, png.dir = NULL,
-    png.dir.make = TRUE, png.width = 800,
-    png.height = png.width,
-    png.pointsize = 12 + (png.width - 480)/80,
-    png.fn.pre = NULL, png.fn.suf = NULL,
-    png.overwrite = TRUE, panel.num = NULL,
-    panel.num.inside.plot = !title.show, bg = "white",
-    legend.space = if (legend) 0.05 else 0, ...)
+lhs.plot.isoear(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, sort.metric = NULL, iso.idx = NULL,
+  figs.per.page = 1, legend = TRUE, title = NULL, title.show = TRUE,
+  subtitle = TRUE, mar = c(3.3, 3.2, if (title.show) (if (subtitle) 3.2 else
+  2.3) else 0.5, 0.5), mgp = c(2, 0.7, 0), png.fn = NULL, png.dir = NULL,
+  png.dir.make = TRUE, png.width = 800, png.height = png.width,
+  png.pointsize = 12 + (png.width - 480)/80, png.fn.pre = NULL,
+  png.fn.suf = NULL, png.overwrite = TRUE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, bg = "white", legend.space = if
+  (legend) 0.05 else 0, ...)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -111,6 +107,6 @@
   the \code{\link{plot}} function}
 }
 \description{
-  Creates a plot of the ratio of edge to area for isopleths
+Creates a plot of the ratio of edge to area for isopleths
 }
 

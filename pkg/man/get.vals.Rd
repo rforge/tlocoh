@@ -2,8 +2,7 @@
 \alias{get.vals}
 \title{Get x and/or y values from a plot using the mouse}
 \usage{
-  get.vals(axis = c("x", "y")[1], round.to = 1,
-    print = TRUE)
+get.vals(axis = c("x", "y")[1], round.to = 1, print = TRUE)
 }
 \arguments{
   \item{axis}{Which axes to return values for, character
@@ -17,16 +16,16 @@
   T/F}
 }
 \value{
-  A vector or matrix of the x and/or y values where the
-  mouse was clicked.
+A vector or matrix of the x and/or y values where the mouse
+was clicked.
 }
 \description{
-  Get x and/or y values from a plot using the mouse
+Get x and/or y values from a plot using the mouse
 }
 \details{
-  This function allows you to get the x and/or y values by
-  clicking on the active plot window. When you're done
-  clicking, right-click and select 'Stop' from the pop-up
-  menu.
+This function allows you to get the x and/or y values by
+clicking on the active plot window. When you're done
+clicking, right-click and select 'Stop' from the pop-up
+menu.
 }
 

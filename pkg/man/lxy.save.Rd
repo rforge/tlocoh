@@ -2,9 +2,8 @@
 \alias{lxy.save}
 \title{Save a LoCoH-xy object to disk}
 \usage{
-  lxy.save(lxy, file = NULL, save.as = NULL, dir = ".",
-    suf = NULL, compress = TRUE, auto.num.files = TRUE,
-    width = 2)
+lxy.save(lxy, file = NULL, save.as = NULL, dir = ".", suf = NULL,
+  compress = TRUE, auto.num.files = TRUE, width = 2)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -28,10 +27,10 @@
   \item{width}{The number of digits in auto.num.files}
 }
 \description{
-  Saves a LoCoH-xy object to disk, constructing a file name
-  if needed that reflects the contents
+Saves a LoCoH-xy object to disk, constructing a file name
+if needed that reflects the contents
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{lhs.save}}
+\code{\link{xyt.lxy}}, \code{\link{lhs.save}}
 }
 

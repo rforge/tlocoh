@@ -2,10 +2,9 @@
 \alias{lxy.exp.kml}
 \title{Export a lxy object to kml (Google Earth)}
 \usage{
-  lxy.exp.kml(lxy, file, id = NULL, skip = 1,
-    overwrite = TRUE, compress = TRUE, pt.scale = 0.5,
-    col = NULL, show.path = TRUE, path.col = NULL,
-    path.opaque = 80, path.lwd = 3)
+lxy.exp.kml(lxy, file, id = NULL, skip = 1, overwrite = TRUE,
+  compress = TRUE, pt.scale = 0.5, col = NULL, show.path = TRUE,
+  path.col = NULL, path.opaque = 80, path.lwd = 3)
 }
 \arguments{
   \item{lxy}{A LoCoH-xy object}
@@ -46,24 +45,24 @@
   \code{show.path=FALSE}}
 }
 \value{
-  The file name of the kml/kmz file
+The file name of the kml/kmz file
 }
 \description{
-  Export a lxy object to a format that can be animated in
-  Google Earth
+Export a lxy object to a format that can be animated in
+Google Earth
 }
 \note{
-  This function will export the locations in a
-  \link{LoCoH-xy} object to a kml file that can be opened
-  in Google Earth for animation. The kml format is not
-  optimized for large datasets, but this works reasonably
-  well for moderate datasets (e.g., <1000). To create
-  animations of larger datasets, use a \code{skip} value >
-  1 or see \code{\link{lxy.exp.mov}}.
+This function will export the locations in a
+\link{LoCoH-xy} object to a kml file that can be opened in
+Google Earth for animation. The kml format is not optimized
+for large datasets, but this works reasonably well for
+moderate datasets (e.g., <1000). To create animations of
+larger datasets, use a \code{skip} value > 1 or see
+\code{\link{lxy.exp.mov}}.
 
-  Adapated from plotKML package
+Adapated from plotKML package
 }
 \seealso{
-  \code{\link{lxy.exp.mov}}
+\code{\link{lxy.exp.mov}}
 }
 

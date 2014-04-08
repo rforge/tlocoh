@@ -2,7 +2,7 @@
 \alias{lhs.hsp.add}
 \title{Adds a hull scatterplot to a LoCoH-hullset object}
 \usage{
-  lhs.hsp.add(lhs, hsp.lst)
+lhs.hsp.add(lhs, hsp.lst)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -10,12 +10,12 @@
   \item{hsp.lst}{A list of object(s) of class locoh.hsp}
 }
 \description{
-  Adds a hull scatterplot to a LoCoH-hullset object
+Adds a hull scatterplot to a LoCoH-hullset object
 }
 \note{
-  hsp objects are typically created with
-  \code{\link{lhs.plot.scatter}} function. They can then be
-  'saved' in a LoCoH-hullset object with this function.
+hsp objects are typically created with
+\code{\link{lhs.plot.scatter}} function. They can then be
+'saved' in a LoCoH-hullset object with this function.
 }
 \examples{
 ## Display a scatter plot and manually draw four regions on it

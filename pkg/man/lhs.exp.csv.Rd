@@ -2,11 +2,10 @@
 \alias{lhs.exp.csv}
 \title{Export a LoCoH-hullset to csv}
 \usage{
-  lhs.exp.csv(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
-    s = NULL, hs.names = NULL, csv.save = TRUE, dir = ".",
-    csv.fn.pre = NULL,
-    csv.fn.mid = c("none", "short", "long")[2], hm = "all",
-    anv = NULL, hsp = NULL, status = TRUE)
+lhs.exp.csv(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
+  hs.names = NULL, csv.save = TRUE, dir = ".", csv.fn.pre = NULL,
+  csv.fn.mid = c("none", "short", "long")[2], hm = "all", anv = NULL,
+  hsp = NULL, status = TRUE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -53,28 +52,28 @@
   \item{status}{Show messages. T/F}
 }
 \value{
-  List (one list element for each hullset) of data frames
-  of hull metrics and possibly ancillary variables
+List (one list element for each hullset) of data frames of
+hull metrics and possibly ancillary variables
 }
 \description{
-  Export hull metrics to a csv file / data frame
+Export hull metrics to a csv file / data frame
 }
 \note{
-  This function exports hull metrics only. If you want to
-  export the coordinates of the hulls themselves for
-  further analysis in a GIS, see \code{/link{lhs.exp.shp}}.
+This function exports hull metrics only. If you want to
+export the coordinates of the hulls themselves for further
+analysis in a GIS, see \code{/link{lhs.exp.shp}}.
 
-  If \code{file} is left blank, no csv file will be written
-  to disk but the function will still return a list of data
-  frames (one for each hullset)
+If \code{file} is left blank, no csv file will be written
+to disk but the function will still return a list of data
+frames (one for each hullset)
 
-  If you have created a scatterplot legend with manually
-  defined regions (see tutorial for details), the region
-  number of each hull parent point can be included in the
-  csv file if you pass the hullscatter plot as parameter
-  \code{hsp}.
+If you have created a scatterplot legend with manually
+defined regions (see tutorial for details), the region
+number of each hull parent point can be included in the csv
+file if you pass the hullscatter plot as parameter
+\code{hsp}.
 }
 \seealso{
-  \code{\link{lhs.exp.shp}}
+\code{\link{lhs.exp.shp}}
 }
 

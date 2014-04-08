@@ -2,9 +2,8 @@
 \alias{lxy.subset}
 \title{Take a subset of a LoCoH-xy object}
 \usage{
-  lxy.subset(lxy, id = NULL, ptid = NULL, idx = NULL,
-    dt.start = NULL, dt.end = NULL, dt.int.round.to = 0.1,
-    tau.diff.max = 0.02)
+lxy.subset(lxy, id = NULL, ptid = NULL, idx = NULL, dt.start = NULL,
+  dt.end = NULL, dt.int.round.to = 0.1, tau.diff.max = 0.02)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -34,15 +33,15 @@
   step length}
 }
 \value{
-  A \link{LoCoH-xy} object
+A \link{LoCoH-xy} object
 }
 \description{
-  Returns a subset of a LoCoH-xy object based on the id,
-  ptid, idx, or dates
+Returns a subset of a LoCoH-xy object based on the id,
+ptid, idx, or dates
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{lxy.repair}},
-  \code{\link{lxy.thin.byfreq}},
-  \code{\link{lxy.thin.bursts}}, \code{\link{lxy.merge}}
+\code{\link{xyt.lxy}}, \code{\link{lxy.repair}},
+\code{\link{lxy.thin.byfreq}},
+\code{\link{lxy.thin.bursts}}, \code{\link{lxy.merge}}
 }
 

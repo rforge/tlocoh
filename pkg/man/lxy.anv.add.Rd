@@ -2,7 +2,7 @@
 \alias{lxy.anv.add}
 \title{Add ancillary variable(s) to a LoCoH-xy object}
 \usage{
-  lxy.anv.add(lxy, anv, anv.desc = NULL, overwrite = FALSE)
+lxy.anv.add(lxy, anv, anv.desc = NULL, overwrite = FALSE)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -16,9 +16,9 @@
   with the same names (T/F)}
 }
 \value{
-  A \link{LoCoH-xy} object
+A \link{LoCoH-xy} object
 }
 \description{
-  Add ancillary variable(s) to a LoCoH-xy object
+Add ancillary variable(s) to a LoCoH-xy object
 }
 

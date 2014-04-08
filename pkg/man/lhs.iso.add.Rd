@@ -2,15 +2,13 @@
 \alias{lhs.iso.add}
 \title{Compute isopleths}
 \usage{
-  lhs.iso.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
-    s = NULL, hs.names = NULL,
-    sort.metric = c("auto", hm.expr(names.only = T, desc = F, print = F))[1],
-    iso.levels = c(0.1, 0.25, 0.5, 0.75, 0.95),
-    iso.method = c("pt.quantiles", "hm.vals")[1],
-    iso.cap.method = c(">=", "<=")[1],
-    scale.iso.levels.to.hm.vals = (iso.method == "hm.vals" && max(iso.levels <= 1)),
-    subset.metric = NULL, subset.vals = NULL,
-    allow.gpc = TRUE, beep = FALSE, status = TRUE, ...)
+lhs.iso.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
+  hs.names = NULL, sort.metric = c("auto", hm.expr(names.only = T, desc = F,
+  print = F))[1], iso.levels = c(0.1, 0.25, 0.5, 0.75, 0.95),
+  iso.method = c("pt.quantiles", "hm.vals")[1], iso.cap.method = c(">=",
+  "<=")[1], scale.iso.levels.to.hm.vals = (iso.method == "hm.vals" &&
+  max(iso.levels <= 1)), subset.metric = NULL, subset.vals = NULL,
+  allow.gpc = TRUE, beep = FALSE, status = TRUE, ...)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -83,76 +81,74 @@
   sort metric}
 }
 \value{
-  A \link{LoCoH-hullset} object
+A \link{LoCoH-hullset} object
 }
 \description{
-  Adds isopleth(s) to a LoCoH-hullset object
+Adds isopleth(s) to a LoCoH-hullset object
 }
 \details{
-  This function creates isopleth(s) for a LoCoH-hullset
-  object. This involves sorting hulls by one of the hull
-  metrics, and then cummulatively unioning them together
-  until a certain level is reached at which point the union
-  is saved as an isopleth. By default, hulls will be sorted
-  according to the area (for k-method) or number of
-  enclosed points (r- and a-methods), producing density
-  isopleths (i.e., utilization distributions).
+This function creates isopleth(s) for a LoCoH-hullset
+object. This involves sorting hulls by one of the hull
+metrics, and then cummulatively unioning them together
+until a certain level is reached at which point the union
+is saved as an isopleth. By default, hulls will be sorted
+according to the area (for k-method) or number of enclosed
+points (r- and a-methods), producing density isopleths
+(i.e., utilization distributions).
 
-  When \code{iso.method=="pt.quantiles"} (the default),
-  isopleths will be defined by the proportion of points
-  they enclose (given in \code{iso.levels}). Thus for
-  example the 50\% isopleth contains 50\% of the total
-  points. The default isopleth levels are 0.15, 0.25, ...,
-  0.95. To get an isopleth that encloses all points in the
-  dataset, \code{iso.levels} must include '1'.
+When \code{iso.method=="pt.quantiles"} (the default),
+isopleths will be defined by the proportion of points they
+enclose (given in \code{iso.levels}). Thus for example the
+50\% isopleth contains 50\% of the total points. The
+default isopleth levels are 0.15, 0.25, ..., 0.95. To get
+an isopleth that encloses all points in the dataset,
+\code{iso.levels} must include '1'.
 
-  When \code{iso.method=="hm.vals"}, isopleths will be
-  defined by the value of the hull metrics (provided in
-  \code{iso.levels}). So if for example
-  \code{sort.metric="scg.nn.mean"} (average speed of all
-  points identified as nearest neighbors), and
-  \code{scg.nn.mean} varied from 0.01 to 3.2, the 0.6
-  isopleth would be the union of all hulls whose average
-  nearest neighbor speed was 0.6 or less. If you would like
-  hulls to be identified by hull metric values, but don't
-  know the range of hull metric values, you can set
-  isopleth levels between 0..1 and set
-  \code{scale.iso.levels.to.hm.vals=TRUE}.
+When \code{iso.method=="hm.vals"}, isopleths will be
+defined by the value of the hull metrics (provided in
+\code{iso.levels}). So if for example
+\code{sort.metric="scg.nn.mean"} (average speed of all
+points identified as nearest neighbors), and
+\code{scg.nn.mean} varied from 0.01 to 3.2, the 0.6
+isopleth would be the union of all hulls whose average
+nearest neighbor speed was 0.6 or less. If you would like
+hulls to be identified by hull metric values, but don't
+know the range of hull metric values, you can set isopleth
+levels between 0..1 and set
+\code{scale.iso.levels.to.hm.vals=TRUE}.
 
-  By default, isopleths defined by quantiles of enclosed
-  points are 'capped' as the smallest number of
-  progressively unioned hulls that enclose a number of
-  points equal to or greater than the isopleth level. For
-  example, if there are 1000 points in the dataset, the
-  50\% isopleth would be the smallest union of hulls that
-  encloses 500 or more points. Alternately, when
-  \code{iso.cap.method = "<-"}, the isopleth will be the
-  largest number of hulls which enclose up to but not more
-  than the isopleth level. The actual number of points
-  enclosed by each isopleth is included in the data table
-  for the isopleth (which you can view by setting
-  \code{iso.details=TRUE} when calling
-  \code{\link{summary.locoh.lhs}}).
+By default, isopleths defined by quantiles of enclosed
+points are 'capped' as the smallest number of progressively
+unioned hulls that enclose a number of points equal to or
+greater than the isopleth level. For example, if there are
+1000 points in the dataset, the 50\% isopleth would be the
+smallest union of hulls that encloses 500 or more points.
+Alternately, when \code{iso.cap.method = "<-"}, the
+isopleth will be the largest number of hulls which enclose
+up to but not more than the isopleth level. The actual
+number of points enclosed by each isopleth is included in
+the data table for the isopleth (which you can view by
+setting \code{iso.details=TRUE} when calling
+\code{\link{summary.locoh.lhs}}).
 
-  The hull metric used for sorting must already have been
-  computed. Several hull metrics (e.g., hull area, number
-  of enclosed points) are 'automatically' computed when a
-  hullset is initially generated (see
-  \code{\link{lxy.lhs}}). Other hull metrics must be
-  created separately with functions such as
-  \code{\link{lhs.ellipses.add}} and
-  \code{\link{lhs.visit.add}}. You can use the
-  \code{\link{summary.locoh.lhs}} function to see which
-  isopleths have been saved in a LoCoH-hullset object.
+The hull metric used for sorting must already have been
+computed. Several hull metrics (e.g., hull area, number of
+enclosed points) are 'automatically' computed when a
+hullset is initially generated (see \code{\link{lxy.lhs}}).
+Other hull metrics must be created separately with
+functions such as \code{\link{lhs.ellipses.add}} and
+\code{\link{lhs.visit.add}}. You can use the
+\code{\link{summary.locoh.lhs}} function to see which
+isopleths have been saved in a LoCoH-hullset object.
 
-  Hulls are unioned using the gUnion and gUnaryUnion
-  functions from the rgeos package, which in general is
-  very fast. These functions occasionally fail when lines
-  are too close together or there are other topological
-  conditions. This is not a problem with the data, but an
-  inherent limitation of the algorithms / processing. If
-  \code{allow.gpc=TRUE}, functions from the gpclib package
-  will be used as backup.
+Hulls are unioned using the gUnion and gUnaryUnion
+functions from the rgeos package, which in general is very
+fast. These functions occasionally fail when lines are too
+close together or there are other topological conditions.
+This is not a problem with the data, but an inherent
+limitation of the algorithms / processing. If
+\code{allow.gpc=TRUE}, functions from the gpclib package
+will be used as backup.
 }
 \examples{
 # Create 0.5 and 0.95 isopleths. By not specifying the sort.metric, density isopleths will be created

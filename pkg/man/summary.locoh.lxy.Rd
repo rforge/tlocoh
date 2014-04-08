@@ -2,8 +2,8 @@
 \alias{summary.locoh.lxy}
 \title{Show a summary of a LoCoH-xy object}
 \usage{
-  \method{summary}{locoh.lxy} (lxy, file = "",
-    dt.int = FALSE, round.coords = 1, ptsh = FALSE, ...)
+\method{summary}{locoh.lxy}(lxy, file = "", dt.int = FALSE,
+  round.coords = 1, ptsh = FALSE, ...)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -22,9 +22,9 @@
   \item{...}{Other arguments}
 }
 \description{
-  Prints a summary of a locoh xy object (set of locations)
+Prints a summary of a locoh xy object (set of locations)
 }
 \seealso{
-  \code{\link{lxy.plot.freq}}, \code{\link{lxy.ptsh.add}}
+\code{\link{lxy.plot.freq}}, \code{\link{lxy.ptsh.add}}
 }
 

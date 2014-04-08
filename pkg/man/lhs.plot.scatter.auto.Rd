@@ -2,21 +2,16 @@
 \alias{lhs.plot.scatter.auto}
 \title{Generate multiple scatterplots of hull metrics}
 \usage{
-  lhs.plot.scatter.auto(hs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL,
-    x.metrics = c("auto", "all")[1],
-    y.metrics = c("auto", "all")[1],
-    metrics.exclude = c("bearing", "sgf.nn.mean", "sgf.enc.mean"),
-    exclude.same.pair = TRUE, exclude.reverse.pair = TRUE,
-    png.dir = NULL, png.dir.make = TRUE, png.width = 800,
-    png.height = png.width,
-    png.pointsize = 12 + (png.width - 480)/80,
-    png.fn.pre = NULL, png.fn.mid = NULL,
-    png.fn.suf = NULL,
-    png.exists = c("skip", "overwrite")[1],
-    progress.bar = TRUE, test.sample = NULL,
-    enumerate.pairs.only = FALSE, new.plot.window = TRUE,
-    hmap = NULL, ...)
+lhs.plot.scatter.auto(hs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, x.metrics = c("auto", "all")[1],
+  y.metrics = c("auto", "all")[1], metrics.exclude = c("bearing",
+  "sgf.nn.mean", "sgf.enc.mean"), exclude.same.pair = TRUE,
+  exclude.reverse.pair = TRUE, png.dir = NULL, png.dir.make = TRUE,
+  png.width = 800, png.height = png.width, png.pointsize = 12 + (png.width
+  - 480)/80, png.fn.pre = NULL, png.fn.mid = NULL, png.fn.suf = NULL,
+  png.exists = c("skip", "overwrite")[1], progress.bar = TRUE,
+  test.sample = NULL, enumerate.pairs.only = FALSE,
+  new.plot.window = TRUE, hmap = NULL, ...)
 }
 \arguments{
   \item{hs}{A LoCoH-hullset object}
@@ -111,30 +106,29 @@
   the \code{\link{hist}} function}
 }
 \value{
-  A data frame containing the pairs of hull metrics
+A data frame containing the pairs of hull metrics
 }
 \description{
-  This is a wrapper function for
-  \code{\link{lhs.plot.scatter}} that creates scatterplots
-  for pairs of hull metrics. It can quickly generate
-  several few dozen scatterplots for the purpose of
-  visually looking for novel associations between hull
-  metrics.
+This is a wrapper function for
+\code{\link{lhs.plot.scatter}} that creates scatterplots
+for pairs of hull metrics. It can quickly generate several
+few dozen scatterplots for the purpose of visually looking
+for novel associations between hull metrics.
 }
 \note{
-  This function generates a list of pairs of hull metrics,
-  and then calls \code{\link{lhs.plot.scatter}} repeatedly
-  to generate the histograms. This is a quick way to
-  visualize the relationships between hull metrics.
+This function generates a list of pairs of hull metrics,
+and then calls \code{\link{lhs.plot.scatter}} repeatedly to
+generate the histograms. This is a quick way to visualize
+the relationships between hull metrics.
 
-  If \code{new.plot.window} is \code{TRUE} (default), a new
-  plot window will be opened and plot recording turned on
-  so you can flip through the histograms using the PgUp and
-  PgDn keys. You may also pass a value for \code{png.dir})
-  which will create a bunch of PNG files which you can then
-  view them as a slideshow.
+If \code{new.plot.window} is \code{TRUE} (default), a new
+plot window will be opened and plot recording turned on so
+you can flip through the histograms using the PgUp and PgDn
+keys. You may also pass a value for \code{png.dir}) which
+will create a bunch of PNG files which you can then view
+them as a slideshow.
 }
 \seealso{
-  \code{\link{lhs.plot.scatter}}, \code{\link{hm.expr}}
+\code{\link{lhs.plot.scatter}}, \code{\link{hm.expr}}
 }
 

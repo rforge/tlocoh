@@ -2,20 +2,17 @@
 \alias{lhs.plot.revisit}
 \title{Plot distribution of revisit times}
 \usage{
-  lhs.plot.revisit(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL, ta.min = "auto",
-    ta.max = NULL, breaks = 40, xaxis.vals = NULL,
-    ta.min.auto.tau = 4, col = "gray80", figs.per.page = 1,
-    title = NULL, title.show = TRUE, subtitle = TRUE,
-    mar = c(2.8, 3.2, if (title.show) (if (subtitle) 3.2 else 2.3) else 0.5, 0.5),
-    mgp = c(1, 0.7, 0), png.fn = NULL, png.dir = NULL,
-    png.dir.make = TRUE, png.width = 800,
-    png.height = png.width,
-    png.pointsize = 12 + (png.width - 480)/80,
-    png.fn.pre = NULL, png.fn.suf = NULL,
-    png.overwrite = TRUE, panel.num = NULL,
-    panel.num.inside.plot = !title.show, bg = "white",
-    legend.space = if (legend) 0.05 else 0, ...)
+lhs.plot.revisit(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, ta.min = "auto", ta.max = NULL,
+  breaks = 40, xaxis.vals = NULL, ta.min.auto.tau = 4, col = "gray80",
+  figs.per.page = 1, title = NULL, title.show = TRUE, subtitle = TRUE,
+  mar = c(2.8, 3.2, if (title.show) (if (subtitle) 3.2 else 2.3) else 0.5,
+  0.5), mgp = c(1, 0.7, 0), png.fn = NULL, png.dir = NULL,
+  png.dir.make = TRUE, png.width = 800, png.height = png.width,
+  png.pointsize = 12 + (png.width - 480)/80, png.fn.pre = NULL,
+  png.fn.suf = NULL, png.overwrite = TRUE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, bg = "white", legend.space = if
+  (legend) 0.05 else 0, ...)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -124,30 +121,29 @@
   the \code{\link{hist}} function}
 }
 \value{
-  A list of objects of class histogram (one for each
-  hullset plotted)
+A list of objects of class histogram (one for each hullset
+plotted)
 }
 \description{
-  Plots a histogram of the revisit times a LoCoH-hullset
-  area
+Plots a histogram of the revisit times a LoCoH-hullset area
 }
 \details{
-  This function will plot a histogram of the revisitation
-  times for a hullset. Revisitation time is simply the time
-  between points enclosed in a hull. Basically, all points
-  enclosed by each hull are examined and their time
-  intervals computed. This may help reveal where there are
-  natural temporal cycles in revisitation, for example if
-  you see a spike in revisitation around 24 hours there may
-  be daily revisitation pattern in some of the hulls. You
-  can specify the minimum amount of time-away to show in
-  the histogram (e.g., if enclosed points that are
-  separated by the median sampling interval are of little
-  interest), as well as the maximum time-away period. Note
-  that revisition metrics do *not* have to be computed for
-  the hullset for the histogram to be computed.
+This function will plot a histogram of the revisitation
+times for a hullset. Revisitation time is simply the time
+between points enclosed in a hull. Basically, all points
+enclosed by each hull are examined and their time intervals
+computed. This may help reveal where there are natural
+temporal cycles in revisitation, for example if you see a
+spike in revisitation around 24 hours there may be daily
+revisitation pattern in some of the hulls. You can specify
+the minimum amount of time-away to show in the histogram
+(e.g., if enclosed points that are separated by the median
+sampling interval are of little interest), as well as the
+maximum time-away period. Note that revisition metrics do
+*not* have to be computed for the hullset for the histogram
+to be computed.
 }
 \seealso{
-  \code{\link{lhs.visit.add}}
+\code{\link{lhs.visit.add}}
 }
 

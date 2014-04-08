@@ -2,41 +2,30 @@
 \alias{lhs.plot.scatter}
 \title{Create scatterplot of hull metrics}
 \usage{
-  lhs.plot.scatter(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL, x.axis = NULL,
-    y.axis = NULL, limx = NULL, limy = NULL,
-    trans.x = NULL, trans.y = NULL, jiggle.x = "auto",
-    jiggle.y = "auto", filter = NULL,
-    filter.label.in.subtitle = TRUE,
-    filter.sampsize.in.subtitle = TRUE,
-    filter.col.use = TRUE, filter.axes.uniform = TRUE,
-    title = NULL, title.show = TRUE,
-    title.hs.name.include = TRUE, title.two.id = FALSE,
-    title.axes = TRUE, col = c("gray50", "spiral")[1],
-    bg = NULL,
-    mar = c(4, 3.2, if (title.show) (if (title.hs.name.include) 3.9 else 3.2) else 0.5, 0.5),
-    mgp = c(2.1, 0.8, 0), lo.save = TRUE,
-    lo.margins.set = TRUE, lo.colors.set = TRUE,
-    lo.bg.as.box = FALSE, sat.base = NULL, val.base = NULL,
-    hue.offset = NULL,
-    center.method = c("bbox", "mean")[2], cex = 0.6,
-    type = c("p", "l", "b")[1], ufat = NULL,
-    figs.per.page = 1, add = FALSE, regions = NULL,
-    prompt.labels = TRUE, hsp = NULL, hsp.reg.col = TRUE,
-    hsp.reg.out = FALSE, hsp.reg.lbl = FALSE,
-    hsp.override = TRUE, png.fn = NULL, png.dir = NULL,
-    png.dir.make = TRUE, png.width = 800,
-    png.height = png.width,
-    png.pointsize = 12 + (png.width - 480)/80,
-    png.fn.pre = NULL, png.fn.mid = NULL,
-    png.fn.suf = NULL,
-    png.exists = c("overwrite", "skip", "abort")[1],
-    status = TRUE,
-    desc = c(NONE <- 0, BOTTOM <- 1, TOP <- 3)[ifelse(figs.per.page == 1, 2, 1)],
-    cex.desc = 0.8, col.desc = NULL, panel.num = NULL,
-    panel.num.inside.plot = !title.show, hmap = NULL,
-    hmap.in.subtitle = TRUE,
-    check.ap.value.in.hmparams = TRUE, ...)
+lhs.plot.scatter(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, x.axis = NULL, y.axis = NULL,
+  limx = NULL, limy = NULL, trans.x = NULL, trans.y = NULL,
+  jiggle.x = "auto", jiggle.y = "auto", filter = NULL,
+  filter.label.in.subtitle = TRUE, filter.sampsize.in.subtitle = TRUE,
+  filter.col.use = TRUE, filter.axes.uniform = TRUE, title = NULL,
+  title.show = TRUE, title.hs.name.include = TRUE, title.two.id = FALSE,
+  title.axes = TRUE, col = c("gray50", "spiral")[1], bg = NULL,
+  mar = c(4, 3.2, if (title.show) (if (title.hs.name.include) 3.9 else 3.2)
+  else 0.5, 0.5), mgp = c(2.1, 0.8, 0), lo.save = TRUE,
+  lo.margins.set = TRUE, lo.colors.set = TRUE, lo.bg.as.box = FALSE,
+  sat.base = NULL, val.base = NULL, hue.offset = NULL,
+  center.method = c("bbox", "mean")[2], cex = 0.6, type = c("p", "l",
+  "b")[1], ufat = NULL, figs.per.page = 1, add = FALSE, regions = NULL,
+  prompt.labels = TRUE, hsp = NULL, hsp.reg.col = TRUE,
+  hsp.reg.out = FALSE, hsp.reg.lbl = FALSE, hsp.override = TRUE,
+  png.fn = NULL, png.dir = NULL, png.dir.make = TRUE, png.width = 800,
+  png.height = png.width, png.pointsize = 12 + (png.width - 480)/80,
+  png.fn.pre = NULL, png.fn.mid = NULL, png.fn.suf = NULL,
+  png.exists = c("overwrite", "skip", "abort")[1], status = TRUE,
+  desc = c(NONE <- 0, BOTTOM <- 1, TOP <- 3)[ifelse(figs.per.page == 1, 2,
+  1)], cex.desc = 0.8, col.desc = NULL, panel.num = NULL,
+  panel.num.inside.plot = !title.show, hmap = NULL,
+  hmap.in.subtitle = TRUE, check.ap.value.in.hmparams = TRUE, ...)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -295,60 +284,55 @@
   parameters required by certain hull metrics}
 }
 \value{
-  If \code{png.fn} or \code{png.dir} is passed, the plots
-  are exported to PNG file(s) and the function returns a
-  list of file names and image dimensions (in pixels).
-  Otherwise returns a named list whose element(s) are of
-  class \emph{locoh.hsp}. This list of \emph{locoh.hsp}
-  objects can then be 'permanently' saved in the
-  LoCoH-hullset object using \code{\link{lhs.hsp.add}},
-  and/or fed into other functions such as
-  \code{\link{plot.locoh.lhs}} (to symbolize hull points).
+If \code{png.fn} or \code{png.dir} is passed, the plots are
+exported to PNG file(s) and the function returns a list of
+file names and image dimensions (in pixels). Otherwise
+returns a named list whose element(s) are of class
+\emph{locoh.hsp}. This list of \emph{locoh.hsp} objects can
+then be 'permanently' saved in the LoCoH-hullset object
+using \code{\link{lhs.hsp.add}}, and/or fed into other
+functions such as \code{\link{plot.locoh.lhs}} (to
+symbolize hull points).
 }
 \description{
-  Multi-purpose scatterplot function for the hull metrics
-  in a LoCoH-hullset
+Multi-purpose scatterplot function for the hull metrics in
+a LoCoH-hullset
 }
 \details{
-  This function has two main purposes. 1) To make
-  scatterplot graphics either in a plot window or PNG file
-  2) To create a list of objects of class "locoh.hsp",
-  which are basically a collection of the parameters that
-  were used to create the scatterplot including any
-  manually drawn regions created by the user (see
-  \code{regions}).
+This function has two main purposes. 1) To make scatterplot
+graphics either in a plot window or PNG file 2) To create a
+list of objects of class "locoh.hsp", which are basically a
+collection of the parameters that were used to create the
+scatterplot including any manually drawn regions created by
+the user (see \code{regions}).
 
-  Note that hull metrics must already have been computed.
-  Several hull metrics are 'automatically' computed when
-  the hullset is defined (e.g., hull area, number of
-  enclosed points). Other hull metrics must be created
-  separately with functions such as
-  \code{\link{lhs.ellipses.add}} and
-  \code{\link{lhs.visit.add}}. Auxillary parameters
-  required for hull metrics can be passed either as
-  individual parameters (e.g., \code{ivg=3600*12}) or as a
-  list element (e.g., \code{hmap=list(ivg=86400)}).
+Note that hull metrics must already have been computed.
+Several hull metrics are 'automatically' computed when the
+hullset is defined (e.g., hull area, number of enclosed
+points). Other hull metrics must be created separately with
+functions such as \code{\link{lhs.ellipses.add}} and
+\code{\link{lhs.visit.add}}. Auxillary parameters required
+for hull metrics can be passed either as individual
+parameters (e.g., \code{ivg=3600*12}) or as a list element
+(e.g., \code{hmap=list(ivg=86400)}).
 
-  \code{filter}, if passed, will create scatterplots for
-  subsets of hulls. For this to work, \code{filter} must be
-  a list whose elements are named lists with the following
-  elements: \emph{idx} = a vector of the indices of the
-  hulls (in the hulls SpatialPolygonsDataFrame),
-  \emph{label} = a label for the subset, and \emph{col} = a
-  color value. \code{\link{lhs.filter.hsp}} can be used to
-  create a filter list based on manually drawn regions of a
-  hull scatterplot, and \code{\link{lhs.filter.anv}} can be
-  used to create a filter based on ranges of values of an
-  ancillary variable. The arguments
-  \code{filter.sampsize.in.subtitle},
-  \code{filter.col.use}, and \code{filter.axes.uniform}
-  control how the subsets are treated in the
-  scatterplot(s).
+\code{filter}, if passed, will create scatterplots for
+subsets of hulls. For this to work, \code{filter} must be a
+list whose elements are named lists with the following
+elements: \emph{idx} = a vector of the indices of the hulls
+(in the hulls SpatialPolygonsDataFrame), \emph{label} = a
+label for the subset, and \emph{col} = a color value.
+\code{\link{lhs.filter.hsp}} can be used to create a filter
+list based on manually drawn regions of a hull scatterplot,
+and \code{\link{lhs.filter.anv}} can be used to create a
+filter based on ranges of values of an ancillary variable.
+The arguments \code{filter.sampsize.in.subtitle},
+\code{filter.col.use}, and \code{filter.axes.uniform}
+control how the subsets are treated in the scatterplot(s).
 }
 \seealso{
-  \code{\link{lhs.plot.scatter.auto}},
-  \code{\link{hm.expr}}, \code{\link{lhs.hsp.add}},
-  \code{\link{lhs.filter.hsp}},
-  \code{\link{lhs.filter.anv}}
+\code{\link{lhs.plot.scatter.auto}}, \code{\link{hm.expr}},
+\code{\link{lhs.hsp.add}}, \code{\link{lhs.filter.hsp}},
+\code{\link{lhs.filter.anv}}
 }
 

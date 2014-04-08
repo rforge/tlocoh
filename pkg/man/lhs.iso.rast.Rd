@@ -2,11 +2,10 @@
 \alias{lhs.iso.rast}
 \title{Convert isopleths to rasters}
 \usage{
-  lhs.iso.rast(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL,
-    sort.metric = NULL, iso.method = "pt.quantiles",
-    raster = NULL, dimSize = 100, cell.size = NULL,
-    sf.cell.size = 2, ll.round = TRUE, status = TRUE)
+lhs.iso.rast(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
+  hs.names = NULL, sort.metric = NULL, iso.method = "pt.quantiles",
+  raster = NULL, dimSize = 100, cell.size = NULL, sf.cell.size = 2,
+  ll.round = TRUE, status = TRUE)
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -54,15 +53,15 @@
   \item{status}{Show status messages. T/F}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Adds rasterized version of isopleth(s) to a LoCoH-hullset
-  object
+Adds rasterized version of isopleth(s) to a LoCoH-hullset
+object
 }
 \details{
-  This will take exising isopleths and create raster
-  versions of them.
+This will take exising isopleths and create raster versions
+of them.
 }
 \examples{
 \dontrun{
@@ -71,6 +70,6 @@ lhs <- lhs.iso.rast(lhs)
 }
 }
 \seealso{
-  \code{\link{lhs.iso.add}}
+\code{\link{lhs.iso.add}}
 }
 

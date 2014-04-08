@@ -2,9 +2,8 @@
 \alias{lhs.anv.del}
 \title{Delete ancillary variables from a LoCoH-hullset}
 \usage{
-  lhs.anv.del(lhs, anv = NULL, id = NULL, k = NULL,
-    r = NULL, a = NULL, s = NULL, hs.names = NULL,
-    status = TRUE)
+lhs.anv.del(lhs, anv = NULL, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, status = TRUE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -26,19 +25,19 @@
   \item{status}{Show status messages (T/F)}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Delete ancillary variables from a LoCoH-hullset
+Delete ancillary variables from a LoCoH-hullset
 }
 \note{
-  To see which ancillary variables a hullset contains, use
-  the \code{summary()} function.
+To see which ancillary variables a hullset contains, use
+the \code{summary()} function.
 
-  Copying ancillary variables is optional when creating a
-  hullset with \code{\link{lxy.lhs}}.
+Copying ancillary variables is optional when creating a
+hullset with \code{\link{lxy.lhs}}.
 }
 \seealso{
-  \code{\link{summary.locoh.lhs}}
+\code{\link{summary.locoh.lhs}}
 }
 

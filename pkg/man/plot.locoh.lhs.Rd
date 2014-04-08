@@ -2,54 +2,44 @@
 \alias{plot.locoh.lhs}
 \title{Plot a LoCoH-hullset object}
 \usage{
-  plot.locoh.lhs(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL, iso = FALSE,
-    rast = FALSE, hulls = FALSE, hpp = FALSE, dr = FALSE,
-    nn = FALSE, ellipses = FALSE, allpts = FALSE,
-    ptid = NULL, ptid.highlight = TRUE, add = FALSE,
-    aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL,
-    iso.legend = TRUE, legend.space = 0.25,
-    dr.metric = NULL, dr.thresh.val = NULL,
-    dr.thresh.type = NULL, dr.smooth = NULL, lwd.dr = 2,
-    pch.allpts = 16, cex.nn = 2, cex.hpp = 0.6,
-    cex.allpts = 0.5, cex.pp = 2, cex.axis = 0.8,
-    cex.legend = 0.8, col.hpp = "gray50",
-    col.hpp.na = "yellow", col.hulls.border = "gray50",
-    col.hulls.fill = NA, col.ellipses = "red",
-    col.allpts = c("auto", "gray")[1], col.nn = "black",
-    col.nn.pp = "blue", col.iso.fill = 1,
-    col.iso.border = NA, col.iso.scale = TRUE,
-    col.dr = "red",
-    hpp.classify = c("none", "hsp", hm.expr(names.only = TRUE, print = FALSE, desc = FALSE))[1],
-    hpp.classify.bins = 10, hpp.classify.chop = 0.01,
-    hpp.classify.legend = TRUE,
-    hpp.classify.common.scale.discrete = TRUE,
-    col.ramp = c("gray10,gray90", "rainbow")[1],
-    col.ramp.bins = 10, hsp = NULL, record = FALSE,
-    figs.per.page = 1, same.axes.4all = NULL, ufat = TRUE,
-    ufipt = TRUE, axes.show = TRUE, axes.ticks = axes.show,
-    axes.titles = axes.show, title = NULL,
-    title.show = TRUE,
-    title.inc = c("title", "hs.name", "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if (is.null(title)) 3:4 else 1],
-    subtitle.inc = c("title", "hs.name", "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if (is.null(title)) 5:8 else 0],
-    mar = c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5),
-    mgp = c(2, 0.7, 0), lo.save = TRUE,
-    lo.margins.set = TRUE,
-    desc = c(NONE <- 0, BOTTOM <- 1, TOP <- 3)[ifelse(figs.per.page == 1, 2, 1)],
-    cex.desc = 0.8, col.desc = "darkgreen", tiff.fn = NULL,
-    tiff.pct = FALSE, tiff.bands = c(4, 3, 2),
-    tiff.buff = 500, tiff.fill.plot = TRUE, shp.csv = NULL,
-    layers = NULL, png.fn = NULL, png.dir = NULL,
-    png.dir.make = TRUE, png.fn.pre = NULL,
-    png.fn.mid = NULL, png.fn.suf = NULL,
-    png.fn.incld.hs.name = TRUE,
-    png.each.plot.separate = TRUE, png.width = 800,
-    png.height = png.width,
-    png.pointsize = 12 + (png.width - 480)/80,
-    png.overwrite = TRUE, status = TRUE, panel.num = NULL,
-    panel.num.inside.plot = !title.show, hmap = NULL,
-    iso.level = NULL, xlim = NULL, ylim = NULL,
-    check.ap.value.in.hmparams = TRUE, ...)
+\method{plot}{locoh.lhs}(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, iso = FALSE, rast = FALSE, hulls = FALSE,
+  hpp = FALSE, dr = FALSE, nn = FALSE, ellipses = FALSE,
+  allpts = FALSE, ptid = NULL, ptid.highlight = TRUE, add = FALSE,
+  aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL, iso.legend = TRUE,
+  legend.space = 0.25, dr.metric = NULL, dr.thresh.val = NULL,
+  dr.thresh.type = NULL, dr.smooth = NULL, lwd.dr = 2, pch.allpts = 16,
+  cex.nn = 2, cex.hpp = 0.6, cex.allpts = 0.5, cex.pp = 2,
+  cex.axis = 0.8, cex.legend = 0.8, col.hpp = "gray50",
+  col.hpp.na = "yellow", col.hulls.border = "gray50", col.hulls.fill = NA,
+  col.ellipses = "red", col.allpts = c("auto", "gray")[1],
+  col.nn = "black", col.nn.pp = "blue", col.iso.fill = 1,
+  col.iso.border = NA, col.iso.scale = TRUE, col.dr = "red",
+  hpp.classify = c("none", "hsp", hm.expr(names.only = TRUE, print = FALSE,
+  desc = FALSE))[1], hpp.classify.bins = 10, hpp.classify.chop = 0.01,
+  hpp.classify.legend = TRUE, hpp.classify.common.scale.discrete = TRUE,
+  col.ramp = c("gray10,gray90", "rainbow")[1], col.ramp.bins = 10,
+  hsp = NULL, record = FALSE, figs.per.page = 1, same.axes.4all = NULL,
+  ufat = TRUE, ufipt = TRUE, axes.show = TRUE, axes.ticks = axes.show,
+  axes.titles = axes.show, title = NULL, title.show = TRUE,
+  title.inc = c("title", "hs.name", "id", "kar", "features", "hpp.classify",
+  "hmap", "ptid")[if (is.null(title)) 3:4 else 1], subtitle.inc = c("title",
+  "hs.name", "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if
+  (is.null(title)) 5:8 else 0], mar = c(if (axes.titles || axes.ticks) 3.3
+  else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2
+  else 0.5, 0.5), mgp = c(2, 0.7, 0), lo.save = TRUE,
+  lo.margins.set = TRUE, desc = c(NONE <- 0, BOTTOM <- 1, TOP <-
+  3)[ifelse(figs.per.page == 1, 2, 1)], cex.desc = 0.8,
+  col.desc = "darkgreen", tiff.fn = NULL, tiff.pct = FALSE,
+  tiff.bands = c(4, 3, 2), tiff.buff = 500, tiff.fill.plot = TRUE,
+  shp.csv = NULL, layers = NULL, png.fn = NULL, png.dir = NULL,
+  png.dir.make = TRUE, png.fn.pre = NULL, png.fn.mid = NULL,
+  png.fn.suf = NULL, png.fn.incld.hs.name = TRUE,
+  png.each.plot.separate = TRUE, png.width = 800, png.height = png.width,
+  png.pointsize = 12 + (png.width - 480)/80, png.overwrite = TRUE,
+  status = TRUE, panel.num = NULL, panel.num.inside.plot = !title.show,
+  hmap = NULL, iso.level = NULL, xlim = NULL, ylim = NULL,
+  check.ap.value.in.hmparams = TRUE, ...)
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -396,68 +386,64 @@
   parameters required by certain hull metrics}
 }
 \value{
-  If png.fn or png.dir is passed, a list object where each
-  element is a three-element list of the properties of the
-  PNG file(s) created: $fn, $dim, $desc. Otherwise, returns
-  a vector of desc
+If png.fn or png.dir is passed, a list object where each
+element is a three-element list of the properties of the
+PNG file(s) created: $fn, $dim, $desc. Otherwise, returns a
+vector of desc
 }
 \description{
-  Multi-purpose plotting function for a LoCoH-hullset
-  object
+Multi-purpose plotting function for a LoCoH-hullset object
 }
 \note{
-  This is a multi-purpose plotting function for
-  \link{LoCoH-hullset} objects. You specify which objects
-  in the hullset to include on the plot by passing
-  parameters.
+This is a multi-purpose plotting function for
+\link{LoCoH-hullset} objects. You specify which objects in
+the hullset to include on the plot by passing parameters.
 
-  All hullsets have hulls and hull parent points that can
-  be plotted (e.g., code{hulls=TRUE, hpp=TRUE}. All
-  hullsets also have the original locations saved and these
-  can be added to the plot by setting \code{allpts=TRUE}.
-  Depending how the hullset was created (see
-  \code{\link{lxy.lhs}}), some hullsets may also have the
-  nearest neighbors for each parent point saved, which can
-  also be plotted (\code{nn=TRUE}).
+All hullsets have hulls and hull parent points that can be
+plotted (e.g., code{hulls=TRUE, hpp=TRUE}. All hullsets
+also have the original locations saved and these can be
+added to the plot by setting \code{allpts=TRUE}. Depending
+how the hullset was created (see \code{\link{lxy.lhs}}),
+some hullsets may also have the nearest neighbors for each
+parent point saved, which can also be plotted
+(\code{nn=TRUE}).
 
-  Hullsets for which have bounding ellipses
-  (\code{\link{lhs.ellipses.add}}) or directional routes
-  (\code{\link{lhs.dr.add}}) have been computed can have
-  these elements plotted by setting \code{ellipses=TRUE})
-  and \code{dr=TRUE}) respectively. If isopleths have been
-  constructed (\code{\link{lhs.iso.add}}), these can be
-  plotted by setting \code{iso=TRUE}. If you only want to
-  plot some of the isopleths, you can specify which one(s)
-  to plot with the parameters \code{iso.idx} (the index(s)
-  of the isopleths to plot, see
-  \code{\link{summary.locoh.lhs}}) or
-  \code{iso.sort.metric}.
+Hullsets for which have bounding ellipses
+(\code{\link{lhs.ellipses.add}}) or directional routes
+(\code{\link{lhs.dr.add}}) have been computed can have
+these elements plotted by setting \code{ellipses=TRUE}) and
+\code{dr=TRUE}) respectively. If isopleths have been
+constructed (\code{\link{lhs.iso.add}}), these can be
+plotted by setting \code{iso=TRUE}. If you only want to
+plot some of the isopleths, you can specify which one(s) to
+plot with the parameters \code{iso.idx} (the index(s) of
+the isopleths to plot, see \code{\link{summary.locoh.lhs}})
+or \code{iso.sort.metric}.
 
-  The plot title can be manually set with the \code{title}
-  parameter. If no value for \code{title} is passed, a
-  title will be constructed. You can define what elements
-  will go in the title and subtitle (i.e., the second line
-  of the title) with the \code{title.inc} and
-  \code{subtitle.inc} parameters. To omit the plot title
-  completely, set \code{title.show=FALSE}.
+The plot title can be manually set with the \code{title}
+parameter. If no value for \code{title} is passed, a title
+will be constructed. You can define what elements will go
+in the title and subtitle (i.e., the second line of the
+title) with the \code{title.inc} and \code{subtitle.inc}
+parameters. To omit the plot title completely, set
+\code{title.show=FALSE}.
 
-  \code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff},
-  \code{tiff.bands}, and \code{tiff.fill.plot} control the
-  display of a GeoTIFF image in the plot background. The
-  GeoTIFF image must be georeferenced in the same
-  coordinate system as the locoh-hullset object, and the
-  pixel values must be 'prestretched' for display.
-  \code{tiff.bands} controls which bands in the TIFF file
-  will be displayed using the red, green, and blue color
-  guns. In a Landsat TM image, for example, the first four
-  bands are blue, green, red, and infrared. To display a TM
-  GeoTIFF image as 'natural colors', you would set
-  \code{tiff.bands=c(3,2,1)}. If \code{tiff.pct=T}, the
-  script will create a indexed 256-color version of the
-  image, which may result in quicker drawing time
-  particularly if several plots are being drawn.
-  \code{tiff.buff} can be used to expand the range of
-  values on the x and y axis so that you see a bit of the
-  background image beyond the extent of the points.
+\code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff},
+\code{tiff.bands}, and \code{tiff.fill.plot} control the
+display of a GeoTIFF image in the plot background. The
+GeoTIFF image must be georeferenced in the same coordinate
+system as the locoh-hullset object, and the pixel values
+must be 'prestretched' for display. \code{tiff.bands}
+controls which bands in the TIFF file will be displayed
+using the red, green, and blue color guns. In a Landsat TM
+image, for example, the first four bands are blue, green,
+red, and infrared. To display a TM GeoTIFF image as
+'natural colors', you would set \code{tiff.bands=c(3,2,1)}.
+If \code{tiff.pct=T}, the script will create a indexed
+256-color version of the image, which may result in quicker
+drawing time particularly if several plots are being drawn.
+\code{tiff.buff} can be used to expand the range of values
+on the x and y axis so that you see a bit of the background
+image beyond the extent of the points.
 }
 

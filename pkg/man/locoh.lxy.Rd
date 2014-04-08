@@ -4,40 +4,40 @@
 \alias{locoh.lxy-class}
 \title{Class for location data}
 \description{
-  Data class for locations with associated dates, nearest
-  neighbor info, parameters for a random walk null model,
-  and assorted meta-data
+Data class for locations with associated dates, nearest
+neighbor info, parameters for a random walk null model, and
+assorted meta-data
 }
 \details{
-  An object of class \code{locoh.lxy} is a list containing
-  a series of point locations and ancillary variables that
-  go with those locations (e.g., time stamps, point IDs,
-  animal IDs). These items are bundled together and 'ready
-  to go' as inputs into T-LoCoH functions. The benefits of
-  bundling all of the objects related to a set of point
-  locations in a single list object includes:
+An object of class \code{locoh.lxy} is a list containing a
+series of point locations and ancillary variables that go
+with those locations (e.g., time stamps, point IDs, animal
+IDs). These items are bundled together and 'ready to go' as
+inputs into T-LoCoH functions. The benefits of bundling all
+of the objects related to a set of point locations in a
+single list object includes:
 
-  \itemize{ \item cleaning and error checking only has to
-  be done once when the lxy object is created (e.g., with
-  \code{\link{xyt.lxy}}) \item having all of the ancillary
-  variables together simplifies the task of passing
-  parameters to other functions as well as
-  saving/retrieving your work to disk \item the nearest
-  neighbor lookup-table (which can take a long time to
-  compute) can be reused \item locations for multiple
-  individuals can be saved in one object }
+\itemize{ \item cleaning and error checking only has to be
+done once when the lxy object is created (e.g., with
+\code{\link{xyt.lxy}}) \item having all of the ancillary
+variables together simplifies the task of passing
+parameters to other functions as well as saving/retrieving
+your work to disk \item the nearest neighbor lookup-table
+(which can take a long time to compute) can be reused \item
+locations for multiple individuals can be saved in one
+object }
 
-  In code examples, objects of class \code{locoh.lxy} are
-  often indicated by a 'lxy' suffix, and functions that are
-  designed to work on LoCoH-xy objects typically start with
-  'lxy'.
+In code examples, objects of class \code{locoh.lxy} are
+often indicated by a 'lxy' suffix, and functions that are
+designed to work on LoCoH-xy objects typically start with
+'lxy'.
 
-  For a description of the data structure, see the
-  \emph{T-LoCoH Data Classes} vignette.
+For a description of the data structure, see the
+\emph{T-LoCoH Data Classes} vignette.
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{move.lxy}},
-  \code{\link{lxy.repair}}, \code{\link{lxy.subset}},
-  \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}
+\code{\link{xyt.lxy}}, \code{\link{move.lxy}},
+\code{\link{lxy.repair}}, \code{\link{lxy.subset}},
+\code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}
 }
 

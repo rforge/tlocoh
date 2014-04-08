@@ -2,22 +2,17 @@
 \alias{hist.locoh.lhs}
 \title{Plot histograms of hull metrics}
 \usage{
-  \method{hist}{locoh.lhs} (x, id = NULL, k = NULL,
-    r = NULL, a = NULL, s = NULL, hs.names = NULL,
-    metric = "area", include.missing.hulls = TRUE,
-    hmap = NULL, hmap.in.title = TRUE,
-    hs.name.in.title = TRUE, title = NULL,
-    title.show = TRUE, figs.per.page = NULL,
-    mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
-    mgp = c(1.8, 0.5, 0), same.axes.for.all = FALSE,
-    ufat = TRUE, breaks = "Sturges", col = "gray80",
-    png.dir = NULL, png.dir.make = TRUE, png.width = 800,
-    png.height = png.width, png.overwrite = TRUE,
-    png.pointsize = 12 + (png.width - 480)/80,
-    title.two.id = FALSE,
-    indicate.missing.hulls.in.axis.lbl = TRUE,
-    panel.num = NULL, panel.num.inside.plot = !title.show,
-    ...)
+\method{hist}{locoh.lhs}(x, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, metric = "area",
+  include.missing.hulls = TRUE, hmap = NULL, hmap.in.title = TRUE,
+  hs.name.in.title = TRUE, title = NULL, title.show = TRUE,
+  figs.per.page = NULL, mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
+  mgp = c(1.8, 0.5, 0), same.axes.for.all = FALSE, ufat = TRUE,
+  breaks = "Sturges", col = "gray80", png.dir = NULL,
+  png.dir.make = TRUE, png.width = 800, png.height = png.width,
+  png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80,
+  title.two.id = FALSE, indicate.missing.hulls.in.axis.lbl = TRUE,
+  panel.num = NULL, panel.num.inside.plot = !title.show, ...)
 }
 \arguments{
   \item{x}{A \link{LoCoH-hullset} object}
@@ -124,15 +119,14 @@
   parameters to specify particular hull metrics}
 }
 \value{
-  A named list of values of the hull metrics. There is one
-  list element for each metric.
+A named list of values of the hull metrics. There is one
+list element for each metric.
 }
 \description{
-  Plot histograms of hull metrics
+Plot histograms of hull metrics
 }
 \note{
-  To see the names of hull metrics, type \code{hm.expr()}.
-  Only hull metrics which have been computed can be
-  plotted.
+To see the names of hull metrics, type \code{hm.expr()}.
+Only hull metrics which have been computed can be plotted.
 }
 

@@ -2,9 +2,8 @@
 \alias{lhs.save}
 \title{Save a LoCoH-hullset object to disk}
 \usage{
-  lhs.save(lhs, file = NULL, dir = ".", suf = NULL,
-    compress = TRUE, auto.num.files = TRUE, width = 2,
-    save.as = NULL)
+lhs.save(lhs, file = NULL, dir = ".", suf = NULL, compress = TRUE,
+  auto.num.files = TRUE, width = 2, save.as = NULL)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -31,10 +30,10 @@
   is the same as the original)}
 }
 \description{
-  Saves a LoCoH-hullset object to disk, constructing a
-  filename if needed that reflects the contents
+Saves a LoCoH-hullset object to disk, constructing a
+filename if needed that reflects the contents
 }
 \seealso{
-  \code{\link{lxy.save}}
+\code{\link{lxy.save}}
 }
 

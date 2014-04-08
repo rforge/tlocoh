@@ -2,11 +2,10 @@
 \alias{move.lxy}
 \title{Converts a Move object to a LoCoH-xy object}
 \usage{
-  move.lxy(move.obj, use.utm = FALSE, xcoord = NULL,
-    ycoord = NULL, proj = NULL, anv.flds = NULL,
-    ptid = NULL, del.dup.xyt = TRUE, dup.dt.check = TRUE,
-    dt.int.round.to = 0.1, tau.diff.max = 0.02,
-    req.id = TRUE, warn.latlong = TRUE, status = TRUE)
+move.lxy(move.obj, use.utm = FALSE, xcoord = NULL, ycoord = NULL,
+  proj = NULL, anv.flds = NULL, ptid = NULL, del.dup.xyt = TRUE,
+  dup.dt.check = TRUE, dt.int.round.to = 0.1, tau.diff.max = 0.02,
+  req.id = TRUE, warn.latlong = TRUE, status = TRUE)
 }
 \arguments{
   \item{move.obj}{A object of class Move or MoveStack.}
@@ -60,25 +59,24 @@
   \item{status}{Show status messages (T/F).}
 }
 \value{
-  A \link{LoCoH-xy} object
+A \link{LoCoH-xy} object
 }
 \description{
-  Converts a Move or MoveStack object from the move package
-  to a LoCoH-xy object
+Converts a Move or MoveStack object from the move package
+to a LoCoH-xy object
 }
 \note{
-  Move and MoveStack are formal classes from the
-  \emph{Move} package for storage of movement data for a
-  single (Move) or multiple (MoveStack) indviduals.
-  \code{move.lxy} will convert these objects to
-  \link{LoCoH-xy} objects. To import the attribute data
-  associated with each point (termed ancillary variables in
-  T-LoCoH), set \code{anv.flds} to the names of the
-  field(s) you wish to import (or \code{anv.flds="all"}).
-  Note that the Move and MoveStack classes store a lot more
-  metadata than LoCoH-xy objects, including unused records,
-  which are not supported by the \link{LoCoH-xy} data class
-  and are not imported.
+Move and MoveStack are formal classes from the \emph{Move}
+package for storage of movement data for a single (Move) or
+multiple (MoveStack) indviduals. \code{move.lxy} will
+convert these objects to \link{LoCoH-xy} objects. To import
+the attribute data associated with each point (termed
+ancillary variables in T-LoCoH), set \code{anv.flds} to the
+names of the field(s) you wish to import (or
+\code{anv.flds="all"}). Note that the Move and MoveStack
+classes store a lot more metadata than LoCoH-xy objects,
+including unused records, which are not supported by the
+\link{LoCoH-xy} data class and are not imported.
 }
 \examples{
 require(move)
@@ -88,6 +86,6 @@ leroy.lxy <- move.lxy(leroy.move, anv.flds=c("ground.speed", "heading"))
 summary(leroy.lxy)
 }
 \seealso{
-  \code{\link{xyt.lxy}}
+\code{\link{xyt.lxy}}
 }
 

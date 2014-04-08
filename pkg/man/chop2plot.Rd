@@ -2,8 +2,7 @@
 \alias{chop2plot}
 \title{Divides a long string into separate lines for adding to a plot}
 \usage{
-  chop2plot(str, width, char.break = " ",
-    char.break.keep = FALSE, cex = 1)
+chop2plot(str, width, char.break = " ", char.break.keep = FALSE, cex = 1)
 }
 \arguments{
   \item{str}{The string to format}
@@ -21,29 +20,27 @@
   used to display the text}
 }
 \value{
-  A two-item character vector containing [1] the formatted
-  character string with \\n inserted and [2] number of
-  lines
+A two-item character vector containing [1] the formatted
+character string with \\n inserted and [2] number of lines
 }
 \description{
-  Breaks a long character object into separate lines at
-  specific characters
+Breaks a long character object into separate lines at
+specific characters
 }
 \note{
-  This function is designed to break up a potentially long
-  character object that is going to be added to a plot
-  either as a title or text. Line breaks will be inserted
-  so that the string will wrap appropriately at
-  \code{width} inches when plotted with \code{cex}
-  character expansion factor.
+This function is designed to break up a potentially long
+character object that is going to be added to a plot either
+as a title or text. Line breaks will be inserted so that
+the string will wrap appropriately at \code{width} inches
+when plotted with \code{cex} character expansion factor.
 
-  The character object will be broken at the
-  \code{char.break} characters such that each line will be
-  <= \code{width} when plotted. Breaks are replaced with
-  carriage returns. If \code{char.break.keep} is
-  \code{TRUE}, the break character will be kept, otherwise
-  it will be removed. If no occurrence of the
-  /code{char.break} is available, the line will be chopped
-  at the last character that fits.
+The character object will be broken at the
+\code{char.break} characters such that each line will be <=
+\code{width} when plotted. Breaks are replaced with
+carriage returns. If \code{char.break.keep} is \code{TRUE},
+the break character will be kept, otherwise it will be
+removed. If no occurrence of the /code{char.break} is
+available, the line will be chopped at the last character
+that fits.
 }
 

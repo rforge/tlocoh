@@ -2,11 +2,10 @@
 \alias{lxy.thin.byfreq}
 \title{Delete locations to harmonize the sampling frequency and time duration}
 \usage{
-  lxy.thin.byfreq(lxy, id = NULL, trim.ends = TRUE,
-    dt.start = NULL, dt.end = NULL, byfreq = TRUE,
-    samp.freq = "lcm", lcm.round = 120, lcm.max.iter = 300,
-    status = TRUE, dt.int.round.to = 0.1,
-    tau.diff.max = 0.02)
+lxy.thin.byfreq(lxy, id = NULL, trim.ends = TRUE, dt.start = NULL,
+  dt.end = NULL, byfreq = TRUE, samp.freq = "lcm", lcm.round = 120,
+  lcm.max.iter = 300, status = TRUE, dt.int.round.to = 0.1,
+  tau.diff.max = 0.02)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -57,44 +56,43 @@
   \item{status}{Show messages, T/F}
 }
 \value{
-  a \link{LoCoH-xy} object
+a \link{LoCoH-xy} object
 }
 \description{
-  Standardize the sampling frequency and duration across
-  individuals in a \link{LoCoH-xy} object by deleting
-  points
+Standardize the sampling frequency and duration across
+individuals in a \link{LoCoH-xy} object by deleting points
 }
 \note{
-  This function processes a \link{LoCoH-xy} object that
-  contains movement data for several individuals, and
-  removes points such that the output contains a fixed
-  start and end date for each individual, as well as an
-  approximately uniform sampling frequency (time step).
+This function processes a \link{LoCoH-xy} object that
+contains movement data for several individuals, and removes
+points such that the output contains a fixed start and end
+date for each individual, as well as an approximately
+uniform sampling frequency (time step).
 
-  Before using this function, you should clean your data of
-  all abnormally short time intervals (e.g., bursts). See
-  \code{\link{lxy.thin.bursts}}.
+Before using this function, you should clean your data of
+all abnormally short time intervals (e.g., bursts). See
+\code{\link{lxy.thin.bursts}}.
 
-  If you know the time interval the data was *supposed* to
-  be sampled (e.g., every 20 minutes), you should pass that
-  value for \code{samp.freq} (expressed in seconds). If
-  \code{samp.freq="lcm"}, the function will automatically
-  compute the common time step for the individuals by
-  taking the least common multiple of the median time steps
-  of each individual. You can deal with noise by rounding
-  the median sampling interval to the value of
-  \code{lcm.round} (expressed in seconds).
+If you know the time interval the data was *supposed* to be
+sampled (e.g., every 20 minutes), you should pass that
+value for \code{samp.freq} (expressed in seconds). If
+\code{samp.freq="lcm"}, the function will automatically
+compute the common time step for the individuals by taking
+the least common multiple of the median time steps of each
+individual. You can deal with noise by rounding the median
+sampling interval to the value of \code{lcm.round}
+(expressed in seconds).
 
-  The function \code{\link{lxy.plot.freq}} can help you see
-  the 'actual' sampling intervals in the data (set
-  \code{by.date=TRUE}).
+The function \code{\link{lxy.plot.freq}} can help you see
+the 'actual' sampling intervals in the data (set
+\code{by.date=TRUE}).
 
-  Because this function deletes points, the
-  nearest-neighbors lookup table of the \link{LoCoH-xy}
-  object (if any) will be deleted.
+Because this function deletes points, the nearest-neighbors
+lookup table of the \link{LoCoH-xy} object (if any) will be
+deleted.
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}},
-  \code{\link{lxy.thin.bursts}}
+\code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}},
+\code{\link{lxy.thin.bursts}}
 }
 

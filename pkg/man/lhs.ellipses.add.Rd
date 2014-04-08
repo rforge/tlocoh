@@ -2,10 +2,9 @@
 \alias{lhs.ellipses.add}
 \title{Compute hull bounding ellipses}
 \usage{
-  lhs.ellipses.add(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL, status = TRUE,
-    beep = FALSE, save.ellipses = TRUE,
-    existing.ellipses = c("overwrite", "abort")[1])
+lhs.ellipses.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, status = TRUE, beep = FALSE,
+  save.ellipses = TRUE, existing.ellipses = c("overwrite", "abort")[1])
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -34,19 +33,19 @@
   \item{beep}{Beep when done (T/F)}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Creates bounding ellipses around each hull and computes
-  the eccentricity as a metric of ellongation
+Creates bounding ellipses around each hull and computes the
+eccentricity as a metric of ellongation
 }
 \note{
-  Saving the ellipses is optional. If ellipses are not
-  saved, the eccentricity values will still be computed and
-  saved as a hull metric. The only real reason to save
-  ellipses is if you wish to plot them.
+Saving the ellipses is optional. If ellipses are not saved,
+the eccentricity values will still be computed and saved as
+a hull metric. The only real reason to save ellipses is if
+you wish to plot them.
 
-  Note creating ellipses is computationally intensive and
-  can take a long time.
+Note creating ellipses is computationally intensive and can
+take a long time.
 }
 

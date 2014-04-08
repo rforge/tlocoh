@@ -2,21 +2,18 @@
 \alias{lhs.to.stats}
 \title{Computes statistics on the centroid distances for time-overlapped hulls}
 \usage{
-  lhs.to.stats(lhs, id1 = "all", id2 = "all", n = "all",
-    iso.lower = NULL, iso.upper = NULL, iso.oz = TRUE,
-    iso.sort.metric = "auto", to.comp.hist = TRUE,
-    breaks = 20, to.mcd.outline.only = FALSE,
-    lwd.outline = 3, hist.type = c("density", "counts")[1],
-    col.to.mcd = "blue", col.h2h.cd = "red", title = NULL,
-    title.show = TRUE, title.id.only = FALSE,
-    title.sub.iso.enc = TRUE,
-    mar = c(3, 3, if (title.show) 1.5 + (if (title.sub.iso.enc) 1.3 else 0) else 0.5, 0.5),
-    mgp = c(1.8, 0.5, 0), figs.per.page = 1,
-    panel.num = NULL, panel.num.inside.plot = !title.show,
-    png.dir = NULL, png.dir.make = TRUE, png.width = 800,
-    png.height = png.width, png.overwrite = TRUE,
-    png.pointsize = 12 + (png.width - 480)/80,
-    status = TRUE, ...)
+lhs.to.stats(lhs, id1 = "all", id2 = "all", n = "all", iso.lower = NULL,
+  iso.upper = NULL, iso.oz = TRUE, iso.sort.metric = "auto",
+  to.comp.hist = TRUE, breaks = 20, to.mcd.outline.only = FALSE,
+  lwd.outline = 3, hist.type = c("density", "counts")[1],
+  col.to.mcd = "blue", col.h2h.cd = "red", title = NULL,
+  title.show = TRUE, title.id.only = FALSE, title.sub.iso.enc = TRUE,
+  mar = c(3, 3, if (title.show) 1.5 + (if (title.sub.iso.enc) 1.3 else 0) else
+  0.5, 0.5), mgp = c(1.8, 0.5, 0), figs.per.page = 1, panel.num = NULL,
+  panel.num.inside.plot = !title.show, png.dir = NULL,
+  png.dir.make = TRUE, png.width = 800, png.height = png.width,
+  png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80,
+  status = TRUE, ...)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -125,45 +122,45 @@
   the \code{\link{plot}} function}
 }
 \value{
-  A list object
+A list object
 }
 \description{
-  Computes statistics on the hull-to-hull centroid distance
-  for time-overlapped hulls, with an option to plot and
-  overlay the distribution of centroid distances for random
-  pairs of hulls
+Computes statistics on the hull-to-hull centroid distance
+for time-overlapped hulls, with an option to plot and
+overlay the distribution of centroid distances for random
+pairs of hulls
 }
 \details{
-  This returns a list object containing the
-  centroid-to-centroid distances of a random selection of
-  hulls from two individuals, which serves as a NULL model
-  of no interaction. It can also plot the histogram of
-  mean-centroid-distance of time-overlapped hulls with the
-  outline of the centroid distance of random-pairs of hulls
-  overlain on top, to visually see how close the
-  distributions match.
+This returns a list object containing the
+centroid-to-centroid distances of a random selection of
+hulls from two individuals, which serves as a NULL model of
+no interaction. It can also plot the histogram of
+mean-centroid-distance of time-overlapped hulls with the
+outline of the centroid distance of random-pairs of hulls
+overlain on top, to visually see how close the
+distributions match.
 
-  It will also compute the Welch Two Sample t-test to see
-  if the distribution for time-overlapped and randomly
-  paired hulls have statistically significant means, and
-  the Two-sample Kolmogorov-Smirnov test which tells you
-  how likely the two distributions are the same.
+It will also compute the Welch Two Sample t-test to see if
+the distribution for time-overlapped and randomly paired
+hulls have statistically significant means, and the
+Two-sample Kolmogorov-Smirnov test which tells you how
+likely the two distributions are the same.
 
-  Note that before you can use this function, the
-  mean-centroid-distance for time-overlapped hulls must be
-  computed using \code{\link{lhs.to.add}}
+Note that before you can use this function, the
+mean-centroid-distance for time-overlapped hulls must be
+computed using \code{\link{lhs.to.add}}
 
-  You can apply an isopleth filter by passing values for
-  iso.lower and iso.upper. These should be the isopleth
-  level (normally between 0 and 1) that the hull parent
-  point must fall in to be included in the analysis. If,
-  for example, you wanted to see whether association in the
-  core area is significantly different from nuetral
-  interaction, you would pass \code{iso.upper=0.5} and
-  leave \code{iso.lower} NULL. Note that the isopleths with
-  matching isopleth levels must already be present.
+You can apply an isopleth filter by passing values for
+iso.lower and iso.upper. These should be the isopleth level
+(normally between 0 and 1) that the hull parent point must
+fall in to be included in the analysis. If, for example,
+you wanted to see whether association in the core area is
+significantly different from nuetral interaction, you would
+pass \code{iso.upper=0.5} and leave \code{iso.lower} NULL.
+Note that the isopleths with matching isopleth levels must
+already be present.
 }
 \seealso{
-  \code{\link{lhs.to.add}}, \code{\link{lhs.iso.add}}
+\code{\link{lhs.to.add}}, \code{\link{lhs.iso.add}}
 }
 

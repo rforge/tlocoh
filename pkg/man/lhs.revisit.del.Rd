@@ -2,7 +2,7 @@
 \alias{lhs.revisit.del}
 \title{Delete all revisitation hull metrics in a LoCoH-hullset object}
 \usage{
-  lhs.revisit.del(lhs, status = TRUE)
+lhs.revisit.del(lhs, status = TRUE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -10,13 +10,13 @@
   \item{status}{Display summary, T/F}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Delete all revisitation hull metrics in a LoCoH-hullset
-  object
+Delete all revisitation hull metrics in a LoCoH-hullset
+object
 }
 \seealso{
-  \code{\link{lhs.revisit.add}}
+\code{\link{lhs.revisit.add}}
 }
 

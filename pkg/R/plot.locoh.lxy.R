@@ -2,7 +2,7 @@
 #'
 #' Multi-purpose plotting function for a LoCoH-xy object
 #'
-#' @param x A \link{LoCoH-xy} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id A vector of the id value(s) to plot
 #' @param cex Character expansion factor for the points
 #' @param show.start Whether to highlight the starting location (if time stamps are present) in green. T/F.
@@ -31,47 +31,54 @@
 #' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
 #' @param tiff.bands A vector of threee integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, green and blue color guns respectively.
 #' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
-#' @param tiff.buff A numeric buffer distance that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
+#' @param tiff.buff A numeric buffer distance in map units that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
 #' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
 #' @param layers The name(s) of layers in shp.csv to display in the background. Will be displayed using the symbology in shp.csv. Character vector or comma delimited string
 #' @param shp.csv The path and filename of a csv file that contains information about shapefiles, including layer names, file, and symbology.
 #' @param xlim The lower and upper limit of the x-axis, two-element numeric vector
 #' @param ylim The lower and upper limit of the y-axis, two-element numeric vector
+#' @param legend One of the following keywords specifying where to put a legend when overlaying the locations of multiple individuals: \code{bottomright}, \code{bottom}, \code{bottomleft}, \code{left}, \code{topleft},
+#' \code{top}, \code{topright}, \code{right} or \code{center}
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
+#' @details
+#' This is a multi-purpose plotting function for a LoCoH-xy object, with several custom arguments useful for plotting 
+#' a movement trajectory. You may also extract the SpatialPointsDataFrame element of the LoCoH-xy object directly by referencing 
+#' the \code{pts} element (e.g., \code{x$pts}, where \code{x} is a LoCoH-xy object).
+#'
+#' @seealso Vignette on T-LoCoH data classes, Tutorial Vignette (for details on displyaing GIS layers and raster images in the background)
+#' 
 #' @export
 #' @method plot locoh.lxy
 
-plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
+plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
                            overlay=FALSE, status=TRUE, title=NULL, title.show=TRUE, 
                            axes.show=TRUE, axes.titles=axes.show, axes.ticks=axes.show,
                            mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5), 
                            mgp=c(2, 0.7, 0), lo.save=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show,
                            png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, 
                            tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.pct=FALSE, tiff.buff=500, tiff.fill.plot=TRUE, 
-                           layers=NULL, shp.csv=NULL, xlim=NULL, ylim=NULL, ...) {
-
-    ## taken out: figs.per.page (wasn't being used)
+                           layers=NULL, shp.csv=NULL, xlim=NULL, ylim=NULL, legend=NULL, ...) {
     
-    ## creates a plot (map) of lxy
-    ## if there are multiple individuals, if overlay=T it will overlay them, otherwise will display in separate plots
-    ## tiff.fn is the name of a geotiff, which will be displayed in the background. Presumed to be a 3-band image, pre-stretched, with bands 123 corresponding to RGB
-    ## if tiff.pct = TRUE, will convert the TIFF to a 256 indexed color image (might have quicker drawing time particularly if several plots)
-    ## tiff.buff is an additional buffer (in map units) on all sides
-    ## layers is the name(s) (can be comma separated) of a shapefile layer specified in shp.csv. 
-    ## NEW: layers can also be a list of lists, see comments in shp.layers
-    ## If provided, these layers will be displayed in the background according to the symbology listed in shp.csv
-    
-    lxy <- x; rm(x)
+    ## lxy <- x; rm(x)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!require(sp)) stop("package sp required")
-    
+
     if (is.null(id)) {
         id <- levels(lxy[["pts"]][["id"]])
     } else {
         if (FALSE %in% (id %in% levels(lxy[["pts"]][["id"]]))) stop("id not found")
     }
     
+    ## Error check legend argument
+    if (!is.null(legend)) {
+        legend.vals <- c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")
+        if (!legend %in% legend.vals) stop(cw(paste("'legend' should be one of the following: ", paste(legend.vals, collapse=", ", sep=""), sep=""), final.cr=F))
+        if (length(id)==1) warning("only one individual found, 'legend' argument will be ignored")
+        if (!overlay) warning("legend only supported when overlaying locations of multiple individuals")
+    }
+    
+
     ## Prepare the tiff file
     if (is.null(tiff.fn)) {
         range.expand.tiff <- 0    
@@ -111,7 +118,8 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
     } else {
         ## There will only be a single plot (but might have several individuals overlaid on it)
         multiple.plots <- FALSE
-
+        col.legend <- vector("character", length(id))
+        
         ## Create png device if needed
         if (!is.null(png.dir)) {
             if (is.null(png.fn)) {
@@ -137,19 +145,7 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
 
         ## Compute xlim and ylim
         range.expand <- matrix(0, nrow=1, ncol=2)
-        #if (!is.null(lxy$aux)) {
-        #    for (i in 1:length(lxy$aux)) {
-        #        for (j in 1:length(lxy$aux[[i]])) {
-        #            if (lxy$aux[[i]][[j]][["type"]] == "range.expand") {
-        #                range.expand <- rbind(range.expand, lxy$aux[[i]][[j]][["data"]]) 
-        #            }
-        #        }
-        #    }
-        #}
         range.expand <- c(min(c(range.expand[,1], -range.expand.tiff)), max(c(range.expand[,2], range.expand.tiff)))
-        #xlim <- range(lxy$xys[,1]) + range.expand
-        #ylim <- range(lxy$xys[,2]) + range.expand
-        
         xlim.use <- if (is.null(xlim)) range(coordinates(lxy[["pts"]])[,1]) + range.expand else xlim
         ylim.use <- if (is.null(ylim)) range(coordinates(lxy[["pts"]])[,2]) + range.expand else ylim
 
@@ -186,6 +182,8 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
                 
     }
 
+    
+
     ## Loop through all the individuals
     for (i in 1:length(id)) {
         idVal <- id[i]
@@ -194,7 +192,7 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
         if (identical(col, "auto")) {
             if (is.null(lxy[["pts"]][["col"]])) {
                 if (length(id) > 1 && overlay) {
-                    col.use <- palette()[i]
+                    col.use <- palette()[i]                    
                 } else {
                     col.use <- topo.colors(length(idVal.idx))
                 }
@@ -224,17 +222,7 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
 
             ## Compute xlim and ylim
             range.expand <- matrix(0, nrow=1, ncol=2)
-            #if (!is.null(lxy$aux[[idVal]])) {
-            #    for (j in 1:length(lxy$aux[[idVal]])) {
-            #        if (lxy$aux[[idVal]][[j]][["type"]] == "range.expand") {
-            #            range.expand <- lxy$aux[[idVal]][[j]][["data"]] 
-            #        }
-            #    }
-            #} 
             range.expand <- c(min(c(range.expand[,1], -range.expand.tiff)), max(c(range.expand[,2], range.expand.tiff)))
-            #xlim <- range(lxy$xys[,1]) + range.expand
-            #ylim <- range(lxy$xys[,2]) + range.expand
-
             xlim.use <- if (is.null(xlim)) range(coordinates(lxy[["pts"]])[,1]) + range.expand else xlim
             ylim.use <- if (is.null(ylim)) range(coordinates(lxy[["pts"]])[,2]) + range.expand else ylim
             
@@ -244,7 +232,6 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
                  ylab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[2] else "", ...)
             
             if (!is.null(tiff.fn)) {
-                #print("lets get the range"); browser()
                 if (tiff.fill.plot) {
                     half.plot.size <- c(-0.5, 0.5) * max(diff(xlim.use), diff(ylim.use))
                     rx.tiff <- half.plot.size + mean(xlim.use)
@@ -262,13 +249,18 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
                 } else {
                     image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
                 }
+            }
+
+            ## Add legend
+            if (!is.null(legend)) {
+
             }        
             
+        } else {
+            ## Single plot, record col.use
+            if (length(col.use)==1) col.legend[i] <- col.use
         }
 
-        #points(lxy$xys[idVal.idx,], col="gray80", type= if (connect.dots) "l" else "n", main=lxy$comment, asp=1)
-        #points(lxy$xys[idVal.idx,], type="p", col=col.use, main=lxy$comment, pch=20, asp=1, cex=cex)
-        
         ## Add the connecting lines if needed, and then the points themselves
         points(coordinates(lxy[["pts"]])[idVal.idx,], col="gray80", type= if (connect.dots) "l" else "n", asp=1)
         points(coordinates(lxy[["pts"]])[idVal.idx,], type="p", col=col.use, pch=20, asp=1, cex=cex)
@@ -294,10 +286,22 @@ plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, 
             with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
         }
         
-    }  #for (i in 1:nlevels(lxy[["id"]]))
+    }  # for each id
     
-    #if (nlevels(lxy[["pts"]][["id"]]) > 1 && overlay && title.show) title(paste(unlist(lxy[["comment"]]), collapse = "\n", sep = ""))
-    if (length(id) > 1 && overlay && title.show) title(paste(unlist(lxy[["comment"]][id]), collapse = "\n", sep = ""))
+    ## Add a plot title if overlaying multiple individuals
+    if (title.show && length(id) > 1 && overlay) {
+        if (is.null(title)) {
+            title.use <- paste(unlist(lxy[["comment"]][id]), collapse = "\n", sep = "")
+        } else {
+            title.use <- title
+        }
+        title(title.use)
+    }
+    
+    ## Add legend if overlaying multiple individuals
+    if (!is.null(legend) && length(id) > 1 && overlay) {
+        legend(legend, legend=id, col=col.legend, lty=1, lwd=2, bg="white") 
+    }        
     
     if (!is.null(png.dir)) {
         dev.off()

@@ -2,10 +2,9 @@
 \alias{lxy.id.new}
 \title{Change the id value(s) in a LoCoH-xy object}
 \usage{
-  lxy.id.new(lxy, id.new, save.old.id = NULL,
-    dup.dt = c("check", "offset", "ignore")[1],
-    dup.dt.offset = 5, dt.int.round.to = 0.1,
-    tau.diff.max = 0.02, status = TRUE)
+lxy.id.new(lxy, id.new, save.old.id = NULL, dup.dt = c("check", "offset",
+  "ignore")[1], dup.dt.offset = 5, dt.int.round.to = 0.1,
+  tau.diff.max = 0.02, status = TRUE)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -41,29 +40,29 @@
   \item{status}{Show status messages. T/F}
 }
 \value{
-  A \link{LoCoH-xy} object containing the original xys, dt,
-  ptid and ancillary values for each point. Other items and
-  attributes (including the comment) will be recreated or
-  set to NULL
+A \link{LoCoH-xy} object containing the original xys, dt,
+ptid and ancillary values for each point. Other items and
+attributes (including the comment) will be recreated or set
+to NULL
 }
 \description{
-  Changes the id values in a LoCoH-xy object, with option
-  to save the 'old' id values as an ancillary variable
+Changes the id values in a LoCoH-xy object, with option to
+save the 'old' id values as an ancillary variable
 }
 \details{
-  This function can be used to change the id value for each
-  point. Note that the id value is the name of the
-  individual animal or device, as opposed to ptid which is
-  a unique numeric integer for each point.
+This function can be used to change the id value for each
+point. Note that the id value is the name of the individual
+animal or device, as opposed to ptid which is a unique
+numeric integer for each point.
 
-  \code{tau.diff.max} exists to eliminate the inclusion of
-  temporal outliers in the computation of the median step
-  length. The time difference betwen points must be withint
-  \code{tau.diff.max} of tau for that pair of points to be
-  included in step length calculation.
+\code{tau.diff.max} exists to eliminate the inclusion of
+temporal outliers in the computation of the median step
+length. The time difference betwen points must be withint
+\code{tau.diff.max} of tau for that pair of points to be
+included in step length calculation.
 
-  One can also use this function to change the id (name of
-  the individual), rebuild the rw.params or table of
-  sampling frequencies
+One can also use this function to change the id (name of
+the individual), rebuild the rw.params or table of sampling
+frequencies
 }
 

@@ -2,8 +2,8 @@
 \alias{lhs.to.add}
 \title{Compute hull metrics for temporally overlapping hulls}
 \usage{
-  lhs.to.add(lhs, id = "all", hs2.id = "all",
-    maxdt = "auto", save.hto = TRUE, status = TRUE)
+lhs.to.add(lhs, id = "all", hs2.id = "all", maxdt = "auto",
+  save.hto = TRUE, status = TRUE)
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -26,31 +26,30 @@
   \item{status}{Show status messages, T/F}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Compute hull metrics for pairs of temporally overlapping
-  hulls of separate individuals
+Compute hull metrics for pairs of temporally overlapping
+hulls of separate individuals
 }
 \details{
-  This will compute hull metrics for pairs of hulls from
-  two individuals. This only works for a LoCoH-hullset
-  object that contains hulls from two or more individuals
-  (id's). For each hull for individual A, for example, it
-  will identify the hulls in individual B that temporally
-  overlap, and compute the mean centroid distance (hull
-  metric name = to.mcd). By default \emph{to.mcd} is
-  computed for all pairs of individuals, but you can
-  specify specific pairs by passing values for \code{id}
-  and \code{hs2.id}.
+This will compute hull metrics for pairs of hulls from two
+individuals. This only works for a LoCoH-hullset object
+that contains hulls from two or more individuals (id's).
+For each hull for individual A, for example, it will
+identify the hulls in individual B that temporally overlap,
+and compute the mean centroid distance (hull metric name =
+to.mcd). By default \emph{to.mcd} is computed for all pairs
+of individuals, but you can specify specific pairs by
+passing values for \code{id} and \code{hs2.id}.
 
-  This metric is used for association analysis. You can use
-  this metric for example to look for spatial and temporal
-  patterns in how close individuals get to each other.
-  Other association metrics exist for spatially overlapping
-  hulls (see \code{\link{lhs.so.add}}).
+This metric is used for association analysis. You can use
+this metric for example to look for spatial and temporal
+patterns in how close individuals get to each other. Other
+association metrics exist for spatially overlapping hulls
+(see \code{\link{lhs.so.add}}).
 }
 \seealso{
-  \code{\link{lhs.so.add}}, \code{\link{lhs.merge}}
+\code{\link{lhs.so.add}}, \code{\link{lhs.merge}}
 }
 

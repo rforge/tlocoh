@@ -2,7 +2,7 @@
 \alias{cw}
 \title{Console Wrap. Formats a string for printing to the console window}
 \usage{
-  cw(x, final.cr = TRUE, indent = 0, exdent = 0)
+cw(x, final.cr = TRUE, indent = 0, exdent = 0)
 }
 \arguments{
   \item{x}{A character object}
@@ -16,17 +16,16 @@
   spaces)}
 }
 \value{
-  character object with embedded \\n characters
+character object with embedded \\n characters
 }
 \description{
-  Takes a potentially long character object and adds
-  carriage returns and blank spaces for better appearance
-  when printing to the terminal window
+Takes a potentially long character object and adds carriage
+returns and blank spaces for better appearance when
+printing to the terminal window
 }
 \note{
-  This function can prevent long messages from extending
-  beyond the width of the R-console. Works with any
-  function that prints to the console (e.g., cat, print,
-  stop)
+This function can prevent long messages from extending
+beyond the width of the R-console. Works with any function
+that prints to the console (e.g., cat, print, stop)
 }
 

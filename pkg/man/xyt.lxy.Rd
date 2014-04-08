@@ -2,12 +2,11 @@
 \alias{xyt.lxy}
 \title{Create a LoCoH-xy object}
 \usage{
-  xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
-    proj4string = CRS(as.character(NA)), anv = NULL,
-    anv.desc = NULL, col = NULL, del.dup.xyt = TRUE,
-    dup.dt.check = TRUE, dt.int.round.to = 0.1,
-    tau.diff.max = 0.02, req.id = TRUE,
-    warn.latlong = TRUE, status = TRUE)
+xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
+  proj4string = CRS(as.character(NA)), anv = NULL, anv.desc = NULL,
+  col = NULL, del.dup.xyt = TRUE, dup.dt.check = TRUE,
+  show.dup.dt = FALSE, dt.int.round.to = 0.1, tau.diff.max = 0.02,
+  req.id = TRUE, warn.latlong = TRUE, status = TRUE)
 }
 \arguments{
   \item{xy}{A two-column matrix or data frame containing
@@ -41,6 +40,9 @@
   \item{dup.dt.check}{Whether to check to make sure there
   are no duplicate date values for the same id}
 
+  \item{show.dup.dt}{Whether to show duplicate time stamps
+  (if found) (T/F)}
+
   \item{col}{Optional vector of color values (one for each
   point), or a single color value}
 
@@ -61,76 +63,85 @@
   \item{status}{Show status messages (T/F)}
 }
 \value{
-  A object of class \link{locoh.lxy}
+A object of class \link{locoh.lxy}
 }
 \description{
-  Creates a \link{LoCoH-xy} object from a set of location
-  data
+Creates a \link{LoCoH-xy} object from a set of location
+data
 }
 \details{
-  At a minimum, a \link{locoh-xy} object contains a set of
-  points. It can also contain date-time values for each
-  point, the name of the individual(s) associated with each
-  point, and a nearest nieghbors lookup table.
+At a minimum, a \link{LoCoH-xy} object contains a set of
+points. It can also contain date-time values for each
+point, the name of the individual(s) associated with each
+point, and a nearest nieghbors lookup table.
 
-  Importing date-time values into R is often a painful
-  process. You may want to try exporting your date-time
-  values from your spreadsheet or database as a text field
-  that is formatted in a style that R will recognize as a
-  valid time. To see a date-time format that R will be able
-  to convert to a date- time object (class \emph{POSIXct}),
-  type \code{Sys.time()} at the console. Once you've noted
-  the date-time format recognized by R, try to format the
-  date field in your spreadsheet or database in a similar
-  manner, then export the values in a text format (e.g.,
-  csv). For example in MS Access, you can use the
-  \code{format()} function as part of a query to format a
-  date field, e.g. \code{format(PointDate, "yyyy-mm-dd
-  hh:nn:ss")}. In Excel, you can go to Format - Cells and
-  give the date-time cells a custom format \code{yyyy-mm-dd
-  hh:mm:ss}. See the Appendices of the T-LoCoH tutorial for
-  more examples.
+Importing date-time values into R is often a painful
+process. You may want to try exporting your date-time
+values from your spreadsheet or database as a text field
+that is formatted in a style that R will recognize as a
+valid time. To see a date-time format that R will be able
+to convert to a date- time object (class \emph{POSIXct}),
+type \code{Sys.time()} at the console. Once you've noted
+the date-time format recognized by R, try to format the
+date field in your spreadsheet or database in a similar
+manner, then export the values in a text format (e.g.,
+csv). For example in MS Access, you can use the
+\code{format()} function as part of a query to format a
+date field, e.g. \code{format(PointDate, "yyyy-mm-dd
+hh:nn:ss")}. In Excel, you can go to Format - Cells and
+give the date-time cells a custom format \code{yyyy-mm-dd
+hh:mm:ss}. See the Appendices of the T-LoCoH tutorial for
+more examples.
 
-  The time zone paramter \code{tz} is optional. If
-  \code{tz} is omitted, R will try to get the timezone from
-  dt, and if there is no timezone specified set it to
-  \code{UTC}. Valid timezone names are to some extent OS
-  specific, see
-  \url{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
-  If dt is of class POSIXct (which stores the time zone)
-  and a different value for \code{tz} is passed, a prompt
-  will ask whether date values should be converted.
+The time zone paramter \code{tz} is optional. If \code{tz}
+is omitted, R will try to get the timezone from dt, and if
+there is no timezone specified set it to \code{UTC}. Valid
+timezone names are to some extent OS specific, see
+\url{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
+If dt is of class POSIXct (which stores the time zone) and
+a different value for \code{tz} is passed, a prompt will
+ask whether date values should be converted.
 
-  \code{ptid} is an optional vector of numeric id values
-  (i.e., primary key) for each location. When present,
-  point id values of parent points will be saved in the
-  data table of hulls. This enables linking the outputs of
-  tlocoh (hulls and hull metrics) with other data and/or
-  other software tools. See also \code{\link{lhs.exp.csv}}
-  and \code{\link{lhs.exp.shp}}. \code{ptid} should not be
-  confused with \code{id}, which is a character vector of
-  the name(s) of the individuals in the dataset.
+By default, if the function finds two or more locations
+with the same time stamp for the same id (individual), an
+error will be triggered. This usually results from a data
+processing error (e.g., duplication of a row), or a
+conversion problem or rounding issue in the time stamp
+values. To see which records have duplicate time stamps,
+pass \code{show.dup.dt=TRUE}. To disable the checking for
+duplicate time stamps, pass \code{dup.dt.check=TRUE}.
+Duplicate locations are allowed, as are duplicate time
+stamps for different individuals.
 
-  \code{tau.diff.max} controls which consecutive pairs of
-  points will be used to compute the median step length
-  (d-bar) and the maximum observed speed (v-max). Pairs of
-  points whose sampling interval (i.e., time difference)
-  deviates from the median by more than \code{tau.diff.max}
-  will be excluded from this computation (presumably
-  because there was a drop-out in the data, and the
-  distance between those pairs of locations does not
-  represent the characteristic movement pattern). However
-  for data that have a wide distribution of sampling
-  intervals (e.g., manually collected radio telemetry
-  locations), this filtering may result in an insufficient
-  number of pairs. In this case, increase
-  \code{tau.diff.max} or set it to zero to disable
-  filtering completely.
+\code{ptid} is an optional vector of numeric id values
+(i.e., primary key) for each location. When present, point
+id values of parent points will be saved in the data table
+of hulls. This enables linking the outputs of tlocoh (hulls
+and hull metrics) with other data and/or other software
+tools. See also \code{\link{lhs.exp.csv}} and
+\code{\link{lhs.exp.shp}}. \code{ptid} should not be
+confused with \code{id}, which is a character vector of the
+name(s) of the individuals in the dataset.
 
-  Other variables, including environmental variables or
-  biometric variables can be brought in using the
-  \code{anv} parameter. These variables can then be used in
-  hull metrics.
+\code{tau.diff.max} controls which consecutive pairs of
+points will be used to compute the median step length
+(d-bar) and the maximum observed speed (v-max). Pairs of
+points whose sampling interval (i.e., time difference)
+deviates from the median by more than \code{tau.diff.max}
+will be excluded from this computation (presumably because
+there was a drop-out in the data, and the distance between
+those pairs of locations does not represent the
+characteristic movement pattern). However for data that
+have a wide distribution of sampling intervals (e.g.,
+manually collected radio telemetry locations), this
+filtering may result in an insufficient number of pairs. In
+this case, increase \code{tau.diff.max} or set it to zero
+to disable filtering completely.
+
+Other variables, including environmental variables or
+biometric variables can be brought in using the \code{anv}
+parameter. These variables can then be used in hull
+metrics.
 }
 \examples{
 \dontrun{
@@ -148,7 +159,7 @@ summary(lxy)
 }
 }
 \seealso{
-  \code{\link{lxy.nn.add}}, \code{\link{lxy.repair}},
-  \code{\link{lxy.subset}}
+\code{\link{lxy.nn.add}}, \code{\link{lxy.repair}},
+\code{\link{lxy.subset}}
 }
 

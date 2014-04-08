@@ -2,9 +2,8 @@
 \alias{lxy.merge}
 \title{Merges LoCoH-xy object}
 \usage{
-  lxy.merge(..., pts.flds = "all", save.ptid = FALSE,
-    new.id = NULL, save.old.id = NULL,
-    dt.int.round.to = 0.1, tau.diff.max = 0.02)
+lxy.merge(..., pts.flds = "all", save.ptid = FALSE, new.id = NULL,
+  save.old.id = NULL, dt.int.round.to = 0.1, tau.diff.max = 0.02)
 }
 \arguments{
   \item{...}{\link{LoCoH-xy} objects}
@@ -35,25 +34,24 @@
   step length}
 }
 \description{
-  Merges LoCoH-xy objects together
+Merges LoCoH-xy objects together
 }
 \details{
-  The coordinate system of the LoCoH-xy objects being
-  merged must be the same. Also each lxy object must have
-  the same data columns present, e.g., dt, col, ancillary
-  variables, etc. To merge a subset of the attribute
-  fields, use the \code{pts.flds} parameter.
+The coordinate system of the LoCoH-xy objects being merged
+must be the same. Also each lxy object must have the same
+data columns present, e.g., dt, col, ancillary variables,
+etc. To merge a subset of the attribute fields, use the
+\code{pts.flds} parameter.
 
-  Because LoCoH-xy object must have unique ptid values for
-  each location, if the merged object contains duplicate
-  ptid values new one will be created. If
-  \code{save.ptid=TRUE}, the 'old' ptid values will be
-  saved as \code{ptid.orig}.
+Because LoCoH-xy object must have unique ptid values for
+each location, if the merged object contains duplicate ptid
+values new one will be created. If \code{save.ptid=TRUE},
+the 'old' ptid values will be saved as \code{ptid.orig}.
 
-  The merged object will no have nearest neighbors table
-  and the random walk parameters will be recomputed.
+The merged object will no have nearest neighbors table and
+the random walk parameters will be recomputed.
 }
 \seealso{
-  \code{\link{lxy.id.new}}
+\code{\link{lxy.id.new}}
 }
 

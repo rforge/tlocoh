@@ -2,15 +2,12 @@
 \alias{lxy.ptsh.add}
 \title{Compute s vs. proportion-time-selected hulls table}
 \usage{
-  lxy.ptsh.add(lxy, id = NULL, k = 10, n = 200,
-    samp.idx = NULL, sinit = 0.005, ptsh.target = 1:9/10,
-    ptsh.max = 0.98, ptsh.buf = 0.01, max.iter = 15,
-    max.loops = 10, time.term = c("vmax", "dif")[1],
-    FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2],
-    use.nn = FALSE, plotme = TRUE, save = TRUE,
-    nn.add = FALSE, use.pb.n = 200,
-    ptsh.exists = c("replace", "append")[2], beep = FALSE,
-    status = TRUE)
+lxy.ptsh.add(lxy, id = NULL, k = 10, n = 200, samp.idx = NULL,
+  sinit = 0.005, ptsh.target = 1:9/10, ptsh.max = 0.98, ptsh.buf = 0.01,
+  max.iter = 15, max.loops = 10, time.term = c("vmax", "dif")[1],
+  FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2], use.nn = FALSE,
+  plotme = TRUE, save = TRUE, nn.add = FALSE, use.pb.n = 200,
+  ptsh.exists = c("replace", "append")[2], beep = FALSE, status = TRUE)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -85,36 +82,36 @@
   \item{status}{Display status messages. T/F}
 }
 \description{
-  Identify the values of s that result in proportion p of
-  hulls being time-selected
+Identify the values of s that result in proportion p of
+hulls being time-selected
 }
 \details{
-  When \emph{s}=0, nearest neighbors are space-selected
-  (i.e., point-to-point distance is merely Euclidean
-  distance). For large values of \emph{s}, nearest
-  neighbors are effectively time-selected (e.g., temporally
-  contiguous). One approach to selecting a value of
-  \emph{s} between these two ends of the spectrum is to
-  pick a \emph{s} value that returns an intermediate
-  proportion of time-selected-hulls representing the
-  desired balance between space and time selection (which
-  in turn is shaped by the research question / objective).
-  This function will find the value(s) of \emph{s} that
-  produce a desired proportion of time-selected-hulls using
-  a randomly-selected subset of points. A general rule of
-  thumb is to pick a value of \emph{s} that results in a
-  proportion of time-selected hulls from 0.4 to 0.6.
+When \emph{s}=0, nearest neighbors are space-selected
+(i.e., point-to-point distance is merely Euclidean
+distance). For large values of \emph{s}, nearest neighbors
+are effectively time-selected (e.g., temporally
+contiguous). One approach to selecting a value of \emph{s}
+between these two ends of the spectrum is to pick a
+\emph{s} value that returns an intermediate proportion of
+time-selected-hulls representing the desired balance
+between space and time selection (which in turn is shaped
+by the research question / objective). This function will
+find the value(s) of \emph{s} that produce a desired
+proportion of time-selected-hulls using a randomly-selected
+subset of points. A general rule of thumb is to pick a
+value of \emph{s} that results in a proportion of
+time-selected hulls from 0.4 to 0.6.
 
-  The script iteratively tries a variety of \emph{s} values
-  until it finds one that produces the desired proportion
-  of time-selected hulls within a tolerance of
-  \code{ptsh.buf}. If for example the vector of target
-  values \code{ptsh.target} includes 0.5, and
-  \code{ptsh.buf = 0.01}, the script will try to find a
-  value of \emph{s} that results in a proportion of
-  time-selected hulls between 0.49 and 0.51.
+The script iteratively tries a variety of \emph{s} values
+until it finds one that produces the desired proportion of
+time-selected hulls within a tolerance of \code{ptsh.buf}.
+If for example the vector of target values
+\code{ptsh.target} includes 0.5, and \code{ptsh.buf =
+0.01}, the script will try to find a value of \emph{s} that
+results in a proportion of time-selected hulls between 0.49
+and 0.51.
 }
 \seealso{
-  \code{\link{lxy.nn.add}}
+\code{\link{lxy.nn.add}}
 }
 

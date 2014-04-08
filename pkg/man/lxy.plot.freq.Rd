@@ -2,23 +2,18 @@
 \alias{lxy.plot.freq}
 \title{Plots of sampling frequency}
 \usage{
-  lxy.plot.freq(lxy, id = NULL, deltat.by.date = F,
-    samp.by.date = F, cp = F, cp.min = 0, cp.max = 1,
-    time.unit = c("auto", "sec", "min", "hour", "day", "week", "month", "year")[1],
-    xlim = NULL, ylim = NULL,
-    ylim.deltat.by.date = c(0, 0.999), sbd.y.jiggle = 0.1,
-    sbd.vline = NULL,
-    sbd.vline.trunc.units.to = c("secs", "mins", "hours", "days")[4],
-    cex.pts = 0.3, desc = c(0, 1, 3)[2], cex.desc = 0.8,
-    col.desc = "darkgreen", title = NULL,
-    title.show = TRUE, subtitle = "auto",
-    mar = c(2.8, 2.8, if (title.show) 2.8 else 0.5, 0.5),
-    mgp = c(1.8, 0.5, 0), figs.per.page = NULL,
-    status = TRUE, panel.num = NULL,
-    panel.num.inside.plot = !title.show, png.dir = NULL,
-    png.dir.make = TRUE, png.width = 800,
-    png.height = png.width, png.overwrite = TRUE,
-    png.pointsize = 12 + (png.width - 480)/80, ...)
+lxy.plot.freq(lxy, id = NULL, deltat.by.date = F, samp.by.date = F,
+  cp = F, cp.min = 0, cp.max = 1, time.unit = c("auto", "sec", "min",
+  "hour", "day", "week", "month", "year")[1], xlim = NULL, ylim = NULL,
+  ylim.deltat.by.date = c(0, 0.999), sbd.y.jiggle = 0.1, sbd.vline = NULL,
+  sbd.vline.trunc.units.to = c("secs", "mins", "hours", "days")[4],
+  cex.pts = 0.3, desc = c(0, 1, 3)[2], cex.desc = 0.8,
+  col.desc = "darkgreen", title = NULL, title.show = TRUE,
+  subtitle = "auto", mar = c(2.8, 2.8, if (title.show) 2.8 else 0.5, 0.5),
+  mgp = c(1.8, 0.5, 0), figs.per.page = NULL, status = TRUE,
+  panel.num = NULL, panel.num.inside.plot = !title.show, png.dir = NULL,
+  png.dir.make = TRUE, png.width = 800, png.height = png.width,
+  png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80, ...)
 }
 \arguments{
   \item{lxy}{A LoCoH-xy object}
@@ -130,32 +125,31 @@
   the \code{\link{plot}} function}
 }
 \value{
-  A list of lists, one for each plot containing the
-  filename (NULL if no png made), the image dimensions
-  (NULL), descriptive text, and id
+A list of lists, one for each plot containing the filename
+(NULL if no png made), the image dimensions (NULL),
+descriptive text, and id
 }
 \description{
-  Creates plots of the temporal extent and sampling
-  frequency of a LoCoH-xy object
+Creates plots of the temporal extent and sampling frequency
+of a LoCoH-xy object
 }
 \note{
-  Plotting the cummulative percentage of sampling
-  frequencies (code{cp=TRUE}) can help determine a
-  threshhold below which pairs of points should be
-  considered to be part of the same 'burst' (see
-  \code{\link{lxy.thin.bursts}}). For example, if most
-  points are sampled 1 hour apart, but there are a few
-  bursts of points that were only 2 minutes apart, the
-  cumuulative percentage of sampling frequencies will
-  reveal a cluster of sampling intervals around 2 minutes
-  and the majority around 1 hour.
+Plotting the cummulative percentage of sampling frequencies
+(code{cp=TRUE}) can help determine a threshhold below which
+pairs of points should be considered to be part of the same
+'burst' (see \code{\link{lxy.thin.bursts}}). For example,
+if most points are sampled 1 hour apart, but there are a
+few bursts of points that were only 2 minutes apart, the
+cumuulative percentage of sampling frequencies will reveal
+a cluster of sampling intervals around 2 minutes and the
+majority around 1 hour.
 
-  Plotting the sampling frequency over time can help
-  identify gaps in the data as well as frequencies for
-  harmonising sampling frequency
+Plotting the sampling frequency over time can help identify
+gaps in the data as well as frequencies for harmonising
+sampling frequency
 }
 \seealso{
-  \code{\link{lxy.thin.bursts}},
-  \code{\link{lxy.thin.byfreq}}
+\code{\link{lxy.thin.bursts}},
+\code{\link{lxy.thin.byfreq}}
 }
 

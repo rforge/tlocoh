@@ -2,8 +2,8 @@
 \alias{lxy.repair}
 \title{Repair a LoCoH-xy object}
 \usage{
-  lxy.repair(lxy, fix.dup.ptid = FALSE,
-    dt.int.round.to = 0.1, tau.diff.max = 0.02)
+lxy.repair(lxy, fix.dup.ptid = FALSE, dt.int.round.to = 0.1,
+  tau.diff.max = 0.02)
 }
 \arguments{
   \item{lxy}{A LoCoH-xy object}
@@ -24,30 +24,29 @@
   step length}
 }
 \value{
-  A \link{LoCoH-xy} object
+A \link{LoCoH-xy} object
 }
 \description{
-  Recreates a \link{LoCoH-xy} object
+Recreates a \link{LoCoH-xy} object
 }
 \details{
-  This will return a new lxy object containing the original
-  xys, dt, and ptid from lxy. All other items and
-  attributes (including the comment) will be recreated or
-  set to NULL
+This will return a new lxy object containing the original
+xys, dt, and ptid from lxy. All other items and attributes
+(including the comment) will be recreated or set to NULL
 
-  Set \code{fix.dup.ptid=TRUE} to automatically generate
-  new ptid values if any duplcates are detected. If
-  \code{fix.dup.ptid=FALSE} and duplicate ptid values are
-  detected, an error message will result.
+Set \code{fix.dup.ptid=TRUE} to automatically generate new
+ptid values if any duplcates are detected. If
+\code{fix.dup.ptid=FALSE} and duplicate ptid values are
+detected, an error message will result.
 
-  \code{tau.diff.max} exists to eliminate the inclusion of
-  temporal outliers in the computation of the median step
-  length. The time difference betwen points must be withint
-  \code{tau.diff.max} of tau for that pair of points to be
-  included in step length calculation.
+\code{tau.diff.max} exists to eliminate the inclusion of
+temporal outliers in the computation of the median step
+length. The time difference betwen points must be withint
+\code{tau.diff.max} of tau for that pair of points to be
+included in step length calculation.
 }
 \seealso{
-  \code{\link{xyt.lxy}}, \code{\link{lxy.id.new}},
-  \code{\link{lxy.merge}}
+\code{\link{xyt.lxy}}, \code{\link{lxy.id.new}},
+\code{\link{lxy.merge}}
 }
 

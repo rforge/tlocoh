@@ -2,9 +2,9 @@
 \alias{iso2raster}
 \title{Convert isopleths to raster}
 \usage{
-  iso2raster(polys, raster = NULL, ext = NULL,
-    dimSize = 100, cell.size = NULL, sf.cell.size = 2,
-    ll.round = TRUE, status = TRUE, debug = FALSE)
+iso2raster(polys, raster = NULL, ext = NULL, dimSize = 100,
+  cell.size = NULL, sf.cell.size = 2, ll.round = TRUE, status = TRUE,
+  debug = FALSE)
 }
 \arguments{
   \item{polys}{A SpatialPolygonsDataFrame containing
@@ -34,14 +34,14 @@
   \item{debug}{Show debugging info}
 }
 \description{
-  Converts isopleths in a SpatialPolygonsDataFrame object
-  to a RasterLayer
+Converts isopleths in a SpatialPolygonsDataFrame object to
+a RasterLayer
 }
 \details{
-  This presumes the SPDF contains isopleths ordered from
-  lowest level to highest. The cell values of the resulting
-  raster will sum up to the largest isopleth leve. In order
-  for the resulting raster to sum to 1, the 100% isopleth
-  must be part of the input.
+This presumes the SPDF contains isopleths ordered from
+lowest level to highest. The cell values of the resulting
+raster will sum up to the largest isopleth leve. In order
+for the resulting raster to sum to 1, the 100% isopleth
+must be part of the input.
 }
 

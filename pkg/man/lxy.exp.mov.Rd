@@ -2,40 +2,32 @@
 \alias{lxy.exp.mov}
 \title{Create a Quicktime animation from a LoCoH-xy object}
 \usage{
-  lxy.exp.mov(lxy, id = NULL, all.ids.at.once = TRUE,
-    all.ids.col.unique = all.ids.at.once,
-    all.ids.col = NULL,
-    all.ids.legend = c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[5],
-    all.ids.legend.cex = 0.8, dt.start = NULL,
-    dt.end = NULL,
-    frame.method = c("auto", "time", "location")[1],
-    frame.rtd = "auto", xlim = NULL, ylim = NULL,
-    dt.label = TRUE, dt.label.col = "black",
-    dt.label.x = NULL, dt.label.y = NULL, title = NULL,
-    title.show = TRUE, axes.show = TRUE,
-    axes.ticks = axes.show, axes.titles = FALSE,
-    mar.map = c(0.7 + (if (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0), 0.5 + (if (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0), if (title.show) 2.1 else 0.5, 0.5),
-    mgp.map = c(0.4 + if (axes.ticks) 1.2 else 0, 0.4, 0),
-    col.xys.active = "red", col.xys.background = "gray80",
-    cex.xys.active = 1.5, cex.xys.background = 0.5,
-    tz.local = NULL, tz.local.check = TRUE,
-    col.by.hour.of.day = FALSE,
-    col.hod = colorRampPalette(colors()[c(24, 30, 553, 121, 26, 121, 553, 30, 24)])(24),
-    width = if (screen.test) 7 else 608, height = NULL,
-    max.frames = NULL,
-    png.pointsize = 16 + (width - 480)/80,
-    screen.test = FALSE, tmp.dir = NULL,
-    tmp.files.delete = TRUE, prompt.continue = TRUE,
-    fn.mov = NULL, fn.mov.dir = getwd(),
-    fn.mov.exists = c("auto.increment", "overwrite", "stop", "ask")[1],
-    duration = NULL, fps = NULL, skip = NULL,
-    ffmpeg = "ffmpeg.exe", create.mov = TRUE,
-    info.only = TRUE, shp.csv = NULL, layers = NULL,
-    bg2png = !is.null(layers),
-    crop.layers.to.extent = TRUE, date.bar = 0.85,
-    date.bar.bins = 12, col.db = "darkblue",
-    cex.axis.db = 0.7, beep = FALSE, report.time = TRUE,
-    status = TRUE)
+lxy.exp.mov(lxy, id = NULL, all.ids.at.once = TRUE,
+  all.ids.col.unique = all.ids.at.once, all.ids.col = NULL,
+  all.ids.legend = c("bottomright", "bottom", "bottomleft", "left", "topleft",
+  "top", "topright", "right", "center")[5], all.ids.legend.cex = 0.8,
+  dt.start = NULL, dt.end = NULL, frame.method = c("auto", "time",
+  "location")[1], frame.rtd = "auto", xlim = NULL, ylim = NULL,
+  dt.label = TRUE, dt.label.col = "black", dt.label.x = NULL,
+  dt.label.y = NULL, title = NULL, title.show = TRUE, axes.show = TRUE,
+  axes.ticks = axes.show, axes.titles = FALSE, mar.map = c(0.7 + (if
+  (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0), 0.5 + (if
+  (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0), if (title.show) 2.1
+  else 0.5, 0.5), mgp.map = c(0.4 + if (axes.ticks) 1.2 else 0, 0.4, 0),
+  col.xys.active = "red", col.xys.background = "gray80",
+  cex.xys.active = 1.5, cex.xys.background = 0.5, tz.local = NULL,
+  tz.local.check = TRUE, col.by.hour.of.day = FALSE,
+  col.hod = colorRampPalette(colors()[c(24, 30, 553, 121, 26, 121, 553, 30,
+  24)])(24), width = if (screen.test) 7 else 608, height = NULL,
+  max.frames = NULL, png.pointsize = 16 + (width - 480)/80,
+  screen.test = FALSE, tmp.dir = NULL, tmp.files.delete = TRUE,
+  prompt.continue = TRUE, fn.mov = NULL, fn.mov.dir = getwd(),
+  fn.mov.exists = c("auto.increment", "overwrite", "stop", "ask")[1],
+  duration = NULL, fps = NULL, skip = NULL, ffmpeg = "ffmpeg.exe",
+  create.mov = TRUE, info.only = TRUE, shp.csv = NULL, layers = NULL,
+  bg2png = !is.null(layers), crop.layers.to.extent = TRUE,
+  date.bar = 0.85, date.bar.bins = 12, col.db = "darkblue",
+  cex.axis.db = 0.7, beep = FALSE, report.time = TRUE, status = TRUE)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -237,87 +229,83 @@
   \item{status}{Show progress bar and status messages}
 }
 \value{
-  A list with information about each *.mov file created.
-  Each element of the list is another list with two
-  elements: \code{fn} (the full filename) and \code{dim} (a
-  two-element numeric vector with the frame width and
-  height). If no *.mov file(s) were created, returns NULL.
+A list with information about each *.mov file created. Each
+element of the list is another list with two elements:
+\code{fn} (the full filename) and \code{dim} (a two-element
+numeric vector with the frame width and height). If no
+*.mov file(s) were created, returns NULL.
 }
 \description{
-  Create a Quicktime animation from a LoCoH-xy object
+Create a Quicktime animation from a LoCoH-xy object
 }
 \note{
-  To create the animation, two and only two of the
-  following parameters must be passed: \code{duration},
-  \code{fps}, and \code{skip}. The third parameter will be
-  computed based on the other two. To include every frame,
-  pass \code{fps}, set \code{skip=1}, and leave
-  \code{duration} out.
+To create the animation, two and only two of the following
+parameters must be passed: \code{duration}, \code{fps}, and
+\code{skip}. The third parameter will be computed based on
+the other two. To include every frame, pass \code{fps}, set
+\code{skip=1}, and leave \code{duration} out.
 
-  Larger values for \code{fps} will result in the animation
-  running 'faster'. Values between 10 and 20 often work
-  well; beyond 30 fps the eye can't keep up with the motion
-  Note if you pass values for \code{fps} and
-  \code{duration}, an appropriate value for \code{skip}
-  will be computed but the final duration of the animation
-  may not be exactly equal to \code{duration} because only
-  interger values of \code{skip} are allowed.
+Larger values for \code{fps} will result in the animation
+running 'faster'. Values between 10 and 20 often work well;
+beyond 30 fps the eye can't keep up with the motion Note if
+you pass values for \code{fps} and \code{duration}, an
+appropriate value for \code{skip} will be computed but the
+final duration of the animation may not be exactly equal to
+\code{duration} because only interger values of \code{skip}
+are allowed.
 
-  One will normally want to run the function a few times
-  without actually encoding to tweak the frame design
-  (e.g., where the date label and legend appear). To see
-  what a frame in the output will *approximately* look
-  like, set \code{screen.test=TRUE}. Once the screen sample
-  looks good, next set \code{max.frames=3},
-  \code{tmp.dir="."} (or another folder),
-  \code{create.mov=FALSE}, and
-  \code{tmp.files.delete=FALSE}. This will generate a few
-  sample frames as PNG files but not delete them so you can
-  inspect them using an image viewer. Once these look good,
-  create the full animation by setting
-  \code{create.mov=TRUE} and \code{max.frames=NULL}.
+One will normally want to run the function a few times
+without actually encoding to tweak the frame design (e.g.,
+where the date label and legend appear). To see what a
+frame in the output will *approximately* look like, set
+\code{screen.test=TRUE}. Once the screen sample looks good,
+next set \code{max.frames=3}, \code{tmp.dir="."} (or
+another folder), \code{create.mov=FALSE}, and
+\code{tmp.files.delete=FALSE}. This will generate a few
+sample frames as PNG files but not delete them so you can
+inspect them using an image viewer. Once these look good,
+create the full animation by setting \code{create.mov=TRUE}
+and \code{max.frames=NULL}.
 
-  If frame.method is 'auto', the script will use time-based
-  frames when multiple individuals are being animated
-  simultaneously, and location-based frames otherwise.
+If frame.method is 'auto', the script will use time-based
+frames when multiple individuals are being animated
+simultaneously, and location-based frames otherwise.
 
-  \code{duration} (the duration of the animation in
-  seconds) should not be confused with \code{frame.rtd}
-  which is the real-time duration of a single frame in
-  seconds (e.g., \code{frame.rtd=3600} means each frame
-  will represent 1 hour).
+\code{duration} (the duration of the animation in seconds)
+should not be confused with \code{frame.rtd} which is the
+real-time duration of a single frame in seconds (e.g.,
+\code{frame.rtd=3600} means each frame will represent 1
+hour).
 
-  If \code{date.bar} is too small or too large, you might
-  get a 'margins too large' error. Try values around 1, or
-  hide the date bar completely by setting
-  \code{date.bar=0}.
+If \code{date.bar} is too small or too large, you might get
+a 'margins too large' error. Try values around 1, or hide
+the date bar completely by setting \code{date.bar=0}.
 
-  The output animation is encoded in QuickTime format. The
-  Quicktime file is encoded using Quicktime's 'animation'
-  codec, a lossless format that 'scrubs' well (i.e., you
-  can drag the scroll bar to view frame by frame). Encoding
-  requires installing the open source encoding program
-  ffmpeg. ffmpeg is a command line program that Linux and
-  Windows users can download from
-  http://ffmpeg.org/download.html. Windows users should
-  save the ffmpeg.exe file to the working directory or a
-  directory on Window's path environment variable (e.g.,
-  c:\\windows). Mac users can download ffmpegX from
-  http://ffmpegx.com/download.html but this has not been
-  tested (pass a value to \code{ffmpeg}).
+The output animation is encoded in QuickTime format. The
+Quicktime file is encoded using Quicktime's 'animation'
+codec, a lossless format that 'scrubs' well (i.e., you can
+drag the scroll bar to view frame by frame). Encoding
+requires installing the open source encoding program
+ffmpeg. ffmpeg is a command line program that Linux and
+Windows users can download from
+http://ffmpeg.org/download.html. Windows users should save
+the ffmpeg.exe file to the working directory or a directory
+on Window's path environment variable (e.g., c:\\windows).
+Mac users can download ffmpegX from
+http://ffmpegx.com/download.html but this has not been
+tested (pass a value to \code{ffmpeg}).
 
-  If ffmpeg is not available, you can still use this
-  function to generate the individual frames and then use
-  another utility (e.g., ImageMagick, Quicktime Pro) to
-  combine the frames into a video file. For best results
-  use a 'lossless' compression method in the encoding
-  program. To create the individual frames only for
-  encoding with another utility, set \code{tmp.dir="."}
-  (the working directory) and
-  \code{tmp.files.delete=FALSE}.
+If ffmpeg is not available, you can still use this function
+to generate the individual frames and then use another
+utility (e.g., ImageMagick, Quicktime Pro) to combine the
+frames into a video file. For best results use a 'lossless'
+compression method in the encoding program. To create the
+individual frames only for encoding with another utility,
+set \code{tmp.dir="."} (the working directory) and
+\code{tmp.files.delete=FALSE}.
 
-  If \code{fn.mov.exists = "auto.increment"}, a two-digit
-  number will be appended to the *.mov filename to avoid
-  overwriting an existing file
+If \code{fn.mov.exists = "auto.increment"}, a two-digit
+number will be appended to the *.mov filename to avoid
+overwriting an existing file
 }
 

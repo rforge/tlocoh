@@ -2,9 +2,9 @@
 \alias{lhs.dr.add}
 \title{Define directional routes}
 \usage{
-  lhs.dr.add(lhs, metric = c("ecc", "par")[2],
-    thresh.val = 0.95, thresh.type = c("q", "v")[1],
-    smooth = 1, status = TRUE, show.elong.hist = FALSE)
+lhs.dr.add(lhs, metric = c("ecc", "par")[2], thresh.val = 0.95,
+  thresh.type = c("q", "v")[1], smooth = 1, status = TRUE,
+  show.elong.hist = FALSE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -37,24 +37,24 @@
   after smoothing. T/F}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Defines 'directional routes' by identifying parent points
-  that are 1) temporally contiguous and 2) have hulls in
-  the top n% of elongation values
+Defines 'directional routes' by identifying parent points
+that are 1) temporally contiguous and 2) have hulls in the
+top n% of elongation values
 }
 \note{
-  Directional routes are line segments defined by
-  connecting temporally contiguous hull parent-points that
-  are in the top N percent of hull elongation. Hull
-  elongation is proxied by one of two hull metrics:
-  perimeter:area ratio ('par') or the eccentricity of the
-  bounding ellipse ('ecc'). Hull perimeter:area ratios are
-  automatically computed when a hullset is created;
-  bounding ellipses must be computed separately using
-  \code{\link{lhs.ellipses.add}}. Once computed, you can
-  plot directional routes by passing \code{dr=TRUE} to
-  \code{\link{plot.locoh.lhs}}.
+Directional routes are line segments defined by connecting
+temporally contiguous hull parent-points that are in the
+top N percent of hull elongation. Hull elongation is
+proxied by one of two hull metrics: perimeter:area ratio
+('par') or the eccentricity of the bounding ellipse
+('ecc'). Hull perimeter:area ratios are automatically
+computed when a hullset is created; bounding ellipses must
+be computed separately using
+\code{\link{lhs.ellipses.add}}. Once computed, you can plot
+directional routes by passing \code{dr=TRUE} to
+\code{\link{plot.locoh.lhs}}.
 }
 

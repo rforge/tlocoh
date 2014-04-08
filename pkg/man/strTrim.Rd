@@ -2,7 +2,7 @@
 \alias{strTrim}
 \title{Trim leading and/or trailing blanks from a character object}
 \usage{
-  strTrim(str, side = "both")
+strTrim(str, side = "both")
 }
 \arguments{
   \item{str}{Input string}
@@ -11,7 +11,6 @@
   'left', 'right', or 'both'}
 }
 \description{
-  Trim leading and/or trailing blanks from a character
-  object
+Trim leading and/or trailing blanks from a character object
 }
 

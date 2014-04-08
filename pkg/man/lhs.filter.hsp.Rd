@@ -2,9 +2,9 @@
 \alias{lhs.filter.hsp}
 \title{Define subsets of hulls based on the location of the parent point in hull scatterplot space}
 \usage{
-  lhs.filter.hsp(lhs, id = NULL, k = NULL, r = NULL,
-    a = NULL, s = NULL, hs.names = NULL, hsp = NULL,
-    reg.idx = NULL, label = NULL, col = NULL)
+lhs.filter.hsp(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
+  hs.names = NULL, hsp = NULL, reg.idx = NULL, label = NULL,
+  col = NULL)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -40,37 +40,37 @@
   omitted the colors saved in \code{hsp} will be used}
 }
 \value{
-  A list that defines subsets of hulls, with one element
-  for each region in \code{hsp}. Each element is a list
-  with three elements: \describe{ \item{idx}{indices of the
-  hull parent points} \item{label}{the label of the region
-  of hsp} \item{col}{the color of the region in hsp} }
+A list that defines subsets of hulls, with one element for
+each region in \code{hsp}. Each element is a list with
+three elements: \describe{ \item{idx}{indices of the hull
+parent points} \item{label}{the label of the region of hsp}
+\item{col}{the color of the region in hsp} }
 }
 \description{
-  Define subsets of hulls based on the location of the
-  parent point in hull scatterplot space
+Define subsets of hulls based on the location of the parent
+point in hull scatterplot space
 }
 \details{
-  This will return a list that defines subsets of hulls
-  grouped according to which manually-digitized region in
-  scatterplot space the hull parent point falls. This can
-  be passed to several functions, including
-  \code{\link{plot.locoh.lhs}} (future), and
-  \code{\link{lhs.plot.scatter}}, to create plots of
-  subsets of hulls.
+This will return a list that defines subsets of hulls
+grouped according to which manually-digitized region in
+scatterplot space the hull parent point falls. This can be
+passed to several functions, including
+\code{\link{plot.locoh.lhs}} (future), and
+\code{\link{lhs.plot.scatter}}, to create plots of subsets
+of hulls.
 
-  The scatterplot space, including the manually defined
-  regions, are saved in a \code{locoh.hsp} object.
-  Typically \code{hsp} will be created using the
-  \code{\link{lhs.plot.scatter}} function. \code{hsp}
-  objects can also be saved in the \code{lhs} object (see
-  \code{\link{lhs.hsp.add}}.
+The scatterplot space, including the manually defined
+regions, are saved in a \code{locoh.hsp} object. Typically
+\code{hsp} will be created using the
+\code{\link{lhs.plot.scatter}} function. \code{hsp} objects
+can also be saved in the \code{lhs} object (see
+\code{\link{lhs.hsp.add}}.
 
-  Note that this function can only return subsets for *one*
-  hullset and *one* hsp object. This means that either
-  \code{lhs} must contain a single hullset, or other
-  parameters (e.g., \code{id}, \code{hs.names}, \code{k},
-  \code{r}, and/or \code{a}) are passed to select one and
-  only one of the hullsets in \code{lhs}.
+Note that this function can only return subsets for *one*
+hullset and *one* hsp object. This means that either
+\code{lhs} must contain a single hullset, or other
+parameters (e.g., \code{id}, \code{hs.names}, \code{k},
+\code{r}, and/or \code{a}) are passed to select one and
+only one of the hullsets in \code{lhs}.
 }
 

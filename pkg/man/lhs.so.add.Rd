@@ -2,10 +2,9 @@
 \alias{lhs.so.add}
 \title{Add hull metrics for association analysis}
 \usage{
-  lhs.so.add(lhs, id = "all", hs2.id = "all", tbuff = 0,
-    ivg = NULL, test = 0, skip.dups = TRUE,
-    save.hso = TRUE, status = TRUE,
-    piFUN = c("pIntersect", "pIntersectSat")[1])
+lhs.so.add(lhs, id = "all", hs2.id = "all", tbuff = 0, ivg = NULL,
+  test = 0, skip.dups = TRUE, save.hso = TRUE, status = TRUE,
+  piFUN = c("pIntersect", "pIntersectSat")[1])
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -38,50 +37,48 @@
   of hulls intersect: 'pIntersect' or 'pIntersectSat'}
 }
 \value{
-  A \link{LoCoH-hullset} object
+A \link{LoCoH-hullset} object
 }
 \description{
-  Add hull metrics for association analysis
+Add hull metrics for association analysis
 }
 \details{
-  This function computes hull metrics for the spatially
-  overlapping hulls from two ids. Typically this would be
-  used when you have hullset from two individuals (i.e.,
-  two animals) and you want to see the spatial and temporal
-  patterns of shared space use.
+This function computes hull metrics for the spatially
+overlapping hulls from two ids. Typically this would be
+used when you have hullset from two individuals (i.e., two
+animals) and you want to see the spatial and temporal
+patterns of shared space use.
 
-  You can impose a temporal overlap requirement as well by
-  passing a value for \code{tbuff}. Two hulls will be
-  considered spatially overlapping only if their parent
-  points also were recorded within \code{tbuff} seconds of
-  each other. This essentially produces metrics for
-  spatially and temporally overlapping hulls.
+You can impose a temporal overlap requirement as well by
+passing a value for \code{tbuff}. Two hulls will be
+considered spatially overlapping only if their parent
+points also were recorded within \code{tbuff} seconds of
+each other. This essentially produces metrics for spatially
+and temporally overlapping hulls.
 
-  Hullset metrics are computed for each pair of ids. Thus
-  if a hullset has hulls for three unique ids, each hull
-  will have spatial overlap metrics computed for each of
-  the other two hullsets. You can narrow which id(s) to
-  compute metrics for, and which hullset(s) to use as the
-  comparison, with the \code{id} and \code{hs2.id}
-  arguments.
+Hullset metrics are computed for each pair of ids. Thus if
+a hullset has hulls for three unique ids, each hull will
+have spatial overlap metrics computed for each of the other
+two hullsets. You can narrow which id(s) to compute metrics
+for, and which hullset(s) to use as the comparison, with
+the \code{id} and \code{hs2.id} arguments.
 
-  Up to three spatial overlap metrics are computed.
-  \code{so.count} is simply the number of hulls in hullset
-  2 that overlap. \code{so.dtmin} is the minimum amount of
-  time (expressed in seconds) that passes between
-  overlapping hulls. This reflects temporal partitioning of
-  shared space - low values of \code{so.dtmin} suggest the
-  two individuals don't mind being in the same area at the
-  same time. \code{so.nsv} (number of separate visits) is
-  similiar to \code{so.count}, but collapses overlapping
-  hulls into discrete visits based on an intervisit gap
-  period \code{ivg}. \code{so.nsv} is only computed if a
-  value for \code{ivg} is passed.
+Up to three spatial overlap metrics are computed.
+\code{so.count} is simply the number of hulls in hullset 2
+that overlap. \code{so.dtmin} is the minimum amount of time
+(expressed in seconds) that passes between overlapping
+hulls. This reflects temporal partitioning of shared space
+- low values of \code{so.dtmin} suggest the two individuals
+don't mind being in the same area at the same time.
+\code{so.nsv} (number of separate visits) is similiar to
+\code{so.count}, but collapses overlapping hulls into
+discrete visits based on an intervisit gap period
+\code{ivg}. \code{so.nsv} is only computed if a value for
+\code{ivg} is passed.
 
-  \code{pIntersect} and \code{pIntersectSat} are two
-  functions that identify which pairs of hulls actually
-  intersect. Neither are terribly fast, but
-  \code{pIntersect} appears to work faster than
-  \code{pIntersectSat}.
+\code{pIntersect} and \code{pIntersectSat} are two
+functions that identify which pairs of hulls actually
+intersect. Neither are terribly fast, but \code{pIntersect}
+appears to work faster than \code{pIntersectSat}.
 }
 

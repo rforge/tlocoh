@@ -2,12 +2,12 @@
 \alias{square}
 \title{square}
 \usage{
-  square(x)
+square(x)
 }
 \arguments{
   \item{x}{Input object}
 }
 \description{
-  square
+square
 }
 

@@ -12,6 +12,7 @@
 #' @param tz The name of the time zone that will be assigned if not explicit in dt.
 #' @param del.dup.xyt Whether to delete duplicate rows with the same x, y, dt, and id value. (T/F)
 #' @param dup.dt.check Whether to check to make sure there are no duplicate date values for the same id
+#' @param show.dup.dt Whether to show duplicate time stamps (if found) (T/F)
 #' @param col Optional vector of color values (one for each point), or a single color value
 #' @param dt.int.round.to The proportion of the median sampling frequency that time intervals will be rounded to when computing the frequency table of sampling intervals (no change is made to the time stamps)
 #' @param tau.diff.max The maximum deviation from the median sampling interval (tau), expressed as a proportion of the median sampling interval, see details
@@ -20,7 +21,7 @@
 #' @param status Show status messages (T/F)
 #'
 #' @details
-#' At a minimum, a \link{locoh-xy} object contains a set of points. It can also contain date-time values for each point, the name of 
+#' At a minimum, a \link{LoCoH-xy} object contains a set of points. It can also contain date-time values for each point, the name of 
 #' the individual(s) associated with each point, and a nearest nieghbors lookup table.
 #'
 #' Importing date-time values into R is often a painful process. You may want to try exporting your
@@ -38,6 +39,12 @@
 #' are to some extent OS specific, see \url{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
 #' If dt is of class POSIXct (which stores the time zone) and a different value for \code{tz} is passed,
 #' a prompt will ask whether date values should be converted.
+#'
+#' By default, if the function finds two or more locations with the same time stamp for the same id (individual), an
+#' error will be triggered. This usually results from a data processing error (e.g., duplication of a row), or a conversion problem or rounding
+#' issue in the time stamp values. To see which records have duplicate time stamps, pass \code{show.dup.dt=TRUE}. 
+#' To disable the checking for duplicate time stamps, pass \code{dup.dt.check=TRUE}. Duplicate locations are allowed, as are
+#' duplicate time stamps for different individuals.
 #'
 #' \code{ptid} is an optional vector of numeric id values (i.e., primary key) for each location. When present, point 
 #' id values of parent points will be saved in the data table of hulls. This enables linking the 
@@ -78,7 +85,7 @@
 #' @export
 
 xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(as.character(NA)), anv=NULL, anv.desc=NULL, col=NULL,
-                     del.dup.xyt=TRUE, dup.dt.check=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, 
+                     del.dup.xyt=TRUE, dup.dt.check=TRUE, show.dup.dt=FALSE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, 
                      warn.latlong=TRUE, status=TRUE) {
                      
     if (!require(sp)) stop("package sp required")
@@ -198,7 +205,39 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
         ## Check for duplicate time stamps for the same individual. 
         ## We have to convert dates to seconds otherwise daylight savings time could create spurious duplicates
         if (dup.dt.check) {
-            if (anyDuplicated(data.frame(dt=as.numeric(dt, units="secs"), id=id)) != 0) stop("Duplicate time stamps detected. Aborting.")
+            if (anyDuplicated(data.frame(dt=as.numeric(dt, units="secs"), id=id)) != 0) {
+                if (show.dup.dt) {
+                    ## Create a data frame with id and dt (in secs since 1970) 
+                    id_dtsecs_df <- data.frame(id=id, dtsecs=as.numeric(dt, units="secs"))
+                    head(id_dtsecs_df)
+                    
+                    ## For the purposes of identifying duplicates, construct a string
+                    id_dtsecs_str <- apply(id_dtsecs_df, 1, function(x) paste(x, collapse="\r"))
+                    head(id_dtsecs_str)
+                    
+                    ## Identify all records whic are duplicates
+                    duped_idx <- which(id_dtsecs_str %in% id_dtsecs_str[duplicated(id_dtsecs_str)])
+                    summary(duped_idx)
+                    
+                    ## Define the order based on 1) id, 2) dtsets
+                    duped_idx_ord <- order(id_dtsecs_df$id[duped_idx], id_dtsecs_df$dtsecs[duped_idx])
+                    
+                    ## Construct a data frame of the duplicate records in order
+                    id_dt_dups_df <-data.frame(id=id, dt=dt)[duped_idx[duped_idx_ord], ]
+                    nrow(id_dt_dups_df)
+                    
+                    cat("Duplicate time stamps:\n")
+                    print(id_dt_dups_df)
+
+                    stop("Duplicate time stamps shown above. Aborting.")
+
+                } else {
+                    msg <- "Duplicate time stamps detected. Aborting. To view the records with duplicate time stamps, use show.dup.dt=TRUE. To disable the time stamp check, set dup.dt.check=FALSE."
+                    stop(cw(msg, exdent=2, final.cr=FALSE))
+                }
+            
+            
+            }
         }
 
         ## Sort everything by ID then datetime

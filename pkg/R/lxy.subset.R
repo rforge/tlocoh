@@ -60,7 +60,7 @@ lxy.subset <- function(lxy, id=NULL, ptid=NULL, idx=NULL, dt.start=NULL, dt.end=
 
     "%i%" <- intersect
     idx.filter <- idx.ids %i% idx.ptid %i% idx.dt.start %i% idx.dt.end %i% idx.idx
-    
+        
     if (length(idx.filter) == num.pts) {
         stop("These parameters do not filter out any locations \n")
     } else if (length(idx.filter) == 0) {
@@ -76,18 +76,29 @@ lxy.subset <- function(lxy, id=NULL, ptid=NULL, idx=NULL, dt.start=NULL, dt.end=
         lxy[["nn"]] <- NULL
         lxy[["ptsh"]] <- NULL
         
-        ## Calculate frequency table and median value of time interval for each id
-        rwp.dti.lst <- xyt.rw.params.dt.int(id=lxy[["pts"]][["id"]], xy=coordinates(lxy[["pts"]]), dt=lxy[["pts"]][["dt"]], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max) 
-        lxy[["dt.int"]] <- rwp.dti.lst[["dt.int"]]
-        lxy[["rw.params"]] <- rwp.dti.lst[["rw.params"]]
+        if (!is.null(lxy[["dt.int"]])) {
+            ## Calculate frequency table and median value of time interval for each id
+            rwp.dti.lst <- xyt.rw.params.dt.int(id=lxy[["pts"]][["id"]], xy=coordinates(lxy[["pts"]]), dt=lxy[["pts"]][["dt"]], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max) 
+            
+            lxy[["dt.int"]] <- rwp.dti.lst[["dt.int"]]
+            lxy[["rw.params"]] <- rwp.dti.lst[["rw.params"]]
+        }
+        
+        print("We need to do a test to see if dt is present");browser()
+        #if (is.null(dt)) {
+        #    rw.params <- NULL
+        #    dt.int <- NULL
+        #}    
+        
         
         ## Construct a 'comment'
+        
         comment <- list()
         ids.tab <- table(lxy[["pts"]][["id"]])
         for (id.name in names(ids.tab)) {
-            comment[[id.name]] <- paste(id.name, ".n", ids.tab[[id.name]], ".", 
+            comment[[id.name]] <- paste(id.name, ".n", ids.tab[[id.name]], if (is.null(lxy[["dt"]])) "" else paste(".", 
                   format(min(lxy[["pts"]][["dt"]][lxy[["pts"]][["id"]]==id.name]), format = "%Y-%m-%d", tz = ""), ".", 
-                  format(max(lxy[["pts"]][["dt"]][lxy[["pts"]][["id"]]==id.name]), format = "%Y-%m-%d", tz = ""), sep="")
+                  format(max(lxy[["pts"]][["dt"]][lxy[["pts"]][["id"]]==id.name]), format = "%Y-%m-%d", tz = ""), sep=""), sep="")
         }
         lxy[["comment"]] <- comment
         return (lxy)                

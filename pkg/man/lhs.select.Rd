@@ -2,9 +2,8 @@
 \alias{lhs.select}
 \title{Select hullsets}
 \usage{
-  lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
-    s = NULL, hs.names = NULL, hs.idx = NULL,
-    status = TRUE)
+lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
+  hs.names = NULL, hs.idx = NULL, status = TRUE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -26,9 +25,9 @@
   \item{status}{Show status messages (T/F)}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Select hullsets
+Select hullsets
 }
 

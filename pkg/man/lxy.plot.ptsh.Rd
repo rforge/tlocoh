@@ -2,18 +2,16 @@
 \alias{lxy.plot.ptsh}
 \title{Plots the proportion of time-selected hulls over 's'}
 \usage{
-  lxy.plot.ptsh(lxy, id = NULL, ptsh.idx = NULL,
-    use.nn = FALSE, k = NULL, r = NULL, a = NULL,
-    slim = NULL, desc = c(0, 1, 3)[2], cex.desc = 0.8,
-    col.desc = "darkgreen", title = NULL,
-    title.show = TRUE,
-    legend = c("none", "bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[2],
-    mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
-    mgp = c(1.8, 0.5, 0), figs.per.page = NULL,
-    panel.num = NULL, panel.num.inside.plot = !title.show,
-    png.dir = NULL, png.dir.make = TRUE, png.width = 800,
-    png.height = png.width, png.overwrite = TRUE,
-    png.pointsize = 12 + (png.width - 480)/80, ...)
+lxy.plot.ptsh(lxy, id = NULL, ptsh.idx = NULL, use.nn = FALSE, k = NULL,
+  r = NULL, a = NULL, slim = NULL, desc = c(0, 1, 3)[2],
+  cex.desc = 0.8, col.desc = "darkgreen", title = NULL,
+  title.show = TRUE, legend = c("none", "bottomright", "bottom",
+  "bottomleft", "left", "topleft", "top", "topright", "right", "center")[2],
+  mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp = c(1.8, 0.5, 0),
+  figs.per.page = NULL, panel.num = NULL,
+  panel.num.inside.plot = !title.show, png.dir = NULL,
+  png.dir.make = TRUE, png.width = 800, png.height = png.width,
+  png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80, ...)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -98,47 +96,45 @@
   the \code{\link{plot}} function}
 }
 \value{
-  A list of lists, one for each plot containing the
-  filename (NULL if no png made), the image dimensions (or
-  NULL), the descriptive text, the id, and a matrix of the
-  values
+A list of lists, one for each plot containing the filename
+(NULL if no png made), the image dimensions (or NULL), the
+descriptive text, the id, and a matrix of the values
 }
 \description{
-  Plots the proportion of time-selected hulls over 's'
+Plots the proportion of time-selected hulls over 's'
 }
 \details{
-  This function will plot the proportion of total hulls
-  that are 'time-selected'. Time-selected means all of the
-  nearest neighbors are were sampled sequentially in time.
-  This is one end of the spectrum as far as nearest
-  neighbor identification goes, the other being
-  space-selected (i.e., time has no bearing). The \code{s}
-  parameter in the TSD equation determines the degree to
-  which time plays a role in the point-to-point 'distance'.
-  When \code{s=0}, time plays no role in TSD and TSD is
-  equivalent to Euclidean distance. As \code{s} increases,
-  time plays a bigger and bigger role until eventually
-  nearest neighbor selection is equivalent to selection
-  points based only on their separation in time.
+This function will plot the proportion of total hulls that
+are 'time-selected'. Time-selected means all of the nearest
+neighbors are were sampled sequentially in time. This is
+one end of the spectrum as far as nearest neighbor
+identification goes, the other being space-selected (i.e.,
+time has no bearing). The \code{s} parameter in the TSD
+equation determines the degree to which time plays a role
+in the point-to-point 'distance'. When \code{s=0}, time
+plays no role in TSD and TSD is equivalent to Euclidean
+distance. As \code{s} increases, time plays a bigger and
+bigger role until eventually nearest neighbor selection is
+equivalent to selection points based only on their
+separation in time.
 
-  In order to plot the proportion of time-selected hulls
-  (ptsh), nearest neighbors must have already been
-  identified. This can be done in one of two ways. The
-  \code{\link{lxy.ptsh.add}} function will compute ptsh for
-  different values of s using a random sample of points (to
-  save time), automatically picking values of s such that
-  ptsh is close to target values provided by the user.
-  Alternately, one can identify nearest neighbors for
-  different values of \code{s} using
-  \code{\link{lxy.nn.add}} and then run this function with
-  \code{use.nn=TRUE}. The main difference between
-  \code{\link{lxy.ptsh.add}} and \code{\link{lxy.nn.add}}
-  is that \code{\link{lxy.ptsh.add}} finds nearest
-  neighbors for a random sample of points, and doesn't
-  actually save the nearest neighbor information for
-  individual points, whereas \code{\link{lxy.nn.add}}
-  identifies and saves nearest neighbor information for
-  each and every point.
+In order to plot the proportion of time-selected hulls
+(ptsh), nearest neighbors must have already been
+identified. This can be done in one of two ways. The
+\code{\link{lxy.ptsh.add}} function will compute ptsh for
+different values of s using a random sample of points (to
+save time), automatically picking values of s such that
+ptsh is close to target values provided by the user.
+Alternately, one can identify nearest neighbors for
+different values of \code{s} using \code{\link{lxy.nn.add}}
+and then run this function with \code{use.nn=TRUE}. The
+main difference between \code{\link{lxy.ptsh.add}} and
+\code{\link{lxy.nn.add}} is that \code{\link{lxy.ptsh.add}}
+finds nearest neighbors for a random sample of points, and
+doesn't actually save the nearest neighbor information for
+individual points, whereas \code{\link{lxy.nn.add}}
+identifies and saves nearest neighbor information for each
+and every point.
 }
 \examples{
 # data(toni.lxy)
@@ -146,6 +142,6 @@
 # lxy.plot.ptsh(toni.lxy)
 }
 \seealso{
-  \code{\link{lxy.ptsh.add}}, \code{\link{lxy.nn.add}}
+\code{\link{lxy.ptsh.add}}, \code{\link{lxy.nn.add}}
 }
 

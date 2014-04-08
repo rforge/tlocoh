@@ -2,9 +2,8 @@
 \alias{mvee}
 \title{mvee}
 \usage{
-  mvee(xy = NULL, tolerance = 0.005, plotme = FALSE,
-    max.iter = 500, shiftxy = TRUE, no.ellipse.val = 1,
-    checks = TRUE)
+mvee(xy = NULL, tolerance = 0.005, plotme = FALSE, max.iter = 500,
+  shiftxy = TRUE, no.ellipse.val = 1, checks = TRUE)
 }
 \arguments{
   \item{xy}{a two-column data frame containing x and y
@@ -36,25 +35,25 @@
   type and remove any duplicate points. T/F}
 }
 \value{
-  A list containing the "center form" matrix equation of
-  the ellipse. i.e. a 2x2 matrix "A" and a 2x1 vector "C"
-  representing the center of the ellipse such that: (x -
-  C)' A (x - C) <= 1 List elements include A - 2x2 matrix C
-  - 2x1 vector of the center coordinates elps.axes.lngth -
-  2x1 vector whose elements are one-half the lengths of the
-  major and minor axes (i.e., variables a and b in the
-  standard ellipse equation) alpha - angle of rotation
+A list containing the "center form" matrix equation of the
+ellipse. i.e. a 2x2 matrix "A" and a 2x1 vector "C"
+representing the center of the ellipse such that: (x - C)'
+A (x - C) <= 1 List elements include A - 2x2 matrix C - 2x1
+vector of the center coordinates elps.axes.lngth - 2x1
+vector whose elements are one-half the lengths of the major
+and minor axes (i.e., variables a and b in the standard
+ellipse equation) alpha - angle of rotation
 }
 \description{
-  Computes the minimum volume enclosing ellipsoid around a
-  set of points using the Khachiyan Algorithm. In two
-  dimensions, this is equivalent to the bounding ellipse
+Computes the minimum volume enclosing ellipsoid around a
+set of points using the Khachiyan Algorithm. In two
+dimensions, this is equivalent to the bounding ellipse
 }
 \note{
-  Adapted by Andy Lyons from Matlab code by Nima Moshtagh.
-  Copyright (c) 2009, Nima Moshtagh
-  http://www.mathworks.com/matlabcentral/fileexchange/9542
-  http://www.mathworks.com/matlabcentral/fileexchange/13844
-  http://stackoverflow.com/questions/1768197/bounding-ellipse
+Adapted by Andy Lyons from Matlab code by Nima Moshtagh.
+Copyright (c) 2009, Nima Moshtagh
+http://www.mathworks.com/matlabcentral/fileexchange/9542
+http://www.mathworks.com/matlabcentral/fileexchange/13844
+http://stackoverflow.com/questions/1768197/bounding-ellipse
 }
 

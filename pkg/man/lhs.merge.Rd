@@ -2,7 +2,7 @@
 \alias{lhs.merge}
 \title{Merge LoCoH-hullsets}
 \usage{
-  lhs.merge(..., check.class = TRUE)
+lhs.merge(..., check.class = TRUE)
 }
 \arguments{
   \item{...}{Two or more LoCoH-hullset objects}
@@ -11,15 +11,15 @@
   merged belong to class locoh.lhs (T/F)}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Merge LoCoH-hullsets
+Merge LoCoH-hullsets
 }
 \note{
-  Hullsets in different objects can be merged together, but
-  the hullsets themselves remain separate. If duplicate
-  hullsets are detected (e.g., same id, same mode, same
-  parameter value), an error message will appear.
+Hullsets in different objects can be merged together, but
+the hullsets themselves remain separate. If duplicate
+hullsets are detected (e.g., same id, same mode, same
+parameter value), an error message will appear.
 }
 

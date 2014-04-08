@@ -2,7 +2,7 @@
 \alias{auto.a}
 \title{Parameters to select a reasonable value of 'a'}
 \usage{
-  auto.a(meth = "nn", ptp = 0.98, nnn = 2, tct = 1.05)
+auto.a(meth = "nn", ptp = 0.98, nnn = 2, tct = 1.05)
 }
 \arguments{
   \item{meth}{The name of the method for finding a (default
@@ -16,38 +16,36 @@
   details.}
 }
 \value{
-  A data frame with columns \code{meth}, \code{ptp},
-  \code{nnn}, and \code{tct} which are the settings that
-  other functions will use to find a value for 'a' should
-  be automatically selected. Columns include:
+A data frame with columns \code{meth}, \code{ptp},
+\code{nnn}, and \code{tct} which are the settings that
+other functions will use to find a value for 'a' should be
+automatically selected. Columns include:
 
-  \itemize{ \item \emph{meth} The name of the method for
-  finding a \item \emph{ptp} The proportion of parent
-  points that should have at least a.nn neighbors (default
-  0.98) \item \emph{nnn} The minimum number of nearest
-  neighbors that each point will get (default 2, so each
-  point can be part of a triangle) \item \emph{tct} A time
-  threshhold (expressed as a percentage of the median
-  sampling frequency), such that if a point is temporally
-  disconnected from its 2 nearest temporal neighbors by
-  more than than \code{tct} times the median sampling
-  frequency, the point will be be excluded from the
-  computation of a. This is to avoid bias from internal
-  time gaps (default 1.05) }
+\itemize{ \item \emph{meth} The name of the method for
+finding a \item \emph{ptp} The proportion of parent points
+that should have at least a.nn neighbors (default 0.98)
+\item \emph{nnn} The minimum number of nearest neighbors
+that each point will get (default 2, so each point can be
+part of a triangle) \item \emph{tct} A time threshhold
+(expressed as a percentage of the median sampling
+frequency), such that if a point is temporally disconnected
+from its 2 nearest temporal neighbors by more than than
+\code{tct} times the median sampling frequency, the point
+will be be excluded from the computation of a. This is to
+avoid bias from internal time gaps (default 1.05) }
 }
 \description{
-  Returns a list of parameters that other functions accept
-  for the 'a' parameter
+Returns a list of parameters that other functions accept
+for the 'a' parameter
 }
 \details{
-  If multiple values are passed for any of the parameters,
-  the resulting data frame will have multiple rows and
-  other parameters will be recycled as needed.
+If multiple values are passed for any of the parameters,
+the resulting data frame will have multiple rows and other
+parameters will be recycled as needed.
 
-  This function does not actually find nearest neighgors.
-  Rather it returns a list of parameters that can be used
-  as input in other functions such as
-  \code{\link{lxy.nn.add}}.
+This function does not actually find nearest neighgors.
+Rather it returns a list of parameters that can be used as
+input in other functions such as \code{\link{lxy.nn.add}}.
 }
 \examples{
 \dontrun{
@@ -55,6 +53,6 @@ lxy <- lxy.nn.add(lxy, ptsh=0.5, a=auto.a())
 }
 }
 \seealso{
-  \code{\link{lxy.nn.add}}
+\code{\link{lxy.nn.add}}
 }
 

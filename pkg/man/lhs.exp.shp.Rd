@@ -2,13 +2,12 @@
 \alias{lhs.exp.shp}
 \title{Export a LoCoH-hullset to shapefile}
 \usage{
-  lhs.exp.shp(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
-    s = NULL, hs.names = NULL, hpp = FALSE, hulls = FALSE,
-    iso = FALSE, nn = FALSE, ellipses = FALSE,
-    allpts = FALSE, iso.idx = NULL, iso.metric = NULL,
-    dir = ".", file.base = "", file.base.auto = TRUE,
-    avl.file = NULL, status = TRUE, show.time = TRUE,
-    hm = "all", anv = NULL, hsp = NULL, metadata = TRUE)
+lhs.exp.shp(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
+  hs.names = NULL, hpp = FALSE, hulls = FALSE, iso = FALSE,
+  nn = FALSE, ellipses = FALSE, allpts = FALSE, iso.idx = NULL,
+  iso.metric = NULL, dir = ".", file.base = "", file.base.auto = TRUE,
+  avl.file = NULL, status = TRUE, show.time = TRUE, hm = "all",
+  anv = NULL, hsp = NULL, metadata = TRUE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -89,36 +88,36 @@
   file (not yet supported)}
 }
 \description{
-  Export hulls, hull parent points, and/or isopleths from a
-  locoh-hullset object to ESRI's shapefile format
+Export hulls, hull parent points, and/or isopleths from a
+locoh-hullset object to ESRI's shapefile format
 }
 \note{
-  Filenames for the resulting shapefiles are automatically
-  generated, but you can specify the directory with the
-  \code{dir} argument and the base of the file name with
-  \code{file.base}. The constructed filenames will consist
-  of a base followed by the name of the hullset and a
-  suffix indicating the type of feature saved (e.g.,
-  '.hulls', '.pts', ".iso", etc. ). If a shapefile already
-  exists with the same name, a unique filename will be
-  constructed by appending a two-digit numeric extension.
+Filenames for the resulting shapefiles are automatically
+generated, but you can specify the directory with the
+\code{dir} argument and the base of the file name with
+\code{file.base}. The constructed filenames will consist of
+a base followed by the name of the hullset and a suffix
+indicating the type of feature saved (e.g., '.hulls',
+'.pts', ".iso", etc. ). If a shapefile already exists with
+the same name, a unique filename will be constructed by
+appending a two-digit numeric extension.
 
-  Most of the time, exporting hull parent points
-  (\code{hpp=T}) is the same as exporting all points
-  (\code{allpts=T}), however in some cases not all points
-  have enough neighbors to make a hull so they wouldn't be
-  included in exported of hull parent points. Only hull
-  parent points will have the corresponding hull metrics
-  included in the attribute table.
+Most of the time, exporting hull parent points
+(\code{hpp=T}) is the same as exporting all points
+(\code{allpts=T}), however in some cases not all points
+have enough neighbors to make a hull so they wouldn't be
+included in exported of hull parent points. Only hull
+parent points will have the corresponding hull metrics
+included in the attribute table.
 
-  \code{avl.file}, if passed, is the name of an ArcView 3.x
-  legend file that contains symbology info. If a value is
-  passed, the script will make a copy of avl.file with the
-  same base name as the shapefile, so that symbology will
-  automatically created in ArcMap. \code{avl.file} is
-  presumed to be relative to the working folder.
+\code{avl.file}, if passed, is the name of an ArcView 3.x
+legend file that contains symbology info. If a value is
+passed, the script will make a copy of avl.file with the
+same base name as the shapefile, so that symbology will
+automatically created in ArcMap. \code{avl.file} is
+presumed to be relative to the working folder.
 }
 \seealso{
-  \code{\link{lhs.exp.csv}}
+\code{\link{lhs.exp.csv}}
 }
 

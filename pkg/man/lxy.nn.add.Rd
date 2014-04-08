@@ -2,15 +2,12 @@
 \alias{lxy.nn.add}
 \title{Identifies nearest neighbors for a LoCoH-xy object}
 \usage{
-  lxy.nn.add(lxy, id = NULL, ptid = NULL, k = NULL,
-    r = NULL, a = NULL, s = NULL, kmin = 0, ptsh = NULL,
-    ptsh.idx = 1,
-    nn.exists = c("append", "replace", "skip")[1],
-    time.term = c("vmax", "dif")[1],
-    FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2],
-    dec.places = 1, ra.init.samp.size = 30,
-    ra.init.quant = 0.8, tct = 0.05, beep = FALSE,
-    status = TRUE)
+lxy.nn.add(lxy, id = NULL, ptid = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, kmin = 0, ptsh = NULL, ptsh.idx = 1,
+  nn.exists = c("append", "replace", "skip")[1], time.term = c("vmax",
+  "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2],
+  dec.places = 1, ra.init.samp.size = 30, ra.init.quant = 0.8,
+  tct = 0.05, beep = FALSE, status = TRUE)
 }
 \arguments{
   \item{lxy}{A LoCoH-xy object}
@@ -77,31 +74,31 @@
   \item{status}{Show status messages (T/F)}
 }
 \value{
-  A LoCoH-xy object object with saved information about
-  each points' nearest neighbors
+A LoCoH-xy object object with saved information about each
+points' nearest neighbors
 }
 \description{
-  Identifies nearest neighbors for a LoCoH-xy object
+Identifies nearest neighbors for a LoCoH-xy object
 }
 \details{
-  When s > 0, the 'distance' (as defined by the time-scaled
-  distance metric') between two points is a function of
-  their separation in time as well as space.
+When s > 0, the 'distance' (as defined by the time-scaled
+distance metric') between two points is a function of their
+separation in time as well as space.
 
-  If \code{ptsh} is provided, the script will find a value
-  of 's' such that the proportion of hulls which are
-  time-selected (e.g, consecutive points in time) is equal
-  to \code{ptsh}. In this case, no value for \code{s}
-  should be passed. If \code{ptsh="all"} and the proportion
-  of time selected hulls has already been computed, those
-  values of 's' will be used.
+If \code{ptsh} is provided, the script will find a value of
+'s' such that the proportion of hulls which are
+time-selected (e.g, consecutive points in time) is equal to
+\code{ptsh}. In this case, no value for \code{s} should be
+passed. If \code{ptsh="all"} and the proportion of time
+selected hulls has already been computed, those values of
+'s' will be used.
 }
 \examples{
 # lxy <- lxy.nn.add(lxy, k=10, s=0.01)
 }
 \seealso{
-  \code{\link{summary.locoh.lxy}} to see what nearest
-  neighbors have already been identified
-  \code{\link{auto.a}} \code{\link{lxy.ptsh.add}}
+\code{\link{summary.locoh.lxy}} to see what nearest
+neighbors have already been identified \code{\link{auto.a}}
+\code{\link{lxy.ptsh.add}}
 }
 

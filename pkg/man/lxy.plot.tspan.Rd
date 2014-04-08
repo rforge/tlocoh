@@ -2,22 +2,17 @@
 \alias{lxy.plot.tspan}
 \title{Plot distributions of the time span of nearest neighbors}
 \usage{
-  lxy.plot.tspan(lxy, s = NULL, k = NULL, a = NULL,
-    r = NULL, id = NULL,
-    type = c("hist", "boxplot", "mean")[1],
-    outline = FALSE, breaks = 20, desc = c(0, 1, 3)[2],
-    cex.desc = 0.8, col.desc = "darkgreen",
-    col.hist = "gray80",
-    mar = c(if (type == "hist") 1.5 else 3, 3, if (type == "hist") 2 else if (title.show) 3 else 0.5, 0.5),
-    mgp = c(1.9, 0.5, 0), figs.per.page = NULL,
-    title = NULL, title.show = TRUE,
-    title.obj.name = FALSE, panel.num = NULL,
-    panel.num.inside.plot = !title.show, panel.num.cex = 2,
-    no.sci.notation = FALSE, png.dir = NULL,
-    png.dir.make = TRUE, png.width = 800,
-    png.height = png.width, png.overwrite = TRUE,
-    png.pointsize = 12 + (png.width - 480)/80,
-    status = TRUE, ...)
+lxy.plot.tspan(lxy, s = NULL, k = NULL, a = NULL, r = NULL, id = NULL,
+  type = c("hist", "boxplot", "mean")[1], outline = FALSE, breaks = 20,
+  desc = c(0, 1, 3)[2], cex.desc = 0.8, col.desc = "darkgreen",
+  col.hist = "gray80", mar = c(if (type == "hist") 1.5 else 3, 3, if (type
+  == "hist") 2 else if (title.show) 3 else 0.5, 0.5), mgp = c(1.9, 0.5, 0),
+  figs.per.page = NULL, title = NULL, title.show = TRUE,
+  title.obj.name = FALSE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, panel.num.cex = 2,
+  no.sci.notation = FALSE, png.dir = NULL, png.dir.make = TRUE,
+  png.width = 800, png.height = png.width, png.overwrite = TRUE,
+  png.pointsize = 12 + (png.width - 480)/80, status = TRUE, ...)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -114,15 +109,14 @@
   the \code{\link{plot}} function}
 }
 \value{
-  A list of plots created, with one element per id, and
-  each element consisting of another list with elements for
-  the filename (or NULL), filename dimensions in pixels (or
-  NULL), the timespan values (as a list with one element
-  for each value of s), descriptive text, and the k/a/r
-  value
+A list of plots created, with one element per id, and each
+element consisting of another list with elements for the
+filename (or NULL), filename dimensions in pixels (or
+NULL), the timespan values (as a list with one element for
+each value of s), descriptive text, and the k/a/r value
 }
 \description{
-  Plot distributions of the time span of nearest neighbors
-  as a proportion of the median sampling interval
+Plot distributions of the time span of nearest neighbors as
+a proportion of the median sampling interval
 }
 

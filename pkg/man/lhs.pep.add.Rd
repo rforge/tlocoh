@@ -2,8 +2,7 @@
 \alias{lhs.pep.add}
 \title{Add hull metrics for proportion of enclosed points by each hull for an ancillary variable}
 \usage{
-  lhs.pep.add(lhs, pep.var, pep.val = NULL, npep = TRUE,
-    status = TRUE)
+lhs.pep.add(lhs, pep.var, pep.val = NULL, npep = TRUE, status = TRUE)
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -22,48 +21,47 @@
   \item{status}{Show messages, T/F}
 }
 \value{
-  A LoCoH-hullset object
+A LoCoH-hullset object
 }
 \description{
-  Computes proportion of enclosed points of a second set of
-  points
+Computes proportion of enclosed points of a second set of
+points
 }
 \note{
-  The proportion of enclosed points is a hull metric that
-  measures relative association among N individuals when
-  you have movement data for multiple individuals
-  simultaneous over the same tim period. The general idea
-  is to create hulls for all of the locations combined
-  (ignoring which location was for each individual), then
-  for each hull look at the proportion of enclosed points
-  for each individual. If the individuals ignored each
-  other, one would expect the proportion of enclosed points
-  for any given hull to be approximately equal to the
-  proportions of each individual in the entire dataset.
-  Deviations from this random mixing null model reflect
-  places where the individuals did not mix evenly (e.g.,
-  one dominated).
+The proportion of enclosed points is a hull metric that
+measures relative association among N individuals when you
+have movement data for multiple individuals simultaneous
+over the same tim period. The general idea is to create
+hulls for all of the locations combined (ignoring which
+location was for each individual), then for each hull look
+at the proportion of enclosed points for each individual.
+If the individuals ignored each other, one would expect the
+proportion of enclosed points for any given hull to be
+approximately equal to the proportions of each individual
+in the entire dataset. Deviations from this random mixing
+null model reflect places where the individuals did not mix
+evenly (e.g., one dominated).
 
-  Do compute pep, all points must have the same id (beause
-  you create hulls with the combined dataset) with the
-  original id values saved as an ancillary variable (see
-  \code{\link{lxy.id.new}}). Create hulls as you normally
-  would using the 'a' or 'k' method, although it would be
-  recommneded to omit time (let s=0) because the time
-  difference between locations means different things for
-  different pairs of points depending on whether they are
-  from the same or different individuals. Pass the name of
-  the ancillary variable that contains the original ids as
-  \code{pep.var} and the original id value(s) as
-  \code{pep.val} (if \code{pep.val} is omitted the pep
-  metric will be computed for all id values found in
-  \code{pep.var}. \emph{npep} (normalized proportion of
-  enclosed points) normalizes pep by the proportion of that
-  individual in the entire dataset, such that \emph{npep=1}
-  means the individual was in the hull in the same
-  proportion as it was in the entire dataset.  '
+Do compute pep, all points must have the same id (beause
+you create hulls with the combined dataset) with the
+original id values saved as an ancillary variable (see
+\code{\link{lxy.id.new}}). Create hulls as you normally
+would using the 'a' or 'k' method, although it would be
+recommneded to omit time (let s=0) because the time
+difference between locations means different things for
+different pairs of points depending on whether they are
+from the same or different individuals. Pass the name of
+the ancillary variable that contains the original ids as
+\code{pep.var} and the original id value(s) as
+\code{pep.val} (if \code{pep.val} is omitted the pep metric
+will be computed for all id values found in \code{pep.var}.
+\emph{npep} (normalized proportion of enclosed points)
+normalizes pep by the proportion of that individual in the
+entire dataset, such that \emph{npep=1} means the
+individual was in the hull in the same proportion as it was
+in the entire dataset.  '
 }
 \seealso{
-  \code{\link{lxy.id.new}}
+\code{\link{lxy.id.new}}
 }
 

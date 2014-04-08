@@ -2,11 +2,9 @@
 \alias{summary.locoh.lhs}
 \title{Show summary of a LoCoH-hullset}
 \usage{
-  \method{summary}{locoh.lhs} (lhs, file = "", id = NULL,
-    k = NULL, r = NULL, a = NULL, s = NULL,
-    hs.names = NULL, iso.details = FALSE,
-    hsp.details = FALSE, desc = FALSE, compact = FALSE,
-    ...)
+\method{summary}{locoh.lhs}(lhs, file = "", id = NULL, k = NULL,
+  r = NULL, a = NULL, s = NULL, hs.names = NULL, iso.details = FALSE,
+  hsp.details = FALSE, desc = FALSE, compact = FALSE, ...)
 }
 \arguments{
   \item{lhs}{A \link{LoCoH-hullset} object}
@@ -37,6 +35,6 @@
   \item{...}{Other arguments}
 }
 \description{
-  Displays a summary of a LoCoH-hullset object
+Displays a summary of a LoCoH-hullset object
 }
 

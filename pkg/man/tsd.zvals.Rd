@@ -2,8 +2,7 @@
 \alias{tsd.zvals}
 \title{Space-time transformation term for TSD}
 \usage{
-  tsd.zvals(delta.t, sVal, type, d.bar = NULL, tau = NULL,
-    vmax = NULL)
+tsd.zvals(delta.t, sVal, type, d.bar = NULL, tau = NULL, vmax = NULL)
 }
 \arguments{
   \item{delta.t}{is the time difference in seconds}
@@ -24,7 +23,7 @@
   when \code{type='vmax'})}
 }
 \description{
-  Returns the values for the "time axis" of the TSD
-  distance metric
+Returns the values for the "time axis" of the TSD distance
+metric
 }
 
