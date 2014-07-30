@@ -138,9 +138,17 @@ require(tlocoh)
 <li>Windows users: if you have trouble installing the 'gpclib' package, see step two in the <a href="manual_install.html">manual installation</a> instructions.<br></li>
 </ul>
 
-<hr><h2>Updates</h2>
+<hr><h2>Getting Updates</h2>
 
-<p>T-LoCoH is still being developed and updates are expected. To receive announcements about updates, please subscribe to the T-LoCoH <a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/tlocoh-info">email list</a>. To see a list of new features and bug-fixes, see the <a href="change_log.html">Change Log</a>. To request a feature or report a bug, please email the package administrator.</p>  
+<p>T-LoCoH is still being developed and updates are expected (<a href="https://r-forge.r-project.org/R/?group_id=1622">see latest version</a>). To update your T-LoCoH package, type the following in R:</p>
+
+<p><pre>
+packageVersion("tlocoh")<br>
+update.packages(oldPkgs="tlocoh", repos="http://R-Forge.R-project.org")
+</pre></p>
+
+
+<p>To receive announcements about new updates, please subscribe to the T-LoCoH <a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/tlocoh-info">email list</a> (<a href="http://lists.r-forge.r-project.org/pipermail/tlocoh-info/">archives</a>). To see a list of new features and bug-fixes, see the <a href="change_log.html">Change Log</a>. To request a feature or report a bug, please email the <a href="https://r-forge.r-project.org/users/ajlyons/">package administrator</a>.</p>  
 
 <hr><a name="resources"></a>
 <div class="boxright"><div style="width: 500px;">
