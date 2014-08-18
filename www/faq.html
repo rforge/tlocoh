@@ -5,13 +5,9 @@
 
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>T-LoCoH</title>
+	<title>T-LoCoH: FAQs</title>
 	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
 <style>
-
-     li.halfspaceafter {
-        margin-bottom: 0.5em;
-     }
 
      body {
          font-size: 100%;
@@ -26,20 +22,6 @@
         margin-bottom: 0.5em;
      }
 
-     .ans {
-        font-size: 85%;
-        margin-bottom: 1.5em;
-     }
-
-     pre.box {
-         font-size: 110%;
-         padding: 1em;
-         border: 1px dashed rgb(47, 111, 171);
-         color: black;
-         background-color: rgb(249, 249, 249);
-         line-height: 1.1em;
-         clear: both;
-     }
 
 
 </style>
@@ -52,49 +34,7 @@
 
 <div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
 
-<h1>T-LoCoH FAQs</h1>
-
-
-<p class="qtn">Is there a version of T-LoCoH for ArcGIS?</p>
-<p class="ans">No, not at this time.</p>
-
-<p class="qtn">Is there a GUI?</p>
-<p class="ans">Not at this time.</p>
-
-<p class="qtn">Is T-LoCoH backward compatible with LoCoH?</p>
-<p class="ans">Yes, if you set <em>s=0</em> (time ignored), T-LoCoH should produce the same hulls and isopleths as <a href="http://tlocoh.r-forge.r-project.org/">LoCoH</a>.</p>
-
-<p class="qtn">What method should I use (k/a/r)?</p>
-<p class="ans">The k-method is fine if all you're interested in is density isopleths (utilization distributions). For all other hull metrics (including time-use metrics), you're better off using the a-method. If in doubt, use the a-method.</p>
-
-<p class="qtn">How do I find an upper and lower bound for <em>a</em>?</p>
-<p class="ans">Try using the <tt>lxy.amin.add</tt> function with nnn=c(3,20). More to come later.</p>
-
-<p class="qtn">Can I export my results to a format I can import into a GIS?</p>
-<p class="ans">Yes, see the functions <tt>lhs.exp.shp</tt> and <tt>lxy.exp.shp</tt></p>
-
-<p class="qtn">How many points can T-LoCoH handle?</p>
-<p class="ans">R is notoriously inefficient with memory, so it depends on your hardware, amount of physical memory, other applications open, and what you're doing in T-LoCoH (creating hulls and isopleths are memory intensive). Datasets up to 15,000 points run fine on modest laptop hardware, larger datasets run but are slower. Very large datasets can produce an out of memory error. A set of functions and workflow for k/a/r parameter selection has been developed for large datasets. Thinning down points with systematic sampling (i.e., keep every nth point), or analyzing different time periods separately, are also options (see lxy.subset). You can also run T-LoCoH on powerful machines in the cloud. </p>
-
-<p class="qtn">What's the difference between the 'id' and 'ptid' fields?</p>
-<p class="ans">T-LoCoH's data structure for location data has an 'id' and 'ptid' (point id) value for each location. The 'id' is the name of an individual (animal), or possibly a GPS device. This field allows you to keep track of mixed locations data for several individuals in the same LoCoH-xy object, so you can analyze them or create hulls for them simultaneously. Another use of the 'id' field is to break the dataset into discrete groups, for example by season (e.g., flyn_dryseason, flyn_wetseason).</p>
-<p class="ans">The 'ptid' (point id) is simply a unique numeric value for each location (i.e., primary key). It exists to help you link points and hulls to other variables associated with each hull. For example if you have a spreadsheet with soil type at each location, and have a column in the spreadsheet with a unique id for each location, you can pass a vector of unique point id values to xyt.lxy() and then any hulls created will have those ptid values also so you can analyze the hull metrics with the soil type.</p>
-
-<p class="qtn">What is the data structure of a locoh-hullset object?</p>
-<p class="ans">See the vignette (pdf file) on T-LoCoH data classes</p>
-
-<p><a href="index.html">Back</a></p>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-42624612-1', 'r-project.org');
-  ga('send', 'pageview');
-</script>
-
+<p class="qtn">This page has moved. Please visit the new <a href="tips_faqs.html">Tips and FAQs</a> page.</p>
 </body>
 </html>
 
