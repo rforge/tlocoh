@@ -34,7 +34,6 @@
 
 lhs.pep.add <- function(lhs, pep.var, pep.val=NULL, npep=TRUE, status=TRUE) {
 
-    if (!require(pbapply)) stop("package pbapply required")
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (is.null(pep.var)) stop("pep.var is a required value")
     if (is.null(lhs[[1]][["anv"]])) stop("Ancillary variables data frame not found")
@@ -65,14 +64,11 @@ lhs.pep.add <- function(lhs, pep.var, pep.val=NULL, npep=TRUE, status=TRUE) {
             
             for (pepVal in pep.val.use) {
             
-                #print("right now, we have a var and a val");browser()
-                
                 ## Createa a numeric vector of ones and zeros whether each point belongs to pepVal
                 ptval.int <- as.integer(lhs[[hs.idx]][["pts"]][[pepVar]] == pepVal)
                 
                 ## Sum up the number of points enclosed by each hull that are equal to pepVal
                 if (status) cat(" - computing the proportion of ", pepVal, " in each hull \n", sep=""); flush.console()
-                #pep.vals <- pbsapply(lhs[[hs.idx]][["hulls.enc"]][["idx"]], function(idx) sum(part.of.this.val[idx]) / length(idx))
                 pep.vals <- sapply(lhs[[hs.idx]][["enc.pts"]][["idx"]], function(x) sum(ptval.int[x]) / length(x))
                 
                 ## Create pep and npep hull metrics

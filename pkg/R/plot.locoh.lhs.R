@@ -78,7 +78,9 @@
 #' @param col.desc The color of the descriptive text. Color value.
 #' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
 #' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
-#' @param tiff.bands A vector of threee integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, green and blue color guns respectively.
+#' @param tiff.bands A vector of exactly one (for a single band image) or exactly three integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, 
+#' green and blue color guns respectively,. Ignored if \code{tiff.fn} only contains one band.
+#' @param tiff.col A vector of color values for plotting single-band images in the background. Ignored if using three bands.
 #' @param tiff.buff A numeric buffer distance that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
 #' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
 #' @param shp.csv The path and filename of a csv file that contains information about shapefiles, including layer names, file, and symbology.
@@ -126,18 +128,19 @@
 #' what elements will go in the title and subtitle (i.e., the second line of the title) with the \code{title.inc} and \code{subtitle.inc} parameters.
 #' To omit the plot title completely, set \code{title.show=FALSE}.
 #'
-#' \code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff}, \code{tiff.bands},
+#' \code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff}, \code{tiff.bands}, \code{tiff.col},
 #' and \code{tiff.fill.plot} control the display of a GeoTIFF image in
 #' the plot background. The GeoTIFF image must be georeferenced in the
 #' same coordinate system as the locoh-hullset object, and the pixel
 #' values must be 'prestretched' for display. \code{tiff.bands}
 #' controls which bands in the TIFF file will be displayed using the
-#' red, green, and blue color guns. In a Landsat TM image, for example, the
+#' red, green, and blue color guns if using three bands. In a Landsat TM image, for example, the
 #' first four bands are blue, green, red, and infrared. To display a TM
 #' GeoTIFF image as 'natural colors', you would set \code{tiff.bands=c(3,2,1)}.
 #' If \code{tiff.pct=T}, the script will create a indexed 256-color
 #' version of the image, which may result in quicker drawing time
-#' particularly if several plots are being drawn. \code{tiff.buff} can be
+#' particularly if several plots are being drawn. If using a single-band, for example a 
+#' DEM or classified image, the colors are set by \code{tiff.col}. \code{tiff.buff} can be
 #' used to expand the range of values on the x and y axis so that you see
 #' a bit of the background image beyond the extent of the points.
 #'
@@ -164,7 +167,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5),
     mgp=c(2, 0.7, 0), lo.save=TRUE, lo.margins.set=TRUE,
     desc=c(NONE<-0, BOTTOM<-1, TOP<-3)[ifelse(figs.per.page==1,2,1)], cex.desc=0.8, col.desc="darkgreen", 
-    tiff.fn=NULL, tiff.pct=FALSE, tiff.bands=c(4,3,2), tiff.buff=500, tiff.fill.plot=TRUE,
+    tiff.fn=NULL, tiff.pct=FALSE, tiff.bands=c(4,3,2), tiff.col=gray(0:255/255), tiff.buff=0, tiff.fill.plot=TRUE,
     shp.csv=NULL, layers=NULL, 
     png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.fn.pre=NULL, png.fn.mid=NULL, png.fn.suf=NULL, png.fn.incld.hs.name=TRUE, 
     png.each.plot.separate=TRUE, png.width=800, png.height=png.width, png.pointsize=12+(png.width-480)/80, png.overwrite=TRUE, 
@@ -194,12 +197,11 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     ## If record = TRUE, it will create a new device (plot window) and record the plots there
              
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (rast && !require(raster)) stop("package raster required")
+    if (rast && !requireNamespace("raster")) stop("package raster required, please install")
 
     ## Make sure tiff.fn exists, check tiff.bands
     if (!is.null(tiff.fn)) {
-        if (!require(rgdal)) stop("package rgdal required to display a tiff in the background")
+        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         range.expand.tiff <- tiff.buff
         tiff.sgdf <- NULL
@@ -442,9 +444,18 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                 ry.tiff <- ry
             }
             tiff.sgdf <- readpartgdal(tiff.fn, xlim=rx.tiff, ylim=ry.tiff, band=tiff.bands, silent=TRUE, status=TRUE)
-            if (tiff.pct) {
-                tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
-                tiff.sgdf$idx <- tiff.sgdf.cols$idx
+            if (is.null(tiff.sgdf)) {
+                tiff.fn <- NULL
+            } else {
+                if (tiff.pct) {
+                    if (length(tiff.sgdf@data)==3) {
+                        tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                        tiff.sgdf$idx <- tiff.sgdf.cols$idx
+                    } else {
+                        cat("   Incorrect number of bands, can't convert image to indexed RGB\n")
+                        tiff.pct <- FALSE
+                    }
+                }
             }
         }
     }
@@ -703,9 +714,18 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                             ry.tiff <- ry
                         }
                         tiff.sgdf <- readpartgdal(tiff.fn, xlim=rx.tiff, ylim=ry.tiff, band=tiff.bands, silent=TRUE, status=TRUE)
-                        if (tiff.pct) {
-                            tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
-                            tiff.sgdf$idx <- tiff.sgdf.cols$idx
+                        if (is.null(tiff.sgdf)) {
+                            tiff.fn <- NULL
+                        } else {
+                            if (tiff.pct) {
+                                if (length(tiff.sgdf@data)==3) {
+                                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                                    tiff.sgdf$idx <- tiff.sgdf.cols$idx
+                                } else {
+                                    cat("   Incorrect number of bands, can't convert image to indexed RGB\n")
+                                    tiff.pct <- FALSE
+                                }
+                            }
                         }
                     }
                     
@@ -876,7 +896,11 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                         if (tiff.pct) {
                             image(tiff.sgdf, "idx", col=tiff.sgdf.cols[["ct"]], add=TRUE)
                         } else {
-                            image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                            if (length(tiff.sgdf@data)==3) {
+                                image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                            } else {
+                                image(tiff.sgdf, col=tiff.col, add=TRUE)
+                            }
                         }
                     }
 

@@ -9,7 +9,6 @@ hsp.col.reg <- function(x,y, regions, col="gray50", return.reg.num.only=FALSE) {
     ## only points within defined regions will have their color changed to that of the region
     ## return.reg.num.only return only the region number, not its color code
     
-    if (!require(sp)) stop("package sp required")
     if (length(x) != length(y)) stop("length of x and y must be equal")
     
     ## Define the default values (for those points that don't fall in any region)

@@ -23,6 +23,7 @@
 #'
 #' For a description of the data structure, see the \emph{T-LoCoH Data Classes} vignette.
 #'
-#' @seealso \code{\link{xyt.lxy}}, \code{\link{move.lxy}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}, \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}
+#' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.proj.add}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}, 
+#' \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}, \code{\link{lxy.exp.kml}}, \code{\link{lxy.exp.shp}}, \code{\link{move.lxy}}
 
 NULL

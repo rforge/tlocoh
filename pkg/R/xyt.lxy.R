@@ -67,6 +67,7 @@
 #' @return A object of class \link{locoh.lxy}
 #'
 #' @seealso \code{\link{lxy.nn.add}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}
+#'
 #' @examples
 #' \dontrun{
 #' #Create an unbounded random walk as a sample dataset
@@ -77,7 +78,7 @@
 #' plot(xy, pch=20, type="b", lty=1)
 #' timestamps <- Sys.time() + 3600 * (1:n-1)
 #'
-#' #Combine the xy locations and timestamps into a \link{LoCoH-xy} object
+#' #Combine the xy locations and timestamps into a LoCoH-xy object
 #' lxy <- xyt.lxy(xy=xy, dt=timestamps, id="broken_tooth")
 #' summary(lxy)
 #' }
@@ -88,9 +89,7 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
                      del.dup.xyt=TRUE, dup.dt.check=TRUE, show.dup.dt=FALSE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, 
                      warn.latlong=TRUE, status=TRUE) {
                      
-    if (!require(sp)) stop("package sp required")
-    
-    #cat("still want to try to error test whether tz \n")
+    #cat("still want to try to error test whether tz is valid \n")
     
     err.msg <- "xy must be a two column data frame or matrix"
     if (is.matrix(xy)) {

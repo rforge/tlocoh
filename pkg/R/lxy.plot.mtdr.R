@@ -62,8 +62,6 @@ lxy.plot.mtdr <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, type=c("mtd.tsd",
                              png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, status=TRUE, ...) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't plot maximum theoretical distance ratio, no time stamps found")
     if (is.null(lxy[["nn"]])) stop("Please first identify nearest neighbors with lxy.nn.add(), then try again.")
     if (length(k) + length(a) + length(r) != 1) stop("Must provide one and only one of the following: k, r, or a")

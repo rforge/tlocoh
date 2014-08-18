@@ -1,13 +1,10 @@
-shp.layers.crop <-
-function(shp.layers.lst, bbox) {
+shp.layers.crop <- function(shp.layers.lst, bbox) {
     ## Crops the spatial data frame layer in shp.layers.lst to the extent of the bbox
     ## This is used primarily for faster drawing on plots
     ##
     ## shp.layers.lst is a list of spatialdataframe objects and symbology parameters (see shp.layers)
     ## Bbox is a 2x2 xy matrix containing two opposite corner points of a box
     
-    if (!require(rgeos)) stop("package rgeos required")
-
     ## Create a spatial polygons object for the bounding box
     bb.rx <- range(bbox[,1])
     bb.ry <- range(bbox[,2])

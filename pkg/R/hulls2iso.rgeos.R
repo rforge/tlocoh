@@ -18,9 +18,6 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
     ##    if iso.method == 'hm.vals', iso.levels will be the 'break points' ()
     ## in the order they are passed until the ith % of points is captured
 
-    if (!require(sp)) stop("package sp required")
-    if (!require(rgeos)) stop("package rgeos required")
-    if (!require(pbapply)) stop("package pbapply required")
     if (!is(hulls, "SpatialPolygons")) stop("hulls should be SpatialPolygons")
     if (length(hulls) < length(iso.levels)) return(NULL)
     if (!iso.method %in% c("pt.quantiles", "hm.vals")) stop("Unknown value for iso.method")

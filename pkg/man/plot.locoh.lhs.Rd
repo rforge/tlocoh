@@ -31,10 +31,10 @@
   lo.margins.set = TRUE, desc = c(NONE <- 0, BOTTOM <- 1, TOP <-
   3)[ifelse(figs.per.page == 1, 2, 1)], cex.desc = 0.8,
   col.desc = "darkgreen", tiff.fn = NULL, tiff.pct = FALSE,
-  tiff.bands = c(4, 3, 2), tiff.buff = 500, tiff.fill.plot = TRUE,
-  shp.csv = NULL, layers = NULL, png.fn = NULL, png.dir = NULL,
-  png.dir.make = TRUE, png.fn.pre = NULL, png.fn.mid = NULL,
-  png.fn.suf = NULL, png.fn.incld.hs.name = TRUE,
+  tiff.bands = c(4, 3, 2), tiff.col = gray(0:255/255), tiff.buff = 0,
+  tiff.fill.plot = TRUE, shp.csv = NULL, layers = NULL, png.fn = NULL,
+  png.dir = NULL, png.dir.make = TRUE, png.fn.pre = NULL,
+  png.fn.mid = NULL, png.fn.suf = NULL, png.fn.incld.hs.name = TRUE,
   png.each.plot.separate = TRUE, png.width = 800, png.height = png.width,
   png.pointsize = 12 + (png.width - 480)/80, png.overwrite = TRUE,
   status = TRUE, panel.num = NULL, panel.num.inside.plot = !title.show,
@@ -290,10 +290,15 @@
   indexed 256 color RGB image, which may speed up drawing.
   T/F.}
 
-  \item{tiff.bands}{A vector of threee integers
-  corresponding to the bands of the GeoTIFF image that will
-  be mapped to the red, green and blue color guns
-  respectively.}
+  \item{tiff.bands}{A vector of exactly one (for a single
+  band image) or exactly three integers corresponding to
+  the bands of the GeoTIFF image that will be mapped to the
+  red, green and blue color guns respectively,. Ignored if
+  \code{tiff.fn} only contains one band.}
+
+  \item{tiff.col}{A vector of color values for plotting
+  single-band images in the background. Ignored if using
+  three bands.}
 
   \item{tiff.buff}{A numeric buffer distance that the range
   of the plot will be expanded so the points are not right
@@ -429,21 +434,25 @@ parameters. To omit the plot title completely, set
 \code{title.show=FALSE}.
 
 \code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff},
-\code{tiff.bands}, and \code{tiff.fill.plot} control the
-display of a GeoTIFF image in the plot background. The
-GeoTIFF image must be georeferenced in the same coordinate
-system as the locoh-hullset object, and the pixel values
-must be 'prestretched' for display. \code{tiff.bands}
-controls which bands in the TIFF file will be displayed
-using the red, green, and blue color guns. In a Landsat TM
-image, for example, the first four bands are blue, green,
-red, and infrared. To display a TM GeoTIFF image as
-'natural colors', you would set \code{tiff.bands=c(3,2,1)}.
-If \code{tiff.pct=T}, the script will create a indexed
-256-color version of the image, which may result in quicker
-drawing time particularly if several plots are being drawn.
-\code{tiff.buff} can be used to expand the range of values
-on the x and y axis so that you see a bit of the background
-image beyond the extent of the points.
+\code{tiff.bands}, \code{tiff.col}, and
+\code{tiff.fill.plot} control the display of a GeoTIFF
+image in the plot background. The GeoTIFF image must be
+georeferenced in the same coordinate system as the
+locoh-hullset object, and the pixel values must be
+'prestretched' for display. \code{tiff.bands} controls
+which bands in the TIFF file will be displayed using the
+red, green, and blue color guns if using three bands. In a
+Landsat TM image, for example, the first four bands are
+blue, green, red, and infrared. To display a TM GeoTIFF
+image as 'natural colors', you would set
+\code{tiff.bands=c(3,2,1)}. If \code{tiff.pct=T}, the
+script will create a indexed 256-color version of the
+image, which may result in quicker drawing time
+particularly if several plots are being drawn. If using a
+single-band, for example a DEM or classified image, the
+colors are set by \code{tiff.col}. \code{tiff.buff} can be
+used to expand the range of values on the x and y axis so
+that you see a bit of the background image beyond the
+extent of the points.
 }
 

@@ -2,11 +2,13 @@
 \alias{lxy.exp.csv}
 \title{Export coordinates to a csv file}
 \usage{
-lxy.exp.csv(lxy, file = NULL, id = NULL, file.overwrite = FALSE,
-  quote = FALSE)
+lxy.exp.csv(lxy, dir = ".", file = NULL, id = NULL,
+  file.overwrite = FALSE, quote = FALSE)
 }
 \arguments{
   \item{lxy}{A LoCoH-xy object}
+
+  \item{dir}{The output directory}
 
   \item{file}{Filename (with extension .csv)}
 
@@ -15,6 +17,10 @@ lxy.exp.csv(lxy, file = NULL, id = NULL, file.overwrite = FALSE,
   \item{file.overwrite}{Overwrite existing file, T/F}
 
   \item{quote}{Delimit strings in quotes, T/F}
+}
+\value{
+A data frame containing the coordinates and attribute
+values of \code{lxy}
 }
 \description{
 Exports coordinates and date-stamps from a LoCoH-xy object

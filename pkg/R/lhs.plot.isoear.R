@@ -43,11 +43,7 @@ lhs.plot.isoear <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                              png.fn.pre=NULL, png.fn.suf=NULL, png.overwrite=TRUE,
                              panel.num=NULL, panel.num.inside.plot=!title.show, bg="white", legend.space=if (legend) 0.05 else 0, ...) {
 
-  ## If overlay=T, all series are combined on one axis
-  ## Taken out: series=c("hullsets","iso.levels")[ifelse(length(lhs)==1,1,2)], 
-
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {
         hs <- lhs

@@ -2,7 +2,7 @@
 #'
 #' Displays histogram(s) of point-to-point step length, velocity, and sampling frequency for a LoCoH-xy object
 #'
-#' @param x A \link{LoCoH-xy} object
+#' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to be plotted
 #' @param dt Include a histogram of the number of locations over time) (T/F)
 #' @param d Include a histogram of distance travelled per adjacent points (i.e., step length) (T/F)
@@ -23,13 +23,12 @@
 #' @method hist locoh.lxy
 #' @export
 
-hist.locoh.lxy <- function(x, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
+hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
                            dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,
                            delta.t.num.sd=NULL, d.tct=1.2, time.unit="auto", overlay.median=TRUE, breaks=20) {
 
-    lxy <- x; rm(x)
+    #lxy <- x; rm(x)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
     if (delta.t && is.null(lxy[["pts"]][["dt"]])) stop("No time stamps in this dataset, can't plot delta.t")
     if (dt && is.null(lxy[["pts"]][["dt"]])) stop("No time stamps in this dataset, can't plot dates over time")
     if (v && is.null(lxy[["pts"]][["dt"]])) stop("No time stamps in this dataset, can't plot velocity")
@@ -40,12 +39,8 @@ hist.locoh.lxy <- function(x, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, fi
     } else {
         if (FALSE %in% (id %in% levels(lxy[["pts"]][["id"]]))) stop("id value(s) not found")
     }
-
-    #comment <- ifelse(is.null(lxy[["comment"]]), "", paste(lxy[["comment"]], "\n", sep=""))
     
     opar <- par(mfrow = n2mfrow(if (is.null(figs.per.page)) d + delta.t + v + dt else figs.per.page), mar=c(4,3.2,3.2,0.5), mgp=c(1.2, 0.5, 0), bg="white")
-    ## orig: mgp=c(1.6, 0.7, 0), 
-    
     on.exit(par(opar))
     res <- list()
     

@@ -13,7 +13,6 @@ lxy.anv.add <- function(lxy, anv, anv.desc=NULL, overwrite=FALSE) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]])) stop("Old data structure detected, please update with lxy.repair()")
-    if (!require(sp)) stop("package sp required")
 
     ## if anv is a vector, convert to a named list
     if (is.vector(anv)) {

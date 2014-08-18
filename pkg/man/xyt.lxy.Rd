@@ -153,7 +153,7 @@ xy <- data.frame(x=start[1]+cumsum(stepsize * cos(theta)), y=start[2]+cumsum(ste
 plot(xy, pch=20, type="b", lty=1)
 timestamps <- Sys.time() + 3600 * (1:n-1)
 
-#Combine the xy locations and timestamps into a \\link{LoCoH-xy} object
+#Combine the xy locations and timestamps into a LoCoH-xy object
 lxy <- xyt.lxy(xy=xy, dt=timestamps, id="broken_tooth")
 summary(lxy)
 }

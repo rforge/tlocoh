@@ -17,9 +17,9 @@
 lhs.save <- function (lhs, file=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, save.as=NULL) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
     
     if (is.null(file)) {
+
         ## Build the pieces of a file name
         id.df <- unique(do.call(rbind, lapply(lhs, function(x) data.frame(id=x[["id"]], num.pts=length(x[["pts"]])))))
         fn.id <- tolower(paste(id.df[["id"]], ".n", id.df$num.pts, collapse = ".", sep=""))

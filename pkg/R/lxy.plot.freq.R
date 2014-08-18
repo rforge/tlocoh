@@ -63,7 +63,6 @@ lxy.plot.freq <- function(lxy, id=NULL, deltat.by.date=F, samp.by.date=F, cp=F, 
                             png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, ...) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Date-time values not found")
     if (!cp && !deltat.by.date && !samp.by.date) stop("Don't know what to plot. Set cp, deltat.by.date, or samp.by.date to TRUE")
     if ((cp || deltat.by.date) && samp.by.date) stop("You can only plot samples by date by itself")

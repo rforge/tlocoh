@@ -48,8 +48,6 @@ lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, dt.start=NULL, dt.end
                              status=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
-    if (byfreq && !require(FNN)) stop("Package FNN is required")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't harmonize the temporal frequency without date-time values")
     if (!trim.ends && !byfreq) stop("Don't know what to do. trim.ends and/or byfreq must be TRUE")
     

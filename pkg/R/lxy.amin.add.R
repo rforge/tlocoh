@@ -22,9 +22,7 @@
 
 lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=0.98, nnn=2, prec=NULL, max.iter=20, status=TRUE) {
 
-    if (!require(pbapply)) stop("pbapply package required")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
     if (is.null(lxy[["nn"]])) stop("No nearest-neighbor sets found")
     if (max(ptp) > 1) stop("ptp can't be more than 1")  
     

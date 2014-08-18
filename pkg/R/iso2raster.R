@@ -19,8 +19,7 @@
 
 iso2raster <- function(polys, raster=NULL, ext=NULL, dimSize=100, cell.size=NULL, sf.cell.size=2, ll.round=TRUE, status=TRUE, debug=FALSE) {
 
-    if (!require(raster)) stop("raster package required")
-    if (!require(sp)) stop("raster package required")
+    if (!requireNamespace("raster")) stop("raster package required")
 
     if (!is(polys, "SpatialPolygonsDataFrame")) stop("polys must be class SpatialPolygonsDataFrame")
     if (TRUE %in% diff(polys@data[["ptp"]]) < 0 ) stop("Isopleth levels must be increasing order to rasterize ")

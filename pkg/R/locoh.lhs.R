@@ -24,8 +24,7 @@
 #' In code examples, objects of class \code{locoh.lhs} are often noted by a 'lhs' suffix, and functions that are designed to work on LoCoH-hullset
 #' objects typically start with 'lhs'.
 #'
-#' For a description of the data structure, see the \emph{T-LoCoH Data Classes} vignette.
-#'
+#' For a complete description of the data structure, see the \emph{T-LoCoH Data Classes} vignette \url{../doc/tlocoh_data_classes.pdf} 
 #' @seealso \code{\link{lxy.lhs}}, \code{\link{summary.locoh.lhs}}, \code{\link{plot.locoh.lhs}}, \code{\link{lhs.merge}}, 
 #' \code{\link{lhs.iso.add}}, \code{\link{lhs.save}}, \code{\link{lhs.exp.shp}}
 

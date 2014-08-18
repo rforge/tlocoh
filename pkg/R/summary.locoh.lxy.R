@@ -18,7 +18,6 @@ summary.locoh.lxy <- function(lxy, file="", dt.int=FALSE, round.coords=1, ptsh=F
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
-    if (!require(sp)) stop("package sp required")
     if (file!="") sink(file=file)
 
     cat("Summary of LoCoH-xy object:", deparse(substitute(lxy)), "\n")

@@ -111,6 +111,8 @@ large datasets.
 ellipses \code{\link{lhs.visit.add}} for computing time-use
 metrics \code{\link{lhs.plot.scatter}} for creating
 scatterplots of hull metrics \code{\link{plot.locoh.lhs}}
-for plotting a LoCoH-hullset
+for plotting a LoCoH-hullset \code{\link{hulls}} for
+extracting hulls as a SpatialPolygonsDataFrame
+\code{\link{lhs.exp.shp}} to export hulls as shapefile
 }
 

@@ -118,6 +118,7 @@ automatically created in ArcMap. \code{avl.file} is
 presumed to be relative to the working folder.
 }
 \seealso{
-\code{\link{lhs.exp.csv}}
+\code{\link{lhs.exp.csv}}, \code{\link{hulls}},
+\code{\link{isopleths}}
 }
 

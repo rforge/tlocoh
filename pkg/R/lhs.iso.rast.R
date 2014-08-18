@@ -38,14 +38,10 @@ lhs.iso.rast <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names 
                         cell.size=NULL, sf.cell.size=2, ll.round=TRUE, status=TRUE) {
          
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!is.null(lhs[["xys"]])) stop("Old data structure detected")
-    if (!require(sp)) stop("package sp required")
-    if (!require(raster)) stop("package raster required")
+    if (!requireNamespace("raster")) stop("package raster required")
     if (!is.null(sort.metric)) {
         if (FALSE %in% (sort.metric %in% hm.expr(names.only=T, desc=F, print=F))) stop("Unknown value(s) for sort.metric")  
     }
-    
-    #if (anyDuplicated(iso.levels)) stop("Duplicate iso.levels detected")
     
     start.time <- Sys.time()
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {

@@ -11,7 +11,6 @@
 lhs.revisit.del <- function(lhs, status=TRUE) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
 
     hm.deleted <- NULL
     for (hs.idx in 1:length(lhs)) {
@@ -19,7 +18,6 @@ lhs.revisit.del <- function(lhs, status=TRUE) {
         
         hm.nsr <- sapply(lhs[[hs.idx]][["hm"]], function(x) x$type == "nsr")
         hm.nsr.colnames <- names(lhs[[hs.idx]][["hm"]])[hm.nsr]
-        
         
         ## Remove from lhs$hm
         lhs[[hs.idx]][["hm"]][hm.nsr] <- NULL

@@ -49,13 +49,10 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                    max.loops=10, time.term=c("vmax", "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2], use.nn=FALSE,
                    plotme=TRUE, save=TRUE, nn.add=FALSE, use.pb.n=200, ptsh.exists=c("replace", "append")[2], beep=FALSE, status=TRUE) {
 
-## Future enhancements
-## 1) Option to compute ptsh from saved nearest neighbor sets   *** top priority ***
-## 2) Option to compute ptsh for r and a methods
+    ## Future enhancements
+    ## 1) Option to compute ptsh from saved nearest neighbor sets   *** top priority ***
+    ## 2) Option to compute ptsh for r and a methods
 
-    if (!require(FNN)) stop("FNN (Fast Nearest Neighbor) package required")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("pbapply package required")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
     
@@ -311,7 +308,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
 
         }
 
-        cat("Done with ", idVal, "\n")
+        cat("Done with ", idVal, "\n", sep="")
         
         if (plotme) {
             plot(s.ptsh, type="l", main=paste("s vs. ptsh\n", idVal, ", n=", n, sep=""))

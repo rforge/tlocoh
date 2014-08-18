@@ -47,7 +47,8 @@
 #' symbology will automatically created in ArcMap. \code{avl.file} is presumed to be relative
 #' to the working folder.
 #'
-#' @seealso \code{\link{lhs.exp.csv}}
+#' @seealso \code{\link{lhs.exp.csv}}, \code{\link{hulls}}, \code{\link{isopleths}}
+#'
 #' @export
 
 lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL,
@@ -56,8 +57,7 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                show.time=TRUE, hm="all", anv=NULL, hsp=NULL, metadata=TRUE) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (!require(rgdal)) stop("package rgdal required")
+    if (!requireNamespace("rgdal")) stop("package rgdal required")
 
     if (!hpp && !hulls && !iso && !nn && !ellipses && !allpts) stop(cw("Don't know what to export. Set at least one of the following to TRUE: hpp, hulls, iso, nn, ellipses, or allpts"))
     if (!file.exists(dir)) stop(paste("Output directory doesn't exist:", dir))

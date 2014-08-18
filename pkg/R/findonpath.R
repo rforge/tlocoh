@@ -13,8 +13,7 @@
 #'
 #' @export
 
-findonpath <-
-function(fn, status=TRUE) {
+findonpath <- function(fn, status=TRUE) {
     
     if (file.exists(fn)) return(fn)
     
@@ -31,6 +30,7 @@ function(fn, status=TRUE) {
         if (status) cat(fn, "not found anywhere on the path\n")
         return(NULL)
     } 
-    if (length(fn.with.path.exists) > 1 && status) cat(length(fn.with.path.exists), "occurences of", fn, "found \n")
-    return(normalizePath(fn.with.path[fn.with.path.exists[1]]))
+    fnReturn <- normalizePath(fn.with.path[fn.with.path.exists[1]])
+    if (length(fn.with.path.exists) > 1 && status) cat(cw(paste(length(fn.with.path.exists), "occurences of", fn, "found on path. Returning ", fnReturn), final.cr=T))
+    return(fnReturn)
 }

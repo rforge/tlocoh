@@ -150,24 +150,19 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
 
     ## col.hour.of.day is NULL or a 24 color values for each hour of the day
     ## tz.local can be NULL or a named time zone. If not null, dt will be converted to local time
-    
-    #cat("x x x implement info.only \n")
 
     ## This will take an lxy object and export it as mov file
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (bg2png) if(!require(png)) stop("Package png required for bg2png")
+    if (bg2png) if(!requireNamespace("png")) stop("Package png required for bg2png")
 
     ## Make sure tiff.fn exists, check tiff.bands
     if (!is.null(tiff.fn)) {
-        if (!require(rgdal)) stop("package rgdal required to display a tiff in the background")
+        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         if (length(tiff.bands) > 3) stop("tiff.bands can not be longer than 3")
         tiff.info <- GDALinfo(tiff.fn, silent=TRUE)
         if (max(tiff.bands) > tiff.info[3]) stop(paste("Invalid value for tiff.bands. Only ", tiff.info[3], " band(s) in ", tiff.fn, "."))
-        #range.expand.tiff <- tiff.buff
         tiff.sgdf <- NULL
-
     }
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {
@@ -524,7 +519,7 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
 
         ## If we're not going to crop gis.layers, we can define gis.features as the full extent
         if (crop.layers.to.extent && length(gis.features.full.extent) > 0 ) {
-            if (require(rgeos)) {
+            if (requireNamespace("rgeos")) {
                 gis.layers.ready <- FALSE
             } else {
                 cat("rgeos package not installed, setting crop.layers.to.extent to FALSE \n")            

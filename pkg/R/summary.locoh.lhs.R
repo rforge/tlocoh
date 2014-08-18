@@ -23,11 +23,10 @@ summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=N
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!is.null(lhs[[1]][["xys"]])) stop("Old data structure detected")
-    if (!require(sp)) stop("package sp required")
     if (file!="") sink(file=file)
 
     cat("Summary of LoCoH-hullset object:", deparse(substitute(lhs)), "\n")
-    cat("T-LoCoH version: ", as.character(attr(lhs, "tlocoh_ver")), "\n", sep="")
+    if (!compact) cat("Created by: T-LoCoH ", as.character(attr(lhs, "tlocoh_ver")), "\n", sep="")
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {
         hs.indices <- 1:length(lhs)
@@ -117,6 +116,8 @@ summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=N
             if (!is.null(lhs[[hs.idx]][["hto"]])) other.elements <- c(other.elements, "temporal overlap indices")
             if (length(other.elements)==0) other.elements <- "-none-"
             cat(cw(paste("other: ", paste(other.elements, collapse=", ", sep=""), sep=""), final.cr=TRUE, indent=3, exdent=10))
+            
+            cat(cw(paste("created: ", lhs[[hs.idx]][["gen.date"]]), final.cr=TRUE, indent=1, exdent=10))
             cat("\n")
         }
 

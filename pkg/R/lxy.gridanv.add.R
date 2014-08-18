@@ -34,16 +34,14 @@ lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]])) stop("Old data structure detected, please update with lxy.repair()")
-    if (!require(sp)) stop("package sp required")
     if (!is.null(anv.name) && (length(band) != length(anv.name))) stop("Please provide an ancillary variable name (anv.name) for each band")
     if (is.null(fn) + is.null(dtfn) != 1) stop("fn OR dtfn is required (but not both)")
     if (is.null(fn) && length(fn) != 0) stop("fn must be of length 1. To grab values from multiple image by date, use dtfn")
     if (!date.match %in% c("closest", "before")) stop("Unknown value for date.match")
-    if (date.match=="closest" && !is.null(dtfn) && !require(FNN)) stop("package FNN required")
     
     ## Do some error checking on dtfn
     dtfn.err <- "dtfn should be a two-column data frame containing a date and filename"
-    if (!require(rgdal)) stop("package rgdal required to display a tiff in the background")
+    if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background")
     if (!is.null(dtfn)) {
         if (!is.data.frame(dtfn)) stop(dtfn.err)
         if (ncol(dtfn) != 2) stop(dtfn.err)

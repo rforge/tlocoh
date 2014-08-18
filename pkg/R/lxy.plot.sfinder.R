@@ -44,10 +44,7 @@ lxy.plot.sfinder <- function(lxy, id=NULL, delta.t="auto", delta.t.auto.n=8, del
     ##         term of TSD is equivalent to the Euclidean term. If 'auto,n' it will n intervals of tau starting from 3tau to the 80% 
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!require(sp)) stop("package sp required")
     
-    #if (nlevels(lxy[["id"]])>1) stop("More than one ID in this dataset. Need to change code before s can be computed")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't overlay the diffusion distance, no time stamps found")
     if (is.null(lxy[["rw.params"]])) stop("Can't overlay the diffusion distance, rw.params not saved")
     if (is.null(delta.t)) stop("Delta.t can't be null")

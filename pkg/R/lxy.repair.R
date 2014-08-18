@@ -26,7 +26,6 @@ lxy.repair <- function(lxy, fix.dup.ptid=FALSE, dt.int.round.to=0.1, tau.diff.ma
     
     if (class(lxy)=="LoCoH.lxy") class(lxy) <- "locoh.lxy"
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
 
     ## Convert the 'old' plural form of element names to singular forms
     if ("ids" %in% names(lxy)) names(lxy)[names(lxy)=="ids"] <- "id"

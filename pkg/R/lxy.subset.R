@@ -19,7 +19,6 @@
 lxy.subset <- function(lxy, id=NULL, ptid=NULL, idx=NULL, dt.start=NULL, dt.end=NULL, dt.int.round.to=0.1, tau.diff.max=0.02) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
     if (is.null(id) && is.null(ptid) && is.null(idx) && is.null(dt.start) && is.null(dt.end)) stop("no parameters for filtering passed")
     
     num.pts <- nrow(lxy[["pts"]])

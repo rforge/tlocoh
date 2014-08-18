@@ -49,14 +49,9 @@ lxy.plot.tspan <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, id=NULL, type=c(
 
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!require(sp)) stop("package sp required")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't plot tspan, no time stamps found")
     if (is.null(lxy[["nn"]])) stop("Please first identify nearest neighbors with lxy.nn.add(), then try again.")
     if (length(k) + length(a) + length(r) != 1) stop("Must provide one and only one of the following: k, r, or a")
-    ## if (length(s)==0) stop("s is a required parameter")
-    
-    #s.all <- sort(as.numeric(sapply(lxy$nn, function(x) x$s)))
     
     if (is.null(id)) {
         id <- levels(lxy[["pts"]][["id"]])

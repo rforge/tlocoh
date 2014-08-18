@@ -12,9 +12,9 @@
   panel.num.inside.plot = !title.show, png.fn = NULL, png.dir = NULL,
   png.dir.make = TRUE, png.width = 800, png.height = png.width,
   png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80,
-  tiff.fn = NULL, tiff.bands = c(3, 2, 1), tiff.pct = FALSE,
-  tiff.buff = 500, tiff.fill.plot = TRUE, layers = NULL, shp.csv = NULL,
-  xlim = NULL, ylim = NULL, legend = NULL, ...)
+  tiff.fn = NULL, tiff.bands = c(3, 2, 1), tiff.col = gray(0:255/255),
+  tiff.pct = FALSE, tiff.buff = 0, tiff.fill.plot = TRUE, layers = NULL,
+  shp.csv = NULL, xlim = NULL, ylim = NULL, legend = NULL, ...)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -103,6 +103,10 @@
   corresponding to the bands of the GeoTIFF image that will
   be mapped to the red, green and blue color guns
   respectively.}
+
+  \item{tiff.col}{A vector of color values for plotting
+  single-band images in the background. Ignored if using
+  three bands.}
 
   \item{tiff.pct}{Whether or to convert the GeoTIFF to an
   indexed 256 color RGB image, which may speed up drawing.

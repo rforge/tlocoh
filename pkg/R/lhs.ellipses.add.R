@@ -31,9 +31,6 @@ lhs.ellipses.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
     ## This could be a good candidate to parallelize over multiple cores
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!is.null(lhs[["xys"]])) stop("Old data structure detected")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!require(sp)) stop("package sp required")
     if (!existing.ellipses %in% c("overwrite", "abort")) stop("Unknown value for existing.ellipses")
     
     start.time <- Sys.time()

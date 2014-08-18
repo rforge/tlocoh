@@ -39,7 +39,6 @@
 lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median")[2], info.only=FALSE, 
                              dt.int.round.to=0.1, tau.diff.max=0.02, status=TRUE) {
 
-    if (!require(sp)) stop("package sp required")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't thin bursts without date-time values")
     if (!replace %in% c("mean","median")) stop("Unknown value for 'replace'")

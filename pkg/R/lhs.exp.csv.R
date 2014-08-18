@@ -38,7 +38,6 @@ lhs.exp.csv <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
     # metadata - export field descriptions in a meta data file (not yet supported)
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
     if (csv.save && !file.exists(dir)) stop(paste("Output directory doesn't exist:", dir))
 
     hme <- hm.expr(names.only=FALSE, print=FALSE)
@@ -54,8 +53,6 @@ lhs.exp.csv <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
     }
     if (length(hs)==0) stop("No hullsets found matching those criteria")
                                  
-    #if (is.null(file.base)) stop("You must enter a base filename: file.base")
-
     ## Do some error checking on hsp if passed
     if (!is.null(hsp)) {
         err.msg <- cw("hsp must be either a valid index of a saved scatter plot(s), or a list of objects of class 'locoh.hsp'", final.cr=FALSE, exdent=2)

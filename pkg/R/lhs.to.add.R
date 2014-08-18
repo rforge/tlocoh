@@ -28,9 +28,6 @@
 lhs.to.add <- function(lhs, id="all", hs2.id="all", maxdt="auto", save.hto=TRUE, status=TRUE ) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!is.null(lhs[["xys"]])) stop("Old lhs data structure detected")
     
     start.time <- Sys.time()
     if (status) cat(" - start time: ", as.character(start.time), "\n", sep = "")

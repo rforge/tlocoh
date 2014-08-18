@@ -51,8 +51,6 @@ lhs.plot.scatter.auto <- function(hs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, h
                              test.sample=NULL, enumerate.pairs.only=FALSE, new.plot.window=TRUE, hmap=NULL, ...) {
 
     if (!inherits(hs, "locoh.lhs")) stop("hs should be of class \"locoh.lhs\"")
-    if (!is.null(hs[["xys"]])) stop("Old data structure detected")
-    if (!require(sp)) stop("package sp required")
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {
         hs.matching.idx <- 1:length(hs)

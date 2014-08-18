@@ -27,8 +27,6 @@ lhs.revisit.add <- function(lhs, ta.min=NULL, ta.max=NULL, ta.cuts=NULL, status=
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (TRUE %in% sapply(lhs, function(hs) is.null(hs[["pts"]][["dt"]]))) stop("Date stamps not found, can't compute revisitation metrics")
-    if (!require(sp)) stop("package sp required")
-    #if (!require(pbapply)) stop("package pbapply required")
     if (!is.null(ta.max)) {
         if (length(ta.max) != length(ta.min)) stop("ta.max should be the same length as ta.min")
         if (min(ta.max - ta.min) <= 0) stop("ta.max should be greater than ta.min") 

@@ -14,9 +14,10 @@
 #' @param xlim A two-element numeric vector for the range of the x-axis (in map units)
 #' @param ylim A two-element numeric vector for the range of the y-axis (in map units)
 #' @param dt.label Add a label for the date of the frame
-#' @param dt.label.col A color value/name for the date label (ignored if \code{dt.label=FALSE})
 #' @param dt.label.x The x-coordinate for the date label (ignored if \code{dt.label=FALSE})
 #' @param dt.label.y The y-coordinate for the date label (ignored if \code{dt.label=FALSE})
+#' @param dt.label.col A color value/name for the date label (ignored if \code{dt.label=FALSE})
+#' @param dt.label.bg The background color for the date label. Set to \code{NA} for a transparent background. (ignored if \code{dt.label=FALSE})
 #' @param title A title for the map
 #' @param title.show Whether to show the title. T/F.
 #' @param axes.show Whether to show the axes (ticks, labels and titles). Can be over-written by \code{axes.ticks} and \code{axes.titles}. T/F.
@@ -25,7 +26,7 @@
 #' @param mar.map Margin settings for the map, see \code{\link{par}}
 #' @param mgp.map Locations of the axes elements for the map, see \code{\link{par}}
 #' @param col.xys.active Color of the active point. Ignored if \code{col.by.hour.of.day = TRUE}.
-#' @param col.xys.background Color of the non-active points. To hide non-active points, set to \code{NA}.
+#' @param col.xys.background Color of the non-active points. To hide non-active points, set this to \code{NA}.
 #' @param cex.xys.active The character expansion factor of the active point
 #' @param cex.xys.background The character expansion factor of non-active points
 #' @param tz.local The name of the time zone of the study area
@@ -40,7 +41,7 @@
 #' @param tmp.dir A directory where temporary PNG files for each frame will be created, character.
 #' @param tmp.files.delete Delete the temporary PNG files when done, T/F
 #' @param prompt.continue Whether to present a summary of the encoding settings and get user confirmation before continuing, T/F
-#' @param fn.mov The path and filename of output Quicktime *.mov file. If NULL a filename will be automatically generated
+#' @param fn.mov The path and filename of output file (either *.mov or *.mp4). If NULL a filename will be automatically generated
 #' @param fn.mov.dir The directory where the animation will be saved (ignored if a value for \code{fn.mov} is passed)
 #' @param fn.mov.exists What to do if the animation file already exists: "auto.increment", "overwrite", "stop", or "ask". 
 #' @param duration The desired duration of the animation (in seconds)
@@ -48,28 +49,47 @@
 #' @param skip Output every nth frame. To include every frame set skip=1. Integer.
 #' @param ffmpeg The name of the ffmpeg file. See notes.
 #' @param create.mov Whether to actually create the mov file. Set to FALSE preview a few frames without actually encoding them.
+#' @param fmt Video format: \code{'mov'} (Quicktime animation codec) or \code{'mp4'} (h.264)
 #' @param info.only Only return info 
 #' @param shp.csv The path and filename of a csv file that contains information about shapefiles, including layer names, file, and symbology.
 #' @param layers The name(s) of layers in shp.csv to display in the background. Will be displayed using the symbology in shp.csv. Character vector or comma delimited string.
+#' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
+#' @param tiff.bands A vector of threee integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, green and blue color guns respectively.
+#' @param tiff.col A vector of color values for plotting single-band images in the background. Ignored if using three bands.
+#' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
+#' @param tiff.buff A numeric buffer distance in map units that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
+#' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
 #' @param bg2png Save the plot background elements as a static raster image (to improve speed), ignored if \code{screen.test=TRUE}
 #' @param crop.layers.to.extent Whether to crop the shapefile layers to the view extent (may speed up drawing time)
 #' @param date.bar The height of the lower section of the plot to devote to the time bar, in inches. To hide the time bar completely, set \code{date.bar=0}.
 #' @param date.bar.bins The target number of bins (tick marks + 1) on the time bar (integer)
 #' @param col.db A single color value for the date bar axes / tick labels, character
 #' @param cex.axis.db Character expansion factor for the labels on the date bar axis.
-#' @param beep Beep when one, T/F
+#' @param beep Beep when done, T/F
 #' @param report.time Show the time taken when done, T/F
 #' @param status Show progress bar and status messages 
 #'
-#' @note To create the animation, two and only two of the following parameters must be passed: \code{duration}, \code{fps}, and \code{skip}. 
+#' @note This function creates an animation from a LoCoH-xy object. There are three general steps in the workflow: 
+#' 1) design the frame layout, 2) choose values for the speed and duration of the animation, and 3) create the 
+#' animation. 
+#'
+#' One will normally want to run the function a few times without actually encoding to tweak the frame design (e.g., where 
+#' the date label and legend appear). To see what a frame in the output will approximately look like, 
+#' set \code{screen.test=TRUE}. See Appendix VI of the T-LoCoH tutorial for further details.
+#' 
+#' If you have locations for all hours of the day, you can color the active point by the hour-of-day by setting
+#' \code{col.by.hour.of.day=TRUE}. This can help you visualize daily patterns in movement, assuming that the 
+#' time-stamps of each point are in local time. Locations at night will appear dark, sunrise and sunset reddish, and mid-day 
+#' points blue (these colors can be adjusted by passing a different value for \code{col.hod}. 
+#'
+#' To create the animation, two and only two of the following parameters must be passed: \code{duration}, \code{fps}, and \code{skip}. 
 #' The third parameter will be computed based on the other two. To include every frame, pass \code{fps}, set \code{skip=1}, and leave \code{duration} out.
 #'
-#' Larger values for \code{fps} will result in the animation running 'faster'. Values between 10 and 20 often work well; beyond 30 fps the eye can't keep up with the motion
+#' Larger values for \code{fps} will result in the animation running 'faster'. Values between 10 and 20 often work well; 
+#' beyond 30 fps the eye can't keep up with the motion
 #' Note if you pass values for \code{fps} and \code{duration}, an appropriate value for \code{skip} will be computed but 
 #' the final duration of the animation may not be exactly equal to \code{duration} because only interger values of \code{skip} are allowed.
 #'
-#' One will normally want to run the function a few times without actually encoding to tweak the frame design (e.g., where the date label and legend appear).
-#' To see what a frame in the output will *approximately* look like, set \code{screen.test=TRUE}. Once the screen sample looks good, next set \code{max.frames=3}, 
 #' \code{tmp.dir="."} (or another folder), \code{create.mov=FALSE}, and \code{tmp.files.delete=FALSE}. This will generate a few sample frames as PNG files 
 #' but not delete them so you can inspect them using an image viewer. Once these look good, create the full animation by setting \code{create.mov=TRUE} and 
 #' \code{max.frames=NULL}. 
@@ -82,9 +102,10 @@
 #' If \code{date.bar} is too small or too large, you might get a 'margins too large' error. Try values around 1, or 
 #' hide the date bar completely by setting \code{date.bar=0}.
 #'
-#' The output animation is encoded in QuickTime format. The Quicktime file is encoded using Quicktime's 'animation' codec, a lossless format that 'scrubs' 
+#' The output animation is encoded in QuickTime format or mp4. The Quicktime file is encoded using Quicktime's 'animation' codec, a lossless format that 'scrubs' 
 #' well (i.e., you can drag the scroll bar 
-#' to view frame by frame). Encoding requires installing the open source encoding program ffmpeg. ffmpeg is a command line program that 
+#' to view frame by frame). The mp4 settings use the h.264 compression algorithm with a constant rate factor of 20 (good quality). In both cases, 
+#' encoding requires installing the open source encoding program ffmpeg. ffmpeg is a command line program that 
 #' Linux and Windows users can download from http://ffmpeg.org/download.html.
 #' Windows users should save the ffmpeg.exe file to the working directory or a directory on Window's path environment variable (e.g., c:\\windows).
 #' Mac users can download ffmpegX from http://ffmpegx.com/download.html but this has not been tested (pass a value to \code{ffmpeg}).
@@ -93,10 +114,10 @@
 #' to combine the frames into a video file. For best results use a 'lossless' compression method in the encoding program.
 #' To create the individual frames only for encoding with another utility, set \code{tmp.dir="."} (the working directory) and \code{tmp.files.delete=FALSE}. 
 #'
-#' If \code{fn.mov.exists = "auto.increment"}, a two-digit number will be appended to the *.mov filename to avoid overwriting an existing file
+#' If \code{fn.mov.exists = "auto.increment"}, a two-digit number will be appended to the filename to avoid overwriting an existing file
 #'
-#' @return A list with information about each *.mov file created. Each element of the list is another list with two 
-#' elements: \code{fn} (the full filename) and \code{dim} (a two-element numeric vector with the frame width and height). If no *.mov file(s) were
+#' @return A list with information about each file created. Each element of the list is another list with two 
+#' elements: \code{fn} (the full filename) and \code{dim} (a two-element numeric vector with the frame width and height). If no animation file(s) were
 #' created, returns NULL. 
 #'
 #' @export
@@ -105,7 +126,7 @@
 lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=all.ids.at.once, all.ids.col=NULL, 
                         all.ids.legend=c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[5],
                         all.ids.legend.cex=0.8, dt.start=NULL, dt.end=NULL, frame.method=c("auto", "time", "location")[1], frame.rtd="auto", xlim=NULL, ylim=NULL, 
-                        dt.label=TRUE, dt.label.col="black", dt.label.x=NULL, dt.label.y=NULL, 
+                        dt.label=TRUE, dt.label.x=NULL, dt.label.y=NULL, dt.label.col="black", dt.label.bg="gray90",
                         title=NULL, title.show=TRUE,
                         axes.show=TRUE, axes.ticks=axes.show, axes.titles=FALSE, 
                         mar.map=c(0.7 + (if (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0),
@@ -120,8 +141,9 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                         width=if (screen.test) 7 else 608, height=NULL, max.frames=NULL, png.pointsize=16+(width-480)/80, 
                         screen.test=FALSE, tmp.dir=NULL, tmp.files.delete=TRUE, prompt.continue=TRUE,
                         fn.mov=NULL, fn.mov.dir=getwd(), fn.mov.exists=c("auto.increment", "overwrite", "stop", "ask")[1], 
-                        duration=NULL, fps=NULL, skip=NULL, ffmpeg="ffmpeg.exe", create.mov=TRUE, info.only=TRUE, 
-                        shp.csv=NULL, layers=NULL, bg2png=!is.null(layers), crop.layers.to.extent=TRUE, 
+                        duration=NULL, fps=NULL, skip=NULL, ffmpeg="ffmpeg.exe", create.mov=TRUE, fmt=c("mov","mp4")[1], info.only=TRUE, 
+                        shp.csv=NULL, layers=NULL, tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.col=gray(0:255/255), tiff.pct=FALSE, tiff.buff=0, tiff.fill.plot=TRUE, 
+                        bg2png=!is.null(layers), crop.layers.to.extent=TRUE, 
                         date.bar=0.85, date.bar.bins=12, col.db="darkblue", cex.axis.db=0.7, 
                         beep=FALSE, report.time=TRUE, status=TRUE) {
 
@@ -131,13 +153,11 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
 
     ## col.hour.of.day is NULL or a 24 color values for each hour of the day
     ## tz.local can be NULL or a named time zone. If not null, dt will be converted to local time
-    
-    #cat("x x x implement info.only \n")
 
     ## This will take an lxy object and export it as mov file
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
-    if (bg2png) if(!require(png)) stop("Package png required for bg2png")
+    if (bg2png) if(!requireNamespace("png")) stop("Package png required for bg2png")
+    if (!fmt %in% c("mp4","mov")) stop("fmt must be 'mov' or 'mp4'")
 
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't animate without date values")
     if (is.null(id)) {
@@ -193,6 +213,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
     
         ## Define a vector of colors that is in the same sequence as levels(lxy[["id"]]) (if needed)
         if (all.ids.col.unique) {
+            if (col.by.hour.of.day) stop(cw("If you are displaying each individual with a unique color, you can't also color the points by hour of day."))
             if (is.null(all.ids.col)) {
                 ids.cols <- rainbow(length(id), end=5/6)
             } else {
@@ -219,9 +240,6 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
      }
 
     ## Create presets for the margins of the map and date bar
-    ## col.db="darkblue"
-    ## was 2.1
-    ## mgp.map <- c(1.6, 0.4, 0)
     mar.db <- c(2, 5, 0, 2)
     mgp.db <- c(0, 0.4, 0)
     axes.lbl <- colnames(coordinates(lxy[["pts"]]))
@@ -239,10 +257,22 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
         }
     }
     
+
+    ## Expand xlim and ylim by tiff.buff 
+    if (is.null(tiff.fn)) {
+        range.expand <- rep(0,2)
+    } else {
+        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background, please install")
+        if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
+        range.expand <- c(-tiff.buff, tiff.buff)
+        tiff.sgdf <- NULL
+        if (length(tiff.bands) > 3) stop("tiff.bands can not be longer than 3")
+    }
+
+   
     ## Prepare GIS features
     gis.features.full.extent <- shp.layers(layers, shp.csv=shp.csv)
-    #if (length(layers) > 0) layers.plot <- NULL
-
+    
     ## Convert date stamps to local time if needed
     if (!is.null(tz.local) && attr(lxy[["pts"]][["dt"]], "tzone") != tz.local) {
         lxy[["pts"]][["dt"]] <- as.POSIXct(format(lxy[["pts"]][["dt"]], tz=tz.local), tz=tz.local)   
@@ -281,8 +311,6 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
             ## Delete any points from the very last list element that were sampled after dt.end.use
             dt.frames.lxyidx.lst[[length(dt.frames)]] <- dt.frames.lxyidx.lst[[length(dt.frames)]][lxy[["pts"]][["dt"]][dt.frames.lxyidx.lst[[length(dt.frames)]]] <= dt.end.use]
             
-            #print("lets pause here and look at dt.frames.lxyidx.lst");browser()
-            
         } else if (frame.method=="location") {
             dt.frames.lxyidx.lst <- as.list(idx.this.loop)
             dt.frames <- lxy[["pts"]][["dt"]][idx.this.loop]
@@ -294,11 +322,13 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
         xys <- data.frame(coordinates(lxy[["pts"]]))[idx.this.loop, , drop=FALSE]
         xys.range.lower.upper <- as.data.frame(sapply(xys, range))
         height.use <- height
-        
+
         ## Define xlim and ylim
-        if (is.null(xlim)) xlim <- xys.range.lower.upper[,1]
+        if (is.null(xlim)) xlim <- xys.range.lower.upper[,1] + range.expand
         if (is.null(ylim)) {
-            ylim <- xys.range.lower.upper[,2]
+            ylim <- xys.range.lower.upper[,2] + range.expand
+            
+            ## Compute frame height based on aspect ratio of points
             if (!is.null(height.use)) {
                 ylim.diff.based.on.width.height.ratio <-  diff(xlim) * height.use / width 
                 if (ylim.diff.based.on.width.height.ratio > diff(ylim)) {
@@ -310,51 +340,68 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 }
             }
         }
-        
-        ## If we're not going to crop gis.layers, we can define gis.features as the full extent
-        if (crop.layers.to.extent && length(gis.features.full.extent) > 0 ) {
-            if (require(rgeos)) {
-                gis.layers.ready <- FALSE
+
+        ## Prepare the tiff
+        if (!is.null(tiff.fn)) {
+            if (tiff.fill.plot) {
+                half.plot.size <- c(-0.5, 0.5) * max(diff(xlim), diff(ylim))
+                rx.tiff <- half.plot.size + mean(xlim)
+                ry.tiff <- half.plot.size + mean(ylim)
             } else {
-                cat("rgeos package not installed, setting crop.layers.to.extent to FALSE \n")            
-                gis.features <- gis.features.full.extent
-                gis.layers.ready <- TRUE
+                rx.tiff <- xlim
+                ry.tiff <- ylim
             }
+            
+            tiff.sgdf <- readpartgdal(tiff.fn, xlim=rx.tiff, ylim=ry.tiff, band=tiff.bands, silent=TRUE)
+            if (is.null(tiff.sgdf)) {
+                tiff.fn <- NULL
+            } else {
+                if (tiff.pct) {
+                    if (length(tiff.sgdf@data)!=3) {
+                        cat("   Incorrect number of bands, can't convert image to indexed RGB\n")
+                        tiff.pct <- FALSE
+                    } else if (bg2png) {
+                        cat("   Can't convert background image to a RGB when bg2png=TRUE\n")
+                        tiff.pct <- FALSE
+                    }
+                }
+                if (tiff.pct) {
+                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                    tiff.sgdf$idx <- tiff.sgdf.cols$idx
+                }
+            }
+            
+        }
+
+        
+        ## Determine if we're not going to crop gis.layers to the plot extent
+        if (crop.layers.to.extent && length(gis.features.full.extent) > 0 ) {
+            gis.layers.ready <- FALSE
         } else {
             gis.features <- gis.features.full.extent
             gis.layers.ready <- TRUE
         }
-        #saved.plot.background <- NULL
+        
         bg.png <- NULL
         fn.background.png <- tempfile(fileext=".png")
         
         ## Get device resolution and height of default-sized characters in inches
         dpi <- if (screen.test)  1 else 72
-        #round.up.to.nearest <- if (screen.test) 1 else 16
         no.device.open <- dev.cur() == 1 
-        #if (no.device.open) dev.new()
         line.height.in <- par("csi")
         if (no.device.open) dev.off()
         
         ## Compute height of the device if needed
         if (is.null(height.use)) {
-            #top.plus.bottom.margins.pixels <- dpi * sum(par("mai")[c(1,3)])
-
             top.plus.bottom.margins.pixels <- dpi * sum(mar.map[c(1,3)]) * line.height.in
             left.plus.right.margins.pixels <- dpi * sum(mar.map[c(2,4)]) * line.height.in
-            
             needed.height.of.plot.area.pixels <- (width - left.plus.right.margins.pixels) * diff(ylim) / diff(xlim)
-            
-            #if (date.bar > 0) needed.height.of.plot.area.pixels <- needed.height.of.plot.area.pixels + (dpi * date.bar) + (dpi * char.size.in * 2)
             if (date.bar > 0) needed.height.of.plot.area.pixels <- needed.height.of.plot.area.pixels + (dpi * date.bar)
-            
             height.use <- top.plus.bottom.margins.pixels + needed.height.of.plot.area.pixels
             
             ## If plotting to PNG, round height up to the nearest multiple of 16 (to help the video encoder)
             if (!screen.test) height.use <- ceiling(round(height.use)/round.up.to.nearest) * round.up.to.nearest
         } 
-        
-        #print("just found the height"); browser()
         
         ## Get the height of the date bar as a proportion of the total height
         date.bar.pth <- date.bar / (height.use / dpi)
@@ -427,7 +474,6 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
         if (title.show) {
             if (is.null(title)) {
                 str.title <- paste(idx.ids.lst[[idx.set]][["id"]], collapse=", ", sep="")
-                ##paste(hs[[hs.name]][["id"]], ": ", format(min(hs[[hs.name]]$dt[xys.indices]), format="%Y/%m/%d"), " - ", format(max(hs[[hs.name]]$dt[xys.indices]), format="%Y/%m/%d"), sep="")
             } else {
                 str.title <- title
             }
@@ -453,15 +499,16 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                                           
             if (is.null(fn.mov)) {
                 fn.mov.base <- eval(fn.mov.base.exp)
-                fn.mov.full <- file.path(fn.mov.dir, paste(fn.mov.base, ".mov", sep=""))
+                fn.mov.full <- file.path(fn.mov.dir, paste(fn.mov.base, ".", fmt, sep=""))
             } else {
                 ## User provided a value for fn.mov. Check if it is a full file name include extension
-                if (substr(fn.mov, nchar(fn.mov) - 3, nchar(fn.mov)) != ".mov") {
-                    fn.mov.full <- file.path(fn.mov, ".mov", sep="")
+                if (substr(fn.mov, nchar(fn.mov) - 3, nchar(fn.mov)) != paste(".", fmt, sep="")) {
+                    fn.mov.full <- file.path(paste(fn.mov, ".", fmt, sep=""))
                 } else { 
                     fn.mov.full <- fn.mov
                 }
             }
+            
             if (file.exists(fn.mov.full)) {
                 if (fn.mov.exists == "stop") {
                     stop(paste(fn.mov.full, "exists"))
@@ -472,7 +519,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                     i <- 0
                     while (file.exists(fn.mov.full)) {
                         i <- i + 1
-                        if (i > 99) stop("Have tried 99 unique file names for mov file, but all exist. Bailing")
+                        if (i > 99) stop("Have tried 99 unique file names for the animation file, but all exist. Bailing")
                         #print("lets check out this auto-increment");browser()
                         
                         ## Look for a .nn pattern in the file name, then either update the 
@@ -480,9 +527,9 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                         auto.incr.dot <- substr(fn.mov.full, nchar(fn.mov.full) - 6, nchar(fn.mov.full) - 6)
                         auto.incr.digits <- substr(fn.mov.full, nchar(fn.mov.full) - 5, nchar(fn.mov.full) - 4)
                         if (auto.incr.dot=="." && length(grep("[^0-9]", auto.incr.digits, value = TRUE)) == 0) {
-                            fn.mov.full <- paste(substr(fn.mov.full, 1, nchar(fn.mov.full) - 6), sprintf("%02d", i), ".mov", sep="")    
+                            fn.mov.full <- paste(substr(fn.mov.full, 1, nchar(fn.mov.full) - 6), sprintf("%02d", i), ".", fmt, sep="")    
                         } else {
-                            fn.mov.full <- paste(substr(fn.mov.full, 1, nchar(fn.mov.full) - 4), ".", sprintf("%02d", i), ".mov", sep="")    
+                            fn.mov.full <- paste(substr(fn.mov.full, 1, nchar(fn.mov.full) - 4), ".", sprintf("%02d", i), ".", fmt, sep="")    
                         }
                     }
                 } else if (fn.mov.exists == "ask") {
@@ -507,7 +554,14 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                     cat(cw("Cant find ffmpeg.exe. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows)", final.cr=T))
                     return(invisible(NULL))
                 }
-                cmd <- paste(ffmpeg.exec, " -r ", fps.use, " -i \"", fn.png, "\" -s ", width, "x", height.use, " -g 300 -pix_fmt rgb555be -vcodec qtrle -an \"", fn.mov.full, "\"", sep="")
+                if (fmt=="mov") {
+                    cmd <- paste(ffmpeg.exec, " -r ", fps.use, " -i \"", fn.png, "\" -s ", width, "x", height.use, " -g 300 -pix_fmt rgb555be -vcodec qtrle -an \"", fn.mov.full, "\"", sep="")
+                } else {
+                    cmd <- paste(ffmpeg.exec, " -r ", fps.use, " -i \"", fn.png, "\" -s ", width, "x", height.use, " -c:v libx264 -crf 20 -pix_fmt yuv420p -preset slow -tune animation -an -f mp4 \"", fn.mov.full, "\"", sep="")
+                }
+                
+                # new cmd: mp4
+                # ffmpeg.exe -r 10 -i img18d449a02b93%04d.png -s 608x848 -c:v libx264 -crf 25 -pix_fmt yuv420p -preset slow -tune animation -an -f mp4 am188_v2.mp4
             }
             
             if (prompt.continue) {
@@ -515,7 +569,9 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 cat("  Num frames=", length(frames.to.use), ". Duration=", round(duration.use, 1), "secs. fps=", fps.use, ". Skip=", skip.use, ". Frame size: ", 
                     width, "x", height.use, "\n", sep="")
                 cat("  Temp folder: ", tmp.dir, "\n  Delete temp files: ", tmp.files.delete, "\n  Record background as PNG: ", bg2png, "\n", sep="")
-                cat("  Mov file: ", if (create.mov) fn.mov.full else "<skipped>", "\n", sep="")
+                if (!bg2png && !is.null(tiff.fn)) cat(cw("  Tip: Creating frames with a background image may be faster if you set bg2png=TRUE", indent=4, exdent=4, final.cr=T))
+                if (col.by.hour.of.day) cat("  Color points by the hour-of-day: TRUE\n")
+                cat("  Format: ", fmt, "\n  File: ", if (create.mov) fn.mov.full else "<skipped>", "\n", sep="")
                 ans <- readline(prompt = "Continue? y/n ")
                 if (ans != "y") return(invisible(NULL))
             }
@@ -525,46 +581,32 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
             ##if (record.plot) dev.control(displaylist="enable")
             opar <- par(mar=mar.map , mgp=mgp.map)
             if (date.bar > 0) layout(matrix(1:2, ncol=1), heights=c(1-date.bar.pth, date.bar.pth))
-            #opar <- par(mar=c(5, 3.2, 3.2, 0.5), mgp=c(2.1, 1, 0))        
         }
         on.exit(par(opar))
         
         ## Set up date bar parameters
         if (date.bar > 0) {
-            #print("here we are again with the fucked up time zone prob");browser()
-            
-            ## db.axis$tick.all is a vector of dates in local time (SAST)
             db.axis <- dateticks(dt.frames, max.ticks=date.bar.bins + 1)
             db.axis.int.gmt <- as.numeric(db.axis[["tick.all"]])
             dt.frames.int.gmt <- as.numeric(dt.frames)
             db.xlim.int.gmt <- c(min(db.axis.int.gmt[1], dt.frames.int.gmt[1]), max(db.axis.int.gmt[length(db.axis.int.gmt)], dt.frames.int.gmt[length(dt.frames.int.gmt)]))
-            
-            ## old
-            ##db.xlim <- c(min(db.axis$tick.all[1], min(dt.frames)), max(db.axis$tick.all[length(db.axis$tick.all)], max(dt.frames)))
         }
-               
                     
-        ## Set up the colors for the active points
+        ## Set up the colors for the active point if coloring locations by the hour of day
         if (col.by.hour.of.day) {
-            print("ok, time to set colors for hour of day - is this still needed and working?");browser()
-            #print("lets pause and look at the hour of day color");browser()
-            col.use <- col.hod[as.POSIXlt(dt.frames)[["hour"]] + 1]
-        } else {
-            col.use <- "black"
-            ## take out for now col.use <- rep(col.xys.active, length(xys.indices))
+            col.xys.active.hod <- factor(col.hod[as.POSIXlt(dt.frames)[["hour"]] + 1])
         } 
         
-          
         ## Make the frames
         cat("  Creating frames...\n")
         if (status) pb <- txtProgressBar(min = 0, max = length(frames.to.use), style = 3)
         make.frames.start <- Sys.time()
         
-        ##for (i in 1:length(dt.frames.lxyidx.lst)) {
-        for (i in frames.to.use) {
-                                
-            if (status) setTxtProgressBar(pb, i)
-
+        for (frmidx in 1:length(frames.to.use)) {
+            
+            if (status) setTxtProgressBar(pb, frmidx)
+            i <- frames.to.use[frmidx]
+            
             ## If bg2png=T and this is the first pass, create a PNG file of just the plot area containing the map background, then load it to memory
             if (bg2png && is.null(bg.png)) {
             
@@ -591,6 +633,15 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 ## Create a blank plot with no margins and no axes
                 par(mar=c(0,0,0,0))
                 plot(NULL, xlim=xlim, ylim=ylim, axes=F, asp=1)
+
+                ## Display the tiff
+                if (!is.null(tiff.fn)) {
+                    if (length(tiff.sgdf@data)==3) {
+                        image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                    } else {
+                        image(tiff.sgdf, col=tiff.col, add=TRUE)
+                    }
+                }
 
                 ## Crop the GIS layers on first pass if needed
                 if (!gis.layers.ready) {
@@ -624,12 +675,6 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 
             }
             
-            #if (!screen.test && record.plot && !is.null(saved.plot.background)) {
-            #    replayPlot(saved.plot.background)
-            #} else {
-                
-            #print('ready to create a blank plot');browser()
-            
             ## Create a blank plot
             par(mar=mar.map, mgp=mgp.map)
             plot(NULL, xlim=xlim, ylim=ylim, xlab=if (axes.titles) axes.lbl[1] else "", ylab=if (axes.titles) axes.lbl[2] else "", xaxt=tick.show, yaxt=tick.show, cex.axis=0.8, main=str.title, asp=1)
@@ -641,6 +686,15 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 box()
             } else {
             
+                ## Display the tiff
+                if (!is.null(tiff.fn)) {
+                    if (length(tiff.sgdf@data)==3) {
+                        image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                    } else {
+                        image(tiff.sgdf, col=tiff.col, add=TRUE)
+                    }
+                }
+                
                 ## Crop the GIS layers on first pass if needed
                 if (!gis.layers.ready) {
                     #gis.features <- shp.layers.crop(gis.features.full.extent, matrix(c(xlim,ylim), ncol=2, byrow=F))
@@ -675,22 +729,29 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 axis(side=1, at=db.axis.int.gmt, labels=format(db.axis[["tick.all"]], format=db.axis[["format.str"]]), cex.axis=cex.axis.db, col.axis=col.db, col=col.db, col.ticks=col.db)
             }
             
-            ## Save the plot if this is the first run
-            #if (!screen.test && record.plot && is.null(saved.plot.background)) {
-            #    saved.plot.background <- recordPlot()
-            #}
-                
-            #}
-            
-            
             ## Time to plot the active point(s). Set the focus to the top frame and apply map margins
             par(mfg=c(1,1), mar=mar.map, mgp=mgp.map, usr=usr.map)
             
             ## Plot the active point
-            points(coordinates(lxy[["pts"]])[dt.frames.lxyidx.lst[[i]], ,drop=FALSE], col=if (all.ids.col.unique) ids.cols[lxy.id.int[dt.frames.lxyidx.lst[[i]]]] else col.xys.active, pch=20, cex=cex.xys.active)
+            if (col.by.hour.of.day) {
+                points(coordinates(lxy[["pts"]])[dt.frames.lxyidx.lst[[i]], ,drop=FALSE], col=if (all.ids.col.unique) ids.cols[lxy.id.int[dt.frames.lxyidx.lst[[i]]]] else as.character(col.xys.active.hod[dt.frames.lxyidx.lst[[i]]]), pch=20, cex=cex.xys.active)
+            } else {
+                points(coordinates(lxy[["pts"]])[dt.frames.lxyidx.lst[[i]], ,drop=FALSE], col=if (all.ids.col.unique) ids.cols[lxy.id.int[dt.frames.lxyidx.lst[[i]]]] else col.xys.active, pch=20, cex=cex.xys.active)
+            }
             
             ## Plot the date-time label
-            if (dt.label) text(dtlabel.pt, labels=format(dt.frames[i], format="%b. %d, %Y. %H:%M"), font=2, col=dt.label.col)
+            if (dt.label) {
+                dt.text <- format(dt.frames[i], format="%b. %d, %Y. %H:%M")
+                if (!is.na(dt.label.bg)) {
+                    dt.buff <- strwidth("m", units = "user", font=2) * 0.2
+                    dt.halfwidth <- dt.buff + strwidth(dt.text, units = "user", font=2) / 2 
+                    dt.halfheight <- dt.buff + strheight(dt.text, units = "user", font=2)  / 2
+                    dt.boxX <- dtlabel.pt[1,1] + dt.halfwidth * c(-1,1,1,-1,-1)
+                    dt.boxY <- dtlabel.pt[1,2] + dt.halfheight * c(1,1,-1,-1,1)
+                    polygon(dt.boxX, dt.boxY, border=NA, col=dt.label.bg)
+                }
+                text(dtlabel.pt, labels=dt.text, font=2, col=dt.label.col)
+            }
             
             ## Put a line on the date bar
             if (date.bar > 0) {
@@ -716,18 +777,17 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 cat("   Time to make frames:", round(time.taken.frames, 1), units(time.taken.frames), " (", round(time.taken.frames.secs / length(frames.to.use), 1), " seconds/frame) \n", sep = " ") 
             }    
 
-            if (create.mov) {
+            if (create.mov) {                
                 shell.ffmpeg <- system(cmd, wait=TRUE, invisible=TRUE, intern=FALSE, minimized=FALSE)
                 if (shell.ffmpeg == 0) {
                     cat("  Created ", fn.mov.full, " (", round(file.info(fn.mov.full)[["size"]] / 2^20, 3), "Mb)\n", sep="")    
                 } else {
-                    cat("Creating mov file appears to have failed \n")
+                    cat("Creating the animation file appears to have failed \n")
                     return(NULL)
                 }
                 res[[names(idx.ids.lst)[idx.set]]] <- list(fn=fn.mov.full, dim=c(width, height.use))
             }
-            if (tmp.files.delete) file.remove(sprintf(fn.png, 1:length(frames.to.use)))            
-        
+            if (tmp.files.delete) file.remove(sprintf(fn.png, 1:length(frames.to.use)))                      
         }
         
     }

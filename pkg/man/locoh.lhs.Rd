@@ -30,8 +30,9 @@ often noted by a 'lhs' suffix, and functions that are
 designed to work on LoCoH-hullset objects typically start
 with 'lhs'.
 
-For a description of the data structure, see the
-\emph{T-LoCoH Data Classes} vignette.
+For a complete description of the data structure, see the
+\emph{T-LoCoH Data Classes} vignette
+\url{../doc/tlocoh_data_classes.pdf}
 }
 \seealso{
 \code{\link{lxy.lhs}}, \code{\link{summary.locoh.lhs}},

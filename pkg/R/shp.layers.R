@@ -81,7 +81,7 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
     }
                             
     ## Read each shp file and fill the in the $sdf element with a spatial data frame
-    if (!require(maptools)) stop("package maptools required")
+    if (!requireNamespace("maptools")) stop("package maptools required")
     for (i in 1:length(shp.layers.lst)) {
         fn.shp <- shp.layers.lst[[i]][["fn"]]
         if (!file.exists(fn.shp)) {

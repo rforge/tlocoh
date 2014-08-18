@@ -160,4 +160,7 @@ will be used as backup.
 # lhs <- lhs.visit.add(lhs, ivg=3600.24)
 # lhs <- lhs.iso.add(lhs, sort.metric="nsv", ivg=3600*24)
 }
+\seealso{
+\code{\link{isopleths}}
+}
 

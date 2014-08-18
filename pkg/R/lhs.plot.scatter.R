@@ -132,8 +132,6 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
     ##  2) a vector of color values
     
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!is.null(lhs[["xys"]])) stop("Old data structure detected. Update with lxy.repair.")
-    if (!require(sp)) stop("package sp required")
 
     if (add && (!is.null(png.dir) || !is.null(png.fn))) stop("You can't use the add option when creating a PNG file")
     if (identical(col,"hsp")) {

@@ -27,14 +27,12 @@
 lxy.plot.pt2ctr <- function(lxy, id=NULL, idx=NULL, vline=NULL, vline.trunc.units.to = c("secs", "mins", "hours", "days")[4], figs.per.page=NULL, ...) {
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
     if (!is.null(id) && !is.null(idx)) stop("only one of the parameters 'id' and 'idx' should be passed")
     if (is.logical(vline)) stop("Improper value for vline. Should be a unit of time in seconds")
     
     if (is.null(idx)) idx <- 1:nrow(lxy[["pts"]])    
     if (is.null(id)) {
         id <- unique(as.character(lxy[["pts"]][["id"]][idx]))
-        #id <- levels(lxy[["id"]][idx])
     } else {
         if (FALSE %in% (id %in% levels(lxy[["pts"]][["id"]][idx]))) stop("id value(s) not found")
     }

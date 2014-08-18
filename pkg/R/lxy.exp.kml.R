@@ -38,8 +38,7 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
   
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
 
-    if (!require(XML)) stop("package XML is required for this function")
-    #if (!require(plotKML)) stop("package plotKML is required for this function")
+    if (!requireNamespace("XML")) stop("package XML is required for this function")
 
     file.name <- file
     if (substr(file.name, nchar(file.name)-3, nchar(file.name)) != ".kml") file.name <- paste(file.name, ".kml", sep="") 
@@ -188,7 +187,6 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     ## Finally make the folders with the points
     
     ## Set up progress bar
-    #total_pts <- sum(lxy[["pts"]][["id"]] %in% id)
     total_pts <- sum(as.numeric(sapply(id, function(x) length(seq(from=1, to=sum(lxy[["pts"]][["id"]] == x), by=skip)))))
     
     usePB <- total_pts > 100
@@ -211,7 +209,6 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
         }
         
         ## Next add the placemarks
-        
         for (ptidx in idx) {
             placemark.parent <- newXMLNode("Placemark", parent=idfolder.parent)
             #placemark.name <- newXMLNode("name", text=ptidx, parent=placemark.parent)

@@ -21,8 +21,6 @@ lhs.visit.add <- function(lhs, ivg=NULL, status=TRUE) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (TRUE %in% sapply(lhs, function(hs) is.null(hs[["pts"]][["dt"]]))) stop("Date stamps not found, can't add time use metrics")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
     if (is.null(ivg)) stop("Need a value for the inter-visit gap (ivg)")
 
     for (hs.idx in 1:length(lhs)) {

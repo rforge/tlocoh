@@ -43,7 +43,6 @@ lhs.filter.hsp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
     ## col is an optional vector of color values, if not passed the stored color values in the regions will be used
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
     err.msg.hsp <- "hsp should be the index of a hsp object saved in lhs, or a list with one object of class 'locoh.hsp'"
     if (length(hsp) != 1) stop(err.msg.hsp)
 

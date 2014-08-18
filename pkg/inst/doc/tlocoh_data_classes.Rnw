@@ -1,3 +1,4 @@
+%\VignetteIndexEntry{T-LoCoH Data Classes}
 \documentclass{article}
 
 \title{ T-LoCoH Data Classes }
@@ -103,7 +104,7 @@ The list elements of a LoCoH-xy object are named, and it is suggested that you a
 
 \end{itemize}
 
-\section*{LoCoH-hullst objects}
+\section*{LoCoH-hullset objects}
 
 A LoCoH-hullset is an object of class \texttt{locoh.lhs} is a S3 object (named list) containing hulls and their associated objects. A hullset collection may contain hullsets for multiple individuals (ids), nearest neighbor selection methods, and/or parameter values. The name of each element of a hullset collection takes the following form:
 

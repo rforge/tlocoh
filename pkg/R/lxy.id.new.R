@@ -34,7 +34,6 @@ lxy.id.new <- function(lxy, id.new, save.old.id=NULL, dup.dt=c("check", "offset"
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]])) stop("Old data structure detected, please update with lxy.repair()")
-    if (!require(sp)) stop("package sp required")
     if (length(id.new) != 1 && length(id.new) != nrow(lxy[["pts"]])) stop("Invalid value for 'id.new'")
 
     ## Get the anv values
@@ -46,9 +45,6 @@ lxy.id.new <- function(lxy, id.new, save.old.id=NULL, dup.dt=c("check", "offset"
         anv.desc <- as.character(lxy[["anv"]][["desc"]])
     }
     
-    #anv <- lxy[["pts"]]@data[ , which(!names(lxy[["pts"]]@data) %in%  c("ptid", "dt", "id"))]
-    #if (ncol(anv)==0) anv <- NULL
-
     ## See if we need to save the existing id values
     if (!is.null(save.old.id)) {
         ## Get the name of the column in the anv where the current id values will be saved

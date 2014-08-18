@@ -66,9 +66,6 @@ lhs.to.stats <- function(lhs, id1="all", id2="all", n="all", iso.lower=NULL, iso
                        status=TRUE, ...) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!is.null(lhs[["xys"]])) stop("Old lhs data structure detected")
     if (!hist.type %in% c("density","counts")) stop("Unknown value for hist.type")
     
     ## Make a data frame of all of the hullsets and their properties

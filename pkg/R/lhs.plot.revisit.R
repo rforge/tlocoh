@@ -57,8 +57,6 @@ lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
   ## Taken out: series=c("hullsets","iso.levels")[ifelse(length(lhs)==1,1,2)], 
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
     if (TRUE %in% sapply(lhs, function(hs) is.null(hs[["pts"]][["dt"]]))) stop("Date stamps not found, can't plot revisitation times")
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {

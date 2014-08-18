@@ -12,7 +12,6 @@
 
 lhs.merge <- function(..., check.class=TRUE) {
 
-    if (!require(pbapply)) stop("package pbapply required")
     lhs.lst <- list(...)
     if (length(lhs.lst)==1) stop("Can't merge one object")
     if (length(lhs.lst)==0) return(NULL)

@@ -43,6 +43,8 @@
 #' \code{\link{lhs.visit.add}} for computing time-use metrics
 #' \code{\link{lhs.plot.scatter}} for creating scatterplots of hull metrics
 #' \code{\link{plot.locoh.lhs}} for plotting a LoCoH-hullset
+#' \code{\link{hulls}} for extracting hulls as a SpatialPolygonsDataFrame
+#' \code{\link{lhs.exp.shp}} to export hulls as shapefile
 #'
 #' @export
 
@@ -52,8 +54,6 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                     save.hulls=TRUE, save.enc.pts=TRUE) {
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!require(sp)) stop("package sp required")
     if (is.null(lxy[["pts"]])) stop("Old data structure")
     if (!is.null(ud)) stop("The 'ud' argument is no longer used. Use 'iso.add' instead")
 

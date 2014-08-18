@@ -44,9 +44,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                    time.term=c("vmax", "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2], dec.places=1, 
                    ra.init.samp.size=30, ra.init.quant=0.8, tct=0.05, beep=FALSE, status=TRUE) {
     
-    if (!require(FNN)) stop("FNN (Fast Nearest Neighbor) package required. Please install this package then try again.")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("pbapply package required. Please install this package then try again.")
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
     if (!is.null(s)) {if (is.null(lxy[["pts"]][["dt"]]) && max(s) > 0) stop("You can't set s>0 because these locations have no time stamps saved")}

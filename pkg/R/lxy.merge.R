@@ -27,7 +27,6 @@
 
 lxy.merge <- function (..., pts.flds="all", save.ptid=FALSE, new.id=NULL, save.old.id=NULL, dt.int.round.to=0.1, tau.diff.max=0.02) {
 
-    if (!require(sp)) stop("package sp required")
     if (!is.null(new.id) || !is.null(save.old.id)) stop(cw("These options are not yet working, but will allow you to assign a new id to the merged object and save the old ids as an ancillary variable", final.cr=F))
     
     lxy.lst <- list(...)

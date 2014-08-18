@@ -63,6 +63,8 @@
 #' 
 #' @return A \link{LoCoH-hullset} object
 #'
+#' @seealso \code{\link{isopleths}}
+#'
 #' @examples
 #' # Create 0.5 and 0.95 isopleths. By not specifying the sort.metric, density isopleths will be created
 #' # by default, with hulls sorted by area (k-method) or number of enclosed points (r and a method)
@@ -88,9 +90,6 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
     # of the individual in the hull is considered a separate visit.
      
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!is.null(lhs[["xys"]])) stop("Old data structure detected")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
     if (anyDuplicated(iso.levels)) stop("Duplicate iso.levels detected")
 
     start.time <- Sys.time()
@@ -339,7 +338,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     } else {
                         if (identical(polys.spdf, "error")) {
                             if (allow.gpc) {
-                                if (!require(gpclib)) stop(cw("rgeos can not handle this polygon union. Need to load gpclib package but it isn't installed. Please install gpclib and try again.", final.cr=F))
+                                if (!requireNamespace("gpclib")) stop(cw("rgeos can not handle this polygon union. We need to load the 'gpclib' package but it isn't installed. Please install gpclib and try again. Windows users must install gpclib from source (which requires installing RTools first, see http://tlocoh.r-forge.r-project.org/manual_install.html for details).", final.cr=F))
                                 if (status) cat("  Challenging geometry...switching to gpclib  \n")
                                 polys.spdf <- hulls2iso.gpc(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                    points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 

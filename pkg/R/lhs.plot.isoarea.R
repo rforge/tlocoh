@@ -43,11 +43,7 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                              png.fn.pre=NULL, png.fn.suf=NULL, png.overwrite=TRUE,
                              panel.num=NULL, panel.num.inside.plot=!title.show, bg="white", legend.space=if (legend) 0.05 else 0, ...) {
 
-  ## If overlay=T, all series are combined on one axis
-  ## Taken out: series=c("hullsets","iso.levels")[ifelse(length(lhs)==1,1,2)], 
-
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {
         hs <- lhs
@@ -73,10 +69,7 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
         sort.metric <- sort.metric.all
     } else {
         if (FALSE %in% (sort.metric %in% sort.metric.all)) stop("Invalid value in sort.metric")
-        #isos.lst.df <- isos.lst.df[isos.lst.df$sort.metric %in% sort.metric, ]
     }
-    
-    #if (nrow(isos.lst.df)==0) stop("No isopleths meet that criteria")
     
     res <- NULL
     opar <- NULL
@@ -127,10 +120,6 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
           }
           if (is.null(opar)) opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, bg=bg)
 
-          #hs.mode <- attr(hs, "mode")
-          #param.element <- substr(hs.mode, nchar(hs.mode), nchar(hs.mode))
-
-
           ## Construct the plot title
           if (title.show) {
               if (is.null(title)) {
@@ -143,14 +132,12 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
               title.use <- NULL
           }
 
-
          for (i in 1:nrow(iso.info.immVal)) {
              y.mat[ paramval2rowidx[as.numeric(iso.info.immVal[i,"param.val"])], iso2colidx[as.numeric(iso.info.immVal[i, "iso.level"])]] <- iso.info.immVal[i, "area"]
          }
          
          rx <- range(x.mat[,1])
          xlim <- rx - c(legend.space * (rx[2]-rx[1]), 0)
-         
          
          matplot(x.mat, y.mat, xlim=xlim, type="b", xlab=param.str, ylab="area", col=col.overlay,
                  main=title.use, pch=20, lty=3, ...)
@@ -172,7 +159,6 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
         if (!is.null(png.dir) || !is.null(png.fn)) invisible(dev.off())
 
     }
-
 
     if (!is.null(png.dir) || !is.null(png.fn)) {
         cat(paste(" - ", res, collapse="\n", sep=""), "\n", sep="")

@@ -30,6 +30,7 @@
 #' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
 #' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
 #' @param tiff.bands A vector of threee integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, green and blue color guns respectively.
+#' @param tiff.col A vector of color values for plotting single-band images in the background. Ignored if using three bands.
 #' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
 #' @param tiff.buff A numeric buffer distance in map units that the range of the plot will be expanded so the points are not right on the edge of the GeoTIFF.
 #' @param tiff.fill.plot Whether to fill the entire plot area with the GeoTIFF. T/F.
@@ -57,12 +58,10 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                            mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5), 
                            mgp=c(2, 0.7, 0), lo.save=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show,
                            png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, 
-                           tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.pct=FALSE, tiff.buff=500, tiff.fill.plot=TRUE, 
+                           tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.col=gray(0:255/255), tiff.pct=FALSE, tiff.buff=0, tiff.fill.plot=TRUE, 
                            layers=NULL, shp.csv=NULL, xlim=NULL, ylim=NULL, legend=NULL, ...) {
     
-    ## lxy <- x; rm(x)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (!require(sp)) stop("package sp required")
 
     if (is.null(id)) {
         id <- levels(lxy[["pts"]][["id"]])
@@ -83,7 +82,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
     if (is.null(tiff.fn)) {
         range.expand.tiff <- 0    
     } else {
-        if (!require(rgdal)) stop("package rgdal required to display a tiff in the background")
+        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background, please install")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         range.expand.tiff <- tiff.buff
         tiff.sgdf <- NULL
@@ -166,12 +165,22 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
             }
             
             tiff.sgdf <- readpartgdal(tiff.fn, xlim=rx.tiff, ylim=ry.tiff, band=tiff.bands, silent=TRUE)
-            if (tiff.pct) {
-                tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
-                tiff.sgdf$idx <- tiff.sgdf.cols$idx
-                image(tiff.sgdf, "idx", col=tiff.sgdf.cols$ct, add=TRUE)
-            } else {
-                image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+            if (!is.null(tiff.sgdf)) {
+                if (tiff.pct && length(tiff.sgdf@data)!=3) {
+                    cat("   Incorrect number of bands, can't convert image to indexed RGB\n")
+                    tiff.pct <- FALSE
+                }
+                if (tiff.pct) {
+                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                    tiff.sgdf$idx <- tiff.sgdf.cols$idx
+                    image(tiff.sgdf, "idx", col=tiff.sgdf.cols$ct, add=TRUE)
+                } else {
+                    if (length(tiff.sgdf@data)==3) {
+                        image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                    } else {
+                        image(tiff.sgdf, col=tiff.col, add=TRUE)
+                    }
+                }
             }
         }
         
@@ -242,12 +251,22 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                 }
                 
                 tiff.sgdf <- readpartgdal(tiff.fn, xlim=rx.tiff, ylim=ry.tiff, band=tiff.bands, silent=TRUE)
-                if (tiff.pct) {
-                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
-                    tiff.sgdf$idx <- tiff.sgdf.cols$idx
-                    image(tiff.sgdf, "idx", col=tiff.sgdf.cols$ct, add=TRUE)
-                } else {
-                    image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                if (!is.null(tiff.sgdf)) {
+                    if (tiff.pct && length(tiff.sgdf@data)!=3) {
+                        cat("   Incorrect number of bands, can't convert image to indexed RGB\n")
+                        tiff.pct <- FALSE
+                    }
+                    if (tiff.pct) {
+                        tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                        tiff.sgdf$idx <- tiff.sgdf.cols$idx
+                        image(tiff.sgdf, "idx", col=tiff.sgdf.cols$ct, add=TRUE)
+                    } else {
+                        if (length(tiff.sgdf@data)==3) {
+                            image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
+                        } else {
+                            image(tiff.sgdf, col=tiff.col, add=TRUE)
+                        }
+                    }
                 }
             }
 

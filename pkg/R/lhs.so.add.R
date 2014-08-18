@@ -44,15 +44,9 @@ lhs.so.add <- function(lhs, id="all", hs2.id="all", tbuff=0, ivg=NULL, test=0, s
                        status=TRUE, piFUN=c("pIntersect", "pIntersectSat")[1]) {
 
 
-
-
     ## In my tests, pIntersect is a lot faster than pIntersectSat
-    
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (!require(sp)) stop("package sp required")
-    if (!require(pbapply)) stop("package pbapply required")
-    if (!is.null(lhs[["xys"]])) stop("Old lhs data structure detected")
     
     start.time <- Sys.time()
     if (status) cat(" - start time: ", as.character(start.time), "\n", sep = "")

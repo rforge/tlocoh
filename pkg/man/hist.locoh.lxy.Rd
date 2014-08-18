@@ -2,14 +2,14 @@
 \alias{hist.locoh.lxy}
 \title{Plot histograms of properties of a LoCoH-xy object}
 \usage{
-\method{hist}{locoh.lxy}(x, id = NULL, dt = TRUE, d = TRUE,
+\method{hist}{locoh.lxy}(lxy, id = NULL, dt = TRUE, d = TRUE,
   delta.t = TRUE, v = TRUE, figs.per.page = NULL, col = "gray80",
   dt.bins.base = c("secs", "mins", "hours", "days")[4], dt.bins.width = 3600
   * 24 * 7, delta.t.num.sd = NULL, d.tct = 1.2, time.unit = "auto",
   overlay.median = TRUE, breaks = 20)
 }
 \arguments{
-  \item{x}{A \link{LoCoH-xy} object}
+  \item{lxy}{A \link{LoCoH-xy} object}
 
   \item{id}{The id value(s) to be plotted}
 
