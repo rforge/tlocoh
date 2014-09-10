@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
 	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,16 +24,33 @@
 
      .qtn {
         font-weight:bold;
-        margin-bottom: 0.5em;
+        margin-bottom: 0.2em;
+        text-decoration: none;
+	padding-left:20px;
+        color: darkblue;
+     }
+
+     a.arrow {
+        text-decoration: none;
      }
 
      .ans {
         font-size: 85%;
-        margin-bottom: 1.5em;
+        display: none;
+        margin-left: 20px;  
+        margin-bottom: 2em;
+     }
+
+     .bigger {
+        font-size: 130%;
+        color: darkblue;
+     }
+
+     code {
+         font-size: 140%;
      }
 
      pre.box {
-         font-size: 110%;
          padding: 1em;
          border: 1px dashed rgb(47, 111, 171);
          color: black;
@@ -41,8 +59,19 @@
          clear: both;
      }
 
-
 </style>
+
+<script language="javascript" type="text/javascript">
+  function showHide(shID) {
+     if (document.getElementById(shID).style.display == '' || document.getElementById(shID).style.display == 'none') {
+        document.getElementById(shID).style.display = 'block';
+     }
+     else {
+        document.getElementById(shID).style.display = 'none';
+     }
+  }
+</script>
+
 
   </head>
 
@@ -50,49 +79,75 @@
 
 <!-- R-Forge Logo -->
 
-<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
+<div style="float: right;margin-right:20px;margin-bottom:20px;"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
 
-<h1>T-LoCoH Tips</h1>
+<h1>T-LoCoH Tips and FAQs</h1>
 
-<p>Tips are mini-tutorials or elaboration on specific topics or techniques. If you have a question or suggestion for a tip, please email the <a href="mailto:tlocoh@gmail.com">package author</a>.</p>
+<h2>Tips</h2>
+
+<p>Tips are mini-tutorials or elaboration on specific topics or techniques.</p>
 
 <ul>
-<li><a href="tips/getting_sfinder_values.html">Getting the values from the 'sfinder' plot</a></li>
+<li><a href="tips/exploring_time_use_metrics.html">Exploring time-use metrics</a></li>
+<li><a href="tips/isopleth_overlap.html">Measuring area of intersection for isopleths</a></li>
+<li><a href="tips/getting_vals_from_s-finder.html">Getting the values from the 'sfinder' plot</a></li>
 </ul>
 
 <br><hr>
-<h1>T-LoCoH FAQs</h1>
+<h2>FAQs</h2>
 
+<h3><br>Choice of Method</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq3');return false;">Is T-LoCoH backward compatible with LoCoH?</a></p>
+<p id="faq3" class="ans">Yes. T-LoCoH is the successor of <a href="http://locoh.cnr.berkeley.edu/">LoCoH</a>, the main difference between the two methods is T-LoCoH's inclusion of time in nearest neighbor identification. T-LoCoH should produce the same hulls and isopleths as LoCoH when s=0 (i.e., time ignored).<br><br> Note however that in classic LoCoH the k-method constructs hulls from each point and its k-1 nearest neighbors. T-LoCoH, on the other hand, produces hulls from each point and its k (not k-1) nearest neighbors. So k=10 in LoCoH is equivalent to k=9 in T-LoCoH (with s=0). Parameter values for the adaptive and fixed-radius methods operate the same in both versions. R users are encouraged to use T-LoCoH rather than LoCoH because the T-LoCoH is faster, has more utility functions, can handle larger datasets, and is still supported. <a href="#" class="arrow" onclick="showHide('faq3');return false;"></a></p>
 
-<p class="qtn">Is there a version of T-LoCoH for ArcGIS?</p>
-<p class="ans">No, not at this time.</p>
+<p><a href="#" class="qtn" onclick="showHide('faq7');return false;">How many points can T-LoCoH handle?</a></p>
+<p id="faq7" class="ans">R is notoriously inefficient with memory, so it depends on your hardware, amount of physical memory, other applications open, and what you're doing in T-LoCoH (creating hulls and isopleths are memory intensive). Datasets up to 15,000 points run fine on modest laptop hardware, larger datasets run but are slower. Very large datasets can produce an out of memory error. A set of functions and workflow for k/a/r parameter selection has been developed for large datasets. Thinning down points with systematic sampling (i.e., keep every nth point), or analyzing different time periods separately, are also options (see lxy.subset). You can also run T-LoCoH on powerful machines in the cloud. <a href="#" class="arrow" onclick="showHide('faq7');return false;"></a></p>
 
-<p class="qtn">Is there a GUI?</p>
-<p class="ans">Not at this time.</p>
+<p><a href="#" class="qtn" onclick="showHide('faq-558714369');return false;">When would I *not* want to use T-LoCoH?</a></p>
+<p id="faq-558714369" class="ans"><strong>Spatial uncertainty</strong>. Spatial uncertainty is not modeled in T-LoCoH, so if the cascading effects of position error are important, you may want to use a method that includes a factor for spatial uncertainty (e.g., Brownian Bridges).<br><br>
 
-<p class="qtn">Is T-LoCoH backward compatible with LoCoH?</p>
-<p class="ans">Yes, if you set <em>s=0</em> (time ignored), T-LoCoH should produce the same hulls and isopleths as <a href="http://locoh.cnr.berkeley.edu/">classic LoCoH</a>.</p>
+<strong>Need quick and dirty analysis</strong>. T-LoCoH does not provide good default values for parameters for a quick and dirty analysis. This has advantages, because it forces you to play with your data a bit and select parameter values that work well with your data, your study question, and your knowledge of the system (as opposed to selecting default values that someone else selected because they worked with another dataset). But if you need a "one-click" method that will give you a homerange estimate in 10 minutes or less, consider a method that automates parameter selection. <a href="#" class="arrow" onclick="showHide('faq-558714369');return false;"></a></p>
 
-<p class="qtn">What method should I use (k/a/r)?</p>
-<p class="ans">The k-method is fine if all you're interested in is density isopleths (utilization distributions). For all other hull metrics (including time-use metrics), you're better off using the a-method. If in doubt, use the a-method.</p>
+<h3><br>Setup and Installation</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq1');return false;">Is there a version of T-LoCoH for ArcGIS?</a></p>
+<p id="faq1" class="ans">No, not at this time. There was an ArcToolbox for classic LoCoH, but it doesn't work with the current version of ArcGIS and is no longer supported. <a href="#" class="arrow" onclick="showHide('faq1');return false;"></a></p>
 
-<p class="qtn">How do I find an upper and lower bound for <em>a</em>?</p>
-<p class="ans">Try using the <tt>lxy.amin.add</tt> function with nnn=c(3,20). More to come later.</p>
+<p><a href="#" class="qtn" onclick="showHide('faq1913783990');return false;">I really hate R. Is there any other way to use T-LoCoH?</a></p>
+<p id="faq1913783990" class="ans">Unfortunately no, but we are working on a web GUI which will make it a little easier. <a href="#" class="arrow" onclick="showHide('faq1913783990');return false;"></a></p>
 
-<p class="qtn">Can I export my results to a format I can import into a GIS?</p>
-<p class="ans">Yes, see the functions <tt>lhs.exp.shp</tt> and <tt>lxy.exp.shp</tt></p>
+<h3><br>Parameter Selection</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq4');return false;">What method should I use (k/a/r)?</a></p>
+<p id="faq4" class="ans">The k-method is fine if all you're interested in is density isopleths (utilization distributions). For all other hull metrics (including time-use metrics), you're better off using the a-method. If in doubt, use the a-method. <a href="#" class="arrow" onclick="showHide('faq4');return false;"></a></p>
 
-<p class="qtn">How many points can T-LoCoH handle?</p>
-<p class="ans">R is notoriously inefficient with memory, so it depends on your hardware, amount of physical memory, other applications open, and what you're doing in T-LoCoH (creating hulls and isopleths are memory intensive). Datasets up to 15,000 points run fine on modest laptop hardware, larger datasets run but are slower. Very large datasets can produce an out of memory error. A set of functions and workflow for k/a/r parameter selection has been developed for large datasets. Thinning down points with systematic sampling (i.e., keep every nth point), or analyzing different time periods separately, are also options (see lxy.subset). You can also run T-LoCoH on powerful machines in the cloud. </p>
+<p><a href="#" class="qtn" onclick="showHide('faq5');return false;">How do I find an upper and lower bound for a?</a></p>
+<p id="faq5" class="ans">Try using the lxy.amin.add function with nnn=c(3,20). More to come later. <a href="#" class="arrow" onclick="showHide('faq5');return false;"></a></p>
 
-<p class="qtn">What's the difference between the 'id' and 'ptid' fields?</p>
-<p class="ans">T-LoCoH's data structure for location data has an 'id' and 'ptid' (point id) value for each location. The 'id' is the name of an individual (animal), or possibly a GPS device. This field allows you to keep track of mixed locations data for several individuals in the same LoCoH-xy object, so you can analyze them or create hulls for them simultaneously. Another use of the 'id' field is to break the dataset into discrete groups, for example by season (e.g., flyn_dryseason, flyn_wetseason).</p>
-<p class="ans">The 'ptid' (point id) is simply a unique numeric value for each location (i.e., primary key). It exists to help you link points and hulls to other variables associated with each hull. For example if you have a spreadsheet with soil type at each location, and have a column in the spreadsheet with a unique id for each location, you can pass a vector of unique point id values to xyt.lxy() and then any hulls created will have those ptid values also so you can analyze the hull metrics with the soil type.</p>
+<h3><br>Data</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq1409892265');return false;">What coordinate system should my data be in?</a></p>
+<p id="faq1409892265" class="ans">T-LoCoH can work with any coordinate system, including geographic coordinates (i.e., latitude-longitude). However it is recommended that the locations be in a coordinate system with real world units (e.g., meters), because hulls are sorted by area to form isopleths, and the area of a polygon expressed in degrees squared is niether very meaningful nor consistent. Area is also important for interpreting the size of isopleths. UTM is a popular coordinate system that works well for small to medium sized study sites. Appendix III of the T-LoCoH tutorial, <em>Importing GPS Data into R</em>, gives an example of projecting latitude-longitude data with R. T-LoCoH also has a function, <code>lxy.reproject</code>, which can reproject a LoCoH-xy object. <a href="#" class="arrow" onclick="showHide('faq1409892265');return false;"></a></p>
 
-<p class="qtn">What is the data structure of a locoh-hullset object?</p>
-<p class="ans">See the vignette (pdf file) on T-LoCoH data classes</p>
+<p><a href="#" class="qtn" onclick="showHide('faq8');return false;">What's the difference between the 'id' and 'ptid' fields?</a></p>
+<p id="faq8" class="ans">T-LoCoH's data structure for location data has an 'id' and 'ptid' value for each location. The 'id' is the name of an individual (animal) or GPS device. This field allows you to work with locations for several individuals in the same LoCoH-xy object, so you can analyze them or create hulls for them simultaneously. Another use of the 'id' field is to subdivide the dataset for a single individual into discrete groups, for example by season (e.g., flyn_dryseason, flyn_wetseason).<br><br>
 
+The 'ptid' (point id), on the other hand, is simply a unique numeric value for each location (i.e., primary key). It exists to help you link points and hulls to other variables associated with each hull. For example if you have a spreadsheet with soil type at each location, and have a column in the spreadsheet with a unique id for each location, you can pass a vector of unique point id values to <code>xyt.lxy()</code> and then any hulls created will have those ptid values also so you can analyze the hull metrics with the soil type. <a href="#" class="arrow" onclick="showHide('faq8');return false;"></a></p>
+
+<p><a href="#" class="qtn" onclick="showHide('faq9');return false;">What is the data structure of a locoh-hullset object?</a></p>
+<p id="faq9" class="ans">See the vignette (pdf file) on T-LoCoH data classes by typing:<br><br><code>browseVignettes("tlocoh")</code> <a href="#" class="arrow" onclick="showHide('faq9');return false;"></a></p>
+
+<h3><br>Analysis</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq1981047764');return false;">I have created isopleths for different individuals (or different seasons), and now want to compare the area of overlap. How can I do this?</a></p>
+<p id="faq1981047764" class="ans">See the sample script <a href="isopleth_overlap_exericse.txt">isopleth_overlap_exericse.txt</a> <a href="#" class="arrow" onclick="showHide('faq1981047764');return false;"></a></p>
+
+<h3><br>Import / Export</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq6');return false;">Can I export my results to a format I can import into a GIS?</a></p>
+<p id="faq6" class="ans">Yes, see the functions <code>lhs.exp.shp</code> and <code>lxy.exp.shp</code> <a href="#" class="arrow" onclick="showHide('faq6');return false;"></a></p>
+
+<p><a href="#" class="qtn" onclick="showHide('faq-465173435');return false;">How do I "get" the hulls and isopleths, and what format are they in?</a></p>
+<p id="faq-465173435" class="ans">T-LoCoH stores hulls and isopleths as SpatialPolygonsDataFrame objects, which is common class for spatial data in R. You can use <code>hulls</code> and <code>isopleths</code> functions to extract these objects from a LoCoH-hullset object. You can also reference them directly from a LoCoH-hullset object (see Vignette on T-LoCoH data classes). <a href="#" class="arrow" onclick="showHide('faq-465173435');return false;"></a></p>
+
+<br><hr><p>Questions? Suggestions? Please email the <a href="mailto:tlocoh@gmail.com">package author</a>.</p>
 <p><a href="index.html">Back</a></p>
+
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -106,5 +161,11 @@
 
 </body>
 </html>
+
+
+
+
+
+
 
 

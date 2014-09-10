@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Andy Lyons" />
+
+
+<title>T-LoCoH Tips: Getting the s values from the sfinder plot</title>
+
+<script src="getting_vals_from_s-finder_files/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="getting_vals_from_s-finder_files/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+<link href="getting_vals_from_s-finder_files/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="getting_vals_from_s-finder_files/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="getting_vals_from_s-finder_files/highlight/default.css"
+      type="text/css" />
+<script src="getting_vals_from_s-finder_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div id="header">
+<h1 class="title">T-LoCoH Tips: Getting the ‘s’ values from the ‘sfinder’ plot</h1>
+<h4 class="author"><em>Andy Lyons</em></h4>
+<h4 class="date"><em>August 2014</em></h4>
+</div>
+
+
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>This T-LoCoH tip demonstrates how to get the actual values of <code>s</code> that produce space-time partity from the ‘sfinder’ boxplot:</p>
+<p><img src="getting_vals_from_s-finder_files/figure-html/unnamed-chunk-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="background" class="section level3">
+<h3>Background</h3>
+<p>In <a href="http://tlocoh.r-forge.r-project.org/">T-LoCoH</a>, ‘s’ is a parameter that controls the degree to which the time difference between two locations is factored into the calculation of their ‘distance’, for the purposes of identifying which points are ‘nearest neighbors’. <code>s=0</code> corresponds to time being ignored, in which case the distance metric is simply Euclidean distance.</p>
+<p>Selecting <code>s</code> is subjective (i.e., up to the analyst), but there are principles we can use to select a value of ‘s’ that will result in the types of hulls that will best illuminate our research question and data. If the locations have no time stamps, then we have no option but to select <code>s=0</code>. Some research questions don’t require hulls that are localized in space and time. For example, if all we’re really interested is a classic ‘home range’, and we don’t really care if our constructed home range differentiates temporal partitioning of space, we could keep things simple and let <code>s=0</code>. Another case where you may want to ignore time is if sampling was so ad-hoc that it wouldn’t make sense to consider the time between observations (which has more to do with unrelated sampling issues than the movement) as a factor in nearest neighbor selection.</p>
+<p>Incorporating time into nearest neighbor selection is most useful when the sampling frequency follows a consistent pattern (i.e., either regular throughout the entire period of observation or regular when the unit was programmed to record data). For consistently sampled locations, there are two recommended approaches to selecting ‘s’. If there is a frequency in the movement that is particularly important to differentiate (e.g., daily resting pattern), you could pick a value of ‘s’ whereby for that time period the distance in time is equivalent to the distance in space. This is known as the ‘space-time parity method’, and the central tool for using this method is the so-called ‘s-finder’ plot (described further below).</p>
+<p>The second method for selecting <code>s</code>, which is not discussed here, is based on choosing the desired proportion of time-selected hulls (see <a href="http://www.movementecologyjournal.com/content/1/1/2/">Lyons et al 2013</a> for details).</p>
+</div>
+<div id="selecting-s-based-on-space-time-equity" class="section level3">
+<h3>Selecting ‘s’ Based on Space-Time Equity</h3>
+<p>The function <code>lxy.plot.sfinder</code> will plot the distribution of <code>s</code> values that achieve space-time parity for different windows of time. If you are interested in a particular time period, you can pass that value (expressed in seconds) as the <code>delta.t</code> argument. In the following example (using hourly tracking data for a small antelope), we plot the distribution of <code>s</code> that achieves space-time parity for 1 to 5 days.</p>
+<pre class="r"><code>require(tlocoh); require(sp)
+summary(ag214.lxy)</code></pre>
+<pre><code>## Summary of LoCoH-xy object: ag214.lxy 
+## ***Locations
+##       id num.pts dups
+##    ag214   10702  205
+## ***Time span
+##       id      begin        end   period
+##    ag214 2009-09-02 2010-04-14 224 days
+## ***Spatial extent 
+##      x: 585777 - 601813 
+##      y: 7878752 - 7890606 
+##   proj: NA
+## ***Movement properties 
+##       id time.step.median d.bar vmax
+##    ag214     1800 (30min) 57.35 1.16
+## ***Ancilliary Variables: 
+##    -none- 
+## ***Nearest-neighbor set(s): 
+##    none saved</code></pre>
+<pre class="r"><code>lxy.plot.sfinder(ag214.lxy, delta.t = 1:5 * 3600 * 24)</code></pre>
+<p><img src="getting_vals_from_s-finder_files/figure-html/unnamed-chunk-3.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="672" /></p>
+<p>Basically, what this plot says is that if we let s=0.007 (the median value of the first box plot), then for all pairs of points that were observed one day apart, the difference in time converted to spatial units will, on average, be equal to their actual distance in space in the space-time distance measure used by T-LoCoH. By extension, this also means that if two points were recorded further apart than one day, when we compete their ‘distance’ the difference in time would play a bigger role than their distance in space. This could be a reasonable selection for <code>s</code> if our animal has daily movements patterns such that we don’t want a point that was recorded several days away to be a serious candidate as a neighbor (even if they were actually quite close together on the ground). Likewise for points record 2-5 days apart.</p>
+<p>The <code>lxy.plot.sfinder</code> function produces the first boxplot by taking all pairs of points exactly 24 hours apart (within a threshold specified by <code>delta.t.err</code>) and computing the value of <code>s</code> where the time-term in the time-scaled-distance formula (see <a href="http://www.movementecologyjournal.com/content/1/1/2/">Lyons et al 2013</a>) equals the actual Euclidean distance. We can visually estimate the median value of <code>s</code> from this boxplot, but we can also find the actual value. Let’s generate the plot again, but this time save the result to a variable.</p>
+<pre class="r"><code>my_plot &lt;- lxy.plot.sfinder(ag214.lxy, delta.t = 1:5 * 3600 * 24)</code></pre>
+<p>Now let’s see what <code>my_plot</code> contains.</p>
+<pre class="r"><code>str(my_plot)</code></pre>
+<pre><code>## List of 1
+##  $ ag214.sfinder:List of 5
+##   ..$ fn   : NULL
+##   ..$ dim  : NULL
+##   ..$ desc : chr &quot;This plot shows the distribution of the s term in TSD for ag214 for a range of delta-t such that the maximum distance possible &quot;| __truncated__
+##   ..$ svals:List of 5
+##   .. ..$ 86400 : num [1:10652] 0.01636 0.00853 0.00776 0.00295 0.00388 ...
+##   .. ..$ 172800: num [1:10604] 0.000681 0.002397 0.000628 0.001675 0.001789 ...
+##   .. ..$ 259200: num [1:10559] 0.001079 0.002154 0.000582 0.000299 0.001007 ...
+##   .. ..$ 345600: num [1:10511] 0.001777 0.000882 0.000909 0.000394 0.000357 ...
+##   .. ..$ 432000: num [1:10464] 0.000447 0.000406 0.001664 0.00085 0.000217 ...
+##   ..$ id   : chr &quot;ag214&quot;</code></pre>
+<p>As we can see, the <code>lxy.plot.sfinder</code> function returns a list object with the results. Each element of this list is another list wth the results for one of the individuals (which in our case is only one, an individual called ‘ag214’). The <code>svals</code> element contains a list of the actual values of <code>s</code> that produce space-time parity, with one list element for each of the delta-t values. To get all of the values of <code>s</code> that balances space and time equally for all pairs of points 24 hours (86400 seconds) apart, we can run:</p>
+<pre class="r"><code>s_parity_vals_24hrs &lt;- my_plot[[1]]$svals[[&quot;86400&quot;]]
+length(s_parity_vals_24hrs)</code></pre>
+<pre><code>## [1] 10652</code></pre>
+<pre class="r"><code>median(s_parity_vals_24hrs)</code></pre>
+<pre><code>## [1] 0.006681</code></pre>
+<p>In a similar manner, we can get the distribution of <code>s</code> for other values of <code>delta.t</code>.</p>
+<hr />
+<p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>. (c) 2014 <br> <br></p>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -47,84 +47,15 @@
 
 <h2>T-LoCoH Change Log</h2>
 
-<p>Please send bug reports and feature requests to the package adminstrator ajlyons "@" users.r-forge.r-project.org</p>
+<p>The change log is now included in the T-LoCoH NEWS file. To view it, type:</p>
 
-<p><strong>Version 1.17</strong> (2014-08-17)</p>
-<ul>
-<li><pre>lxy.exp.shp</pre> added (exports a LocoH-xy object to shapefile)</li>
-<li>Added support for plotting single-band GeoTiff images in the background of LoCoH-xy and LoCoH-hullset objects (including new argument <pre>tiff.col</pre>)</li>
-<li><pre>lxy.exp.mov()</pre>: added support for displaying background raster images in an animation of a LoCoH-xy object; new argument for date label fill color; support for mp4 encoding (h.264); and coloring the active point by the hour-of-day</li>
-<li>Add <em>dir</em> argument to <pre>lxy.exp.csv</pre></li>
-<li>Added a check in <pre>readpartgdal</pre> for the area of overlap and number of bands in a raster</li>
-<li>Corrected default title for plots of time-use isopleths</li>
-<li>Package <em>rgdal</em> moved from 'Imports' to 'Suggests' (to simplify installation)</li>
-<li>Cleaned up code (e.g., got rid of commented lines, unnecessary require() checks) in numerous scripts</li>
-<li>New sections & updates to the tutorial</li>
-<li>Numerous other minor changes</li>
-</ul>
+<pre>
+help(package="tlocoh")
+</pre>
 
-<p><strong>Version 1.16</strong> (2014-04-04)</p>
-<ul>
-<li>Corrected minor argument check bug on <pre>lxy.plot.tspan</pre></li>
-<li>Fixed minor bug in <pre>lxy.save</pre></li>
-<li>Fixed bug in <pre>lxy.subset</pre> that caused an error when the lxy object had multiple individuals and no timestamps</li>
-<li>Updated <pre>plot.locoh.lxy</pre></li>
-  <ul>
-  <li>changed argument named 'x' (back) to 'lxy'</li>
-  <li>added option to add a legend when overlaying the locations of multiple individuals</li>
-  </ul>
-<li>Added an argument to <pre>xyt.lxy</pre> to show locations with duplicate time stamps if encountered</li>
-</ul>
+<p>and click on 'NEWS' at the top of the page.</p>
 
-<p><strong>Version 1.15</strong> (2014-02-18)</p>
-<ul>
-<li>Added vignette on data classes</li>
-<li>Added functions <pre>hulls</pre> and <pre>isopleths</pre> to extract the SpatialPolygonDataFrame objects</li>
-<li>Fixed error message "lxy.dt.int not found" in <pre>lxy.lhs</pre></li>
-<li>New option to disable temporal filtering when computing movement statistics in <pre>xyt.lxy</pre>, see help page for details</li>
-<li>Numerous edits to documentation</li>
-</ul>
-
-<p><strong>Version 1.14</strong> (2013-11-14)</p>
-<ul>
-<li>Bug fix in <pre>lxy.exp.kml</pre></li>
-</ul>
-
-<p><strong>Version 1.13</strong> (2013-09-15)</p>
-<ul>
-<li>Bug fix in <pre>lxy.lhs</pre></li>
-</ul>
-
-<p><strong>Version 1.12</strong></p>
-<ul>
-<li>Added support for rasterized isopleths to <pre>summary.locoh.lhs</pre> and <pre>plot.locoh.lhs</pre>.</li>
-<li>Add creation functions to the output of <pre>hm.expr</pre>.</li>
-<li>Created help page for LoCoH-hullset (class <pre>locoh.lhs</pre>)</li>
-<li>Deprecated 'ud' argument in <pre>lxy.lhs</pre>. Replaced with <pre>iso.add</pre> argument.</li>
-<li>Fixed a bug in <pre>lhs.exp.shp</pre> which prevented exporting isopleths by themselves to shapefiles.</li>
-<li>Fixed a bug in <pre>plot.locoh.lhs</pre> when specifying which isopleth levels to plot.</li>
-<li>Fixed a bug in <pre>xyt.lxy</pre> which caused an error when the projection system wasn't specified.</li>
-<li>Other bug-fixes and updates to documentation.</li>
-</ul>
-
-<p><strong>Version 1.1.10</strong></p>
-<ul>
-<li>renamed 'fn' argument to 'file' in <pre>lxy.save</pre> and <pre>lhs.save</pre> for consistency with other R functions</li>
-<li>added function <pre>lxy.exp.kml</pre> to export lxy objects to KML for animation in Google Earth</li>
-</ul>
-
-<p><strong>Version 1.0.9</strong></p>
-<ul>
-<li>Added <pre>move.lxy</pre> function to import movement data from the <a href="">move</a> package</li>
-<li>Added <pre>lxy.reproject</pre> function to reproject coordinates</li>
-<li>Fixed a bug with <pre>summary</pre> functions</li>
-<li>Added checking for syntax of projection arguments</li>
-<li>Added argument to function <pre>xyt.lxy</pre> to suppress warnings if coordinates are in lat long</li>
-<li>Added function <pre>lhs.iso.rast</pre> to save isopleths to a RasterLayer</li>
-<li>Renamed <pre>trim</pre> funciton to strTrim to avoid conflict names with other packages (e.g., raster)</li>
-<li>Renamed <pre>str.text.contrast.color</pre> function to conform with S3 methods syntax</li>
-<li>Updated tutorials</li>
-</ul>
+<p>As always, please send bug reports and feature requests to the package adminstrator tlocoh "@" gmail.com</p>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Andy Lyons" />
+
+
+<title>T-LoCoH Tips: Analyzing Isopleth Overlap</title>
+
+<script src="isopleth_overlap_files/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="isopleth_overlap_files/bootstrap-2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+<link href="isopleth_overlap_files/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="isopleth_overlap_files/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="isopleth_overlap_files/highlight/default.css"
+      type="text/css" />
+<script src="isopleth_overlap_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div id="header">
+<h1 class="title">T-LoCoH Tips: Analyzing Isopleth Overlap</h1>
+<h4 class="author"><em>Andy Lyons</em></h4>
+<h4 class="date"><em>September 2014</em></h4>
+</div>
+
+
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>This T-LoCoH tip demonstrates how to compute the area of overlap between two sets of isopleths.</p>
+<p>Download code in this exercise <a href="isopleth_overlap.R">here</a>.</p>
+</div>
+<div id="background" class="section level3">
+<h3>Background</h3>
+<p>In <a href="http://tlocoh.r-forge.r-project.org/">T-LoCoH</a>, <code>s</code> is a parameter that controls the degree to which the time difference between two locations is factored into the calculation of their ‘distance’, for the purposes of identifying which points are ‘nearest neighbors’. <code>s=0</code> corresponds to time being ignored, in which case the distance metric is simply Euclidean distance.</p>
+</div>
+<div id="finding-the-area-of-overlap-between-two-home-ranges" class="section level3">
+<h3>Finding the Area of Overlap Between Two Home Ranges</h3>
+<p>A number of indices of association have been developed by ecologists for location data<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. The most basic one (but also intuitive) is simply the area of overlap in the home range or core area (often approximated by the 95% and 50% isopleth respectively). In this exercise, we’ll find the area of intersection of the home ranges of two individuals, as computed by <a href="http://tlocoh.r-forge.r-project.org/">T-LoCoH</a>. This same technique could be used to find the area of HR overlap for the same individual during two different time periods, such as wet season and dry season.</p>
+<p>Hull-based home range estimators like T-LoCoH compute utilization distributions as a series of nested polygons. So our workflow is essentially to get the correct polygon for each individual, and then find the area of intersection. We’ll be working with home ranges data for two buffalo, pepper and toni, from Kruger National Park in South Africa whose location data are available on MoveBank.org. These datasets have already been analyzed by T-LoCoH and home ranges constructed (see T-LoCoH tutorial for details). Note these datasets are illustrative only, the parameters used have not been cross-checked.</p>
+</div>
+<div id="load-t-locoh" class="section level2">
+<h2>Load T-LoCoH</h2>
+<p>If you don’t have the T-LoCoH package for R installed, you can get it from (<a href="http://tlocoh.r-forge.r-project.org/">http://tlocoh.r-forge.r-project.org/</a>)</p>
+<pre class="r"><code>require(tlocoh)</code></pre>
+<pre><code>## Loading required package: tlocoh
+## Loading required package: sp
+## T-LoCoH for R (version 1.18)
+## URL: http://tlocoh.r-forge.r-project.org/</code></pre>
+<p>Download the hullset for ‘pepper’ the buffalo:</p>
+<pre class="r"><code>mycon &lt;- url(&quot;http://tlocoh.r-forge.r-project.org/pepper.n4571.s0.003.k15.iso.lhs.01.RData&quot;)
+load(mycon); close(mycon) </code></pre>
+<p>See what it looks like:</p>
+<pre class="r"><code>summary(pepper.lhs.k15)</code></pre>
+<pre><code>## Summary of LoCoH-hullset object: pepper.lhs.k15 
+## Created by: T-LoCoH 1.15
+## [1] pepper.pts4571.k15.s0.003.kmin0
+##       id: pepper
+##      pts: 4571
+##    dates: 2005-09-16 17:18:00 SAST to 2006-12-31 16:34:00 SAST
+## movement: tau=3600 (1hs), vmax=4.827, d.bar=158.4
+##    hulls: 4571
+##     dups: 9 (offset by 1 map unit)
+##     mode: k=15, kmin=0, s=0.003
+##  metrics: area, nep, nnn, perim, scg.enc.mean, scg.enc.sd,
+##           scg.nn.mean, scg.nn.sd, tspan
+##     isos: [1] iso.srt-area.iso-q.h4571.i5
+##    other: -none-
+##  created: Tue Mar 11 15:34:50 2014</code></pre>
+<pre class="r"><code>plot(pepper.lhs.k15, iso=T)</code></pre>
+<p><img src="isopleth_overlap_files/figure-html/unnamed-chunk-3.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="672" /></p>
+<p>A locoh-hullset object contains a bunch of stuff. We only need the isopleth polygons, which we can extract with the isopleths() function</p>
+<pre class="r"><code>pepper.isos &lt;- isopleths(pepper.lhs.k15)</code></pre>
+<p>The <code>isopleths()</code> function returns a list of SpatialPolygonDataFrame objects, which is how isopleths are saved. In our case, there will only be one list element because pepper only has one set of hulls with one set of isopleths.</p>
+<pre class="r"><code>class(pepper.isos)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>names(pepper.isos)</code></pre>
+<pre><code>## [1] &quot;pepper.pts4571.k15.s0.003.kmin0_iso.srt-area.iso-q.h4571.i5&quot;</code></pre>
+<pre class="r"><code>class(pepper.isos[[1]])</code></pre>
+<pre><code>## [1] &quot;SpatialPolygonsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<p>Let’s look at the attached dataframe</p>
+<pre class="r"><code>pepper.isos[[1]]@data</code></pre>
+<pre><code>##   iso.level      area edge.len  nep    ptp  hm.val num.hulls
+## 1      0.10   1444531    31071  460 0.1006   85056       185
+## 2      0.25   6585281    90442 1157 0.2531  171056       544
+## 3      0.50  24027295   197715 2288 0.5005  350297      1179
+## 4      0.75  62006071   310103 3430 0.7504  658382      2112
+## 5      0.95 193837808   367291 4344 0.9503 2342150      3512</code></pre>
+<p>Next, we get just the 50th and 95% isopleths for Pepper. We are pulling these out using standard indexing syntax for SpatialPolygonDataFrames (which is very similar to the indexing notation for regular data frames)</p>
+<pre class="r"><code>pepper.core &lt;- pepper.isos[[1]][ pepper.isos[[1]][[&quot;iso.level&quot;]]==0.5, ]
+class(pepper.core)</code></pre>
+<pre><code>## [1] &quot;SpatialPolygonsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<pre class="r"><code>pepper.hr &lt;- pepper.isos[[1]][ pepper.isos[[1]][[&quot;iso.level&quot;]]==0.95, ]
+class(pepper.hr)</code></pre>
+<pre><code>## [1] &quot;SpatialPolygonsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<p>Plot the core and homerange</p>
+<pre class="r"><code>plot(pepper.hr, border=&quot;blue&quot;)
+plot(pepper.core, border=&quot;red&quot;, add=T)</code></pre>
+<p><img src="isopleth_overlap_files/figure-html/unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="672" /></p>
+<p>Next, do the same for toni</p>
+<pre class="r"><code>mycon &lt;- url(&quot;http://tlocoh.r-forge.r-project.org/toni.n5775.s0.003.k15.iso.lhs.01.RData&quot;)
+load(mycon); close(mycon) 
+plot(toni.lhs.k15, iso=T)
+toni.isos &lt;- isopleths(toni.lhs.k15)
+toni.core &lt;- toni.isos[[1]][ toni.isos[[1]][[&quot;iso.level&quot;]]==0.5, ]
+toni.hr &lt;- toni.isos[[1]][ toni.isos[[1]][[&quot;iso.level&quot;]]==0.95, ]
+plot(toni.hr, border=&quot;green&quot;, add=T)
+plot(toni.core, border=&quot;purple&quot;, add=T)</code></pre>
+<p><img src="isopleth_overlap_files/figure-html/unnamed-chunk-9.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="672" /></p>
+<p>Next, let’s find the intersection between pepper’s core area and toni’s core area. First we’ll overlay them on a fresh plot</p>
+<pre class="r"><code>plot(pepper.core, border=&quot;red&quot;)
+plot(toni.core, border=&quot;purple&quot;, add=T)</code></pre>
+<p><img src="isopleth_overlap_files/figure-html/unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="672" /></p>
+<p>Next, we’ll find the area of intersection of the core areas of Toni and Pepper using a function from the rgeos package:</p>
+<pre class="r"><code>require(rgeos)</code></pre>
+<pre><code>## Loading required package: rgeos
+## rgeos version: 0.3-6, (SVN revision 450)
+##  GEOS runtime version: 3.4.2-CAPI-1.8.2 r3921 
+##  Polygon checking: TRUE</code></pre>
+<pre class="r"><code>tp.core.common &lt;- gIntersection(pepper.core, toni.core)
+class(tp.core.common)</code></pre>
+<pre><code>## [1] &quot;SpatialPolygons&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<pre class="r"><code>plot(pepper.core, border=&quot;red&quot;)
+plot(toni.core, border=&quot;purple&quot;, add=T)
+plot(tp.core.common, col=&quot;brown&quot;, add=T)</code></pre>
+<p><img src="isopleth_overlap_files/figure-html/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="672" /></p>
+<p>Find the area of intersection of the core areas.</p>
+<p>There isn’t a simple built-in function that returns polygon area, but you can easily get it if you know a little bit about the structure of a SpatialPolygons object</p>
+<pre class="r"><code>tp.core.common@polygons[[1]]@area</code></pre>
+<pre><code>## [1] 971545</code></pre>
+<p>Next, let’s do the same for the intersection of their home ranges</p>
+<pre class="r"><code>plot(pepper.hr, border=&quot;blue&quot;)
+plot(toni.hr, border=&quot;green&quot;, add=T)
+tp.hr.common &lt;- gIntersection(pepper.hr, toni.hr)
+plot(tp.hr.common, col=&quot;brown&quot;, add=T)</code></pre>
+<p><img src="isopleth_overlap_files/figure-html/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="672" /></p>
+<pre class="r"><code>tp.hr.common@polygons[[1]]@area</code></pre>
+<pre><code>## [1] 24573476</code></pre>
+<p>We see that the area of overlap in the home ranges of toni and pepper is quite a bit larger than the area of overlap of the core areas (which is expected because home ranges are by definition larger than core areas).</p>
+<p>This concludes our exercise. A more advanced technique would be to convert the isopleths into a raster probability surface and use the volume of intersection measure of overlap, which we’ll do in another exercise.</p>
+<hr />
+<p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>.<br>(c) 2014 <br> <br></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>For a review of association indices, see Miller, J. 2012. Using Spatially Explicit Simulated Data to Analyze Animal Interactions: A Case Study with Brown Hyenas in Northern Botswana. Transactions in GIS v16, n3, pp. 271-291, June 2012. <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1467-9671.2012.01323.x/full">http://onlinelibrary.wiley.com/doi/10.1111/j.1467-9671.2012.01323.x/full</a><a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
