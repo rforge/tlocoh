@@ -44,6 +44,7 @@
 #' @seealso \code{\link{lhs.visit.add}}
 #'
 #' @export
+#' @import pbapply
 
 lhs.plot.revisit <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, 
                              ta.min="auto", ta.max=NULL, breaks=40, xaxis.vals=NULL, ta.min.auto.tau=4, col="gray80", 

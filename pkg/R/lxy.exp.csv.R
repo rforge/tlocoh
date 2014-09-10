@@ -15,6 +15,7 @@
 #'
 #' If file is not passed, a filename will be automatically constructed. 
 #' @export
+#' @import sp
 
 lxy.exp.csv <- function (lxy, dir=".", file=NULL, id=NULL, file.overwrite=FALSE, quote=FALSE) {
 

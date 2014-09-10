@@ -44,6 +44,7 @@
 #' @seealso \code{\link{lxy.nn.add}}
 #'
 #' @export
+#' @import pbapply sp
 
 lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, ptsh.target=1:9/10, ptsh.max=0.98, ptsh.buf=0.01, max.iter=15,
                    max.loops=10, time.term=c("vmax", "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2], use.nn=FALSE,
@@ -198,7 +199,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                 cat(sequals.str); flush.console()
     
                 ## Find nn for sVal.cur
-                nn.lst <- pblapply(samp.idx, function(i) idVal.idx[as.numeric(get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
+                nn.lst <- pblapply(samp.idx, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
                                           query=cbind(coordinates(lxy[["pts"]])[i, , drop=F], 0), k=k+1, algorithm=FNN.algorithm)[["nn.index"]])])
     
                 ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
@@ -278,7 +279,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                         cat(sequals.str); flush.console()
     
                         ## Find nn for sVal.cur
-                        nn.lst <- pblapply(samp.idx, function(i) idVal.idx[as.numeric(get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
+                        nn.lst <- pblapply(samp.idx, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
                                                   query=cbind(coordinates(lxy[["pts"]])[i, , drop=F], 0), k=k+1, algorithm=FNN.algorithm)[["nn.index"]])])
     
                         ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
@@ -301,7 +302,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
             s.ptsh <- s.ptsh[order(s.ptsh[,1]),]
     
             ptsh.target.all <- sort(unique(c(0, ptsh.target, ptsh.max)))
-            magic.s <- s.ptsh[get.knnx(s.ptsh[,2], query=ptsh.target.all, k=1)[["nn.index"]],1]
+            magic.s <- s.ptsh[FNN::get.knnx(s.ptsh[,2], query=ptsh.target.all, k=1)[["nn.index"]],1]
             res.idVal <- list(id=idVal, samp.idx=samp.idx, n=n, k=k, target.ptsh=ptsh.target.all, target.s=magic.s, s.ptsh=s.ptsh, time.taken=difftime(Sys.time(), start.time, units="secs"))
 
 

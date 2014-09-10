@@ -23,6 +23,7 @@
 #' @return A LoCoH-hullset object
 #'
 #' @export
+#' @import pbapply sp
 
 lhs.ellipses.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, status=TRUE, beep=FALSE,
                              save.ellipses=TRUE, existing.ellipses=c("overwrite", "abort")[1]) {

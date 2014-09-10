@@ -30,6 +30,7 @@
 #'
 #' @seealso \code{\link{lhs.exp.shp}}
 #' @export
+#' @import sp
 
 lhs.exp.csv <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL,
                csv.save=TRUE, dir=".", csv.fn.pre=NULL, csv.fn.mid=c("none","short","long")[2],

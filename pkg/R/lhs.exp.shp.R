@@ -50,6 +50,7 @@
 #' @seealso \code{\link{lhs.exp.csv}}, \code{\link{hulls}}, \code{\link{isopleths}}
 #'
 #' @export
+#' @import sp
 
 lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL,
                hpp=FALSE, hulls=FALSE, iso=FALSE, nn=FALSE, ellipses = FALSE, allpts = FALSE, iso.idx=NULL, iso.metric=NULL, 

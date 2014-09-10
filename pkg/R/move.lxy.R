@@ -32,8 +32,10 @@
 #' leroy.lxy <- move.lxy(leroy.move, anv.flds=c("ground.speed", "heading"))
 #' summary(leroy.lxy)
 #'
-#' @export
 #' @seealso \code{\link{xyt.lxy}}
+#'
+#' @export
+#' @import sp
 
 move.lxy <- function(move.obj, use.utm=FALSE, xcoord=NULL, ycoord=NULL, proj=NULL, anv.flds=NULL, ptid=NULL, 
                      del.dup.xyt=TRUE, dup.dt.check=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, warn.latlong=TRUE, status=TRUE) {

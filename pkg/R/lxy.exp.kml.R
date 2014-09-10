@@ -25,6 +25,7 @@
 #'
 #' @seealso \code{\link{lxy.exp.mov}}
 #' @export
+#' @import sp
 
 lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRUE, pt.scale=0.5, col=NULL, show.path=TRUE, 
                         path.col=NULL, path.opaque=80, path.lwd=3) {
@@ -128,8 +129,9 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     }
 
     if (blnNeedToReproject) {
+        if (!requireNamespace("rgdal")) stop("package rgdal is required for this function")
         cat("Reprojecting data to ", kmlCRS, "...", sep=""); flush.console()
-        lxy$pts <- sp::spTransform(lxy$pts, CRSobj = CRS(kmlCRS))
+        lxy$pts <- spTransform(lxy$pts, CRSobj = CRS(kmlCRS))
         cat("Done.\n")
     }
     

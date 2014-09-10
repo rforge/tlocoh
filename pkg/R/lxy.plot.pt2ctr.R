@@ -22,6 +22,7 @@
 #' of when the point series started. This can be helpful for seeing cycles of a specific frequency.
 #' 
 #' @export
+#' @import sp
 #' @seealso \code{\link{lxy.plot.sfinder}}
 
 lxy.plot.pt2ctr <- function(lxy, id=NULL, idx=NULL, vline=NULL, vline.trunc.units.to = c("secs", "mins", "hours", "days")[4], figs.per.page=NULL, ...) {

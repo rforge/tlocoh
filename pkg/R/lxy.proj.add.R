@@ -14,6 +14,7 @@
 #' # lxy <- lxy.proj.add(lxy, CRS("+proj=utm +south +zone=34"))
 #'
 #' @export
+#' @import sp
 
 lxy.proj.add <- function(lxy, proj4string=CRS(as.character(NA))) {
 

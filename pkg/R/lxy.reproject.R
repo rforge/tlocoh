@@ -12,7 +12,7 @@
 #'
 #' \itemize{
 #'     \item The coordinate system of the current locations must be recorded. To see the current coordinate system, run \code{\link{summary.locoh.lxy}}. To add projection information (which you need to get from the source of the data), use \code{\link{lxy.proj.add}}.
-#'     \item Argument \code{proj4string} which is an object of class \code{\link{CRS-class}} containing information about the new projection system
+#'     \item Argument \code{proj4string} which is an object of class \code{\link{CRS-class}} containing information about the new projection system. A good place to find the proj4 strings for a projection system is \url{http://www.spatialreference.org}.
 #' }
 #'
 #' Note that not all coordinate systems can be projected into all other coordinate systems.
@@ -26,7 +26,7 @@
 #'
 #' @seealso \code{\link{lxy.proj.add}}, \code{\link{summary.locoh.lxy}}, \code{\link{CRS}}
 #' @export
-
+#' @import sp
 
 lxy.reproject <- function(lxy, proj, dt.int.round.to=0.1, tau.diff.max=0.02, status=TRUE) {
 

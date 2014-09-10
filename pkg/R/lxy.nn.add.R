@@ -38,6 +38,7 @@
 #' # lxy <- lxy.nn.add(lxy, k=10, s=0.01)
 #'
 #' @export
+#' @import pbapply sp
 
 lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, kmin=0, ptsh=NULL, ptsh.idx=1,
                    nn.exists = c("append", "replace", "skip")[1],
@@ -293,14 +294,14 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                     kVal <- max(kVal, kmin)
                     if (blnNoTime) {
                         ## Using FNN, find the nearest neighbors and distances to the query points.
-                        pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub, ,drop=F], k=kVal+1, algorithm=FNN.algorithm)
+                        pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub, ,drop=F], k=kVal+1, algorithm=FNN.algorithm)
                         
                         ## Convert the list to a data frame
                         pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.sub, each = kVal+1), nn.rank = rep(0:kVal, times=length(idVal.idx.sub)), 
                                                nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], tsd = c(t(pp.nn.lst$nn.dist)))
                     } else {
                         pp.nn.df <- do.call(rbind, pblapply(idVal.idx.sub, function(i) {                                                                                                                          
-                            pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                            pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                                   query=cbind(coordinates(lxy[["pts"]])[i, , drop=F],0), k=kVal+1, algorithm=FNN.algorithm)
                             data.frame(pp.idx=i, nn.rank=0:kVal, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist))
                             }))
@@ -320,13 +321,13 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                     idVal.idx.test <- sample(idVal.idx, num.test.pts)
                     
                     if (blnNoTime) {
-                        pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.test,,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                        pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.test,,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                         pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.test, each=kVal.tmp + 1), nn.rank = rep(0:kVal.tmp, times=length(idVal.idx.test)), 
                                                nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], tsd = c(t(pp.nn.lst$nn.dist)))
                     
                     } else {
                         pp.nn.df <- do.call(rbind, lapply(idVal.idx.test, function(i) {
-                            pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                            pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                             query=cbind(coordinates(lxy[["pts"]])[i, , drop=F],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                             data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist))
                             }))
@@ -343,14 +344,14 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         kVal.tmp <- min(c(idVal.num.pts - 1, kVal.tmp * 2))
                         
                         if (blnNoTime) {
-                            pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf,,drop=FALSE], k=kVal.tmp+1, algorithm=FNN.algorithm)
+                            pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf,,drop=FALSE], k=kVal.tmp+1, algorithm=FNN.algorithm)
                             pp.nn.df <- rbind(pp.nn.df,
                                         data.frame(pp.idx = rep(pp.idx.not.enuf, each=kVal.tmp + 1), nn.rank = rep(0:kVal.tmp, times=length(pp.idx.not.enuf)), 
                                                    nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], tsd = c(t(pp.nn.lst$nn.dist))))
                         } else {
                             pp.nn.df <- rbind(pp.nn.df,
                                 do.call(rbind, lapply(pp.idx.not.enuf, function(i) {
-                                pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                 query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                 data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist))
                                 })))
@@ -391,14 +392,14 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
 
                     
                     if (blnNoTime) {                                                   
-                        pp.nn.lst <- get.knnx(data=, query=coordinates(lxy[["pts"]])[idVal.idx.sub.nmnn, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                        pp.nn.lst <- FNN::get.knnx(data=, query=coordinates(lxy[["pts"]])[idVal.idx.sub.nmnn, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                         pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.sub.nmnn, each=kVal.tmp + 1), 
                                                nn.rank = rep(0:kVal.tmp, times=length(idVal.idx.sub.nmnn)), 
                                                nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], 
                                                tsd = c(t(pp.nn.lst$nn.dist)))
                     } else {
                         pp.nn.df <- do.call(rbind, pblapply(idVal.idx.sub.nmnn, function(i) {
-                            pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                            pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                             query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                             data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist))
                             }))
@@ -425,7 +426,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         if (status) cat(cw(paste("- ", kVal.old, " wasn't large enough for ", length(pp.idx.not.enuf), " points. Computing distances for k=", kVal.tmp, " points\n", sep=""), exdent=4, indent=2))
                         
                         if (blnNoTime) {
-                            pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf,,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                            pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf,,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                             pp.nn.df <- rbind(pp.nn.df,
                                         data.frame(pp.idx = rep(pp.idx.not.enuf, each=kVal.tmp + 1), 
                                                    nn.rank = rep(0:kVal.tmp, times=length(pp.idx.not.enuf)), 
@@ -434,7 +435,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         } else {
                             pp.nn.df <- rbind(pp.nn.df,
                                 do.call(rbind, pblapply(pp.idx.not.enuf, function(i) {
-                                pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                 query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                 data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist))
                                 })))
@@ -483,14 +484,14 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
 
                                 ## Find the nnn nearest neighbors for all points
                                 if (blnNoTime) {
-                                    pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                                    pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                     pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.sub, each=kVal.tmp + 1), 
                                                            nn.rank = rep(0:kVal.tmp, times=length(idVal.idx.sub)), 
                                                            nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], 
                                                            tsd = c(t(pp.nn.lst$nn.dist)))
                                 } else {
                                     pp.nn.df <- do.call(rbind, pblapply(idVal.idx.sub, function(i) {
-                                        pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                        pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                                               query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                         data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist))
                                         }))
@@ -527,7 +528,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
 
                         ## A-code
                         if (blnNoTime) {
-                            pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.test, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                            pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.test, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                             pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.test, each=kVal.tmp + 1), 
                                                    nn.rank = rep(0:kVal.tmp, times=length(idVal.idx.test)), 
                                                    nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], 
@@ -539,7 +540,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
     
                         } else {
                             pp.nn.df <- do.call(rbind, lapply(idVal.idx.test, function(i) {
-                                pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                 query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                 data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist), 
                                            tsd.cumsum=cumsum(as.numeric(pp.nn.lst$nn.dist)))
@@ -563,7 +564,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                             
                             ## Recalculate
                             if (blnNoTime) {
-                                pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                                pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                 pp.nn.df.new <- data.frame(pp.idx = rep(pp.idx.not.enuf, each=kVal.tmp + 1), 
                                                        nn.rank = rep(0:kVal.tmp, times=length(pp.idx.not.enuf)), 
                                                        nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], 
@@ -579,7 +580,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                             } else {
                                 pp.nn.df <- rbind(pp.nn.df,
                                     do.call(rbind, lapply(pp.idx.not.enuf, function(i) {
-                                    pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                    pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                     query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                     data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist), 
                                     tsd.cumsum=cumsum(as.numeric(pp.nn.lst$nn.dist)))
@@ -615,7 +616,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         }
     
                         if (blnNoTime) {
-                            pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub.nmnn, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                            pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub.nmnn, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                             #print("bug found");browser()
                             pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.sub.nmnn, each=kVal.tmp + 1), 
                                                    nn.rank = rep(0:kVal.tmp, times=length(idVal.idx.sub.nmnn)), 
@@ -628,7 +629,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
     
                         } else {
                             pp.nn.df <- do.call(rbind, pblapply(idVal.idx.sub.nmnn, function(i) {
-                                pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                                       query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                 data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist), 
                                            tsd.cumsum=cumsum(as.numeric(pp.nn.lst$nn.dist)))
@@ -653,7 +654,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                             if (status) cat(cw(paste("  - ", kVal.old, " wasn't large enough for ", length(pp.idx.not.enuf), " points. Computing cumulative distances for k=", kVal.tmp, " points\n", sep=""), exdent=4, indent=1))
                             
                             if (blnNoTime) {
-                                pp.nn.lst <- get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
+                                pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                 pp.nn.df.new <- data.frame(pp.idx = rep(pp.idx.not.enuf, each=kVal.tmp + 1), 
                                                        nn.rank = rep(0:kVal.tmp, times=length(pp.idx.not.enuf)), 
                                                        nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], 
@@ -669,7 +670,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                             } else {
                                 pp.nn.df <- rbind(pp.nn.df,
                                     do.call(rbind, pblapply(pp.idx.not.enuf, function(i) {
-                                    pp.nn.lst <- get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
+                                    pp.nn.lst <- FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z = tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal, type=time.term, d.bar=d.bar, tau=tau, vmax=vmax)),
                                     query=cbind(coordinates(lxy[["pts"]])[i, , drop=FALSE],0), k=kVal.tmp + 1, algorithm=FNN.algorithm)
                                     data.frame(pp.idx=i, nn.rank=0:kVal.tmp, nn.idx=idVal.idx[as.numeric(pp.nn.lst$nn.index)], tsd=as.numeric(pp.nn.lst$nn.dist), 
                                     tsd.cumsum=cumsum(as.numeric(pp.nn.lst$nn.dist)))

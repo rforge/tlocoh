@@ -51,25 +51,13 @@ lhs.revisit.add <- function(lhs, ta.min=NULL, ta.max=NULL, ta.cuts=NULL, status=
             taminVal <- ta.min[ta.idx]
             tamaxVal <- if (is.null(ta.max)) 0 else ta.max[ta.idx]
             
-            #if (ivgVal.min > 0 && ivgVal.min < tau) {
-            #    warning("ivg.min less than the median sampling inverval")
-            #}
-            
             if (status) cat(cw(paste("- ", ta.idx, " of ", length(ta.min), ". Computing revisits for ta.min=", taminVal, " (", secs.fmt(taminVal), ")",
                         if (tamaxVal==0) "" else paste(" to ta.max=", tamaxVal, " (", secs.fmt(tamaxVal), ")",  sep=""), ".", sep=""), indent=1, exdent=3, final.cr=F))
             
-            #print("Need a new ta.tab.lst");browser()
-            
             if (tamaxVal==0) {
                 nsr <- sapply(lhs[[hs.idx]][["enc.pts"]][["idx"]], function(x) sum(diff(dt.int[x]) >= taminVal))
-                #ivg.tab.lst <- pblapply(lhs[[hs.idx]][["enc.pts"]][["idx"]], function(x) as.numeric(table(cumsum(c(1, diff(as.numeric(lhs[[hs.idx]][["pts"]][["dt"]][x])) >= ivgVal.min)))))
-                
             } else {
                 nsr <- sapply(lhs[[hs.idx]][["enc.pts"]][["idx"]], function(x) {epdt <- diff(dt.int[x]); sum(epdt >= taminVal & epdt < tamaxVal)})
-                
-                #ivg.tab.lst <- pblapply(lhs[[hs.idx]][["enc.pts"]][["idx"]], function(x) as.numeric(table(cumsum(c(1, diff(as.numeric(lhs[[hs.idx]][["pts"]][["dt"]][x])) >= ivgVal.min)))))
-                #{ep.diff <- diff(as.numeric(lhs[[hs.idx]][["pts"]][["dt"]][x])); as.numeric(table(cumsum(c(1, ep.diff >= ivgVal.min & ep.diff < ivgVal.max))))})
-                #as.numeric(table(cumsum(c(1, diff(as.numeric(lhs[[hs.idx]][["pts"]][["dt"]][x])) >= ivgVal.min))))
             }
             
             revisit.str <- paste("nsr.", taminVal, ".", tamaxVal, sep="")
@@ -77,11 +65,6 @@ lhs.revisit.add <- function(lhs, ta.min=NULL, ta.max=NULL, ta.cuts=NULL, status=
             lhs[[hs.idx]][["hm"]][[revisit.str]] <- list(type="nsr", aux=list(ta.min=taminVal, ta.max=tamaxVal))
             
             if (status) cat(" Done. \n");flush.console()
-            
-            #nsv <- sapply(ivg.tab.lst, length)
-            #mnlv <- sapply(ivg.tab.lst, mean)
-            #lhs[[hs.idx]][["hulls"]][[paste("mnlv.", ivg.str,sep="")]] <- mnlv
-            #lhs[[hs.idx]][["hm"]][[paste("mnlv.", ivg.str, sep="")]] <- list(type="mnlv", aux=list(ivg.min=ivgVal.min, ivg.max=ivgVal.max))
                             
         }
         

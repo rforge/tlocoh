@@ -118,7 +118,7 @@
 #' created, returns NULL. 
 #'
 #' @export
-
+#' @import sp
 
 lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL,
                         all.ids.at.once=TRUE, all.ids.col.unique=all.ids.at.once, all.ids.col=NULL, 

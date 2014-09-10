@@ -38,8 +38,10 @@
 #' Because this function deletes points, the nearest-neighbors lookup table of the \link{LoCoH-xy} object (if any) will be deleted.
 #'
 #' @return a \link{LoCoH-xy} object
-#' @export
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.bursts}}
+#'
+#' @export
+#' @import sp
 
 # You can thin by dt.start / end, deltat, or both
 
@@ -147,7 +149,7 @@ lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, dt.start=NULL, dt.end
             }
             
             ## For each element of dts.target, identify the nearest element of dts.int
-            dts.target.nn.idx <- get.knnx(data=dts.int, query=dts.target, k=1)[["nn.index"]]
+            dts.target.nn.idx <- FNN::get.knnx(data=dts.int, query=dts.target, k=1)[["nn.index"]]
             
             ## Record the number of duplicates, which are most likely due to sampling gaps > samp.freq 
             num.dups.lst[[idVal]] <- sum(duplicated(dts.target.nn.idx))

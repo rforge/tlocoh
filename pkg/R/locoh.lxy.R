@@ -21,7 +21,8 @@
 #' In code examples, objects of class \code{locoh.lxy} are often indicated by a 'lxy' suffix, and functions that are designed to work on LoCoH-xy
 #' objects typically start with 'lxy'.
 #'
-#' For a description of the data structure, see the \emph{T-LoCoH Data Classes} vignette.
+#' For a complete description of the data structure, see the  
+#' vignette \href{../doc/tlocoh_data_classes.pdf}{\emph{T-LoCoH Data Classes}}.  
 #'
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.proj.add}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}, 
 #' \code{\link{lxy.merge}}, \code{\link{lxy.exp.csv}}, \code{\link{lxy.exp.kml}}, \code{\link{lxy.exp.shp}}, \code{\link{move.lxy}}

@@ -16,6 +16,7 @@
 #' @return A LoCoH-hullset object
 #'
 #' @export
+#' @import pbapply
 
 lhs.visit.add <- function(lhs, ivg=NULL, status=TRUE) {
 

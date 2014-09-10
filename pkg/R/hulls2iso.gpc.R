@@ -1,3 +1,5 @@
+#' @import pbapply sp
+
 hulls2iso.gpc <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasing=FALSE, 
                       iso.method=c("pt.quantiles", "hm.vals")[1], hs.name=NULL, iso.cap.method=c(">=", "<=")[1],
                       status=TRUE, total.num.points=NULL) {

@@ -41,7 +41,7 @@ lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.
     
     ## Do some error checking on dtfn
     dtfn.err <- "dtfn should be a two-column data frame containing a date and filename"
-    if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background")
+    if (!requireNamespace("rgdal")) stop("package rgdal required to read raster image")
     if (!is.null(dtfn)) {
         if (!is.data.frame(dtfn)) stop(dtfn.err)
         if (ncol(dtfn) != 2) stop(dtfn.err)
@@ -71,7 +71,7 @@ lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.
         
         if (date.match == "closest") {
             ## For each point in lxy, find the closest date
-            idx <- as.numeric(get.knnx(data=img.dtint, query=lxy.dtint, k=1)$nn.index)
+            idx <- as.numeric(FNN::get.knnx(data=img.dtint, query=lxy.dtint, k=1)$nn.index)
             
         } else if (date.match == "before") {
             idx <- findInterval(lxy.dtint, img.dtint)

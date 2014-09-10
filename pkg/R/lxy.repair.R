@@ -21,6 +21,7 @@
 #'
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.id.new}}, \code{\link{lxy.merge}}
 #' @export
+#' @import sp
 
 lxy.repair <- function(lxy, fix.dup.ptid=FALSE, dt.int.round.to=0.1, tau.diff.max=0.02) {
     

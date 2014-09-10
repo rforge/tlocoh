@@ -47,6 +47,7 @@
 #' \code{\link{lhs.exp.shp}} to export hulls as shapefile
 #'
 #' @export
+#' @import pbapply sp
 
 lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy=TRUE, 
                     decimal.places=1, offset.dups=1, velocity.metrics=TRUE,
@@ -56,9 +57,6 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]])) stop("Old data structure")
     if (!is.null(ud)) stop("The 'ud' argument is no longer used. Use 'iso.add' instead")
-
-    ## taken out
-    ## @param save.nn Save the nearest neighbors identified for each point. T/F.
 
     ###########################################################################
     ## MAKE SURE A VALID COMBO OF PARAMETERS WAS PASSED
@@ -131,6 +129,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
     ## Get a data frame with the parsed values of all the names of the lxy[["nn"]] list elements, will use this later to see if 
     ## nearest neighbors for this value of s have already been identified
     #if (!is.null(lxy[["nn"]])) nn.names <- nn.name.df(names(lxy[["nn"]]))
+    
     if (!is.null(lxy[["nn"]])) nn.names <- do.call(rbind, lapply(lxy[["nn"]], function(x) data.frame(id=x$id, tt=x$time.term, s=x$s, n=length(x$ptid), kmax=x$kmax, rmax=x$rmax, amax=x$amax)))
     
     ## Create an empty vector we will use to convext lxy.pts.idx to lhs.pts.idx
@@ -144,6 +143,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
     #if (velocity.metrics && !is.null(lxy[["pts"]][["dt"]])) {
     #    speed.com.gf.all <- rep(NA, length(lxy[["pts"]]))
     #}    
+    
     pbo.orig <- pboptions(type="txt", style=pbo.style)
     on.exit(pboptions(pbo.orig))
                         

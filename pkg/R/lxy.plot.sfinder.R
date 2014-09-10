@@ -31,6 +31,7 @@
 #' and a list of the svals
 #'
 #' @export
+#' @import sp
   
 lxy.plot.sfinder <- function(lxy, id=NULL, delta.t="auto", delta.t.auto.n=8, delta.t.err=0.01, outline=FALSE, 
                              desc=c(0,1,3)[2], cex.desc=0.8, col.desc="darkgreen", time.term=c("vmax", "dif")[1],
@@ -134,15 +135,12 @@ lxy.plot.sfinder <- function(lxy, id=NULL, delta.t="auto", delta.t.auto.n=8, del
             ## Identify which pairs are within the allowed range
             end.start.diff.good <- (end.start.diff >= delta.t.lbound) & (end.start.diff <= delta.t.ubound)
 
-            ## if (debug) cat("  Number of starting points evaluated: ", length(idx.start.pt), ". Number found to have elligible end partners: ", sum(end.start.diff.good), "\n", sep="")
-            
             ## Keep just the pairs whose delta-t is within the allowed range
             idx.start.pt <- idx.start.pt[end.start.diff.good]
             idx.end.pt <- idx.end.pt[end.start.diff.good]
-            
+
             ## Calculate s-eq for these pairs of points and save in svals.lst
             if (time.term == "dif") {
-                #svals.lst[[as.character(e)]] <- sqrt((coordinates(lxy[["pts"]])[idx.end.pt,1] - coordinates(lxy[["pts"]])[idx.start.pt,1])^2 + (coordinates(lxy[["pts"]])[idx.end.pt,2] - coordinates(lxy[["pts"]])[idx.start.pt,2]  )^2) * tau / ((lxy.dt.int[idx.end.pt] - lxy.dt.int[idx.start.pt]) * d.bar^2)
                 svals.lst[[as.character(e)]] <- sqrt((coordinates(lxy[["pts"]])[idx.end.pt,1] - coordinates(lxy[["pts"]])[idx.start.pt,1])^2 + (coordinates(lxy[["pts"]])[idx.end.pt,2] - coordinates(lxy[["pts"]])[idx.start.pt,2]  )^2) / (d.bar * sqrt((lxy.dt.int[idx.end.pt] - lxy.dt.int[idx.start.pt]) / tau ))
             } else if (time.term == "vmax") {
                 svals.lst[[as.character(e)]] <- sqrt((coordinates(lxy[["pts"]])[idx.end.pt,1] - coordinates(lxy[["pts"]])[idx.start.pt,1])^2 + (coordinates(lxy[["pts"]])[idx.end.pt,2] - coordinates(lxy[["pts"]])[idx.start.pt,2])^2)  / ((lxy.dt.int[idx.end.pt] - lxy.dt.int[idx.start.pt]) * vmax)

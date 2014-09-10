@@ -22,6 +22,7 @@
 #'
 #' @method hist locoh.lxy
 #' @export
+#' @import sp
 
 hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
                            dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,

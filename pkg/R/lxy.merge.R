@@ -24,6 +24,7 @@
 #'
 #' @seealso \code{\link{lxy.id.new}}
 #' @export
+#' @import sp
 
 lxy.merge <- function (..., pts.flds="all", save.ptid=FALSE, new.id=NULL, save.old.id=NULL, dt.int.round.to=0.1, tau.diff.max=0.02) {
 

@@ -1,0 +1,70 @@
+Changes in version 1.18 (2014-09-09)
+=========================
+* moved package 'sp' from Imports to Depends
+* corrected imports() section in NAMESPACE, specified package name in foreign package functions
+* created NEWS file to keep track of new features
+* updated the email address in DESCRIPTION
+
+Changes in version 1.17 (2014-08-17)
+=========================
+* lxy.exp.shp: added (exports a LocoH-xy object to shapefile)
+* Added support for plotting single-band GeoTiff images in the background of LoCoH-xy and LoCoH-hullset objects (including new argument tiff.col)
+* lxy.exp.mov(): added support for displaying background raster images in an animation of a LoCoH-xy object; new argument for date label fill color; support for mp4 encoding (h.264); and coloring the active point by the hour-of-day
+* Add dir argument to lxy.exp.csv
+* Added a check in readpartgdal for the area of overlap and number of bands in a raster
+* Corrected default title for plots of time-use isopleths
+* Package rgdal moved from 'Imports' to 'Suggests' (to simplify installation)
+* Cleaned up code (e.g., got rid of commented lines, unnecessary require() checks) in numerous scripts
+* New sections & updates to the tutorial
+* Numerous other minor changes
+
+Changes in version 1.16 (2014-04-04)
+=========================
+* Corrected minor argument check bug on lxy.plot.tspan
+* Fixed minor bug in lxy.save
+* Fixed bug in lxy.subset that caused an error when the lxy object had multiple individuals and no timestamps
+* Updated plot.locoh.lxy: 1) changed argument named 'x' (back) to 'lxy', and added option to add a legend when overlaying the locations of multiple individuals
+* Added an argument to xyt.lxy to show locations with duplicate time stamps if encountered
+
+Changes in version 1.15 (2014-02-18)
+=========================
+* Added vignette on data classes
+* Added functions hulls and isopleths to extract the SpatialPolygonDataFrame objects
+* Fixed error message "lxy.dt.int not found" in lxy.lhs
+* New option to disable temporal filtering when computing movement statistics in xyt.lxy, see help page for details
+* Numerous edits to documentation
+
+Changes in version 1.14 (2013-11-14)
+=========================
+* Bug fix in lxy.exp.kml
+Version 1.13 (2013-09-15)
+* Bug fix in lxy.lhs
+
+Changes in version 1.12
+=========================
+* Added support for rasterized isopleths to summary.locoh.lhs and plot.locoh.lhs
+* Add creation functions to the output of hm.expr()
+* Created help page for LoCoH-hullset (class locoh.lhs)
+* Deprecated 'ud' argument in lxy.lhs. Replaced with iso.add argument.
+* Fixed a bug in lhs.exp.shp which prevented exporting isopleths by themselves to shapefiles.
+* Fixed a bug in plot.locoh.lhs when specifying which isopleth levels to plot.
+* Fixed a bug in xyt.lxy which caused an error when the projection system wasn't specified.
+* Other bug-fixes and updates to documentation.
+
+Changes in version 1.1.10
+=========================
+* renamed 'fn' argument to 'file' in lxy.save and lhs.save for consistency with other R functions
+* added function lxy.exp.kml to export lxy objects to KML for animation in Google Earth
+
+Changes in version 1.0.9
+=========================
+* Added move.lxy function to import movement data from the move package
+* Added lxy.reproject function to reproject coordinates
+* Fixed a bug with summary functions
+* Added checking for syntax of projection arguments
+* Added argument to function xyt.lxy to suppress warnings if coordinates are in lat long
+* Added function lhs.iso.rast to save isopleths to a RasterLayer
+* Renamed trim function to strTrim to avoid conflict names with other packages (e.g., raster)
+* Renamed str.text.contrast.color function to conform with S3 methods syntax
+* Updated tutorials
+

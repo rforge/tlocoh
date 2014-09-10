@@ -35,10 +35,9 @@
 #'
 #' \code{pIntersect} and \code{pIntersectSat} are two functions that identify which pairs of hulls actually intersect. Neither are 
 #' terribly fast, but \code{pIntersect} appears to work faster than \code{pIntersectSat}.
-#' 
 #'
 #' @export
-
+#' @import pbapply sp
 
 lhs.so.add <- function(lhs, id="all", hs2.id="all", tbuff=0, ivg=NULL, test=0, skip.dups=TRUE, save.hso=TRUE,
                        status=TRUE, piFUN=c("pIntersect", "pIntersectSat")[1]) {

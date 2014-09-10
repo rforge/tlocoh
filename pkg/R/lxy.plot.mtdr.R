@@ -53,6 +53,7 @@
 #' # lxy.plot.mtdr(lxy)
 #'
 #' @export
+#' @import sp
 
 lxy.plot.mtdr <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, type=c("mtd.tsd", "mtd.ed")[1], offset.dups=1, 
                              id=NULL, show.samp.size=TRUE, outline=FALSE,

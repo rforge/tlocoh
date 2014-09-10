@@ -148,6 +148,7 @@
 #' properties of the PNG file(s) created: $fn, $dim, $desc. Otherwise, returns a vector of desc
 #'
 #' @export
+#' @import sp
 
 plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
     iso=FALSE, rast=FALSE, hulls=FALSE, hpp=FALSE, dr=FALSE, nn=FALSE, ellipses=FALSE, allpts=FALSE, ptid=NULL, ptid.highlight=TRUE, add=FALSE, 
@@ -1250,7 +1251,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                                                     ## Scale the classify values 0-1, chopping off a proportion of the tails given by hpp.classify.chop
 
                                                     ## Chopping off a proportion of the tails given by hpp.classify.chop
-                                                    hulls.pp.classify.val.new.range <- sort(hulls.pp.classify.val[f.idx])[c(length(f.idx) * hpp.classify.chop, length(f.idx) * (1 - hpp.classify.chop))]
+                                                    hulls.pp.classify.val.new.range <- sort(hulls.pp.classify.val[f.idx])[c(max(1, length(f.idx) * hpp.classify.chop), length(f.idx) * (1 - hpp.classify.chop))]
                                                     hulls.pp.classify.val[hulls.pp.classify.val[f.idx] < hulls.pp.classify.val.new.range[1]] <- hulls.pp.classify.val.new.range[1]
                                                     hulls.pp.classify.val[hulls.pp.classify.val[f.idx] > hulls.pp.classify.val.new.range[2]] <- hulls.pp.classify.val.new.range[2]
 

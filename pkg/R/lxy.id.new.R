@@ -28,6 +28,7 @@
 #' attributes (including the comment) will be recreated or set to NULL
 #'
 #' @export
+#' @import sp
 
 lxy.id.new <- function(lxy, id.new, save.old.id=NULL, dup.dt=c("check", "offset", "ignore")[1], dup.dt.offset=5, dt.int.round.to=0.1, 
                        tau.diff.max=0.02, status=TRUE) {

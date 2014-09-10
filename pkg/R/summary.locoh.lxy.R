@@ -13,6 +13,7 @@
 #'
 #' @method summary locoh.lxy
 #' @export
+#' @import sp
 
 summary.locoh.lxy <- function(lxy, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
 

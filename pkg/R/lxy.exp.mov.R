@@ -121,7 +121,7 @@
 #' created, returns NULL. 
 #'
 #' @export
-
+#' @import sp
 
 lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=all.ids.at.once, all.ids.col=NULL, 
                         all.ids.legend=c("bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[5],
@@ -777,8 +777,12 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 cat("   Time to make frames:", round(time.taken.frames, 1), units(time.taken.frames), " (", round(time.taken.frames.secs / length(frames.to.use), 1), " seconds/frame) \n", sep = " ") 
             }    
 
-            if (create.mov) {                
-                shell.ffmpeg <- system(cmd, wait=TRUE, invisible=TRUE, intern=FALSE, minimized=FALSE)
+            if (create.mov) {         
+                if (.Platform$OS.type == "windows") {    
+                    shell.ffmpeg <- system(cmd, wait=TRUE, invisible=TRUE, intern=FALSE, minimized=FALSE)
+                } else {
+                    shell.ffmpeg <- system(cmd, wait=TRUE, intern=FALSE)
+                }
                 if (shell.ffmpeg == 0) {
                     cat("  Created ", fn.mov.full, " (", round(file.info(fn.mov.full)[["size"]] / 2^20, 3), "Mb)\n", sep="")    
                 } else {

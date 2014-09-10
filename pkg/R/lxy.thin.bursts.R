@@ -35,6 +35,7 @@
 #' @return a \link{LoCoH-xy} object
 #' @seealso \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.byfreq}}
 #' @export
+#' @import sp
 
 lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median")[2], info.only=FALSE, 
                              dt.int.round.to=0.1, tau.diff.max=0.02, status=TRUE) {

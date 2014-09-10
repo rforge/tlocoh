@@ -1,3 +1,5 @@
+#' @import pbapply sp
+
 hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasing=FALSE, 
                       iso.method=c("pt.quantiles", "hm.vals")[1], iso.cap.method=c(">=", "<=")[1],
                       one.by.one=FALSE, merge.from.hull1=FALSE, hs.name=NULL, status=TRUE, total.num.points=NULL) {
@@ -23,7 +25,7 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
     if (!iso.method %in% c("pt.quantiles", "hm.vals")) stop("Unknown value for iso.method")
     if (!iso.cap.method %in% c(">=", "<=")) stop("Unknown value for iso.cap.method")
     if (is.null(total.num.points)) stop("total.num.points is a required parameter")
-    if (version_GEOS0() < "3.3.0") stop("Please upgrade rgeos, need support for geos 3.3.0 or later is required")
+    if (rgeos::version_GEOS0() < "3.3.0") stop("Please upgrade rgeos, need support for geos 3.3.0 or later is required")
 
     #iso.cap.method.int <- if (iso.cap.method == ">=") 1 else 0
 
@@ -38,6 +40,8 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
     } else {                                 
         bln.hmvals.dec <- FALSE
     }
+          
+          
                     
     ## Compute the cummulative number of points enclosed for the data frme
     #bln.pt.enc <- rep(FALSE, max(unlist(points.lst)))
@@ -116,8 +120,6 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
             if (class(ind.grps.union.lst[[i]]) == "try-error") {
                 close(pb)
                 
-                ## warning(cw(paste("gUnaryUnion failed on group ", i, ": ",  attr(ind.grps.union.lst[[i]], "condition")[["message"]], ". Switching to gUnion.", sep=""), exdent=2, final.cr=FALSE))
-                
                 cat("  gUnaryUnion failed for hull group ", i, ". Trying slower one-by-one method \n", sep="")
                 cat("  Reformatting multipart polygon object into simple polygons")
                 badsp.singlepart.lst <- pblapply(ind.grps.idx.lst[[i]], function(j) SpatialPolygons(list(Polygons(list(hulls.p.lst[[j]]), ID=feat.ids[i]))))
@@ -127,7 +129,7 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
                 pb <- txtProgressBar(min=0, max=length(badsp.singlepart.lst), style=3, char="+", width=getOption("pboptions")$txt.width - 1)
                 for (j in 2:length(badsp.singlepart.lst)) {
                   setTxtProgressBar(pb, j)
-                  p.union <- try(gUnion(p.union, badsp.singlepart.lst[[j]], id=feat.ids[i]), silent=TRUE)
+                  p.union <- try(rgeos::gUnion(p.union, badsp.singlepart.lst[[j]], id=feat.ids[i]), silent=TRUE)
                   if (class(p.union) == "try-error") return("error")
                   
                 }
@@ -150,16 +152,12 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
         ##ind.grps.union.sp <- do.call("rbind.SpatialPolygons", ind.grps.union.lst)
         
         ## Cummulatively union the individual groups into a list of Sp object
-        #grps.cum.union.lst <- vector("list", length(ind.grps.union.sp))
-        #grps.cum.union.lst[[1]] <- ind.grps.union.sp[1]
-        #for (i in 2:length(ind.grps.union.sp)) grps.cum.union.lst[[i]] <- gUnion(grps.cum.union.lst[[i-1]], ind.grps.union.sp[i], id=as.character(i))
-    
         grps.cum.union.lst <- vector("list", length(ind.grps.union.lst))
         grps.cum.union.lst[[1]] <- ind.grps.union.lst[[1]]
         for (i in 2:length(ind.grps.union.lst)) {
-            grps.cum.union.lst[[i]] <- try(gUnion(grps.cum.union.lst[[i-1]], ind.grps.union.lst[[i]], id=as.character(i)), silent=TRUE)
+            grps.cum.union.lst[[i]] <- try(rgeos::gUnion(grps.cum.union.lst[[i-1]], ind.grps.union.lst[[i]], id=as.character(i)), silent=TRUE)
             if (class(grps.cum.union.lst[[i]]) == "try-error") {
-                #print("Tthere's been an error summing up the groups");browser()
+                ## There's been an error summing up the groups
                 return("error")
             }
         }
@@ -167,9 +165,7 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
         ## rbind the individual isopleths into a single SpatialPolygons object
         grps.cum.union.sp <- do.call(rbind.SpatialPolygons, grps.cum.union.lst)
         
-        #print("Can we compute area per edge");browser()
-        
-        # By this point we have lost proj4string, so restore it now
+        ## By this point we have lost proj4string, so restore it now
         grps.cum.union.sp@proj4string <- hulls@proj4string
     
     } else if (iso.method == "hm.vals") {

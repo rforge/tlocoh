@@ -15,6 +15,7 @@
 #'
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lxy.repair}}, \code{\link{lxy.thin.byfreq}}, \code{\link{lxy.thin.bursts}}, \code{\link{lxy.merge}}
 #' @export
+#' @import sp
 
 lxy.subset <- function(lxy, id=NULL, ptid=NULL, idx=NULL, dt.start=NULL, dt.end=NULL, dt.int.round.to=0.1, tau.diff.max=0.02) {
 

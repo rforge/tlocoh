@@ -50,6 +50,7 @@
 #' @seealso Vignette on T-LoCoH data classes, Tutorial Vignette (for details on displyaing GIS layers and raster images in the background)
 #' 
 #' @export
+#' @import sp
 #' @method plot locoh.lxy
 
 plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
