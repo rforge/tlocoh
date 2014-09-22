@@ -1,4 +1,4 @@
-#' Create a Quicktime animation from a LoCoH-xy object
+#' Create an animation from a LoCoH-xy object
 #'
 #' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to be on the plot
@@ -47,7 +47,7 @@
 #' @param duration The desired duration of the animation (in seconds)
 #' @param fps A numeric value for frames per second 
 #' @param skip Output every nth frame. To include every frame set skip=1. Integer.
-#' @param ffmpeg The name of the ffmpeg file. See notes.
+#' @param ffmpeg The name of the ffmpeg executable. If NULL (the default), a default file name will be used. See notes.
 #' @param create.mov Whether to actually create the mov file. Set to FALSE preview a few frames without actually encoding them.
 #' @param fmt Video format: \code{'mov'} (Quicktime animation codec) or \code{'mp4'} (h.264)
 #' @param info.only Only return info 
@@ -106,9 +106,9 @@
 #' well (i.e., you can drag the scroll bar 
 #' to view frame by frame). The mp4 settings use the h.264 compression algorithm with a constant rate factor of 20 (good quality). In both cases, 
 #' encoding requires installing the open source encoding program ffmpeg. ffmpeg is a command line program that 
-#' Linux and Windows users can download from http://ffmpeg.org/download.html.
+#' can be downloaded from http://ffmpeg.org/download.html.
 #' Windows users should save the ffmpeg.exe file to the working directory or a directory on Window's path environment variable (e.g., c:\\windows).
-#' Mac users can download ffmpegX from http://ffmpegx.com/download.html but this has not been tested (pass a value to \code{ffmpeg}).
+#' Mac users can download ffmpeg from http://ffmpegmac.net (save ffmpeg to active working directory or a directory on the PATH).
 #'
 #' If ffmpeg is not available, you can still use this function to generate the individual frames and then use another utility (e.g., ImageMagick, Quicktime Pro) 
 #' to combine the frames into a video file. For best results use a 'lossless' compression method in the encoding program.
@@ -141,7 +141,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                         width=if (screen.test) 7 else 608, height=NULL, max.frames=NULL, png.pointsize=16+(width-480)/80, 
                         screen.test=FALSE, tmp.dir=NULL, tmp.files.delete=TRUE, prompt.continue=TRUE,
                         fn.mov=NULL, fn.mov.dir=getwd(), fn.mov.exists=c("auto.increment", "overwrite", "stop", "ask")[1], 
-                        duration=NULL, fps=NULL, skip=NULL, ffmpeg="ffmpeg.exe", create.mov=TRUE, fmt=c("mov","mp4")[1], info.only=TRUE, 
+                        duration=NULL, fps=NULL, skip=NULL, ffmpeg=NULL, create.mov=TRUE, fmt=c("mov","mp4")[1], info.only=TRUE, 
                         shp.csv=NULL, layers=NULL, tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.col=gray(0:255/255), tiff.pct=FALSE, tiff.buff=0, tiff.fill.plot=TRUE, 
                         bg2png=!is.null(layers), crop.layers.to.extent=TRUE, 
                         date.bar=0.85, date.bar.bins=12, col.db="darkblue", cex.axis.db=0.7, 
@@ -520,7 +520,6 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                     while (file.exists(fn.mov.full)) {
                         i <- i + 1
                         if (i > 99) stop("Have tried 99 unique file names for the animation file, but all exist. Bailing")
-                        #print("lets check out this auto-increment");browser()
                         
                         ## Look for a .nn pattern in the file name, then either update the 
                         ## auto-increment digits in the file name, or append new ones
@@ -549,9 +548,17 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
             
             ## Find ffmpeg.exe and create cmd line
             if (create.mov) {
-                ffmpeg.exec <- findonpath(ffmpeg)
                 if (is.null(ffmpeg)) {
-                    cat(cw("Cant find ffmpeg.exe. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows)", final.cr=T))
+                    if (.Platform$OS.type == "windows") {
+                        ffmpeg <- "ffmpeg.exe"
+                    } else {
+                        ffmpeg <- "ffmpeg"
+                    }
+                }
+              
+                ffmpeg.exec <- findonpath(ffmpeg)
+                if (is.null(ffmpeg.exec)) {
+                    cat(cw("Cant find ffmpeg. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows)", final.cr=T))
                     return(invisible(NULL))
                 }
                 if (fmt=="mov") {
@@ -559,9 +566,6 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 } else {
                     cmd <- paste(ffmpeg.exec, " -r ", fps.use, " -i \"", fn.png, "\" -s ", width, "x", height.use, " -c:v libx264 -crf 20 -pix_fmt yuv420p -preset slow -tune animation -an -f mp4 \"", fn.mov.full, "\"", sep="")
                 }
-                
-                # new cmd: mp4
-                # ffmpeg.exe -r 10 -i img18d449a02b93%04d.png -s 608x848 -c:v libx264 -crf 25 -pix_fmt yuv420p -preset slow -tune animation -an -f mp4 am188_v2.mp4
             }
             
             if (prompt.continue) {

@@ -15,15 +15,27 @@
 
 findonpath <- function(fn, status=TRUE) {
     
-    if (file.exists(fn)) return(fn)
+    if (file.exists(fn)) {
+        if (.Platform$OS.type == "windows") {
+            return(fn)
+        } else {
+            return(file.path(getwd(), fn))  
+        }      
+    }
     
-    path <- Sys.getenv("path")
+    path <- Sys.getenv("PATH")
     if (path == "") {
         if (status) cat("Path environment variable not found \n")
         return(NULL)
     }
     
-    path.dirs <- c(path.expand("~"), strsplit(path, ";", fixed = TRUE)[[1]])
+    if (.Platform$OS.type == "windows") {
+        path.delim <- ";"
+    } else {
+        path.delim <- ":"      
+    }
+    
+    path.dirs <- c(path.expand("~"), strsplit(path, path.delim, fixed = TRUE)[[1]])
     fn.with.path <- file.path(path.dirs, fn)
     fn.with.path.exists <- which(file.exists(fn.with.path))
     if (length(fn.with.path.exists)==0) {

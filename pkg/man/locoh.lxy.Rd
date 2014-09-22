@@ -36,7 +36,7 @@ designed to work on LoCoH-xy objects typically start with
 For a complete description of the data structure, see the
 vignette
 \href{../doc/tlocoh_data_classes.pdf}{\emph{T-LoCoH Data
-Classes}}
+Classes}}.
 }
 \seealso{
 \code{\link{xyt.lxy}}, \code{\link{lxy.proj.add}},

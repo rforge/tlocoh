@@ -34,7 +34,7 @@ with 'lhs'.
 For a complete description of the data structure, see the
 vignette
 \href{../doc/tlocoh_data_classes.pdf}{\emph{T-LoCoH Data
-Classes}}
+Classes}}.
 }
 \seealso{
 \code{\link{lxy.lhs}}, \code{\link{summary.locoh.lhs}},

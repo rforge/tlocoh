@@ -111,42 +111,45 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
         #ind.grps.union.old <- gUnaryUnionPB(ind.grps.mpart.sp, id=sprintf("p%03d", 1:length(ind.grps.mpart.sp)))
 
         ind.grps.union.lst <- vector(mode="list", length=length(last.hull.idx))
-        pb <- txtProgressBar(min=0, max=length(ind.grps.mpart.sp), style=3, char="+", width=getOption("pboptions")$txt.width - 1)
+        if (status) pb <- txtProgressBar(min=0, max=length(ind.grps.mpart.sp), style=3, char="+", width=getOption("pboptions")$txt.width - 1)
         for (i in 1:length(ind.grps.mpart.sp)) {
-            setTxtProgressBar(pb, i)
+            if (status) setTxtProgressBar(pb, i)
             ind.grps.union.lst[[i]] <- try(.Call("rgeos_unaryunion", rgeos:::.RGEOS_HANDLE, ind.grps.mpart.sp[i], feat.ids[i], FALSE, PACKAGE = "rgeos"), silent=TRUE)
 
             ## If there was a typology error, try unioning them one by one
             if (class(ind.grps.union.lst[[i]]) == "try-error") {
-                close(pb)
-                
-                cat("  gUnaryUnion failed for hull group ", i, ". Trying slower one-by-one method \n", sep="")
-                cat("  Reformatting multipart polygon object into simple polygons")
-                badsp.singlepart.lst <- pblapply(ind.grps.idx.lst[[i]], function(j) SpatialPolygons(list(Polygons(list(hulls.p.lst[[j]]), ID=feat.ids[i]))))
-
-                cat("  Merging pieces together \n")
+                if (status) {
+                    close(pb)
+                    cat("  gUnaryUnion failed for hull group ", i, ". Trying slower one-by-one method \n", sep="")
+                    cat("  Reformatting multipart polygon object into simple polygons")
+                    badsp.singlepart.lst <- pblapply(ind.grps.idx.lst[[i]], function(j) SpatialPolygons(list(Polygons(list(hulls.p.lst[[j]]), ID=feat.ids[i]))))
+                    cat("  Merging pieces together \n")
+                } else {
+                    badsp.singlepart.lst <- lapply(ind.grps.idx.lst[[i]], function(j) SpatialPolygons(list(Polygons(list(hulls.p.lst[[j]]), ID=feat.ids[i]))))
+                }
                 p.union <- badsp.singlepart.lst[[1]]
-                pb <- txtProgressBar(min=0, max=length(badsp.singlepart.lst), style=3, char="+", width=getOption("pboptions")$txt.width - 1)
+                
+                if (status) pb <- txtProgressBar(min=0, max=length(badsp.singlepart.lst), style=3, char="+", width=getOption("pboptions")$txt.width - 1)
                 for (j in 2:length(badsp.singlepart.lst)) {
-                  setTxtProgressBar(pb, j)
+                  if (status) setTxtProgressBar(pb, j)
                   p.union <- try(rgeos::gUnion(p.union, badsp.singlepart.lst[[j]], id=feat.ids[i]), silent=TRUE)
                   if (class(p.union) == "try-error") return("error")
                   
                 }
-                close(pb)
+                if (status) close(pb)
                 ind.grps.union.lst[[i]] <- p.union
 
                 ## I also tried putting the hulls in the problem in a SpatialPolygons object with one record per feature,
                 ## but that was not faster, probably because extracting individual features with [] notation seems to be slow
 
                 ## Reset the progress bar
-                if (i < length(ind.grps.mpart.sp)) {
+                if (status && i < length(ind.grps.mpart.sp)) {
                     pb <- txtProgressBar(min=0, max=length(ind.grps.mpart.sp), style=3, char="+", width=getOption("pboptions")$txt.width - 1)
                     setTxtProgressBar(pb, i)
                 }
             }
         }
-        close(pb)
+        if (status) close(pb)
         
         ## Take the list of the individual SP and put them in a single sp object
         ##ind.grps.union.sp <- do.call("rbind.SpatialPolygons", ind.grps.union.lst)

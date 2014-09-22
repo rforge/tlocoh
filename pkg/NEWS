@@ -1,7 +1,13 @@
+Changes in version 1.19 (2014-09-22)
+=========================
+* modifications to <pre>lxy.exp.mov</pre> and <pre>findonpath</pre> to support use of ffmpeg on MacOS
+
 Changes in version 1.18 (2014-09-09)
 =========================
 * moved package 'sp' from Imports to Depends
 * corrected imports() section in NAMESPACE, specified package name in foreign package functions
+* fixed a bug with hist.locoh.lhs that hid records when <pre>hpp.classify.chop=0</pre>
+* added argument <pre>lo.margins.set</pre> to <pre>hist.locoh.lhs</pre> and <pre>hist.locoh.lxy</pre>
 * created NEWS file to keep track of new features
 * updated the email address in DESCRIPTION
 

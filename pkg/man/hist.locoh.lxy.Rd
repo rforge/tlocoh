@@ -5,9 +5,9 @@
 \usage{
 \method{hist}{locoh.lxy}(lxy, id = NULL, dt = TRUE, d = TRUE,
   delta.t = TRUE, v = TRUE, figs.per.page = NULL, col = "gray80",
-  dt.bins.base = c("secs", "mins", "hours", "days")[4], dt.bins.width = 3600
-  * 24 * 7, delta.t.num.sd = NULL, d.tct = 1.2, time.unit = "auto",
-  overlay.median = TRUE, breaks = 20)
+  lo.margins.set = TRUE, dt.bins.base = c("secs", "mins", "hours",
+  "days")[4], dt.bins.width = 3600 * 24 * 7, delta.t.num.sd = NULL,
+  d.tct = 1.2, time.unit = "auto", overlay.median = TRUE, breaks = 20)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -29,6 +29,10 @@
   \item{figs.per.page}{Number of plots per page}
 
   \item{col}{The color of the bars}
+
+  \item{lo.margins.set}{Whether to save and reset the plot
+  device margin settings (some wrapper functions that call
+  this function don't want device settings reset). T/F.}
 
   \item{dt.bins.base}{Where to start the first bin ((for
   histogram of number of points over time): "secs", "mins",
