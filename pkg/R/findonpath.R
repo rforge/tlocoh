@@ -19,7 +19,7 @@ findonpath <- function(fn, status=TRUE) {
         if (.Platform$OS.type == "windows") {
             return(fn)
         } else {
-            return(file.path(getwd(), fn))  
+            return(file.path(dirname(fn), basename(fn)))  
         }      
     }
     

@@ -342,12 +342,13 @@ settings use the h.264 compression algorithm with a
 constant rate factor of 20 (good quality). In both cases,
 encoding requires installing the open source encoding
 program ffmpeg. ffmpeg is a command line program that can
-be downloaded from http://ffmpeg.org/download.html. Windows
-users should save the ffmpeg.exe file to the working
-directory or a directory on Window's path environment
-variable (e.g., c:\\windows). Mac users can download ffmpeg
-from http://ffmpegmac.net (save ffmpeg to active working
-directory or a directory on the PATH).
+be downloaded from \url{http://ffmpeg.org/download.html}
+(select the package for your OS). After downloading, the
+ffmpeg executable file should be saved in the current
+working directory, or a directory on the PATH environment
+variable (e.g., on windows c:\\windows). You may also pass
+the path and name to ffmpeg using the \code{ffmpeg}
+argument.
 
 If ffmpeg is not available, you can still use this function
 to generate the individual frames and then use another
