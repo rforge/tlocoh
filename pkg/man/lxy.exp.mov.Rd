@@ -26,10 +26,10 @@ lxy.exp.mov(lxy, id = NULL, all.ids.at.once = TRUE,
   prompt.continue = TRUE, fn.mov = NULL, fn.mov.dir = getwd(),
   fn.mov.exists = c("auto.increment", "overwrite", "stop", "ask")[1],
   duration = NULL, fps = NULL, skip = NULL, ffmpeg = NULL,
-  create.mov = TRUE, fmt = c("mov", "mp4")[1], info.only = TRUE,
-  shp.csv = NULL, layers = NULL, tiff.fn = NULL, tiff.bands = c(3, 2,
-  1), tiff.col = gray(0:255/255), tiff.pct = FALSE, tiff.buff = 0,
-  tiff.fill.plot = TRUE, bg2png = !is.null(layers),
+  create.mov = TRUE, show.cmd = FALSE, fmt = c("mov", "mp4")[1],
+  info.only = TRUE, shp.csv = NULL, layers = NULL, tiff.fn = NULL,
+  tiff.bands = c(3, 2, 1), tiff.col = gray(0:255/255), tiff.pct = FALSE,
+  tiff.buff = 0, tiff.fill.plot = TRUE, bg2png = !is.null(layers),
   crop.layers.to.extent = TRUE, date.bar = 0.85, date.bar.bins = 12,
   col.db = "darkblue", cex.axis.db = 0.7, beep = FALSE,
   report.time = TRUE, status = TRUE)
@@ -202,6 +202,9 @@ lxy.exp.mov(lxy, id = NULL, all.ids.at.once = TRUE,
   file. Set to FALSE preview a few frames without actually
   encoding them.}
 
+  \item{show.cmd}{Whether to display the ffmpeg command
+  line that stitches the images into an animation}
+
   \item{fmt}{Video format: \code{'mov'} (Quicktime
   animation codec) or \code{'mp4'} (h.264)}
 
@@ -357,7 +360,10 @@ frames into a video file. For best results use a 'lossless'
 compression method in the encoding program. To create the
 individual frames only for encoding with another utility,
 set \code{tmp.dir="."} (the working directory) and
-\code{tmp.files.delete=FALSE}.
+\code{tmp.files.delete=FALSE}. Passing \code{show.cmd=TRUE}
+will display the ffmpeg command line that will generate
+animation, which can be useful if you want to do some
+additional editing to the frames prior to encoding.
 
 If \code{fn.mov.exists = "auto.increment"}, a two-digit
 number will be appended to the filename to avoid

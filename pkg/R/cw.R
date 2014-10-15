@@ -1,4 +1,4 @@
-#' Console Wrap. Formats a string for printing to the console window
+#' Console wrap. Formats a string for printing to the console window
 #'
 #' Takes a potentially long character object and adds carriage returns and blank spaces for better
 #' appearance when printing to the terminal window

@@ -49,6 +49,7 @@
 #' @param skip Output every nth frame. To include every frame set skip=1. Integer.
 #' @param ffmpeg The name of the ffmpeg executable. If NULL (the default), a default file name will be used. See notes.
 #' @param create.mov Whether to actually create the mov file. Set to FALSE preview a few frames without actually encoding them.
+#' @param show.cmd Whether to display the ffmpeg command line that stitches the images into an animation
 #' @param fmt Video format: \code{'mov'} (Quicktime animation codec) or \code{'mp4'} (h.264)
 #' @param info.only Only return info 
 #' @param shp.csv The path and filename of a csv file that contains information about shapefiles, including layer names, file, and symbology.
@@ -113,6 +114,8 @@
 #' If ffmpeg is not available, you can still use this function to generate the individual frames and then use another utility (e.g., ImageMagick, Quicktime Pro) 
 #' to combine the frames into a video file. For best results use a 'lossless' compression method in the encoding program.
 #' To create the individual frames only for encoding with another utility, set \code{tmp.dir="."} (the working directory) and \code{tmp.files.delete=FALSE}. 
+#' Passing \code{show.cmd=TRUE} will display the ffmpeg command line that will generate animation, which can be useful if you want to do some additional
+#' editing to the frames prior to encoding.
 #'
 #' If \code{fn.mov.exists = "auto.increment"}, a two-digit number will be appended to the filename to avoid overwriting an existing file
 #'
@@ -141,7 +144,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                         width=if (screen.test) 7 else 608, height=NULL, max.frames=NULL, png.pointsize=16+(width-480)/80, 
                         screen.test=FALSE, tmp.dir=NULL, tmp.files.delete=TRUE, prompt.continue=TRUE,
                         fn.mov=NULL, fn.mov.dir=getwd(), fn.mov.exists=c("auto.increment", "overwrite", "stop", "ask")[1], 
-                        duration=NULL, fps=NULL, skip=NULL, ffmpeg=NULL, create.mov=TRUE, fmt=c("mov","mp4")[1], info.only=TRUE, 
+                        duration=NULL, fps=NULL, skip=NULL, ffmpeg=NULL, create.mov=TRUE, show.cmd=FALSE, fmt=c("mov","mp4")[1], info.only=TRUE, 
                         shp.csv=NULL, layers=NULL, tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.col=gray(0:255/255), tiff.pct=FALSE, tiff.buff=0, tiff.fill.plot=TRUE, 
                         bg2png=!is.null(layers), crop.layers.to.extent=TRUE, 
                         date.bar=0.85, date.bar.bins=12, col.db="darkblue", cex.axis.db=0.7, 
@@ -547,7 +550,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
             fn.png <- paste(tempfile(pattern="img", tmpdir=tmp.dir), "%04d.png", sep="")
             
             ## Find ffmpeg.exe and create cmd line
-            if (create.mov) {
+            if (create.mov || show.cmd) {
                 if (is.null(ffmpeg)) {
                     if (.Platform$OS.type == "windows") {
                         ffmpeg <- "ffmpeg.exe"
@@ -803,7 +806,12 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
     if (report.time && !screen.test) {
         time.taken.total = difftime(Sys.time(), start.time, units="auto")
         cat("   Total time:", round(time.taken.total, 1), units(time.taken.total), "\n", sep = " ")    
-    }    
+    } 
+    
+    if (show.cmd) {
+        cat("\nffmpeg command:\n")
+        cat(cmd, "\n")
+    }   
 
     if (beep) {
         flush.console()

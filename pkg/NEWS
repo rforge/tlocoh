@@ -1,6 +1,11 @@
+Changes in version 1.20 (2014-10-14)
+=========================
+* split functions still being developed / tested to a new package called 'tlocoh.dev', including iso2raster, isodata.plot, lhs.check, lhs.exp.isodata, lhs.iso.rast, lhs.revisit.add, lhs.revisit.del, lhs.so.add, lhs.to.add, lhs.to.stats, lines.intersect.turbo.flat, lxy.lhs.batch, pIntersect, pIntersectSat
+
 Changes in version 1.19 (2014-09-22)
 =========================
-* modifications to <pre>lxy.exp.mov</pre> and <pre>findonpath</pre> to support use of ffmpeg on MacOS
+* modifications to <pre>lxy.exp.mov</pre> and <pre>findonpath</pre> to support creating animations with ffmpeg on MacOS
+* added argument <pre>show.cmd</pre> to <pre>lxy.exp.mov</pre>
 
 Changes in version 1.18 (2014-09-09)
 =========================

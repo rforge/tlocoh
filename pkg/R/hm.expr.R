@@ -43,7 +43,7 @@
 #' }
 #' 
 #' @export
-#' @seealso \code{\link{lhs.ellipses.add}}, \code{\link{lhs.visit.add}}, \code{\link{lhs.revisit.add}}
+#' @seealso \code{\link{lhs.ellipses.add}}, \code{\link{lhs.visit.add}}
 
 hm.expr <- function(names.only=TRUE, desc=names.only, print=names.only) {
 

@@ -1,4 +1,4 @@
-#' Divides a long string into separate lines for adding to a plot
+#' Chops a long character object into separate lines for adding to a plot
 #'
 #' Breaks a long character object into separate lines at specific characters 
 #'

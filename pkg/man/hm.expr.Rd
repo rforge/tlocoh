@@ -86,7 +86,6 @@ exist for a specific LoCoH-hullset, use
 \code{\link{summary.locoh.lhs}}.
 }
 \seealso{
-\code{\link{lhs.ellipses.add}},
-\code{\link{lhs.visit.add}}, \code{\link{lhs.revisit.add}}
+\code{\link{lhs.ellipses.add}}, \code{\link{lhs.visit.add}}
 }
 

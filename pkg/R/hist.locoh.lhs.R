@@ -21,6 +21,7 @@
 #' @param ufat User-friendly axis title. T/F
 #' @param breaks Number of breaks or a clustring function. See \code{\link{hist}}.
 #' @param col Color value for the bars
+#' @param lo.margins.set Whether to save and reset the plot device margin settings (some wrapper functions that call this function don't want device settings reset). T/F.
 #' @param png.dir The directory for a PNG file (filename will be constructed automatically).
 #' @param png.dir.make Whether to create png.dir if it doesn't exist. T/F
 #' @param png.width The width of the PNG image. Ignored if png.fn is passed.
@@ -45,10 +46,12 @@ hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
                 metric="area", include.missing.hulls=TRUE, hmap=NULL, 
                 hmap.in.title=TRUE, hs.name.in.title=TRUE, title=NULL, title.show=TRUE,
                 figs.per.page=NULL, mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0),
-                same.axes.for.all=FALSE, ufat=TRUE, breaks="Sturges", col="gray80",
+                same.axes.for.all=FALSE, ufat=TRUE, breaks="Sturges", col="gray80", lo.margins.set=TRUE,
                 png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80,
                 title.two.id=FALSE, indicate.missing.hulls.in.axis.lbl=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, ...) {
 
+    
+    
     ## This does not yet return a list of list ($fn, $dim) when png.dir != NULL
 
     ## lhs <- x; rm(x)
@@ -110,7 +113,6 @@ hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
             metric.hmap.lst[[metric.name]] <- expand.grid(avparams.lst, stringsAsFactors=FALSE)
         }
     }
-    #print("got thru");browser()
         
     ## If there are multiple histograms and we're going to plot them with the same set of bins for visual comparison, we need to calculate the bin break points
     if (same.axes.for.all  && (length(hs.ord) > 1 || (length(metric.hmap.lst) > 0 && nrow(metric.hmap.lst[[metric]]) > 1))) {
@@ -145,9 +147,8 @@ hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
             figs.per.page <- sum(sapply(metric.hmap.lst, nrow))
         }
     }
-    if (is.null(png.dir)) par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, bg="white")
-
-        
+    if (is.null(png.dir) && lo.margins.set) par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, bg="white")
+    
     for (hs.name in names(hs[hs.ord])) {
 
         for (metric.name in metric) {
@@ -215,7 +216,7 @@ hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
                         fn <- file.path(png.dir, paste(hs.name, ".", metric.name, hmap.fn, ".hist.png", sep=""))
                         if (file.exists(fn) && !png.overwrite) stop(paste(fn, "exists"))
                         png(filename=fn, height=png.height, width=png.width, pointsize=png.pointsize)
-                        par(mar=mar, mgp=mgp, bg="white")
+                        if (lo.margins.set) par(mar=mar, mgp=mgp, bg="white")
                     }
                     
                     metric.label <- paste(if (ufat) eval(hme[[metric.name]][["ufat"]]) else metric.name, sep="")
@@ -234,7 +235,7 @@ hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
                         title.use <- ""
                     }
     
-                    opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
+                    if (lo.margins.set) opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
                     
                     ## If xvals contains a single value, manually set the breaks and xlim
                     if ((!same.axes.for.all || figs.per.page==1) && length(unique(xvals))==1) {

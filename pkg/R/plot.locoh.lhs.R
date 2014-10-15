@@ -551,7 +551,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                 has.rast <- FALSE
             }
             
-            if (rast && !has.rast) stop("Rasterized isopleths not found. Use lhs.iso.rast")
+            if (rast && !has.rast) stop("Rasterized isopleths not found. Use lhs.iso.rast in the tlocoh.dev package.")
             
             ## If the user passed a value for iso.idx, limit the isopleths plotted to just those
             if (is.null(iso.idx)) {
