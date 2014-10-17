@@ -80,11 +80,13 @@ including unused records, which are not supported by the
 \link{LoCoH-xy} data class and are not imported.
 }
 \examples{
+\dontrun{
 require(move)
 leroy.move <- move(system.file("extdata","leroy.csv.gz",package="move"))
 class(leroy.move)
 leroy.lxy <- move.lxy(leroy.move, anv.flds=c("ground.speed", "heading"))
 summary(leroy.lxy)
+}
 }
 \seealso{
 \code{\link{xyt.lxy}}

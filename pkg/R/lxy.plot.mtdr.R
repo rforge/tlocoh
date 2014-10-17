@@ -47,10 +47,13 @@
 #' (as a list with one element for each value of s), descriptive text, and the k/a/r value
 #'
 #' @examples
-#' ## Identify a range of 's' values from space-selection to time-selection, and find 10 nearest neighbors for each value of 's'
-#' # lxy <- lxy.ptsh(lxy, nn=TRUE)
+#' \dontrun{
+#' ## Identify a range of 's' values from space-selection to time-selection, 
+#' ## and find 10 nearest neighbors for each value of 's'
+#' lxy <- lxy.ptsh(lxy, nn=TRUE)
 #' ## Plot the ratio of maximum theoretical distance travel to TSD 
-#' # lxy.plot.mtdr(lxy)
+#' lxy.plot.mtdr(lxy)
+#' }
 #'
 #' @export
 #' @import sp

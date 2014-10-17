@@ -26,11 +26,13 @@
 #' @return A \link{LoCoH-xy} object
 #'
 #' @examples
+#' \dontrun{
 #' require(move)
 #' leroy.move <- move(system.file("extdata","leroy.csv.gz",package="move"))
 #' class(leroy.move)
 #' leroy.lxy <- move.lxy(leroy.move, anv.flds=c("ground.speed", "heading"))
 #' summary(leroy.lxy)
+#' }
 #'
 #' @seealso \code{\link{xyt.lxy}}
 #'

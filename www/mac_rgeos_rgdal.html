@@ -107,11 +107,11 @@ require(rgeos)</pre>
 <li>Make sure you're logged into your Mac with an administrator acount.</li> 
 <li>Download the latest source package of rgeos from <a href="https://r-forge.r-project.org/R/?group_id=602">https://r-forge.r-project.org/R/?group_id=602</a> (click the "Package source (.tar.gz)" link). You should see a *.tar.gz file in your downloads folder. Do not decompress the file (i.e. make it a folder). If Safari automatically decompressed it without asking you, try to ctrl+click on the link and save it to your downloads folder.</li>
 
-<li>Fire up a Terminal window (on your Mac, its usually hiding in Applications --> Utilities). Type the following command (modified as described below) in Terminal:<br>
+<li>Open Terminal on your Mac (its usually found in Applications --> Utilities). Type the following command (modified as described below) in Terminal:<br>
  
 <pre>R CMD INSTALL /<em>path-to-rgeos/rgeos_version.tar.gz</em> --configure-args='--with-geos-config=/Library/Frameworks/GEOS.framework/unix/bin/geos-config'</pre></li>
 <ul>
-<li>Replace <em>/path-to-rgeos/rgeos_version.tar.gz</em> to point towards the directory and filename of the actual rgeos tarball you downloaded in step 2. For example for me, the path was <em>/Users/andylyons/Downloads/rgeos_0.3-8.tar.gz</em>. You can get the path of a file by selecting it in Finder and pressing command+I (Info window).</li>
+<li>Replace <em>/path-to-rgeos/rgeos_version.tar.gz</em> to point towards the directory and filename of the actual rgeos tarball you downloaded in step 2. For example for me, the path was <em>/Users/andy/Downloads/rgeos_0.3-8.tar.gz</em>. You can get the path of a file by selecting it in Finder and pressing command+I (Info window).</li>
 <li>If the above command doesn't work, try just 'R64' instead of 'R'. You can also try 'sudo R'.</li>
 </ul>
 

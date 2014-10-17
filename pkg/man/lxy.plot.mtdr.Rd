@@ -137,9 +137,12 @@ computed. To identify nearest neighbors for a range of 's'
 values, use \code{\link{lxy.ptsh.add}} (see examples).
 }
 \examples{
-## Identify a range of 's' values from space-selection to time-selection, and find 10 nearest neighbors for each value of 's'
-# lxy <- lxy.ptsh(lxy, nn=TRUE)
+\dontrun{
+## Identify a range of 's' values from space-selection to time-selection,
+## and find 10 nearest neighbors for each value of 's'
+lxy <- lxy.ptsh(lxy, nn=TRUE)
 ## Plot the ratio of maximum theoretical distance travel to TSD
-# lxy.plot.mtdr(lxy)
+lxy.plot.mtdr(lxy)
+}
 }
 

@@ -152,8 +152,9 @@ limitation of the algorithms / processing. If
 will be used as backup.
 }
 \examples{
-# Create 0.5 and 0.95 isopleths. By not specifying the sort.metric, density isopleths will be created
-# by default, with hulls sorted by area (k-method) or number of enclosed points (r and a method)
+# Create 0.5 and 0.95 isopleths. By not specifying the sort.metric,
+# density isopleths will be created by default, with hulls sorted
+# by area (k-method) or number of enclosed points (r and a method)
 # lhs <- lhs.iso.add(lhs, iso.levels=c(0.5, 0.95))
 
 # Compute hull metrics for a 24 hour inter-visit gap, then produce isopleths with hulls sorted by
