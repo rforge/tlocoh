@@ -3,9 +3,9 @@ readpartgdal <- function(fn, xlim = NULL, ylim = NULL, silent=TRUE, status=TRUE,
     ## adapted from function by Michael Sumner
     ## https://stat.ethz.ch/pipermail/r-sig-geo/2010-July/008854.html
     
-  	if (!requireNamespace("rgdal")) stop("package 'rgdal' required")
+  	if (!requireNamespace("rgdal", quietly=TRUE)) stop("package 'rgdal' required")
   	if (status) cat("   reading ", fn, "...\n", sep="")
-  	info <- GDALinfo(fn, silent=silent)
+  	info <- rgdal::GDALinfo(fn, silent=silent)
   	offs <- info[c("ll.x", "ll.y")]
   	scl <- info[c("res.x", "res.y")]
   	dimn <- info[c("columns", "rows")]
@@ -46,6 +46,6 @@ readpartgdal <- function(fn, xlim = NULL, ylim = NULL, silent=TRUE, status=TRUE,
     } else {  	
   	  rgdal.offset <- rev(c(min(xind), dimn[2] - max(yind)))
   	  rgdal.dim <- rev(c(length(xind), length(yind)))
-      return(readGDAL(fn, offset = rgdal.offset, region.dim = rgdal.dim, silent=silent, band=band, ...))
+      return(rgdal::readGDAL(fn, offset = rgdal.offset, region.dim = rgdal.dim, silent=silent, band=band, ...))
     }
 }

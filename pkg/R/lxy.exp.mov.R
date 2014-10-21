@@ -159,7 +159,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
 
     ## This will take an lxy object and export it as mov file
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
-    if (bg2png) if(!requireNamespace("png")) stop("Package png required for bg2png")
+    if (bg2png) if(!requireNamespace("png", quietly=TRUE)) stop("Package png required for bg2png")
     if (!fmt %in% c("mp4","mov")) stop("fmt must be 'mov' or 'mp4'")
 
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't animate without date values")
@@ -265,7 +265,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
     if (is.null(tiff.fn)) {
         range.expand <- rep(0,2)
     } else {
-        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background, please install")
+        if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a tiff in the background, please install")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         range.expand <- c(-tiff.buff, tiff.buff)
         tiff.sgdf <- NULL
@@ -369,7 +369,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                     }
                 }
                 if (tiff.pct) {
-                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                    tiff.sgdf.cols <- rgdal::SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
                     tiff.sgdf$idx <- tiff.sgdf.cols$idx
                 }
             }
@@ -674,7 +674,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 
                 ## We're done with all the background elements. Close the device and read the png file back into memory as a 3-dimension matrix
                 dev.off()
-                bg.png <- readPNG(fn.background.png)
+                bg.png <- png::readPNG(fn.background.png)
                 
                 ## Reopen the original png device with the original dimensions
                 png(filename=fn.png, width=width, height=height.use, pointsize=png.pointsize)
@@ -809,7 +809,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
     } 
     
     if (show.cmd) {
-        cat("\nffmpeg command:\n")
+        cat("\nffmpeg command to make video file:\n")
         cat(cmd, "\n")
     }   
 

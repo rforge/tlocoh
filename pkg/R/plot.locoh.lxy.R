@@ -83,7 +83,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
     if (is.null(tiff.fn)) {
         range.expand.tiff <- 0    
     } else {
-        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background, please install")
+        if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a tiff in the background, please install")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         range.expand.tiff <- tiff.buff
         tiff.sgdf <- NULL
@@ -172,7 +172,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                     tiff.pct <- FALSE
                 }
                 if (tiff.pct) {
-                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                    tiff.sgdf.cols <- rgdal::SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
                     tiff.sgdf$idx <- tiff.sgdf.cols$idx
                     image(tiff.sgdf, "idx", col=tiff.sgdf.cols$ct, add=TRUE)
                 } else {
@@ -258,7 +258,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                         tiff.pct <- FALSE
                     }
                     if (tiff.pct) {
-                        tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                        tiff.sgdf.cols <- rgdal::SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
                         tiff.sgdf$idx <- tiff.sgdf.cols$idx
                         image(tiff.sgdf, "idx", col=tiff.sgdf.cols$ct, add=TRUE)
                     } else {

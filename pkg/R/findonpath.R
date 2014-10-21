@@ -4,6 +4,7 @@
 #'
 #' @param fn The filename to search for (without a path)
 #' @param status Show messages
+#' @param quote Enclose returned filename in quotes
 #'
 #' @note
 #' This will return the first found occurence of file \code{fn}, searching 1) the current working directory, 2) the user's R 'home' directory, 
@@ -13,7 +14,7 @@
 #'
 #' @export
 
-findonpath <- function(fn, status=TRUE) {
+findonpath <- function(fn, status=TRUE, quote=TRUE) {
     
     if (file.exists(fn)) {
         if (.Platform$OS.type == "windows") {
@@ -43,6 +44,13 @@ findonpath <- function(fn, status=TRUE) {
         return(NULL)
     } 
     fnReturn <- normalizePath(fn.with.path[fn.with.path.exists[1]])
-    if (length(fn.with.path.exists) > 1 && status) cat(cw(paste(length(fn.with.path.exists), "occurences of", fn, "found on path. Returning ", fnReturn), final.cr=T))
-    return(fnReturn)
+    if (length(fn.with.path.exists) > 1 && status) {
+        cat(cw(paste(length(fn.with.path.exists), "occurences of", fn, "found on path"), final.cr=T))
+        cat(cw(paste("Returning ", fnReturn), final.cr=T))
+    }
+    if (quote) {
+        return(shQuote(fnReturn))
+    } else {
+        return(fnReturn)   
+    }
 }

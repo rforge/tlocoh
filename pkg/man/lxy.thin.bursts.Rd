@@ -45,13 +45,6 @@ a \link{LoCoH-xy} object
 Thin out closely-timed bursts of locations
 }
 \note{
-This function processes 'bursts' of locations, where a
-'burst' is a series of locations captured close together in
-time. Each group of points in a burst is replaced with a
-single point. This of course presumes the burst of
-locations is an artifact of data collection and not
-desirable.
-
 Many GPS devices have a feature to save 'bursts' of points
 close together in time (relative to the dominant sampling
 frequency) The 'burst' feature should not be confused with
@@ -59,11 +52,18 @@ point averaging, whereby a GPS device internally averages
 locations for a period of time (e.g., 2 minutes) but saves
 a single location.
 
-\code{thresh} is a value for the sampling interval for
-identifying which points should be considered part of a
-burst. \code{thresh} can be a proportion of the median
-sampling frequency (0..1) or an absolute unit of time (in
-seconds).
+This function can be used to thin out 'bursts' of
+locations, when they are an artifact of data collection and
+therefore not desirable. Each group of points in a burst is
+replaced with a single point.
+
+\code{thresh} is a numeric value for identifying which
+points should be considered part of a burst. When
+\code{thresh} < 1, it is taken to be a proportion of the
+median sampling frequency (0..1), and any pair of points
+that are recorded closer in time are considered part of a
+'burst', When \code{thresh} > 1, it is taken to be absolute
+unit of time (in seconds).
 
 To identify whether there are bursts in a \link{LoCoH-xy}
 dataset, and the sampling frequency of those bursts (i.e.,

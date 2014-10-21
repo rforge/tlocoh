@@ -1,0 +1,4 @@
+%\VignetteIndexEntry{T-LoCoH Tutorial}
+\documentclass{article}
+\begin{document}
+\end{document}

@@ -1,3 +1,15 @@
+
+
+Changes in version 1.23 (2014-10-21)
+=========================
+* corrected bug in lxy.exp.mov and lhs.exp.mov whereby the readPNG function could not be found
+* added option to findonpath to enclose result in quotations
+* repaired a bug in <pre>lxy.thin.bursts</pre> that caused an error if no bursts were found
+
+Changes in version 1.22 (2014-10-19)
+=========================
+* removed dependency on maptools
+
 Changes in version 1.20 (2014-10-14)
 =========================
 * split functions still being developed / tested to a new package called 'tlocoh.dev', including iso2raster, isodata.plot, lhs.check, lhs.exp.isodata, lhs.iso.rast, lhs.revisit.add, lhs.revisit.del, lhs.so.add, lhs.to.add, lhs.to.stats, lines.intersect.turbo.flat, lxy.lhs.batch, pIntersect, pIntersectSat

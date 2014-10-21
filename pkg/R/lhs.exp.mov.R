@@ -153,11 +153,11 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
 
     ## This will take an lxy object and export it as mov file
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (bg2png) if(!requireNamespace("png")) stop("Package png required for bg2png")
+    if (bg2png) if(!requireNamespace("png", quietly=TRUE)) stop("Package png required for bg2png")
 
     ## Make sure tiff.fn exists, check tiff.bands
     if (!is.null(tiff.fn)) {
-        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background")
+        if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a tiff in the background")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         if (length(tiff.bands) > 3) stop("tiff.bands can not be longer than 3")
         tiff.info <- GDALinfo(tiff.fn, silent=TRUE)
@@ -512,20 +512,14 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
 
             tiff.sgdf <- readpartgdal(tiff.fn, xlim=tiff.xlim, ylim=tiff.ylim, band=tiff.bands, silent=TRUE, status=TRUE)
             if (tiff.pct) {
-                tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                tiff.sgdf.cols <- rgdal::SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
                 tiff.sgdf$idx <- tiff.sgdf.cols$idx
             }
         }
 
         ## If we're not going to crop gis.layers, we can define gis.features as the full extent
         if (crop.layers.to.extent && length(gis.features.full.extent) > 0 ) {
-            if (requireNamespace("rgeos")) {
-                gis.layers.ready <- FALSE
-            } else {
-                cat("rgeos package not installed, setting crop.layers.to.extent to FALSE \n")            
-                gis.features <- gis.features.full.extent
-                gis.layers.ready <- TRUE
-            }
+            gis.layers.ready <- FALSE
         } else {
             gis.features <- gis.features.full.extent
             gis.layers.ready <- TRUE
@@ -834,7 +828,7 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                 
                 ## We're done with all the background elements. Close the device and read the png file back into memory as a 3-dimension matrix
                 dev.off()
-                bg.png <- readPNG(fn.background.png)
+                bg.png <- png::readPNG(fn.background.png)
                 
                 ## Reopen the original png device with the original dimensions
                 png(filename=fn.png, width=width, height=height.use, pointsize=png.pointsize)

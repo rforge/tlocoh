@@ -198,11 +198,11 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     ## If record = TRUE, it will create a new device (plot window) and record the plots there
              
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
-    if (rast && !requireNamespace("raster")) stop("package raster required, please install")
+    if (rast && !requireNamespace("raster", quietly=TRUE)) stop("package raster required, please install")
 
     ## Make sure tiff.fn exists, check tiff.bands
     if (!is.null(tiff.fn)) {
-        if (!requireNamespace("rgdal")) stop("package rgdal required to display a tiff in the background")
+        if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a tiff in the background")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
         range.expand.tiff <- tiff.buff
         tiff.sgdf <- NULL
@@ -450,7 +450,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
             } else {
                 if (tiff.pct) {
                     if (length(tiff.sgdf@data)==3) {
-                        tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                        tiff.sgdf.cols <- rgdal::SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
                         tiff.sgdf$idx <- tiff.sgdf.cols$idx
                     } else {
                         cat("   Incorrect number of bands, can't convert image to indexed RGB\n")
@@ -720,7 +720,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                         } else {
                             if (tiff.pct) {
                                 if (length(tiff.sgdf@data)==3) {
-                                    tiff.sgdf.cols <- SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
+                                    tiff.sgdf.cols <- rgdal::SGDF2PCT(tiff.sgdf, adjust.bands=FALSE)
                                     tiff.sgdf$idx <- tiff.sgdf.cols$idx
                                 } else {
                                     cat("   Incorrect number of bands, can't convert image to indexed RGB\n")

@@ -3,12 +3,14 @@
 \alias{findonpath}
 \title{findonpath}
 \usage{
-findonpath(fn, status = TRUE)
+findonpath(fn, status = TRUE, quote = TRUE)
 }
 \arguments{
   \item{fn}{The filename to search for (without a path)}
 
   \item{status}{Show messages}
+
+  \item{quote}{Enclose returned filename in quotes}
 }
 \value{
 The full path and name of the found file, or NULL if not

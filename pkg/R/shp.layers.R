@@ -81,7 +81,7 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
     }
                             
     ## Read each shp file and fill the in the $sdf element with a spatial data frame
-    if (!requireNamespace("maptools")) stop("package maptools required")
+    if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required")
     for (i in 1:length(shp.layers.lst)) {
         fn.shp <- shp.layers.lst[[i]][["fn"]]
         if (!file.exists(fn.shp)) {
@@ -91,8 +91,9 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
             ## If it still doesn't exist, give an error message
             if (!file.exists(fn.shp)) stop(paste("File not found: ", shp.layers.lst[[i]][["fn"]], sep=""))
         }
-        
-        shp.layers.lst[[i]][["sdf"]] <- readShapeSpatial(fn.shp, delete_null_obj=delete_null_obj)
+        shp.dir <- dirname(fn.shp)
+        shp.base <- substr(basename(fn.shp), 0, nchar(basename(fn.shp))-4)
+        shp.layers.lst[[i]][["sdf"]] <- rgdal::readOGR(dsn=shp.dir, layer=shp.base, verbose=FALSE)
     }
     return(shp.layers.lst)
     

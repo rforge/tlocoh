@@ -11,16 +11,17 @@
 #' @param tau.diff.max The maximum deviation from tau (the median delta.t of the entire dataset), expressed as a proportion of tau, that time difference between two points must fall for the distance between those two points to be included in the calculation of the median step length
 #' @param status Show status messages. T/F
 #'
-#' @note This function processes 'bursts' of locations, where a 'burst' is a series of locations captured 
-#' close together in time. Each group of points in a burst is replaced with a single point. This of course presumes the
-#' burst of locations is an artifact of data collection and not desirable.
-#'
-#' Many GPS devices have a feature to save 'bursts' of points close together in time (relative to the dominant sampling frequency)
+#' @note Many GPS devices have a feature to save 'bursts' of points close together in time (relative to the dominant sampling frequency)
 #' The 'burst' feature should not be confused with point averaging, whereby a GPS device internally averages locations 
 #' for a period of time (e.g., 2 minutes) but saves a single location. 
+#'
+#' This function can be used to thin out 'bursts' of locations, when they are an artifact of data collection and therefore not desirable.
+#' Each group of points in a burst is replaced with a single point. 
 #' 
-#' \code{thresh} is a value for the sampling interval for identifying which points should be considered part of 
-#' a burst. \code{thresh} can be a proportion of the median sampling frequency (0..1) or an absolute unit of time (in seconds).
+#' \code{thresh} is a numeric value for identifying which points should be considered part of 
+#' a burst. When \code{thresh} < 1, it is taken to be a proportion of the median sampling frequency (0..1), and any 
+#' pair of points that are recorded closer in time are considered part of a 'burst', When \code{thresh} > 1,
+#' it is taken to be absolute unit of time (in seconds).
 #'
 #' To identify whether there are bursts in a \link{LoCoH-xy} dataset, and the sampling frequency of those bursts (i.e., the value 
 # 'you should use for \code{thresh}), run \code{\link{lxy.plot.byfreq}} with \code{cp=TRUE}.
@@ -75,8 +76,6 @@ lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median
             thresh.use <- thresh
         }
 
-        #cat("thresh.use = ", thresh.use, "\n", sep="")
-        
         ## Construct a factor that will put the short-interval points into separate groups
         dtbt <- (dt.int <= thresh.use)
         dtbt.diff <- abs(c(0, diff(dtbt)))
@@ -88,7 +87,7 @@ lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median
         dtbt.grps.lst <- split(1:length(dtbt), dtbt.grps.vec)[-1]
         
         if (length(dtbt.grps.lst) == 0) {
-            cat("No bursts were found for id ", idVal, "\n")
+            if (status) cat("No bursts were found for id:", idVal, "\n")
             info.lst[[idVal]] <- NA
         } else {
             ## Add one more index to the end of each burst group
@@ -114,45 +113,50 @@ lxy.thin.bursts <- function (lxy, id=NULL, thresh=NULL, replace=c("mean","median
             }
             ids.new <- c(ids.new, rep(idVal, length(dtbt.grps.lst)))
         }
-        
-        
     }
 
     if (info.only) {
         print(info.lst)
         return(invisible(NULL))
     } else {
-        # Get rid of points marked for deletion
-        lxy[["pts"]] <- lxy[["pts"]][-idx.remove,]
-
-        ## Save the local time zone, we will need it later
-        tz.local <- attr(lxy[["pts"]][["dt"]], "tz")
-
-        ## In preparation for merging, convert dt to numeric
-        dt.orig <- lxy[["pts"]]@data[["dt"]]
-        lxy[["pts"]]@data[["dt"]] <- as.numeric(lxy[["pts"]]@data[["dt"]])
-
-        ## Create ptid values for the new points
-        ptid.new <- (1:length(ids.new))+ max(lxy[["pts"]][["ptid"]])
+        if (length(idx.remove)==0) {
+            if (status) cat("Done. No points removed.\n")
+            return(lxy)
+        } else {
         
-        ## Put the new objects in a data frame
-        data <- data.frame(ptid=ptid.new, id=ids.new, dt=dt.new)
-        if (!is.null(anv.new)) data <- data.frame(data, anv.new)
+            # Get rid of points marked for deletion
+            lxy[["pts"]] <- lxy[["pts"]][-idx.remove,]
+    
+            ## Save the local time zone, we will need it later
+            tz.local <- attr(lxy[["pts"]][["dt"]], "tz")
+    
+            ## In preparation for merging, convert dt to numeric
+            dt.orig <- lxy[["pts"]]@data[["dt"]]
+            lxy[["pts"]]@data[["dt"]] <- as.numeric(lxy[["pts"]]@data[["dt"]])
+    
+            ## Create ptid values for the new points
+            ptid.new <- (1:length(ids.new))+ max(lxy[["pts"]][["ptid"]])
+            
+            ## Put the new objects in a data frame
+            data <- data.frame(ptid=ptid.new, id=ids.new, dt=dt.new)
+            if (!is.null(anv.new)) data <- data.frame(data, anv.new)
+            
+            ## Create a SpatialPointsDataFrame for the new points
+            pts.new <- SpatialPointsDataFrame(coords=xys.new, data=data, proj4string=lxy[["pts"]]@proj4string, match.ID=FALSE)
+            
+            ## Merge the new objects
+            pts.comb <- rbind(lxy[["pts"]], pts.new)
+            
+            ## Convert the time values, which are now numeric and presumably in UTC, to a POSIXct object specifying the time zone "UTC"
+            dt.gmt <- as.POSIXct(pts.comb[["dt"]], origin="1970-01-01", tz="UTC")
+            
+            ## Convert the UTC times back to local time
+            dt.local <- as.POSIXct(format(dt.gmt, tz=tz.local), tz=tz.local)
+            
+            return(xyt.lxy(xy=coordinates(pts.comb), proj4string=pts.comb@proj4string, id=pts.comb[["id"]], ptid=pts.comb[["ptid"]], dt=dt.local, anv=pts.comb@data[,as.character(lxy[["anv"]][["anv"]]),drop=FALSE], anv.desc=lxy[["anv"]][["desc"]], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max))
+        }
         
-        ## Create a SpatialPointsDataFrame for the new points
-        pts.new <- SpatialPointsDataFrame(coords=xys.new, data=data, proj4string=lxy[["pts"]]@proj4string, match.ID=FALSE)
-        
-        ## Merge the new objects
-        pts.comb <- rbind(lxy[["pts"]], pts.new)
-        
-        ## Convert the time values, which are now numeric and presumably in UTC, to a POSIXct object specifying the time zone "UTC"
-        dt.gmt <- as.POSIXct(pts.comb[["dt"]], origin="1970-01-01", tz="UTC")
-        
-        ## Convert the UTC times back to local time
-        dt.local <- as.POSIXct(format(dt.gmt, tz=tz.local), tz=tz.local)
-        
-        return(xyt.lxy(xy=coordinates(pts.comb), proj4string=pts.comb@proj4string, id=pts.comb[["id"]], ptid=pts.comb[["ptid"]], dt=dt.local, anv=pts.comb@data[,as.character(lxy[["anv"]][["anv"]]),drop=FALSE], anv.desc=lxy[["anv"]][["desc"]], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max))
-
     }
 
 }
+
