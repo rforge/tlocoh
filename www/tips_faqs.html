@@ -96,15 +96,15 @@
 <br><hr>
 <h2>FAQs</h2>
 
-<h3><br>Choice of Method</h3>
+<h3><br>Selection of Method</h3>
 <p><a href="#" class="qtn" onclick="showHide('faq3');return false;">Is T-LoCoH backward compatible with LoCoH?</a></p>
-<p id="faq3" class="ans">Yes. T-LoCoH is the successor of <a href="http://locoh.cnr.berkeley.edu/">LoCoH</a>, the main difference between the two methods is T-LoCoH's inclusion of time in nearest neighbor identification. T-LoCoH should produce the same hulls and isopleths as LoCoH when s=0 (i.e., time ignored).<br><br> Note however that in classic LoCoH the k-method constructs hulls from each point and its k-1 nearest neighbors. T-LoCoH, on the other hand, produces hulls from each point and its k (not k-1) nearest neighbors. So k=10 in LoCoH is equivalent to k=9 in T-LoCoH (with s=0). Parameter values for the adaptive and fixed-radius methods operate the same in both versions. R users are encouraged to use T-LoCoH rather than LoCoH because the T-LoCoH is faster, has more utility functions, can handle larger datasets, and is still supported. <a href="#" class="arrow" onclick="showHide('faq3');return false;"></a></p>
+<p id="faq3" class="ans">Yes. T-LoCoH is the successor of <a href="http://locoh.cnr.berkeley.edu/">classic LoCoH</a>. The main difference between the two methods is T-LoCoH's inclusion of time in nearest neighbor identification. When s=0 (i.e., time ignored), T-LoCoH should produce the same hulls and isopleths as LoCoH.<br><br> Note however that in classic LoCoH the k-method constructs hulls from each point and its k-1 nearest neighbors. T-LoCoH, on the other hand, produces hulls from each point and its k (not k-1) nearest neighbors. So k=10 in LoCoH is equivalent to k=9 in T-LoCoH (with s=0). Parameter values for the adaptive and fixed-radius methods operate the same in both versions. R users are encouraged to use T-LoCoH rather than LoCoH because the T-LoCoH is faster, has more utility functions, can handle larger datasets, and is still supported. <a href="#" class="arrow" onclick="showHide('faq3');return false;"></a></p>
 
 <p><a href="#" class="qtn" onclick="showHide('faq7');return false;">How many points can T-LoCoH handle?</a></p>
 <p id="faq7" class="ans">R is notoriously inefficient with memory, so it depends on your hardware, amount of physical memory, other applications open, and what you're doing in T-LoCoH (creating hulls and isopleths are memory intensive). Datasets up to 15,000 points run fine on modest laptop hardware, larger datasets run but are slower. Very large datasets can produce an out of memory error. A set of functions and workflow for k/a/r parameter selection has been developed for large datasets. Thinning down points with systematic sampling (i.e., keep every nth point), or analyzing different time periods separately, are also options (see lxy.subset). You can also run T-LoCoH on powerful machines in the cloud. <a href="#" class="arrow" onclick="showHide('faq7');return false;"></a></p>
 
 <p><a href="#" class="qtn" onclick="showHide('faq-558714369');return false;">When would I *not* want to use T-LoCoH?</a></p>
-<p id="faq-558714369" class="ans"><strong>Spatial uncertainty</strong>. Spatial uncertainty is not modeled in T-LoCoH, so if the cascading effects of position error are important, you may want to use a method that includes a factor for spatial uncertainty (e.g., Brownian Bridges).<br><br>
+<p id="faq-558714369" class="ans"><strong>Spatial uncertainty</strong>. Spatial uncertainty is not modeled in T-LoCoH, so if the cascading effects of position error are important, you may want to use a method that explicitly includes estimation of spatial uncertainty (e.g., Brownian Bridges).<br><br>
 
 <strong>Need quick and dirty analysis</strong>. T-LoCoH does not provide good default values for parameters for a quick and dirty analysis. This has advantages, because it forces you to play with your data a bit and select parameter values that work well with your data, your study question, and your knowledge of the system (as opposed to selecting default values that someone else selected because they worked with another dataset). But if you need a "one-click" method that will give you a homerange estimate in 10 minutes or less, consider a method that automates parameter selection. <a href="#" class="arrow" onclick="showHide('faq-558714369');return false;"></a></p>
 
@@ -114,6 +114,9 @@
 
 <p><a href="#" class="qtn" onclick="showHide('faq1913783990');return false;">I really hate R. Is there any other way to use T-LoCoH?</a></p>
 <p id="faq1913783990" class="ans">Unfortunately no, but we are working on a web GUI which will make it a little easier. <a href="#" class="arrow" onclick="showHide('faq1913783990');return false;"></a></p>
+
+<p><a href="#" class="qtn" onclick="showHide('faq179643587');return false;">I'm having problems installing rgeos and/or rgdal on my Mac.</a></p>
+<p id="faq179643587" class="ans">See <a href="mac_rgeos_rgdal.html">Installing rgeos and rgdal on a Mac</a>. <a href="#" class="arrow" onclick="showHide('faq179643587');return false;"></a></p>
 
 <h3><br>Parameter Selection</h3>
 <p><a href="#" class="qtn" onclick="showHide('faq4');return false;">What method should I use (k/a/r)?</a></p>
@@ -136,7 +139,18 @@ The 'ptid' (point id), on the other hand, is simply a unique numeric value for e
 
 <h3><br>Analysis</h3>
 <p><a href="#" class="qtn" onclick="showHide('faq1981047764');return false;">I have created isopleths for different individuals (or different seasons), and now want to compare the area of overlap. How can I do this?</a></p>
-<p id="faq1981047764" class="ans">See the sample script <a href="isopleth_overlap_exericse.txt">isopleth_overlap_exericse.txt</a> <a href="#" class="arrow" onclick="showHide('faq1981047764');return false;"></a></p>
+<p id="faq1981047764" class="ans">See the tip sheet <a href="tips/isopleth_overlap.html">Measuring area of intersection for isopleths</a> <a href="#" class="arrow" onclick="showHide('faq1981047764');return false;"></a></p>
+
+<p><a href="#" class="qtn" onclick="showHide('faq1411330444');return false;">My GPS unit is programmed to go to sleep at night. How will this affect my analysis?</a></p>
+<p id="faq1411330444" class="ans">GPS devices are often programmed to power down when an animal is known to be inactive, such as night, to save battery power. The omission of night time locations is not a problem for modeling space use with T-LoCoH (or any other method) per se, but it may affect how you interpret your space use model, or compel you to make additional assumptions under which your space use model is valid.<br><br>
+
+The omission of night time locations is a specific case of a the more general problem of analyzing time series data with gaps. The first thing to note is that when there is no sampling at night, the estimated utilization distribution (isopleths) should be interpreted as the UD of the sampled data (i.e., daylight hours), and not necessarily the UD for the individual as a whole, even if the animal doesn't move at night. To illustrate why this caveat is necessary, take for example a dataset where the sampling is once an hour during the day, but the GPS unit goes to sleep from 6pm to 6am because the birds usually stay in the nest during this period. Now consider a nest site where the individual was recorded at 6pm, and again at 6am, because it never moved during the night. If the goal is to produce a utilization distribution that represents the overall relative intensity of habitat use, then that nest should really be represented by 13 locations to balance out the sampling during the day, not 2.<br><br>
+
+So we couldn't claim a space-use model generated from daytime points only represent a 24-hour model of space use. But what we can make a more narrow claim that the isopleths generated from our data represent how space is used during the day, and that based on our knowledge of the species, the 24 hour model of space use will be encompassed within the day time space use. The implications of that more conservative claim on the analysis depends on the research question. If our research question, for example, only demands an outline of the core area (50% isopleth), or the 'homerange' (95% isopleth), and the gradient of use within those contours doesn't really matter, then couching the interpretation of the space use model is probably not that big of a deal. However if we're going to feed our UD into another level of analysis where the gradient of the intensity of use matters, for example a parameter estimation for a resource selection function or volume intersection with another UD, then the omission of night time points might be more of a deal breaker.<br><br>
+
+Secondly, if you generate time-use metrics (e.g., nsv and mnlv), you certainly wouldn't want the intervisit gap period to be shorter than the period the device was programmed to go to sleep, otherwise it would appear as though a stationary individual (in the extreme case, dead) was making multiple visits to the nest, when in fact it hadn't moved at all.<br><br>
+
+If the omission of night time points is a deal-breaker for your analysis, you could potentially model the missing data (i.e., insert fake nightime points) based upon the assumption that the individual didn't move during the night. T-LoCoH doesn't have a function to do this, but it wouldn't be hard to make one. You could also test whether the insertion of fake points is reasonable or not by computing the distance between the last location of each day and the first location of the following day, and see if indeed the distances are actually close to zero.<br> <a href="#" class="arrow" onclick="showHide('faq1411330444');return false;"></a></p>
 
 <h3><br>Import / Export</h3>
 <p><a href="#" class="qtn" onclick="showHide('faq6');return false;">Can I export my results to a format I can import into a GIS?</a></p>
@@ -144,6 +158,13 @@ The 'ptid' (point id), on the other hand, is simply a unique numeric value for e
 
 <p><a href="#" class="qtn" onclick="showHide('faq-465173435');return false;">How do I "get" the hulls and isopleths, and what format are they in?</a></p>
 <p id="faq-465173435" class="ans">T-LoCoH stores hulls and isopleths as SpatialPolygonsDataFrame objects, which is common class for spatial data in R. You can use <code>hulls</code> and <code>isopleths</code> functions to extract these objects from a LoCoH-hullset object. You can also reference them directly from a LoCoH-hullset object (see Vignette on T-LoCoH data classes). <a href="#" class="arrow" onclick="showHide('faq-465173435');return false;"></a></p>
+
+<h3><br>Animations</h3>
+<p><a href="#" class="qtn" onclick="showHide('faq1413920205');return false;">I want to do some additional editing to the individual frames of my animation before encoding them to video. How can I do this?</a></p>
+<p id="faq1413920205" class="ans">When running <code>lxy.exp.mov</code>, set <code>tmp.dir</code> to a directory where you want the frames produced. Then set <code>tmp.files.delete=FALSE</code> (so the frames are not deleted), <code>create.mov=FALSE</code> (so it doesn't actually encode the video, only make the frame) and <code>show.cmd=TRUE</code> (so it will display the ffmpeg command that would have been used to stitch the frames into an animation. After the frames are created, edit them however you like (i.e., with an image editor), and then open a command window / terminal, and run the ffmpeg command displayed in the output. <a href="#" class="arrow" onclick="showHide('faq1413920205');return false;"></a></p>
+
+<p><a href="#" class="qtn" onclick="showHide('faq-1979440374');return false;">How do I put my animation on YouTube?</a></p>
+<p id="faq-1979440374" class="ans">Run <code>lxy.exp.mov</code> with <code>fmt="mp4"</code> and then upload the result to YouTube or another video hosting site. <a href="#" class="arrow" onclick="showHide('faq-1979440374');return false;"></a></p>
 
 <br><hr><p>Questions? Suggestions? Please email the <a href="mailto:tlocoh@gmail.com">package author</a>.</p>
 <p><a href="index.html">Back</a></p>
@@ -161,6 +182,11 @@ The 'ptid' (point id), on the other hand, is simply a unique numeric value for e
 
 </body>
 </html>
+
+
+
+
+
 
 
 
