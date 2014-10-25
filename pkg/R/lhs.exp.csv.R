@@ -213,6 +213,6 @@ lhs.exp.csv <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
             cat("No csv files were saved \n")
         }
     }
-    return(res)
+    return(invisible(res))
      
 }

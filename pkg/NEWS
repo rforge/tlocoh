@@ -1,14 +1,19 @@
-
+Changes in version 1.24 (2014-10-24)
+=========================
+* corrected bug in <pre>lxy.exp.kml</pre> whereby sp functions could not be found in attached namespace
+* modified <pre>lhs.exp.csv</pre> to not print hull metric data frame to console
+* added error message in <pre>lhs.iso.add</pre> when hull metric values haven't been computed
+* added package reference for writeOGR in <pre>lxy.exp.shp</pre> and <pre>lhs.exp.shp</pre>
 
 Changes in version 1.23 (2014-10-21)
 =========================
-* corrected bug in lxy.exp.mov and lhs.exp.mov whereby the readPNG function could not be found
-* added option to findonpath to enclose result in quotations
+* corrected bug in <pre>lxy.exp.mov</pre> and <pre>lhs.exp.mov</pre> whereby the readPNG function could not be found in the loaded namespace
+* added option to <pre>findonpath</pre> to enclose result in quotations
 * repaired a bug in <pre>lxy.thin.bursts</pre> that caused an error if no bursts were found
 
 Changes in version 1.22 (2014-10-19)
 =========================
-* removed dependency on maptools
+* removed dependency on maptools, switched <pre>shp.layers</pre> to use read shapefiles rgdal
 
 Changes in version 1.20 (2014-10-14)
 =========================

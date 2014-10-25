@@ -21,7 +21,7 @@
 #' The kml format is not optimized for large datasets, but this works reasonably well for moderate datasets (e.g., <1000).
 #' To create animations of larger datasets, use a \code{skip} value > 1 or see \code{\link{lxy.exp.mov}}. 
 #'
-#' Adapated from plotKML package
+#' Adapated from plotKML package.
 #'
 #' @seealso \code{\link{lxy.exp.mov}}
 #' @export
@@ -40,7 +40,8 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
 
     if (!requireNamespace("XML")) stop("package XML is required for this function")
-
+    if (!requireNamespace("rgdal")) stop("package rgdal is required for this function")
+    
     file.name <- file
     if (substr(file.name, nchar(file.name)-3, nchar(file.name)) != ".kml") file.name <- paste(file.name, ".kml", sep="") 
     
@@ -96,7 +97,7 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     }
     
     ## Get the projection parameters of the lxy object    
-    lxy.prj_params <- CRSargs(lxy$pts@proj4string)
+    lxy.prj_params <- rgdal::CRSargs(lxy$pts@proj4string)
     
     ## See if it needs to be reprojected to geographic - WGS84 
     kmlCRS <- "+proj=longlat +datum=WGS84"
@@ -110,6 +111,7 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
         }
         
         ## Need to do a more intelligent comparison between lxy projection and kmlCRS
+        ## consider using identicalCRS() (sp package)
         ## see check_projection() in plotKML package for sample
         ## Break apart lxy.projparams
         #lxy.prjparams_vals <- strsplit(lxy.prj_params, "\\+")[[1]]
@@ -129,9 +131,8 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     }
 
     if (blnNeedToReproject) {
-        if (!requireNamespace("rgdal")) stop("package rgdal is required for this function")
         cat("Reprojecting data to ", kmlCRS, "...", sep=""); flush.console()
-        lxy$pts <- spTransform(lxy$pts, CRSobj = CRS(kmlCRS))
+        lxy$pts <- sp::spTransform(lxy$pts, CRSobj = sp::CRS(kmlCRS))
         cat("Done.\n")
     }
     
@@ -141,12 +142,12 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     ## Get the coordinates and put them in a matrix for faster referencing later
     lxy.coords.df <- data.frame(coordinates(lxy[["pts"]]))
     
-    kml.out <- newXMLNode("kml", attrs = c(version = "1.0"), namespaceDefinitions = c(xsd = kml_xsd, xmlns = xmlns))
-    doc.parent <- newXMLNode("Document", parent=kml.out)
+    kml.out <- XML::newXMLNode("kml", attrs = c(version = "1.0"), namespaceDefinitions = c(xsd=kml_xsd, xmlns=xmlns))
+    doc.parent <- XML::newXMLNode("Document", parent=kml.out)
     if (!kml_open_ind_folder) {
-        doc.style <- newXMLNode("Style", parent=doc.parent, attrs=list(id="check-hide-children"))
-        doc.liststyle <- newXMLNode("ListStyle", parent=doc.style)
-        doc.litype <- newXMLNode("listItemType", parent=doc.liststyle, text="checkHideChildren")
+        doc.style <- XML::newXMLNode("Style", parent=doc.parent, attrs=list(id="check-hide-children"))
+        doc.liststyle <- XML::newXMLNode("ListStyle", parent=doc.style)
+        doc.litype <- XML::newXMLNode("listItemType", parent=doc.liststyle, text="checkHideChildren")
     }
         
     ## Create the styles for each id
@@ -157,18 +158,18 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     ## Loop through the ids
     for (i in 1:length(id)) {
         idVal <- id[i]
-        ptstyle.node <- newXMLNode("Style", parent=ptstyle.parent, attrs=list(id=paste("pnt-", idVal, sep="")))
+        ptstyle.node <- XML::newXMLNode("Style", parent=ptstyle.parent, attrs=list(id=paste("pnt-", idVal, sep="")))
 
         # We're not using labels so leave these out
         # labelstyle <- newXMLNode("LabelStyle", parent=ptstyle.node)
         # labelscalestyle <- newXMLNode("scale", parent=labelstyle, text=as.character(pt.scale))
 
-        iconparent <- newXMLNode("IconStyle", parent=ptstyle.node)
-        iconcolor <- newXMLNode("color", parent=iconparent, text=pt.col.kml[i])
-        iconscale <- newXMLNode("scale", parent=iconparent, text=as.character(pt.scale))
+        iconparent <- XML::newXMLNode("IconStyle", parent=ptstyle.node)
+        iconcolor <- XML::newXMLNode("color", parent=iconparent, text=pt.col.kml[i])
+        iconscale <- XML::newXMLNode("scale", parent=iconparent, text=as.character(pt.scale))
         
-        iconstyle <- newXMLNode("Icon", parent=iconparent)
-        hrefstyle <- newXMLNode("href", parent=iconstyle, text=icon.url)
+        iconstyle <- XML::newXMLNode("Icon", parent=iconparent)
+        hrefstyle <- XML::newXMLNode("href", parent=iconstyle, text=icon.url)
         
         ## We're not using balloon text so leave these out
         ## balloonstyle <- newXMLNode("BalloonStyle", parent=ptstyle.node)
@@ -179,12 +180,12 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     ## Add some more tags for the parent doc
     #lxyfolder.parent <- newXMLNode("Folder", parent=doc.parent)
     lxyfolder.parent <-  doc.parent
-    lxyfolder.name <- newXMLNode("name", text=lxy.inputobj, parent=lxyfolder.parent)
+    lxyfolder.name <- XML::newXMLNode("name", text=lxy.inputobj, parent=lxyfolder.parent)
     
     ## I think we always want the id folders to be visible
-    if (!kml_visibility) lxyfolder.vis <- newXMLNode("visibility", text=as.numeric(kml_visibility), parent=lxyfolder.parent)
+    if (!kml_visibility) lxyfolder.vis <- XML::newXMLNode("visibility", text=as.numeric(kml_visibility), parent=lxyfolder.parent)
     
-    lxyfolder.open <- newXMLNode("open", text=as.numeric(kml_open_main_folder), parent=lxyfolder.parent)
+    lxyfolder.open <- XML::newXMLNode("open", text=as.numeric(kml_open_main_folder), parent=lxyfolder.parent)
     
     ## Finally make the folders with the points
     
@@ -204,24 +205,24 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
         if (skip > 1) idx <- idx[seq(from=1, to=length(idx), by=skip)]
 
         ## Create header tags for this folder
-        idfolder.parent <- newXMLNode("Folder", parent=lxyfolder.parent)
-        idfolder.name <- newXMLNode("name", text=idVal, parent=idfolder.parent)
+        idfolder.parent <- XML::newXMLNode("Folder", parent=lxyfolder.parent)
+        idfolder.name <- XML::newXMLNode("name", text=idVal, parent=idfolder.parent)
         if (!kml_open_ind_folder) {
-            idfolder.styleurl <- newXMLNode("styleUrl", text="#check-hide-children", parent=idfolder.parent)
+            idfolder.styleurl <- XML::newXMLNode("styleUrl", text="#check-hide-children", parent=idfolder.parent)
         }
         
         ## Next add the placemarks
         for (ptidx in idx) {
-            placemark.parent <- newXMLNode("Placemark", parent=idfolder.parent)
+            placemark.parent <- XML::newXMLNode("Placemark", parent=idfolder.parent)
             #placemark.name <- newXMLNode("name", text=ptidx, parent=placemark.parent)
-            placemark.styleurl <- newXMLNode("styleUrl", text=paste("#pnt-", idVal, sep=""), parent=placemark.parent)
-            placemark.timestamp <- newXMLNode("TimeStamp", parent=placemark.parent)
-            placemark.when <- newXMLNode("when", text=lxy.dts_str[ptidx], parent=placemark.timestamp)
-            placemark.point <- newXMLNode("Point", parent=placemark.parent)
+            placemark.styleurl <- XML::newXMLNode("styleUrl", text=paste("#pnt-", idVal, sep=""), parent=placemark.parent)
+            placemark.timestamp <- XML::newXMLNode("TimeStamp", parent=placemark.parent)
+            placemark.when <- XML::newXMLNode("when", text=lxy.dts_str[ptidx], parent=placemark.timestamp)
+            placemark.point <- XML::newXMLNode("Point", parent=placemark.parent)
             # Extrude means place a line to the ground, we won't use this now
-            #placemark.extrude <- newXMLNode("extrude", text="1", parent=placemark.point)
-            placemark.alt <- newXMLNode("altitudeMode", text="clampToGround", parent=placemark.point)
-            placemark.coords <- newXMLNode("coordinates", text=paste(lxy.coords.df[ptidx,1], lxy.coords.df[ptidx,2], "0", sep=","), parent=placemark.point)
+            #placemark.extrude <- XML::newXMLNode("extrude", text="1", parent=placemark.point)
+            placemark.alt <- XML::newXMLNode("altitudeMode", text="clampToGround", parent=placemark.point)
+            placemark.coords <- XML::newXMLNode("coordinates", text=paste(lxy.coords.df[ptidx,1], lxy.coords.df[ptidx,2], "0", sep=","), parent=placemark.point)
             if (usePB) {
                 counter <- counter + 1
                 setTxtProgressBar(pb, counter)
@@ -229,16 +230,16 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
         }
         
         if (show.path) {
-            path.parent <- newXMLNode("Placemark", parent=idfolder.parent)
+            path.parent <- XML::newXMLNode("Placemark", parent=idfolder.parent)
             #path.name <- newXMLNode("name", text="Path", parent=path.parent)
-            path.style <- newXMLNode("Style", parent=path.parent)
-            path.linestyle <- newXMLNode("LineStyle", parent=path.style)
-            path.color <- newXMLNode("color", text=path.col.kml[i], parent=path.linestyle)
-            path.width <- newXMLNode("width", text=path.lwd, parent=path.linestyle)            
-            path.linestring <- newXMLNode("LineString", parent=path.parent)
-            path.tessellate <- newXMLNode("tessellate", text=1, parent=path.linestring)
-            path.altitudeMode <- newXMLNode("altitudeMode", text="clampToGround", parent=path.linestring)
-            path.coordinates <- newXMLNode("coordinates", text=paste(lxy.coords.df[idx,1], lxy.coords.df[idx,2], sep=",", collapse=" "), parent=path.linestring)
+            path.style <- XML::newXMLNode("Style", parent=path.parent)
+            path.linestyle <- XML::newXMLNode("LineStyle", parent=path.style)
+            path.color <- XML::newXMLNode("color", text=path.col.kml[i], parent=path.linestyle)
+            path.width <- XML::newXMLNode("width", text=path.lwd, parent=path.linestyle)            
+            path.linestring <- XML::newXMLNode("LineString", parent=path.parent)
+            path.tessellate <- XML::newXMLNode("tessellate", text=1, parent=path.linestring)
+            path.altitudeMode <- XML::newXMLNode("altitudeMode", text="clampToGround", parent=path.linestring)
+            path.coordinates <- XML::newXMLNode("coordinates", text=paste(lxy.coords.df[idx,1], lxy.coords.df[idx,2], sep=",", collapse=" "), parent=path.linestring)
             
         }
         
@@ -246,7 +247,7 @@ lxy.exp.kml <- function(lxy, file, id=NULL, skip=1, overwrite=TRUE, compress=TRU
     if (usePB) close(pb)
   
     ## Close file and write to disk
-    saveXML(kml.out, file.name)
+    XML::saveXML(kml.out, file.name)
     file.created <- file.name
 
     ## Compress file

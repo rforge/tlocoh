@@ -257,6 +257,15 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
 
                     ## Get the hull metric values for sort.metric.use
                     hm.vals <- eval(hme[[sort.metric.use]][["expr"]])[hulls2merge.idx]
+                    
+                    if (is.null(hm.vals)) {
+                        if (is.null(hme[[sort.metric.use]][["fun"]])) {
+                            hm_fun <- ""
+                        } else {
+                            hm_fun <- paste(" See also ", hme[[sort.metric.use]][["fun"]], ".", sep="")
+                        }
+                        stop(cw(paste("No values found for hull metric '", sort.metric.use, "'. Make sure values for this hull metric have been computed.", hm_fun, sep=""), exdent=2))
+                    }
 
                     #hm.vals.ord.orig <- order(hm.vals)
 

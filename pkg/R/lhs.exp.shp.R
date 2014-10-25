@@ -237,7 +237,7 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                 hpp.spdf@data <- csv.data
                 #print("just about to save hpp");browser()
                 
-                writeOGR(hpp.spdf, dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
+                rgdal::writeOGR(hpp.spdf, dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
                 files.saved <- c(files.saved, fn.shp.unique.str)
             }
             
@@ -257,7 +257,7 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
 
                 hs[[hs.name]][["hulls"]]@data <- csv.data
                 
-                writeOGR(hs[[hs.name]][["hulls"]], dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
+                rgdal::writeOGR(hs[[hs.name]][["hulls"]], dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
                  
                 files.saved <- c(files.saved, fn.shp.unique.str)
                 
@@ -295,7 +295,7 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                         names(hs[[hs.name]][["isos"]][[iidx]][["polys"]]@data) <- substr(gsub(".", "_", names(hs[[hs.name]][["isos"]][[iidx]][["polys"]]@data), fixed=T), 1, 10)
                         
                         ## Create a SpatialPolygonDataFrame
-                        writeOGR(hs[[hs.name]][["isos"]][[iidx]][["polys"]][hs[[hs.name]][["isos"]][[iidx]][["polys"]]@plotOrder, ], dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
+                        rgdal::writeOGR(hs[[hs.name]][["isos"]][[iidx]][["polys"]][hs[[hs.name]][["isos"]][[iidx]][["polys"]]@plotOrder, ], dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
                         files.saved <- c(files.saved, fn.shp.unique.str)
                     
                     }

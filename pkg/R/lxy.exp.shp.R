@@ -130,7 +130,7 @@ lxy.exp.shp <- function(lxy, id=NULL, dir=".", file.base="", anv="all", idsSepar
         pts.spdf <- lxy[["pts"]][ids.lst[[myid]][["idx"]], anv.use]
         names(pts.spdf@data) <- anvNamesCleaned
 
-        writeOGR(pts.spdf, dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
+        rgdal::writeOGR(pts.spdf, dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
         files.saved <- c(files.saved, fn.shp.unique.str)
     }
 

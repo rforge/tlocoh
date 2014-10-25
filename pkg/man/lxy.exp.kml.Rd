@@ -61,7 +61,7 @@ moderate datasets (e.g., <1000). To create animations of
 larger datasets, use a \code{skip} value > 1 or see
 \code{\link{lxy.exp.mov}}.
 
-Adapated from plotKML package
+Adapated from plotKML package.
 }
 \seealso{
 \code{\link{lxy.exp.mov}}
