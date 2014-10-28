@@ -7,6 +7,7 @@ regions.draw <- function(n, col=NULL, draw.reg=TRUE, alpha=0.5, prompt.labels=TR
     ## The purpose of this function is to help build a "regions" object which is one piece of a scatter plot 
     
     if (dev.cur()==1) stop("To use this function, a plot window must be active")
+    blnRStudio <- names(dev.cur())=="RStudioGD"
     
     lst <- list()
     if (is.null(col)) {
@@ -17,7 +18,14 @@ regions.draw <- function(n, col=NULL, draw.reg=TRUE, alpha=0.5, prompt.labels=TR
         col.str <- paste(" (", as.character(col), ")", sep="")
     }
     
-    cat(cw("To define a polygon region, click on the active plot window using a mouse. When finished, right-click and select 'stop'. The polygon will be automatically 'closed'\n\n"))
+    if (blnRStudio) {
+        msg_end <- "press escape"
+    } else {
+        msg_end <- "right-click and select 'stop'"
+    
+    }
+    
+    cat(cw(paste("To define a polygon region, click on the active plot window using a mouse.\nWhen finished, ", msg_end, ". The polygon will be automatically 'closed'\n\n", sep="")))
     for (i in 1:n) {
         cat("Please draw polygon #", i, " of ", n, col.str[i], "\n", sep="")
       	flush.console()
@@ -28,7 +36,7 @@ regions.draw <- function(n, col=NULL, draw.reg=TRUE, alpha=0.5, prompt.labels=TR
           polygon(pts, col=col.use)
         }
         if (prompt.labels) {
-            bringToTop(-1)
+            if (!blnRStudio) bringToTop(-1)
             label <- readline(prompt = paste("Label for this region [", i, "]: ", sep=""))
             if (label=="") label <- as.character(i)
         } else {

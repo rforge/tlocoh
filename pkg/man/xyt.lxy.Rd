@@ -7,7 +7,8 @@ xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
   proj4string = CRS(as.character(NA)), anv = NULL, anv.desc = NULL,
   col = NULL, del.dup.xyt = TRUE, dup.dt.check = TRUE,
   show.dup.dt = FALSE, dt.int.round.to = 0.1, tau.diff.max = 0.02,
-  req.id = TRUE, warn.latlong = TRUE, status = TRUE)
+  req.id = TRUE, warn.latlong = TRUE, show.bad.dates = FALSE,
+  status = TRUE)
 }
 \arguments{
   \item{xy}{A two-column matrix or data frame containing
@@ -62,6 +63,10 @@ xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
   appear to be in geographic coordinates (T/F)}
 
   \item{status}{Show status messages (T/F)}
+
+  \item{show.bad.timestamp}{If \code{TRUE}, will print any
+  timestamps that didn't successfully convert to a POSIXct
+  object (T/F)}
 }
 \value{
 A object of class \link{locoh.lxy}

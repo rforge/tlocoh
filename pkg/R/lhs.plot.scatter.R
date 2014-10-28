@@ -421,7 +421,6 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                                                                                       length(filter.use[[filter.use.idx]][["idx"]]), 
                                                                                       if (nchar(subtitle)==0) NULL else ")", sep="")
                                 if (hmap.in.subtitle) {
-                                    #print("hmap.in.title");browser()
                                     hmap.subtitles <- paste(unlist(sapply(c(x.axis, y.axis), function(myaxis) sapply(hme[[myaxis]][["req.ap.subtitle"]], function(x) eval(x)))), collapse="; ", sep="")
                                     if (nchar(hmap.subtitles) > 0 ) subtitle <- paste(subtitle, if (nchar(subtitle)==0) NULL else "\n", hmap.subtitles, sep="")
                                 }
