@@ -1,3 +1,7 @@
+Changes in version 1.26 (2014-10-30)
+=========================
+* modified <pre>xyt.lxy</pre> to trap an error when fewer than 5 points per individual are found
+
 Changes in version 1.25 (2014-10-28)
 =========================
 * modified <pre>regions.draw</pre> to support digitizing regions on hull metric scatterplots

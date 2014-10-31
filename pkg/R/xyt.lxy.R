@@ -172,7 +172,7 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
     if (!is.null(ptid)) {
         if (TRUE %in% duplicated(ptid)) stop(cw("Duplicate values detected in ptid. The numeric values in ptid, if passed, must be unique.", final.cr=F))
         if (FALSE %in% is.numeric(ptid)) stop(cw("ptid (if given) is supposed to be a vector of unique ID numbers (integers).", final.cr=F))
-        if (TRUE %in% is.na(ptid)) stop("There is at least one row in ptid with out a valid value")
+        if (TRUE %in% is.na(ptid)) stop("There is at least one row in ptid without a valid value")
     }
 
     if (is.null(dt)) {
@@ -222,22 +222,18 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
                 if (show.dup.dt) {
                     ## Create a data frame with id and dt (in secs since 1970) 
                     id_dtsecs_df <- data.frame(id=id, dtsecs=as.numeric(dt, units="secs"))
-                    head(id_dtsecs_df)
                     
                     ## For the purposes of identifying duplicates, construct a string
                     id_dtsecs_str <- apply(id_dtsecs_df, 1, function(x) paste(x, collapse="\r"))
-                    head(id_dtsecs_str)
                     
                     ## Identify all records whic are duplicates
                     duped_idx <- which(id_dtsecs_str %in% id_dtsecs_str[duplicated(id_dtsecs_str)])
-                    summary(duped_idx)
                     
                     ## Define the order based on 1) id, 2) dtsets
                     duped_idx_ord <- order(id_dtsecs_df$id[duped_idx], id_dtsecs_df$dtsecs[duped_idx])
                     
                     ## Construct a data frame of the duplicate records in order
                     id_dt_dups_df <-data.frame(id=id, dt=dt)[duped_idx[duped_idx_ord], ]
-                    nrow(id_dt_dups_df)
                     
                     cat("Duplicate time stamps:\n")
                     print(id_dt_dups_df)
@@ -251,6 +247,14 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
             
             
             }
+        }
+        
+        ## Check if there are any ids with < 5 locations
+        if (TRUE %in% table(id) < 5) {
+            bad.ids <- table(id) < 5
+            cat("Insufficient number of locations found:\n")
+            print(table(id)[bad.ids])
+            stop(cw(paste("At least five points are needed per id. Not enough points for the following id(s): ", paste(names(bad.ids)[bad.ids], collapse=", ", sep=""), ".", sep=""), exdent=2, final.cr=F))
         }
 
         ## Sort everything by ID then datetime
