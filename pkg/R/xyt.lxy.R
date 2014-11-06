@@ -161,13 +161,13 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
         id = as.factor(rep("1", nrow(xy)))
     } else {
         if (length(id)==1) {
-            id = as.factor(rep(id, nrow(xy)))
+            id = factor(rep(id, nrow(xy)))
         } else {
             ## Convert ID from a vector to a factor and drop unused levels
-            id <- factor(id)[,drop=TRUE]
+            id <- factor(id)
         }
     }
-
+    
     ## Make sure ptid contains only unique integer values
     if (!is.null(ptid)) {
         if (TRUE %in% duplicated(ptid)) stop(cw("Duplicate values detected in ptid. The numeric values in ptid, if passed, must be unique.", final.cr=F))
@@ -248,9 +248,9 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
             
             }
         }
-        
+       
         ## Check if there are any ids with < 5 locations
-        if (TRUE %in% table(id) < 5) {
+        if (TRUE %in% (table(id) < 5)) {
             bad.ids <- table(id) < 5
             cat("Insufficient number of locations found:\n")
             print(table(id)[bad.ids])

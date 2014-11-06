@@ -1,3 +1,7 @@
+Changes in version 1.27 (2014-11-06)
+=========================
+* modified <pre>xyt.lxy</pre> to correct a bug in the code that checks if fewer than 5 points per individual are found
+
 Changes in version 1.26 (2014-10-30)
 =========================
 * modified <pre>xyt.lxy</pre> to trap an error when fewer than 5 points per individual are found
