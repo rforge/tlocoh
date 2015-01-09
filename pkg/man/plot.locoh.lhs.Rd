@@ -417,8 +417,8 @@ parent point saved, which can also be plotted
 Hullsets for which have bounding ellipses
 (\code{\link{lhs.ellipses.add}}) or directional routes
 (\code{\link{lhs.dr.add}}) have been computed can have
-these elements plotted by setting \code{ellipses=TRUE}) and
-\code{dr=TRUE}) respectively. If isopleths have been
+these elements plotted by setting \code{ellipses=TRUE} and
+\code{dr=TRUE} respectively. If isopleths have been
 constructed (\code{\link{lhs.iso.add}}), these can be
 plotted by setting \code{iso=TRUE}. If you only want to
 plot some of the isopleths, you can specify which one(s) to

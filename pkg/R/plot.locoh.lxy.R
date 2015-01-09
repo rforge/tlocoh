@@ -179,6 +179,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                     if (length(tiff.sgdf@data)==3) {
                         image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
                     } else {
+                        if (length(tiff.col)==0) stop("Something is wrong. tiff.col should not be an empty vector")
                         image(tiff.sgdf, col=tiff.col, add=TRUE)
                     }
                 }
@@ -187,12 +188,11 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
         
         ## Lay down the polygons
         for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]]=="polygon")]) {
-            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+            #with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
         }
                 
     }
-
-    
 
     ## Loop through all the individuals
     for (i in 1:length(id)) {
@@ -265,6 +265,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                         if (length(tiff.sgdf@data)==3) {
                             image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
                         } else {
+                            if (length(tiff.col)==0) stop("Something is wrong. tiff.col should not be an empty vector")
                             image(tiff.sgdf, col=tiff.col, add=TRUE)
                         }
                     }
@@ -303,7 +304,7 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
         
         ## Plot the gis layers containing lines and points
         for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]] %in% c("point", "line"))]) {
-            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
         }
         
     }  # for each id

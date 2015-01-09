@@ -225,11 +225,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
     
                     ## Sort s.ptsh by ptsh and then s, because we want to find the sVal above and below the target ptsh
                     s.ptsh <- s.ptsh[order(s.ptsh[,2], s.ptsh[,1]),]
-                    #print(s.ptsh)
                     base.idx <- findInterval(ptshVal, s.ptsh[,2])
-                    
-                    #cat("In loop. ptshVal=", ptshVal, ". count.int=", count.int, ". sVal.cur=", sVal.cur, ". base.idx=", base.idx, "\n", sep="");browser()
-                    #cat("base.idx=", base.idx, "\n")
                     
                     if (base.idx == 0) {
                         ## ptshVal is less than ptsh when s=0, so no chance of getting that level
@@ -240,8 +236,6 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                     } else {
                         sVal.cur <- mean(s.ptsh[0:1+base.idx,1])
                         
-                        #cat("Took the average s for rows ", base.idx, " and ", base.idx + 1, ". sVal.cur is now ", sVal.cur, "\n"); browser()
-    
                         if (isTRUE(all.equal(sVal.cur, sVal.cur.old))) {
                             int.converge.counter <- 0
                             

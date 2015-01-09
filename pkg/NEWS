@@ -1,3 +1,10 @@
+Changes in version 1.28 (2015-01-08)
+=========================
+* added a column name check to <pre>shp.layers</pre>
+* corrected a bug in <pre>plot.locoh.lxy</pre> whereby displaying a polygon shapefile with border=NA generated a warning message
+* changed the default polygon border color from NULL to NA in <pre>lxy.exp.mov</pre> 
+* corrected a bug in how the x-offset is computed in <pre>readpartgdal</pre>, which caused rgdal to try to read in more columns than exists
+
 Changes in version 1.27 (2014-11-06)
 =========================
 * modified <pre>xyt.lxy</pre> to correct a bug in the code that checks if fewer than 5 points per individual are found

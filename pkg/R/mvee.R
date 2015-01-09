@@ -182,7 +182,6 @@ mvee <- function(xy=NULL, tolerance = 0.005, plotme = FALSE, max.iter = 500, shi
         points(c[1], c[2], pch=2, col="blue")
 
     }
-    #print("end of mvee");browser()
     ellipse.params <- list("A" = A, "c" = c, "ab" = semi.axes, alpha=alpha)
 
 }

@@ -58,8 +58,14 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
         
         ## Read the csv file and convert it to a list
         g <- read.table(shp.csv, header=TRUE, sep=",", stringsAsFactors=FALSE, strip.white=TRUE)
+
+        ## Check for the correct column names. This should also catch
+        ## if the user edited the sample csv file in Excel
+        colNames <- c("layer", "fn", "type", "lty", "pch", "cex", "lwd", "border", "col")
+        if (FALSE %in% (names(g) %in% colNames)) stop(cw(paste("Incorrect column name(s) in ", shp.csv, ". Open the csv file in a text editor and compare it to the sample in ", system.file("shps", "kruger_gis.csv", package="tlocoh"), ".", sep=""), exdent=2, final.cr=F)) 
+        
+        ## Turn the dataframe into a list of individual layer parameters
         shp.layers.lst <- lapply(split(g, g$layer), function(x) as.list(x))
-    
         if (length(shp.layers.lst)==0) stop(paste("No shapefile layers found listed in ", shp.csv, sep=""))
         
         if (names.only) {
@@ -67,11 +73,13 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
             cat(paste("   ", sort(names(shp.layers.lst)), "\n", sep=""), sep="")
             return(invisible(names(shp.layers.lst)))
         }
-        if (FALSE %in% (sapply(shp.layers.lst, function(x) x$type) %in% c("point","line","polygon"))) stop(paste("Error in ", shp.csv, ". Type must be 'point', 'line' or 'polygon'", sep=""))
+        
+        ## Do a quick check of the layer type
+        if (FALSE %in% (sapply(shp.layers.lst, function(x) x$type) %in% c("point","line","polygon"))) stop(paste("Error in ", shp.csv, ". Type must be 'point', 'line' or 'polygon'.", sep=""))
     
         ## Make sure all layer names passed are in the CSV
         if (FALSE %in% (layers %in% names(shp.layers.lst))) {
-            err.msg <- cw(paste("Layer(s) not found in ", shp.csv, ": ", paste(layers[!layers %in% names(shp.layers.lst)], collapse=", ", sep=""), sep=""), final.cr=F)
+            err.msg <- cw(paste("Layer(s) not found in ", shp.csv, ": ", paste(layers[!layers %in% names(shp.layers.lst)], collapse=", ", sep=""), sep=""), exdent=2, final.cr=F)
             stop(err.msg)
         }
         
@@ -96,5 +104,4 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
         shp.layers.lst[[i]][["sdf"]] <- rgdal::readOGR(dsn=shp.dir, layer=shp.base, verbose=FALSE)
     }
     return(shp.layers.lst)
-    
 }

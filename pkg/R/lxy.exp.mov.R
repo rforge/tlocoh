@@ -646,6 +646,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                     if (length(tiff.sgdf@data)==3) {
                         image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
                     } else {
+                        if (length(tiff.col)==0) stop("Something is wrong. tiff.col should not be an empty vector")
                         image(tiff.sgdf, col=tiff.col, add=TRUE)
                     }
                 }
@@ -658,7 +659,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 
                 ## Put down the polygon layers the GIS layers
                 for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]]=="polygon")]) {
-                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
                 }
                 
                 ## Put down the background points
@@ -666,7 +667,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 
                 ## Put down the GIS point and line layers
                 for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]] %in% c("point", "line"))]) {
-                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
                 }
 
                 ## Plot the legend
@@ -698,20 +699,20 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                     if (length(tiff.sgdf@data)==3) {
                         image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
                     } else {
+                        if (length(tiff.col)==0) stop("Something is wrong. tiff.col should not be an empty vector")
                         image(tiff.sgdf, col=tiff.col, add=TRUE)
                     }
                 }
                 
                 ## Crop the GIS layers on first pass if needed
                 if (!gis.layers.ready) {
-                    #gis.features <- shp.layers.crop(gis.features.full.extent, matrix(c(xlim,ylim), ncol=2, byrow=F))
                     gis.features <- shp.layers.crop(gis.features.full.extent, matrix(par("usr"), byrow=F, ncol=2))
                     gis.layers.ready <- TRUE
                 }
                 
                 ## Put down the polygon layers the GIS layers
                 for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]]=="polygon")]) {
-                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
                 }
                 
                 ## Put down the background points
@@ -719,7 +720,7 @@ lxy.exp.mov <- function(lxy, id=NULL, all.ids.at.once=TRUE, all.ids.col.unique=a
                 
                 ## Put down the points and lines layers
                 for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]] %in% c("point", "line"))]) {
-                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                    with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
                 }
 
                 ## Plot the legend

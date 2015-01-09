@@ -118,8 +118,8 @@
 #' which can also be plotted (\code{nn=TRUE}).
 #'
 #' Hullsets for which have bounding ellipses (\code{\link{lhs.ellipses.add}}) or directional 
-#' routes (\code{\link{lhs.dr.add}}) have been computed can have these elements plotted by setting \code{ellipses=TRUE}) 
-#' and \code{dr=TRUE}) respectively. If isopleths have been constructed (\code{\link{lhs.iso.add}}), these 
+#' routes (\code{\link{lhs.dr.add}}) have been computed can have these elements plotted by setting \code{ellipses=TRUE} 
+#' and \code{dr=TRUE} respectively. If isopleths have been constructed (\code{\link{lhs.iso.add}}), these 
 #' can be plotted by setting \code{iso=TRUE}. If you only want to plot some of the isopleths, you can specify which one(s) to plot 
 #' with the parameters \code{iso.idx} (the index(s) of the isopleths to plot, see \code{\link{summary.locoh.lhs}}) or 
 #' \code{iso.sort.metric}.
@@ -900,6 +900,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
                             if (length(tiff.sgdf@data)==3) {
                                 image(tiff.sgdf, red=1, green=2, blue=3, add=TRUE)
                             } else {
+                                if (length(tiff.col)==0) stop("Something is wrong. tiff.col should not be an empty vector")
                                 image(tiff.sgdf, col=tiff.col, add=TRUE)
                             }
                         }
