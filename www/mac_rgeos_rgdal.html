@@ -60,6 +60,14 @@
          clear: both;
      }
 
+     .boxed {
+         font-size: 90%;
+         padding: 0.5em;
+         border: 1px solid LightSlateGray;
+         color: red;
+         clear: both;
+     }
+
      hr {
          clear: both;
      }
@@ -79,7 +87,7 @@
 <p><a href="index.html">Home</a></p>
 
 
-<p>The <a href="http://cran.r-project.org/web/packages/rgeos/index.html">rgeos</a> package contains functions to union polygons together (amongst others), and is a dependent (i.e. required) package for T-LoCoH. <a href="http://cran.r-project.org/web/packages/rgdal/index.html">rdgal</a> is suggested package, because it contains functions for importing GIS data (which can be displayed in plots).</p> 
+<p>The <a href="http://cran.r-project.org/web/packages/rgeos/index.html">rgeos</a> package contains functions to union polygons together (amongst others), and is a dependent (i.e. required) package for T-LoCoH. <a href="http://cran.r-project.org/web/packages/rgdal/index.html">rdgal</a> is a suggested package, because it contains functions for importing GIS data (which can be displayed in plots).</p> 
 
 <p>If you are using OS X Mavericks, there may <em>not</em> be binary versions of <a href="http://cran.r-project.org/web/packages/rgeos/index.html">rgeos</a> or <a href="http://cran.r-project.org/web/packages/rgdal/index.html">rdgal</a> on CRAN. This means you have to install the geos and gdal libraries separately (free), and then install the rgeos and rgdal R packages (from source). The steps below describe that process in more detail.</p>
 
@@ -88,17 +96,18 @@
 <p><em>These instructions were adapted from <a href="http://lostingeospace.blogspot.com/2011/08/rgeos-on-macos-x.html">Lost in Geospace</a>.</em></p>
 
 <ol>
-<li>Download and install the GDAL Complete frameworks (which includes geos) for MacOS X from <a href="http://www.kyngchaos.com/software:frameworks">http://www.kyngchaos.com/software:frameworks</a></li>
+<li>Download and install the GDAL Complete frameworks (which includes gdal and geos) for MacOS X from <a href="http://www.kyngchaos.com/software:frameworks">http://www.kyngchaos.com/software:frameworks</a></li>
 <ul>
 <li>make sure you get the complete frameworks</li>
 <li>after you download the *.dmg file, you have to open (mount) it, and then double-click the .pkg file. If you get a security warning, cancel that and then ctrl+click the pkg file and select 'Open' from the pop-up menu. You'll then have a chance to override the security warning.</li>
 </ul>
 
+<p class="boxed">Problems installing geos? You can also install geos using <a href="http://www.macports.org/">MacPorts</a>, which is a Mac utility you can download that allows you to install open source software using a command line (in Terminal). <a href="http://www.janosgyerik.com/installing-rgdal-in-r-on-os-x-mavericks/">MacPorts example</a>.</p>
 </ol>
 
 <p><br>You've now installed geos. If fortune is smiling on you, you may just be able to install rgeos by typing in R:</p>
 
-<pre>install.packages("rgeos", repos="http://R-Forge.R-project.org")
+<pre>install.packages("rgeos", repos="http://R-Forge.R-project.org", type="source")
 require(rgeos)</pre>
 
 <p>If that worked, then you're done. But, if you get an error message, the next thing to try is to install rgeos from the command line.</p>
@@ -140,16 +149,19 @@ require(rgeos)</pre>
 <p>The steps for installing gdal and rgdal are very similar to the ones above. Remember that rgdal is only needed if you plan on displaying GIS files in your plots.</p>
 
 <ol>
-<li>If you didn't already do it above, download and install the GDAL Complete frameworks for MacOS X from <a href="http://www.kyngchaos.com/software:frameworks">http://www.kyngchaos.com/software:frameworks</a>. You can also install GDAL using a command in Terminal, see <a href="http://www.janosgyerik.com/installing-rgdal-in-r-on-os-x-mavericks/">MacPorts</a> (may work better for Apple OS Yosemite). <br><br></li>
+<li>If you didn't already do it above, download and install the GDAL Complete frameworks for MacOS X from <a href="http://www.kyngchaos.com/software:frameworks">http://www.kyngchaos.com/software:frameworks</a>. 
+
+<p class="boxed">Problems installing gdal? You can also install gdal using <a href="http://www.macports.org/">MacPorts</a>, which is a Mac utility you can download that allows you to install open source software using a command line (in Terminal). <a href="http://www.janosgyerik.com/installing-rgdal-in-r-on-os-x-mavericks/">MacPorts example</a>.</p>
+</li>
 
 <li>Attempt to install rgdal in R with the command:
 
-<pre>install.packages("rgdal", repos="http://R-Forge.R-project.org")
+<pre>install.packages("rgdal", repos="http://R-Forge.R-project.org", type="source")
 require(rgdal)</pre>
 </li>
 
 
-<li>If that didn't work, type the following command (modifying the paths as needed) in Terminal:<br>
+<li>If that didn't work, type the following command (modifying the paths as needed, see above) in Terminal:<br>
  
 <pre>R CMD INSTALL /<em>path-to-downloads/rgdal_0.9-1.tar.gz</em> --configure-args='--with-gdal-config=/Library/Frameworks/GDAL.framework/Programs/gdal-config
  --with-proj-include=/Library/Frameworks/PROJ.framework/Headers
