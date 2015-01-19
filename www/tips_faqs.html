@@ -157,7 +157,13 @@ If the omission of night time points is a deal-breaker for your analysis, you co
 <p id="faq6" class="ans">Yes, see the functions <code>lhs.exp.shp</code> and <code>lxy.exp.shp</code> <a href="#" class="arrow" onclick="showHide('faq6');return false;"></a></p>
 
 <p><a href="#" class="qtn" onclick="showHide('faq-465173435');return false;">How do I "get" the hulls and isopleths, and what format are they in?</a></p>
-<p id="faq-465173435" class="ans">T-LoCoH stores hulls and isopleths as SpatialPolygonsDataFrame objects, which is common class for spatial data in R. You can use <code>hulls</code> and <code>isopleths</code> functions to extract these objects from a LoCoH-hullset object. You can also reference them directly from a LoCoH-hullset object (see Vignette on T-LoCoH data classes). <a href="#" class="arrow" onclick="showHide('faq-465173435');return false;"></a></p>
+<p id="faq-465173435" class="ans">T-LoCoH stores hulls and isopleths as SpatialPolygonsDataFrame objects, which is common class for spatial data in R. You can use <code>hulls</code> and <code>isopleths</code> functions to extract these objects from a LoCoH-hullset object. You can also reference them directly from a LoCoH-hullset object (which are S3 lists, see the vignette on T-LoCoH data classes for complete details on the data structure).<br><br>Given a hullset object called <code>toni</code> which contains one set of hulls, we can extract those hulls with:<br><br>
+<code><br>
+hulls_list <- hulls(my_lhs)<br>
+class(hulls_list[[1]])   ## returns 'SpatialPolygonsDataFrame'<br><br>
+## View polygon attributes<br>
+head(hulls_list[[1]]@data)<br>
+</code> <a href="#" class="arrow" onclick="showHide('faq-465173435');return false;"></a></p>
 
 <h3><br>Animations</h3>
 <p><a href="#" class="qtn" onclick="showHide('faq1413920205');return false;">I want to do some additional editing to the individual frames of my animation before encoding them to video. How can I do this?</a></p>
@@ -182,6 +188,10 @@ If the omission of night time points is a deal-breaker for your analysis, you co
 
 </body>
 </html>
+
+
+
+
 
 
 
