@@ -34,7 +34,10 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
             ## Make sure all of the required elements are present
             if (FALSE %in% (c("fn", "type") %in% names(shp.layers.lst[[i]]))) stop(paste(err.msg, ". Required element missing.", sep=""))
 
-            ## Fill in any missing parameters
+            ## If its a polygon and border is omitted, set it to gray50
+            if (shp.layers.lst[[i]]$type=="polygon" & is.null(shp.layers.lst[[i]]$border)) shp.layers.lst[[i]]$border <- "gray50"
+            
+            ## Set all other missing parameters to 
             shp.layers.lst[[i]][all.list.elements[!all.list.elements %in% names(shp.layers.lst[[i]])]] <- NA
         }
         

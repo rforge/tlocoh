@@ -1,6 +1,6 @@
 #' Plot histograms of hull metrics
 #'
-#' @param lhs A \link{LoCoH-hullset} object
+#' @param x A \link{LoCoH-hullset} object
 #' @param id The names of the individual(s) to include in the plot.
 #' @param k The k value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
 #' @param r The r value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object. 
@@ -42,7 +42,7 @@
 #' @export
 #' @method hist locoh.lhs
 
-hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
+hist.locoh.lhs <- function(x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
                 metric="area", include.missing.hulls=TRUE, hmap=NULL, 
                 hmap.in.title=TRUE, hs.name.in.title=TRUE, title=NULL, title.show=TRUE,
                 figs.per.page=NULL, mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0),
@@ -50,12 +50,16 @@ hist.locoh.lhs <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
                 png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80,
                 title.two.id=FALSE, indicate.missing.hulls.in.axis.lbl=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, ...) {
 
-    
-    
     ## This does not yet return a list of list ($fn, $dim) when png.dir != NULL
 
-    ## lhs <- x; rm(x)
-    if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
+    
+    if (!missing(lhs)) {
+      warning("argument lhs is deprecated; please use x instead.", call. = FALSE)
+    } else {
+      lhs <- x; rm(x)
+    }
+    
+    if (!inherits(lhs, "locoh.lhs")) stop("x should be of class \"locoh.lhs\"")
 
     ## Grab a list of expressions that will be used to extract the appropriate values for each hull
     hme <- hm.expr(names.only=FALSE)

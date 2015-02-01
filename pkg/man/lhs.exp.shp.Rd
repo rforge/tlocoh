@@ -5,10 +5,11 @@
 \usage{
 lhs.exp.shp(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
   hs.names = NULL, hpp = FALSE, hulls = FALSE, iso = FALSE,
-  nn = FALSE, ellipses = FALSE, allpts = FALSE, iso.idx = NULL,
-  iso.metric = NULL, dir = ".", file.base = "", file.base.auto = TRUE,
-  avl.file = NULL, status = TRUE, show.time = TRUE, hm = "all",
-  anv = NULL, hsp = NULL, metadata = TRUE)
+  iso.idx = NULL, iso.metric = NULL, ellipses = FALSE, dr = FALSE,
+  dr.idx = NULL, allpts = FALSE, nn = FALSE, dir = ".",
+  file.base = "", file.base.auto = TRUE, avl.file = NULL, status = TRUE,
+  show.time = TRUE, hm = "all", anv = NULL, hsp = NULL,
+  metadata = TRUE)
 }
 \arguments{
   \item{lhs}{A LoCoH-hullset object}
@@ -33,20 +34,25 @@ lhs.exp.shp(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
   \item{iso}{Export isopleths (as a polygon shapefile).
   T/F}
 
-  \item{nn}{Export nearest neighbors (as a multipoint
-  shapefile). T/F}
-
-  \item{ellipses}{Export ellipses (as a polygon shapefile).
-  T/F}
-
-  \item{allpts}{Export all points (as a point shapefile).
-  T/F}
-
   \item{iso.idx}{Numeric vector of the indices of the
   isopleths that will be exported (acts a filter)}
 
   \item{iso.metric}{Hull sort metric(s) for the isopleths
   that will be exported (acts a filter). Character vector.}
+
+  \item{ellipses}{Export ellipses (as a polygon shapefile).
+  T/F}
+
+  \item{dr}{Export directional routes. T/F}
+
+  \item{dr.idx}{Numeric vector of the indices of the
+  isopleths that will be exported (acts a filter)}
+
+  \item{allpts}{Export all points (as a point shapefile).
+  T/F}
+
+  \item{nn}{Export nearest neighbors (as a multipoint
+  shapefile). T/F}
 
   \item{dir}{The directory where the shapefiles will be
   placed (use "." for the working directory, and "~" for

@@ -3,7 +3,7 @@
 \alias{hist.locoh.lhs}
 \title{Plot histograms of hull metrics}
 \usage{
-\method{hist}{locoh.lhs}(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+\method{hist}{locoh.lhs}(x, id = NULL, k = NULL, r = NULL, a = NULL,
   s = NULL, hs.names = NULL, metric = "area",
   include.missing.hulls = TRUE, hmap = NULL, hmap.in.title = TRUE,
   hs.name.in.title = TRUE, title = NULL, title.show = TRUE,
@@ -17,7 +17,7 @@
   panel.num.inside.plot = !title.show, ...)
 }
 \arguments{
-  \item{lhs}{A \link{LoCoH-hullset} object}
+  \item{x}{A \link{LoCoH-hullset} object}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}

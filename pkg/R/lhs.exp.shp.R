@@ -15,6 +15,8 @@
 #' @param iso.metric Hull sort metric(s) for the isopleths that will be exported (acts a filter). Character vector.
 #' @param iso.idx Numeric vector of the indices of the isopleths that will be exported (acts a filter)
 #' @param ellipses Export ellipses (as a polygon shapefile). T/F
+#' @param dr Export directional routes. T/F
+#' @param dr.idx Numeric vector of the indices of the isopleths that will be exported (acts a filter)
 #' @param allpts Export all points (as a point shapefile). T/F
 #' @param nn Export nearest neighbors (as a multipoint shapefile). T/F
 #' @param dir The directory where the shapefiles will be placed (use "." for the working directory, and "~" for the user directory)
@@ -53,14 +55,14 @@
 #' @import sp
 
 lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL,
-               hpp=FALSE, hulls=FALSE, iso=FALSE, nn=FALSE, ellipses = FALSE, allpts = FALSE, iso.idx=NULL, iso.metric=NULL, 
+               hpp=FALSE, hulls=FALSE, iso=FALSE, iso.idx=NULL, iso.metric=NULL, ellipses = FALSE, dr=FALSE, dr.idx=NULL, allpts = FALSE, nn=FALSE, 
                dir=".", file.base="", file.base.auto=TRUE, avl.file = NULL, status = TRUE,
                show.time=TRUE, hm="all", anv=NULL, hsp=NULL, metadata=TRUE) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (!requireNamespace("rgdal")) stop("package rgdal required")
 
-    if (!hpp && !hulls && !iso && !nn && !ellipses && !allpts) stop(cw("Don't know what to export. Set at least one of the following to TRUE: hpp, hulls, iso, nn, ellipses, or allpts"))
+    if (!hpp && !hulls && !iso && !nn && !ellipses && !allpts && !dr) stop(cw("Don't know what to export. Set at least one of the following to TRUE: hpp, hulls, iso, dr, nn, ellipses, or allpts"))
     if (!file.exists(dir)) stop(paste("Output directory doesn't exist:", dir))
 
     hme <- hm.expr(names.only=FALSE, print=FALSE)
@@ -235,12 +237,27 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                 
                 hpp.spdf <- hs[[hs.name]][["pts"]][hulls.pp.idx, ]
                 hpp.spdf@data <- csv.data
-                #print("just about to save hpp");browser()
                 
                 rgdal::writeOGR(hpp.spdf, dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
                 files.saved <- c(files.saved, fn.shp.unique.str)
             }
             
+            
+            if (allpts) {
+                ## Construct a name for this shapefile (minus extension)
+                shp.fn <- paste(file.base.use, if (file.base.auto) "" else hs.name, sep = "")
+                    
+                ## If shapefile already exists, add numeric suffix (still no ext)
+                fn.shp.unique.str <- fn.unique(shp.fn, dir=dir, suf = "allpts", ext = "shp", first.one.numbered=TRUE)
+
+                if (status) {
+                    cat("   Saving ", fn.shp.unique.str, ".shp \n", sep="")
+                    flush.console()
+                }
+                
+                rgdal::writeOGR(hs[[hs.name]][["pts"]], dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
+                files.saved <- c(files.saved, fn.shp.unique.str)
+            }
             
             if (hulls) {
     
@@ -272,7 +289,7 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                 }
                 
                 if (length(isos.idx.use) == 0) {
-                    cat("  ", hs.name, ": no matching isopleths found \n", sep="")
+                    cat("   ", hs.name, ": no matching isopleths found \n", sep="")
                 } else {
                     
                     isos.names <- names(hs[[hs.name]][["isos"]])
@@ -306,9 +323,75 @@ lhs.exp.shp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
             
             }
             
+            if (dr) {
+
+                if (is.null(hs[[hs.name]][["dr"]])) {
+                    cat("   ", hs.name, ": no directional routes found \n", sep="")                
+                } else {
+                    
+                    dr.idx.use <- 1:length(hs[[hs.name]][["dr"]])
+                    if (!is.null(dr.idx)) dr.idx.use <- intersect(dr.idx.use, dr.idx)
+                    
+                    if (length(dr.idx.use) == 0) {
+                        cat("   ", hs.name, ": no matching directional routes found \n", sep="")
+                    } else {
+                        
+                        ## Get all the coordinates for all the points as a matrix
+                        coords_all <- coordinates(hs[[hs.name]][["pts"]])
+
+                        dr.names <- names(hs[[hs.name]][["dr"]])
+                        
+                        ## Loop through the isopleths stored with this set of hulls
+                        for (dridx in dr.idx.use) {
+                            
+                            ## Construct a name for this shapefile (minus extension)
+                            shp.fn <- paste(file.base.use, ".", dr.names[dridx], sep = "")
+                                
+                            ## If shapefile already exists, add numeric suffix (still no ext)
+                            ## Don't need suf='dr' because 'dr' is part of dr.names
+                            fn.shp.unique.str <- fn.unique(shp.fn, dir=dir, suf = "", ext = "shp", first.one.numbered=TRUE)
+        
+                            if (status) {
+                                cat("   Saving ", fn.shp.unique.str, ".shp \n", sep="")
+                                flush.console()
+                            }
+                        
+                            
+                            ## Define a format string that will be used later with the sprintf
+                            ## function to give each line a unique id
+                            fmt <- paste(hs[[hs.name]][["id"]], "%0", nchar(length(hs[[hs.name]][["dr"]][[dridx]][["lines"]])), "d", sep="")
+                            
+                            ## Create a blank list to save each Lines object
+                            lines_all <- list()
+                            
+                            ## Loop through the list of pt.idx vectors that define the directional routes,
+                            ## and for each vector create a Lines objects
+                            num_lines <- length(hs[[hs.name]][["dr"]][[dridx]][["lines"]])
+                            for (i in 1:num_lines) {
+                                ln_coords <- coords_all[hs[[hs.name]][["dr"]][[dridx]][["lines"]][[i]], ]
+                                ln_Lines1 <- Lines(list(Line(ln_coords)), ID=i)
+                                lines_all <- c(lines_all, ln_Lines1)
+                            }
+                            
+                            ## Create a SpatialLines object
+                            dr_sl <- SpatialLines(lines_all)
+                            proj4string(dr_sl) <- hs[[hs.name]][["pts"]]@proj4string
+                            
+                            ## Add the attribute table
+                            data_table <- data.frame(id=sprintf(fmt, 1:num_lines), num_pts=sapply(hs[[hs.name]][["dr"]][[dridx]][["lines"]], length), row.names=1:num_lines)
+                            dr_sldf <- SpatialLinesDataFrame(dr_sl, data=data_table)
+                            
+                            ## Export to disc
+                            rgdal::writeOGR(dr_sldf, dsn=dirname(fn.shp.unique.str), layer=basename(fn.shp.unique.str), driver="ESRI Shapefile")
+                            files.saved <- c(files.saved, fn.shp.unique.str)
+                        
+                        }
+                    }
+                }
+            }   # if dr
+            
             if (nn) stop("Exporting nn is not yet supported")
             if (ellipses) stop("Exporting ellipses is not yet supported")
-            if (allpts) stop("Exporting allpts is not yet supported")
         
         }
           

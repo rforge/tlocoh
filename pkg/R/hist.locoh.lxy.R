@@ -2,7 +2,7 @@
 #'
 #' Displays histogram(s) of point-to-point step length, velocity, and sampling frequency for a LoCoH-xy object
 #'
-#' @param lxy A \link{LoCoH-xy} object
+#' @param x A \link{LoCoH-xy} object
 #' @param id The id value(s) to be plotted
 #' @param dt Include a histogram of the number of locations over time) (T/F)
 #' @param d Include a histogram of distance travelled per adjacent points (i.e., step length) (T/F)
@@ -18,6 +18,7 @@
 #' @param time.unit The unit of time on the x-axis (character). Ignored if delta.t=F.
 #' @param overlay.median Plot the median value on the histogram (T/F)
 #' @param breaks Argument passed to the \code{\link{hist}} function, see \code{\link{hist}} 
+#' @param ... Other parameters to be passed to hist
 #'
 #' @return A list of frequencies with one element for each of the histograms plotted.
 #'
@@ -25,11 +26,15 @@
 #' @export
 #' @import sp
 
-hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
+hist.locoh.lxy <- function(x, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
                            lo.margins.set=TRUE, dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,
-                           delta.t.num.sd=NULL, d.tct=1.2, time.unit="auto", overlay.median=TRUE, breaks=20) {
+                           delta.t.num.sd=NULL, d.tct=1.2, time.unit="auto", overlay.median=TRUE, breaks=20, ...) {
 
-    #lxy <- x; rm(x)
+    if (!missing(lxy)) {
+      warning("argument lxy is deprecated; please use x instead.", call. = FALSE)
+    }
+
+    lxy <- x; rm(x)
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (delta.t && is.null(lxy[["pts"]][["dt"]])) stop("No time stamps in this dataset, can't plot delta.t")
     if (dt && is.null(lxy[["pts"]][["dt"]])) stop("No time stamps in this dataset, can't plot dates over time")
@@ -68,7 +73,7 @@ hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, 
             dt.format <- list(days="%m/%d", hours="%H:%M", mins="%M:%S", secs="%M:%S")
 
             ## Produce the histogram and x-axis
-            hist.obj <- hist(lxy[["pts"]][["dt"]][id.idx], breaks=dt.bins.all, freq=TRUE, xlab="date", ylab="num pts", xlim=range(dt.bins.all), col=col, yaxt="n", xaxt="n", main=paste(idVal, ": Num Locations Over Time", sep=""), sub=paste("bin width=", secs.fmt(dt.bins.width), sep=""), cex.sub=0.9)
+            hist.obj <- hist(lxy[["pts"]][["dt"]][id.idx], breaks=dt.bins.all, freq=TRUE, xlab="date", ylab="num pts", xlim=range(dt.bins.all), col=col, yaxt="n", xaxt="n", main=paste(idVal, ": Num Locations Over Time", sep=""), sub=paste("bin width=", secs.fmt(dt.bins.width), sep=""), cex.sub=0.9, ...)
             axis(side=1, at=dt.bins.all[bins.idx], labels=format(dt.bins.all[bins.idx], dt.format[[dt.bins.base]]), cex.axis=0.9, pos=0)
             axis(2, pos=as.numeric(dt.bins.start), cex.axis=0.9)
             res[[paste(idVal, ".dt", sep="")]] <- hist.obj
@@ -86,7 +91,7 @@ hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, 
             } 
             
             dist <- sqrt((coordinates(lxy[["pts"]])[p2.idx, 1] - coordinates(lxy[["pts"]])[p1.idx, 1])^2 + (coordinates(lxy[["pts"]])[p2.idx, 2] - coordinates(lxy[["pts"]])[p1.idx, 2])^2)
-            hist.obj <- hist(dist, xlab="step length", ylab="freq", freq=TRUE, axes=FALSE, main=paste(idVal, ": Distance Travelled", sep=""), breaks=breaks, col=col)
+            hist.obj <- hist(dist, xlab="step length", ylab="freq", freq=TRUE, axes=FALSE, main=paste(idVal, ": Distance Travelled", sep=""), breaks=breaks, col=col, ...)
             axis(side=1, cex.axis=0.9, pos=0)
             axis(side=2, cex.axis=0.9, pos=hist.obj[["breaks"]][1])
             if (overlay.median) points(x=median(dist), y=0, pch="|", col="red", cex=4)
@@ -107,7 +112,7 @@ hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, 
             }
     
             hist.obj <- hist(delta.t.thisid[delta.t.idx] / time.factor.int, xlab=paste("time interval between samples (", time.unit, "s)", sep=""), ylab="freq",
-                                                            freq=TRUE, axes=F, col=col, main=paste(idVal, ": Time Interval", sep=""), sub=subtitle, breaks=breaks)
+                                                            freq=TRUE, axes=F, col=col, main=paste(idVal, ": Time Interval", sep=""), sub=subtitle, breaks=breaks, ...)
             axis(side=1, cex.axis=0.9, pos=0)
             axis(side=2, cex.axis=0.9, pos=hist.obj[["breaks"]][1])
             if (overlay.median) points(x=tau / time.factor.int, y=0, pch="|", col="red", cex=4)
@@ -127,7 +132,7 @@ hist.locoh.lxy <- function(lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, 
             } 
             
             v.vals <- sqrt((coordinates(lxy[["pts"]])[p2.idx, 1] - coordinates(lxy[["pts"]])[p1.idx, 1])^2 + (coordinates(lxy[["pts"]])[p2.idx, 2] - coordinates(lxy[["pts"]])[p1.idx, 2])^2) / delta.t.thisid[p1.idx]
-            hist.obj <- hist(v.vals, xlab="velocity", ylab="freq", freq=TRUE,  main=paste(idVal, ": Velocity", sep=""), breaks=breaks, col=col, axes=FALSE)
+            hist.obj <- hist(v.vals, xlab="velocity", ylab="freq", freq=TRUE,  main=paste(idVal, ": Velocity", sep=""), breaks=breaks, col=col, axes=FALSE, ...)
             axis(side=1, cex.axis=0.9, pos=0)
             axis(side=2, cex.axis=0.9, pos=hist.obj[["breaks"]][1])
             if (overlay.median) points(x=median(v), y=0, pch="|", col="red", cex=4)

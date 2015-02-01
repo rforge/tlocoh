@@ -2,7 +2,7 @@
 #'
 #' Displays a summary of a LoCoH-hullset object
 #'
-#' @param lhs A \link{LoCoH-hullset} object
+#' @param object A \link{LoCoH-hullset} object
 #' @param file A file name
 #' @param id The name(s) of individuals to summarize
 #' @param k The k value of hullsets to summarize
@@ -19,13 +19,18 @@
 #' @export
 #' @method summary locoh.lhs
 
-summary.locoh.lhs <- function(lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, hsp.details=FALSE, desc=FALSE, compact=FALSE, ...) {
+summary.locoh.lhs <- function(object, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, hsp.details=FALSE, desc=FALSE, compact=FALSE, ...) {
 
-    if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
+    if (!missing(lhs)) {
+      warning("argument lhs is deprecated; please use object instead.", call. = FALSE)
+    } 
+
+    lhs <- object
+    if (!inherits(lhs, "locoh.lhs")) stop("object should be of class \"locoh.lhs\"")
     if (!is.null(lhs[[1]][["xys"]])) stop("Old data structure detected")
     if (file!="") sink(file=file)
 
-    cat("Summary of LoCoH-hullset object:", deparse(substitute(lhs)), "\n")
+    cat("Summary of LoCoH-hullset object:", deparse(substitute(object)), "\n")
     if (!compact) cat("Created by: T-LoCoH ", as.character(attr(lhs, "tlocoh_ver")), "\n", sep="")
 
     if (is.null(id) && is.null(r) && is.null(k) && is.null(a) && is.null(s) && is.null(hs.names)) {

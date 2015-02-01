@@ -7,7 +7,7 @@ xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
   proj4string = CRS(as.character(NA)), anv = NULL, anv.desc = NULL,
   col = NULL, del.dup.xyt = TRUE, dup.dt.check = TRUE,
   show.dup.dt = FALSE, dt.int.round.to = 0.1, tau.diff.max = 0.02,
-  req.id = TRUE, warn.latlong = TRUE, show.bad.dates = FALSE,
+  req.id = TRUE, warn.latlong = TRUE, show.bad.timestamps = FALSE,
   status = TRUE)
 }
 \arguments{
@@ -62,11 +62,11 @@ xyt.lxy(xy, dt = NULL, tz = NULL, id = NULL, ptid = NULL,
   \item{warn.latlong}{Show a warning message if coordinates
   appear to be in geographic coordinates (T/F)}
 
-  \item{status}{Show status messages (T/F)}
-
-  \item{show.bad.timestamp}{If \code{TRUE}, will print any
+  \item{show.bad.timestamps}{If \code{TRUE}, will print any
   timestamps that didn't successfully convert to a POSIXct
   object (T/F)}
+
+  \item{status}{Show status messages (T/F)}
 }
 \value{
 A object of class \link{locoh.lxy}

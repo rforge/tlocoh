@@ -1,3 +1,9 @@
+Changes in version 1.29 (2015-01-21)
+=========================
+* changed first argument name to conform with CRAN requirement for S3 generic/method consistency: 
+<pre>summary.locoh.lxy</pre>, <pre>summary.locoh.lhs</pre>, <pre>plot.locoh.lxy</pre>, <pre>plot.locoh.lhs</pre>, <pre>hist.locoh.lxy</pre>, <pre>hist.locoh.lhs</pre>
+* enabled exporting directional routes and all points to shapefiles in <pre>lhs.exp.shp</pre>
+
 Changes in version 1.28 (2015-01-08)
 =========================
 * added a column name check to <pre>shp.layers</pre>
@@ -16,7 +22,7 @@ Changes in version 1.26 (2014-10-30)
 Changes in version 1.25 (2014-10-28)
 =========================
 * modified <pre>regions.draw</pre> to support digitizing regions on hull metric scatterplots
-* added parameter <pre>show.bad.dates</pre> to <pre>xyt.lxy</pre> to display any bad timestamps (e,g., garbled formatting) encountered
+* added parameter <pre>show.bad.timestamps</pre> to <pre>xyt.lxy</pre> to display any bad timestamps (e,g., garbled formatting) encountered
 
 Changes in version 1.24 (2014-10-24)
 =========================

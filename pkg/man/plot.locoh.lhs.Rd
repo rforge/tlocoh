@@ -3,8 +3,8 @@
 \alias{plot.locoh.lhs}
 \title{Plot a LoCoH-hullset object}
 \usage{
-plot.locoh.lhs(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, iso = FALSE, rast = FALSE, hulls = FALSE,
+\method{plot}{locoh.lhs}(x, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, iso = FALSE, rast = FALSE, hulls = FALSE,
   hpp = FALSE, dr = FALSE, nn = FALSE, ellipses = FALSE,
   allpts = FALSE, ptid = NULL, ptid.highlight = TRUE, add = FALSE,
   aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL, iso.legend = TRUE,
@@ -43,7 +43,7 @@ plot.locoh.lhs(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
   check.ap.value.in.hmparams = TRUE, ...)
 }
 \arguments{
-  \item{lhs}{A \link{LoCoH-hullset} object}
+  \item{x}{A \link{LoCoH-hullset} object}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}

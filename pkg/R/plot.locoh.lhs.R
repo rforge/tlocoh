@@ -2,7 +2,7 @@
 #'
 #' Multi-purpose plotting function for a LoCoH-hullset object
 #'
-#' @param lhs A \link{LoCoH-hullset} object
+#' @param x A \link{LoCoH-hullset} object
 #' @param id The names of the individual(s) to include in the plot.
 #' @param k The k value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
 #' @param r The r value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
@@ -149,8 +149,9 @@
 #'
 #' @export
 #' @import sp
+#' @method plot locoh.lhs
 
-plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
+plot.locoh.lhs <- function (x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
     iso=FALSE, rast=FALSE, hulls=FALSE, hpp=FALSE, dr=FALSE, nn=FALSE, ellipses=FALSE, allpts=FALSE, ptid=NULL, ptid.highlight=TRUE, add=FALSE, 
     aoi=NULL, iso.idx=NULL, iso.sort.metric=NULL, iso.legend=TRUE, legend.space=0.25, 
     dr.metric=NULL, dr.thresh.val=NULL, dr.thresh.type=NULL, dr.smooth=NULL, lwd.dr=2,
@@ -185,8 +186,7 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     #                       occurrence of the individual in the hull is considered a separate visit.
     #           iso.par=FALSE, iso.ecc=FALSE (used to be used for filtering which isopleths to plot)
     
-    ## Multi-purpose plotting function for lhs
-
+    
     ## If png.fn or png.dir is passed, will return a list of list objects with info about the PNG file(s) created: $fn, $dim, $desc
     ## Otherwise, returns a vector of desc
 
@@ -197,6 +197,11 @@ plot.locoh.lhs <- function (lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.nam
     ## ufat = user-friendly axis titles
     ## If record = TRUE, it will create a new device (plot window) and record the plots there
              
+    if (!missing(lhs)) {
+      warning("argument lhs is deprecated; please use x instead.", call. = FALSE)
+    }
+
+    lhs <- x; rm(x)
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (rast && !requireNamespace("raster", quietly=TRUE)) stop("package raster required, please install")
 

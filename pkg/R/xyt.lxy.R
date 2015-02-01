@@ -18,7 +18,7 @@
 #' @param tau.diff.max The maximum deviation from the median sampling interval (tau), expressed as a proportion of the median sampling interval, see details
 #' @param req.id Require a value for id (T/F)
 #' @param warn.latlong Show a warning message if coordinates appear to be in geographic coordinates (T/F)
-#' @param show.bad.timestamp If \code{TRUE}, will print any timestamps that didn't successfully convert to a POSIXct object (T/F)
+#' @param show.bad.timestamps If \code{TRUE}, will print any timestamps that didn't successfully convert to a POSIXct object (T/F)
 #' @param status Show status messages (T/F)
 #'
 #' @details
@@ -89,7 +89,7 @@
 
 xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(as.character(NA)), anv=NULL, anv.desc=NULL, col=NULL,
                      del.dup.xyt=TRUE, dup.dt.check=TRUE, show.dup.dt=FALSE, dt.int.round.to=0.1, tau.diff.max=0.02, req.id=TRUE, 
-                     warn.latlong=TRUE, show.bad.dates=FALSE, status=TRUE) {
+                     warn.latlong=TRUE, show.bad.timestamps=FALSE, status=TRUE) {
                      
     #cat("still want to try to error test whether tz is valid \n")
     
@@ -203,13 +203,13 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
         dt <- as.POSIXct(dt, tz=tz)  # for reasons which are not clear, omission of tz="UTC" results in
                                     # some values not being converted properly and becoming na
         if (TRUE %in% is.na(dt)) {
-            if (show.bad.dates) {
+            if (show.bad.timestamps) {
                 idx.bad.dates <- which(is.na(dt))
                 cat(cw("The following timestamps did not convert to date-time objects in R. Aborting.", final.cr=TRUE))
                 print(data.frame(row_num=idx.bad.dates, bad_date=dt.orig[idx.bad.dates]))
                 return(NULL)
             } else {
-                stop (cw("There is at least one value in dt which does not convert to a valid timestamp. Aborting. To see which date(s) are bad, set show.bad.dates=TRUE.", exdent=2, final.cr=F))
+                stop (cw("There is at least one value in dt which does not convert to a valid timestamp. Aborting. To see which date(s) are bad, set show.bad.timestamps=TRUE.", exdent=2, final.cr=F))
             }
         }
         attr(dt, "names") <- NULL

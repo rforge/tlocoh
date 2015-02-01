@@ -2,7 +2,7 @@
 #'
 #' Multi-purpose plotting function for a LoCoH-xy object
 #'
-#' @param lxy A \link{LoCoH-xy} object
+#' @param x A \link{LoCoH-xy} object
 #' @param id A vector of the id value(s) to plot
 #' @param cex Character expansion factor for the points
 #' @param show.start Whether to highlight the starting location (if time stamps are present) in green. T/F.
@@ -53,7 +53,7 @@
 #' @import sp
 #' @method plot locoh.lxy
 
-plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
+plot.locoh.lxy <- function(x, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE, col=c("auto","gray80")[1], connect.dots=TRUE,
                            overlay=FALSE, status=TRUE, title=NULL, title.show=TRUE, 
                            axes.show=TRUE, axes.titles=axes.show, axes.ticks=axes.show,
                            mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5), 
@@ -61,6 +61,9 @@ plot.locoh.lxy <- function(lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=TRUE
                            png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, 
                            tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.col=gray(0:255/255), tiff.pct=FALSE, tiff.buff=0, tiff.fill.plot=TRUE, 
                            layers=NULL, shp.csv=NULL, xlim=NULL, ylim=NULL, legend=NULL, ...) {
+    
+    if (!missing(lxy)) warning("argument lxy is deprecated; please use x instead.", call. = FALSE)
+    lxy <- x; rm(x)
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
 
