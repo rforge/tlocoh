@@ -3,6 +3,7 @@
 #' Displays histogram(s) of point-to-point step length, velocity, and sampling frequency for a LoCoH-xy object
 #'
 #' @param x A \link{LoCoH-xy} object
+#' @param lxy Deprecated, use \code{x} instead
 #' @param id The id value(s) to be plotted
 #' @param dt Include a histogram of the number of locations over time) (T/F)
 #' @param d Include a histogram of distance travelled per adjacent points (i.e., step length) (T/F)
@@ -26,7 +27,7 @@
 #' @export
 #' @import sp
 
-hist.locoh.lxy <- function(x, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
+hist.locoh.lxy <- function(x, lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
                            lo.margins.set=TRUE, dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,
                            delta.t.num.sd=NULL, d.tct=1.2, time.unit="auto", overlay.median=TRUE, breaks=20, ...) {
 

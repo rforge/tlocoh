@@ -3,6 +3,7 @@
 #' Displays a summary of a LoCoH-hullset object
 #'
 #' @param object A \link{LoCoH-hullset} object
+#' @param lhs Deprecated, use \code{object} instead
 #' @param file A file name
 #' @param id The name(s) of individuals to summarize
 #' @param k The k value of hullsets to summarize
@@ -19,10 +20,10 @@
 #' @export
 #' @method summary locoh.lhs
 
-summary.locoh.lhs <- function(object, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, hsp.details=FALSE, desc=FALSE, compact=FALSE, ...) {
+summary.locoh.lhs <- function(object, lhs, file='', id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=NULL, iso.details=FALSE, hsp.details=FALSE, desc=FALSE, compact=FALSE, ...) {
 
     if (!missing(lhs)) {
-      warning("argument lhs is deprecated; please use object instead.", call. = FALSE)
+      warning("argument lhs is deprecated; please use 'object' instead.", call. = FALSE)
     } 
 
     lhs <- object

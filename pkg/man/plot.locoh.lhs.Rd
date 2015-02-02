@@ -3,18 +3,18 @@
 \alias{plot.locoh.lhs}
 \title{Plot a LoCoH-hullset object}
 \usage{
-\method{plot}{locoh.lhs}(x, id = NULL, k = NULL, r = NULL, a = NULL,
-  s = NULL, hs.names = NULL, iso = FALSE, rast = FALSE, hulls = FALSE,
-  hpp = FALSE, dr = FALSE, nn = FALSE, ellipses = FALSE,
-  allpts = FALSE, ptid = NULL, ptid.highlight = TRUE, add = FALSE,
-  aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL, iso.legend = TRUE,
-  legend.space = 0.25, dr.metric = NULL, dr.thresh.val = NULL,
-  dr.thresh.type = NULL, dr.smooth = NULL, lwd.dr = 2, pch.allpts = 16,
-  cex.nn = 2, cex.hpp = 0.6, cex.allpts = 0.5, cex.pp = 2,
-  cex.axis = 0.8, cex.legend = 0.8, col.hpp = "gray50",
-  col.hpp.na = "yellow", col.hulls.border = "gray50", col.hulls.fill = NA,
-  col.ellipses = "red", col.allpts = c("auto", "gray")[1],
-  col.nn = "black", col.nn.pp = "blue", col.iso.fill = 1,
+\method{plot}{locoh.lhs}(x, lhs, id = NULL, k = NULL, r = NULL,
+  a = NULL, s = NULL, hs.names = NULL, iso = FALSE, rast = FALSE,
+  hulls = FALSE, hpp = FALSE, dr = FALSE, nn = FALSE,
+  ellipses = FALSE, allpts = FALSE, ptid = NULL, ptid.highlight = TRUE,
+  add = FALSE, aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL,
+  iso.legend = TRUE, legend.space = 0.25, dr.metric = NULL,
+  dr.thresh.val = NULL, dr.thresh.type = NULL, dr.smooth = NULL,
+  lwd.dr = 2, pch.allpts = 16, cex.nn = 2, cex.hpp = 0.6,
+  cex.allpts = 0.5, cex.pp = 2, cex.axis = 0.8, cex.legend = 0.8,
+  col.hpp = "gray50", col.hpp.na = "yellow", col.hulls.border = "gray50",
+  col.hulls.fill = NA, col.ellipses = "red", col.allpts = c("auto",
+  "gray")[1], col.nn = "black", col.nn.pp = "blue", col.iso.fill = 1,
   col.iso.border = NA, col.iso.scale = TRUE, col.dr = "red",
   hpp.classify = c("none", "hsp", hm.expr(names.only = TRUE, print = FALSE,
   desc = FALSE))[1], hpp.classify.bins = 10, hpp.classify.chop = 0.01,
@@ -44,6 +44,8 @@
 }
 \arguments{
   \item{x}{A \link{LoCoH-hullset} object}
+
+  \item{lhs}{Deprecated, use \code{x} instead}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}

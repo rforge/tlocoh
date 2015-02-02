@@ -636,8 +636,6 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
             str.title <- NULL
         }
 
-        #print("Check out frames.to.use");browser()
-
         if (screen.test) {
             if (.Platform$OS.type == "windows") {
           		  windows(width=width, height=height.use, record=T)

@@ -3,11 +3,13 @@
 \alias{summary.locoh.lxy}
 \title{Show a summary of a LoCoH-xy object}
 \usage{
-\method{summary}{locoh.lxy}(object, file = "", dt.int = FALSE,
+\method{summary}{locoh.lxy}(object, lxy, file = "", dt.int = FALSE,
   round.coords = 1, ptsh = FALSE, ...)
 }
 \arguments{
   \item{object}{A \link{LoCoH-xy} object}
+
+  \item{lxy}{Deprecated, use \code{object} instead}
 
   \item{file}{A file name where the results will be saved}
 

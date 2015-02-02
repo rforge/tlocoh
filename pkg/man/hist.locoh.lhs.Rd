@@ -3,8 +3,8 @@
 \alias{hist.locoh.lhs}
 \title{Plot histograms of hull metrics}
 \usage{
-\method{hist}{locoh.lhs}(x, id = NULL, k = NULL, r = NULL, a = NULL,
-  s = NULL, hs.names = NULL, metric = "area",
+\method{hist}{locoh.lhs}(x, lhs, id = NULL, k = NULL, r = NULL,
+  a = NULL, s = NULL, hs.names = NULL, metric = "area",
   include.missing.hulls = TRUE, hmap = NULL, hmap.in.title = TRUE,
   hs.name.in.title = TRUE, title = NULL, title.show = TRUE,
   figs.per.page = NULL, mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
@@ -18,6 +18,8 @@
 }
 \arguments{
   \item{x}{A \link{LoCoH-hullset} object}
+
+  \item{lhs}{Deprecated, use \code{x} instead}
 
   \item{id}{The names of the individual(s) to include in
   the plot.}

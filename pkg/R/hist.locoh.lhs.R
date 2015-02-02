@@ -1,6 +1,7 @@
 #' Plot histograms of hull metrics
 #'
 #' @param x A \link{LoCoH-hullset} object
+#' @param lhs Deprecated, use \code{x} instead
 #' @param id The names of the individual(s) to include in the plot.
 #' @param k The k value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object.
 #' @param r The r value(s) of the hullset(s) to include in the plot. Numeric vector or comma-delimited character object. 
@@ -42,7 +43,7 @@
 #' @export
 #' @method hist locoh.lhs
 
-hist.locoh.lhs <- function(x, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
+hist.locoh.lhs <- function(x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names = NULL, 
                 metric="area", include.missing.hulls=TRUE, hmap=NULL, 
                 hmap.in.title=TRUE, hs.name.in.title=TRUE, title=NULL, title.show=TRUE,
                 figs.per.page=NULL, mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0),

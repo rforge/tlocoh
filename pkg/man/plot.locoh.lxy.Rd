@@ -3,7 +3,7 @@
 \alias{plot.locoh.lxy}
 \title{Plot LoCoH-xy object}
 \usage{
-\method{plot}{locoh.lxy}(x, id = NULL, cex = 0.8, show.start = TRUE,
+\method{plot}{locoh.lxy}(x, lxy, id = NULL, cex = 0.8, show.start = TRUE,
   show.end = TRUE, col = c("auto", "gray80")[1], connect.dots = TRUE,
   overlay = FALSE, status = TRUE, title = NULL, title.show = TRUE,
   axes.show = TRUE, axes.titles = axes.show, axes.ticks = axes.show,
@@ -19,6 +19,8 @@
 }
 \arguments{
   \item{x}{A \link{LoCoH-xy} object}
+
+  \item{lxy}{Deprecated, use \code{x} instead}
 
   \item{id}{A vector of the id value(s) to plot}
 

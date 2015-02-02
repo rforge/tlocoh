@@ -3,6 +3,7 @@
 #' Prints a summary of a locoh xy object (set of locations)
 #'
 #' @param object A \link{LoCoH-xy} object
+#' @param lxy Deprecated, use \code{object} instead
 #' @param file A file name where the results will be saved
 #' @param dt.int Whether to show a summary of the sampling interval
 #' @param round.coords The number of digits to display for the coordinates of the spatial extent
@@ -15,9 +16,9 @@
 #' @export
 #' @import sp
 
-summary.locoh.lxy <- function(object, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
+summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
 
-    if (!missing(lxy)) warning("argument lxy is deprecated; please use object instead.", call. = FALSE)
+    if (!missing(lxy)) warning("argument lxy is deprecated; please use 'object' instead.", call. = FALSE)
     lxy <- object
 
     if (!inherits(lxy, "locoh.lxy")) stop("object should be of class \"locoh.lxy\"")

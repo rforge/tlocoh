@@ -3,12 +3,14 @@
 \alias{summary.locoh.lhs}
 \title{Show summary of a LoCoH-hullset}
 \usage{
-\method{summary}{locoh.lhs}(object, file = "", id = NULL, k = NULL,
+\method{summary}{locoh.lhs}(object, lhs, file = "", id = NULL, k = NULL,
   r = NULL, a = NULL, s = NULL, hs.names = NULL, iso.details = FALSE,
   hsp.details = FALSE, desc = FALSE, compact = FALSE, ...)
 }
 \arguments{
   \item{object}{A \link{LoCoH-hullset} object}
+
+  \item{lhs}{Deprecated, use \code{object} instead}
 
   \item{file}{A file name}
 
