@@ -5,7 +5,7 @@
 #' @param s Value(s) for the s term in the time-scaled-distance equation for point-to-point distance
 #' @param ptp The proportion of total points that should be a nearest neighbor for at least one hull (0..1]
 #' @param nnn The minimum number of nearest neighbors each point should have (can pass a vector of several values)
-#' @param prec A numeric value in map units to which the value of 'a' will be found. If \code{NULL}, will default to one-half of the median step legnth of the entire dataset
+#' @param prec A numeric value in map units to which the value of 'a' will be found. 
 #' @param max.iter The maximum number of iterations to try to get within \code{prec} of the minimum value
 #' @param status Show messages, T/F
 #'
@@ -15,10 +15,14 @@
 #' includes as many points as desired, but minimizes areas where the individual was not observed. This assumes that 
 #' duplicate points will be offset by a random amount when creating hullset(s).
 #' 
+#' If no value of \code{prec} is passed, it will default to one-half of the median step legnth of the entire dataset if timestamps are present.
+#' If timestamps are not present, it will use the median non-zero nearest neighbor distance for the entire dataset.
+#' 
 #' Note that the value of 'a' such that \code{ptp} of points are nearest neighbors does not mean that \code{ptp} points are
 #' enclosed. Points can be enclosed by hulls that are not a nearest neighbor of any hull parent point.
 #'
 #' @export
+#' @import FNN sp
 
 lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=0.98, nnn=2, prec=NULL, max.iter=20, status=TRUE) {
 
@@ -36,12 +40,7 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=0.98, nnn=2, prec=NULL, max.i
     nnn <- as.integer(nnn)
     if (min(nnn) < 2) stop("Minimum value of nnn is 2")
     
-    #if (save && is.null(lxy[["amin"]])) lxy[["amin"]] <- data.frame(id="1", s=0, ptp=0, amin=0)[0,]
-    # res <- data.frame(id="1", s=0, ptp=0, amin=0)[0,]
-    
     start.time = Sys.time()
-    #suminfo <- NULL
-    #amin.lst <<- list()
     
     ## Starting the first of the mother of all nested loops
     for (idVal in id) {
@@ -50,7 +49,14 @@ lxy.amin.add <- function(lxy, id=NULL, s=NULL, ptp=0.98, nnn=2, prec=NULL, max.i
         idVal.num.pts <- length(idVal.idx)
         
         if (is.null(prec)) {
-            prec.use <- lxy[["rw.params"]][lxy[["rw.params"]][["id"]]==idVal , "d.bar"] / 2
+            if (is.null(lxy[["rw.params"]])) {
+                ## Find the distance of each points' closest neighbor
+                closest_neighbor <- as.numeric(FNN::get.knn(coordinates(lxy[["pts"]]), k=1)[["nn.dist"]])
+                ## Take the median with out zeros
+                prec.use <- median(closest_neighbor[closest_neighbor>0])
+            } else {
+                prec.use <- lxy[["rw.params"]][lxy[["rw.params"]][["id"]]==idVal , "d.bar"] / 2
+            }
         } else {
             prec.use <- prec
         }

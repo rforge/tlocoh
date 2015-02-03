@@ -95,11 +95,13 @@ selected hulls has already been computed, those values of
 's' will be used.
 }
 \examples{
+\dontrun{
 # lxy <- lxy.nn.add(lxy, k=10, s=0.01)
+}
 }
 \seealso{
 \code{\link{summary.locoh.lxy}} to see what nearest
 neighbors have already been identified \code{\link{auto.a}}
-\code{\link{lxy.ptsh.add}}
+\code{\link{lxy.amin.add}} \code{\link{lxy.ptsh.add}}
 }
 

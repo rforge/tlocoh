@@ -35,20 +35,20 @@ lxy.reproject <- function(lxy, proj, dt.int.round.to=0.1, tau.diff.max=0.02, sta
     if (identical(lxy[["pts"]]@proj4string, CRS(as.character(NA)))) stop(cw("Coordinates can not be reprojected because the current coordinate system is not known. Specify the current projection system with lxy.proj.add and try again.", final.cr=FALSE))
     
     if (is(proj, "CRS")) {
-        crs.good <- checkCRSArgs(proj@projargs)
+        crs.good <- rgdal::checkCRSArgs(proj@projargs)
         if (!crs.good[[1]]) stop(crs.good[[2]])
     } else if (is.character(proj)) {
-        crs.good <- checkCRSArgs(proj)
+        crs.good <- rgdal::checkCRSArgs(proj)
         if (!crs.good[[1]]) stop(crs.good[[2]])
         proj <- CRS(proj)
     } else {
         stop("proj must be class 'CRS' or 'character'")
     } 
 
-    sp.new <- spTransform(lxy[["pts"]], proj)
-    lxy[["pts"]] <- sp.new
+    ## Project the spatial points data frame
+    lxy[["pts"]] <- spTransform(lxy[["pts"]], proj)
 
-    if (!is.null(dt)) {
+    if (!is.null(lxy[["pts"]]@data[["dt"]])) {
         ## Calculate frequency table and median value of time interval for each id
         rwp.dti.lst <- xyt.rw.params.dt.int(id=lxy[["pts"]]@data[["id"]], xy=coordinates(lxy[["pts"]]), dt=lxy[["pts"]]@data[["dt"]], dt.int.round.to=dt.int.round.to, tau.diff.max=tau.diff.max)
         lxy[["rw.params"]] <- rwp.dti.lst[["rw.params"]]

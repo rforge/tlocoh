@@ -52,7 +52,11 @@ summary.locoh.lhs <- function(object, lhs, file='', id=NULL, k=NULL, r=NULL, a=N
                     drange <- range(lhs[[hs.idx]][["pts"]][["dt"]])
                     cat("   dates: ", format(drange[1], usetz=TRUE), " to ", format(drange[2], usetz=TRUE), "\n", sep="")
                 } 
-                cat("movement: tau=", lhs[[hs.idx]][["rw.params"]][["time.step.median"]], " (", secs.fmt(lhs[[hs.idx]][["rw.params"]][["time.step.median"]]), "), vmax=", lhs[[hs.idx]][["rw.params"]][["vmax"]], ", d.bar=", lhs[[hs.idx]][["rw.params"]][["d.bar"]], "\n", sep="")
+                if (is.null(lhs[[hs.idx]][["rw.params"]])) {
+                    cat("movement: NA \n", sep="")
+                } else {
+                    cat("movement: tau=", lhs[[hs.idx]][["rw.params"]][["time.step.median"]], " (", secs.fmt(lhs[[hs.idx]][["rw.params"]][["time.step.median"]]), "), vmax=", lhs[[hs.idx]][["rw.params"]][["vmax"]], ", d.bar=", lhs[[hs.idx]][["rw.params"]][["d.bar"]], "\n", sep="")
+                }
                 cat("   hulls: ", nrow(lhs[[hs.idx]][["hulls"]]), if (is(lhs[[hs.idx]][["hulls"]], "SpatialPolygonsDataFrame")) "" else " (attribute data only)", "\n", sep="")
                 cat("    dups: ", length(lhs[[hs.idx]][["dups"]][["dups.idx"]]), sep="")
                 if (length(lhs[[hs.idx]][["dups"]][["dups.idx"]]) > 0) {

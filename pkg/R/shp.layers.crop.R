@@ -13,7 +13,7 @@ shp.layers.crop <- function(shp.layers.lst, bbox) {
     
     layers.no.intersection <- NULL
     for (i in 1:length(shp.layers.lst)) {
-        shp.layer.sdf.cropped <- gIntersection(bb.spatpoly, shp.layers.lst[[i]][["sdf"]])
+        shp.layer.sdf.cropped <- rgeos::gIntersection(bb.spatpoly, shp.layers.lst[[i]][["sdf"]])
         if (is.null(shp.layer.sdf.cropped)) {
             layers.no.intersection <- c(layers.no.intersection, i)
         } else {

@@ -32,13 +32,16 @@
 #'
 #' @seealso \code{\link{summary.locoh.lxy}} to see what nearest neighbors have already been identified
 #' \code{\link{auto.a}}
+#' \code{\link{lxy.amin.add}}
 #' \code{\link{lxy.ptsh.add}}
 #'
 #' @examples
+#' \dontrun{
 #' # lxy <- lxy.nn.add(lxy, k=10, s=0.01)
+#' }
 #'
 #' @export
-#' @import pbapply sp
+#' @import pbapply sp FNN
 
 lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, kmin=0, ptsh=NULL, ptsh.idx=1,
                    nn.exists = c("append", "replace", "skip")[1],

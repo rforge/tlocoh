@@ -23,9 +23,7 @@ lxy.amin.add(lxy, id = NULL, s = NULL, ptp = 0.98, nnn = 2,
   point should have (can pass a vector of several values)}
 
   \item{prec}{A numeric value in map units to which the
-  value of 'a' will be found. If \code{NULL}, will default
-  to one-half of the median step legnth of the entire
-  dataset}
+  value of 'a' will be found.}
 
   \item{max.iter}{The maximum number of iterations to try
   to get within \code{prec} of the minimum value}
@@ -45,6 +43,12 @@ lower bound for a home range that includes as many points
 as desired, but minimizes areas where the individual was
 not observed. This assumes that duplicate points will be
 offset by a random amount when creating hullset(s).
+
+If no value of \code{prec} is passed, it will default to
+one-half of the median step legnth of the entire dataset if
+timestamps are present. If timestamps are not present, it
+will use the median non-zero nearest neighbor distance for
+the entire dataset.
 
 Note that the value of 'a' such that \code{ptp} of points
 are nearest neighbors does not mean that \code{ptp} points

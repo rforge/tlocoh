@@ -893,7 +893,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                     if (lo.margins.set) if (max(oma.vals) > 0) par(oma=oma.vals)    
                     
                     ## Create a new plot
-
                     plot(NULL, xlab=if (axes.titles) "x" else "", ylab=if (axes.titles) "y" else "", asp=1, type="n", xlim=xlim.use, ylim=ylim.use,
                          axes=axes.show, xaxt=tick.show, yaxt=tick.show, cex.axis=cex.axis)
                     plots.made <- plots.made + 1
@@ -914,7 +913,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
 
                     ## Plot polygon layers 
                     for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]]=="polygon")]) {
-                        with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                        with(gis.features[[featname]], plot(sdf, col=col, border=border, lty=lty, lwd=lwd, add=TRUE))
                     }
                     
                 }
@@ -1013,18 +1012,26 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                                 plot(iso.lst[["polys"]], add=TRUE, col=col.iso.fill.use, border=col.iso.border)
                                 if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
                             } else {
-                                if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
+                                
+                                # Commented out in version 1.31
+                                #if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
+                                
                                 iso.levels.thishs <- iso.lst[["polys"]]@data[["iso.level"]]
                                 iso.level.rowidx <- which(sapply(iso.levels.thishs, function(x) TRUE %in% sapply(iso.level, function(y) isTRUE(all.equal(x,y)))))
                                 if (length(iso.level.rowidx) != length(iso.level)) {
                                   bad.levels <- paste(iso.level[!sapply(iso.level, function(x) TRUE %in% sapply(iso.levels.thishs, function(y) isTRUE(all.equal(x,y))))], sep=", ")
                                   warning(paste("Isopleth level(s) not found: ", bad.levels, sep=""))
                                 }
-                                if (is.na(col.iso.border)) col.iso.border <- col.iso.fill.use[iso.level.rowidx]
+                                
+                                # In version 1.31, I decided to display specific isopleth levels not with an outline,
+                                # but filled as usual (because holes are not easily distinguished with outlines)
+                                # if (is.na(col.iso.border)) col.iso.border <- col.iso.fill.use[iso.level.rowidx]
+                                
                                 if (length(iso.level.rowidx) > 0) {
-                                    plot(iso.lst[["polys"]][iso.level.rowidx,], add=TRUE, col=NA, border=col.iso.border, lwd=2)
+                                    #plot(iso.lst[["polys"]][iso.level.rowidx,], add=TRUE, col=NA, border=col.iso.border, lwd=2)
+                                    plot(iso.lst[["polys"]][iso.level.rowidx,], add=TRUE, col=col.iso.fill.use[iso.level.rowidx], border=col.iso.border, lwd=2)
                                 }
-                            
+                                if (allpts) plot(hs[[hs.name]][["pts"]], add=TRUE, pch=pch.allpts, col=col.allpts.use, cex=cex.allpts)
                             }
                         }
 
@@ -1045,14 +1052,17 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
 
                         ## Plot points and lines gis layers on top of isos
                         for (featname in names(gis.features)[sapply(gis.features, function(x) x$type %in% c("point", "line"))]) {
-                            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                            with(gis.features[[featname]], plot(sdf, pch=pch, cex=cex, col=col, lwd=lwd, lty=lty, add=TRUE))
                         }
                         if (length(gis.features)>0) box("plot")
                         
                         if (iso.legend && !add) {
-                            iso.levels.ord <- order(iso.lst[["polys"]]@data[["iso.level"]])
-                            legend("topleft", legend=as.character(iso.lst[["polys"]]@data[["iso.level"]][iso.levels.ord]), 
-                                   fill=col.iso.fill.use[iso.levels.ord], bg="white", title="Iso Level", cex=cex.legend)
+                            if (is.null(iso.level)) {
+                                iso.levels.ord <- order(iso.lst[["polys"]]@data[["iso.level"]])
+                            } else {
+                                iso.levels.ord <- sort(iso.level.rowidx)
+                            }
+                            legend("topleft", legend=as.character(iso.lst[["polys"]]@data[["iso.level"]][iso.levels.ord]), fill=col.iso.fill.use[iso.levels.ord], bg="white", title="Iso Level", cex=cex.legend)
                             box()
                         }
                         
@@ -1061,7 +1071,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                         
                         ## Plot points and lines gis layers first
                         for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]] %in% c("point", "line"))]) {
-                            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                            with(gis.features[[featname]], plot(sdf, pch=pch, cex=cex, col=col, lwd=lwd, lty=lty, add=TRUE))
                         }
     
                         if (hulls) {
@@ -1077,7 +1087,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             
                             ## Laydown points (again) in case they got covered up by the lines
                             for (featname in names(gis.features)[sapply(gis.features, function(x) x$type %in% c("point"))]) {
-                                with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
+                                with(gis.features[[featname]], plot(sdf, pch=pch, cex=cex, col=col, add=TRUE))
                             }
                             
                             
@@ -1372,15 +1382,12 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             pts.in.pa <- rep(TRUE, length(hs[[hs.name]][["pts"]]))
                         }
                         
-                        #points(hs[[hs.name]]$xys[pts.in.box.idx,], pch=16, col=col.allpts.use[pts.in.box.idx], cex=cex.allpts)
                         plot(hs[[hs.name]][["pts"]][pts.in.pa,], add=TRUE, pch=16, col=col.allpts.use[pts.in.pa], cex=cex.allpts)
                         
                     }
                     
                     ## Highlight the parent point
                     if (ptid.highlight) {
-                        #points(hs[[hs.name]]$xys[pp.idx, ], pch=16, cex=cex.allpts)
-                        #points(hs[[hs.name]]$xys[pp.idx, ], pch=24, cex=2)
                         plot(hs[[hs.name]][["pts"]][pp.idx, ], add=TRUE, pch=16, cex=cex.allpts)
                         plot(hs[[hs.name]][["pts"]][pp.idx, ], add=TRUE, pch=24, cex=2)
                         

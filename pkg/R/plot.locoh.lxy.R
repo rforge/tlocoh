@@ -192,8 +192,7 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
         
         ## Lay down the polygons
         for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]]=="polygon")]) {
-            #with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=if (is.na(border)) NULL else border, lwd=lwd, add=TRUE))
-            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
+            with(gis.features[[featname]], plot(sdf, col=col, border=border, lty=lty, lwd=lwd, add=TRUE))
         }
                 
     }
@@ -308,7 +307,7 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
         
         ## Plot the gis layers containing lines and points
         for (featname in names(gis.features)[sapply(gis.features, function(x) x[["type"]] %in% c("point", "line"))]) {
-            with(gis.features[[featname]], plot(sdf, lty=lty, pch=pch, cex=cex, col=col, border=border, lwd=lwd, add=TRUE))
+            with(gis.features[[featname]], plot(sdf, pch=pch, cex=cex, col=col, lwd=lwd, lty=lty, add=TRUE))
         }
         
     }  # for each id

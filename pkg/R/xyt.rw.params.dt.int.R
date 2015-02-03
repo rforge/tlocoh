@@ -45,8 +45,7 @@ xyt.rw.params.dt.int <- function(id, xy, dt, dt.int.round.to=0.1, tau.diff.max=0
         dt.thisid.diff.tbl.df <- as.data.frame(table(dt.thisid.diff.4tab))
         
         ## Convert the frequency table to a data frame
-        dt.thisid.diff.freq <- data.frame(id=idVal, interval=as.numeric(levels(dt.thisid.diff.tbl.df[,1]))[dt.thisid.diff.tbl.df[,1]], 
-                                          count=dt.thisid.diff.tbl.df$Freq, rounded.to.nearest=round.to)        
+        dt.thisid.diff.freq <- data.frame(id=idVal, interval=as.numeric(levels(dt.thisid.diff.tbl.df[,1]))[dt.thisid.diff.tbl.df[,1]], count=dt.thisid.diff.tbl.df$Freq, rounded.to.nearest=round.to)        
         
         ## Append to the master data frame 
         dt.int <- rbind(dt.int, dt.thisid.diff.freq)

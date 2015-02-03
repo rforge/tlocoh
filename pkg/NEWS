@@ -1,3 +1,11 @@
+Changes in version 1.31 (2015-02-03)
+=========================
+* fixed an ambiguous function call in <pre>lxy.reproject</pre>
+* added a default value of <pre>prec</pre> when timestamps are absent in <pre>lxy.amin.add</pre>
+* modified display of movement paramenters in <pre>summary.locoh.lhs</pre> when timestamps are absent
+* modified arguments for plotting background features in <pre>plot.locoh.lhs</pre> and <pre>plot.locoh.lxy</pre> 
+* added default values for graphic parameters in <pre>shp.layers</pre>
+
 Changes in version 1.30 (2015-02-02)
 =========================
 * fixed check for deprecated arguments in <pre>summary.locoh.lxy</pre>, <pre>summary.locoh.lhs</pre>, <pre>plot.locoh.lxy</pre>, <pre>plot.locoh.lhs</pre>, <pre>hist.locoh.lxy</pre>, <pre>hist.locoh.lhs</pre>

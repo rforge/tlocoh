@@ -1,5 +1,3 @@
-#' @import pbapply sp
-
 hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasing=FALSE, 
                       iso.method=c("pt.quantiles", "hm.vals")[1], iso.cap.method=c(">=", "<=")[1],
                       one.by.one=FALSE, merge.from.hull1=FALSE, hs.name=NULL, status=TRUE, total.num.points=NULL) {
@@ -40,8 +38,6 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
     } else {                                 
         bln.hmvals.dec <- FALSE
     }
-          
-          
                     
     ## Compute the cummulative number of points enclosed for the data frme
     #bln.pt.enc <- rep(FALSE, max(unlist(points.lst)))

@@ -34,11 +34,27 @@ shp.layers <- function(layers=NULL, shp.csv=NULL, names.only=FALSE, delete_null_
             ## Make sure all of the required elements are present
             if (FALSE %in% (c("fn", "type") %in% names(shp.layers.lst[[i]]))) stop(paste(err.msg, ". Required element missing.", sep=""))
 
-            ## If its a polygon and border is omitted, set it to gray50
-            if (shp.layers.lst[[i]]$type=="polygon" & is.null(shp.layers.lst[[i]]$border)) shp.layers.lst[[i]]$border <- "gray50"
+            if (!shp.layers.lst[[i]]$type %in% c("point","line","polygon")) stop(paste(err.msg, ". Unknown feature type. ", sep=""))
+
+            ## Set missing values to defaults
+            if (is.null(shp.layers.lst[[i]]$border)) shp.layers.lst[[i]]$border <- "gray50"
+            if (is.null(shp.layers.lst[[i]]$lwd)) shp.layers.lst[[i]]$lwd <- 1
+            if (is.null(shp.layers.lst[[i]]$lty)) shp.layers.lst[[i]]$lty <- 1
+            if (is.null(shp.layers.lst[[i]]$cex)) shp.layers.lst[[i]]$cex <- 1
+            if (is.null(shp.layers.lst[[i]]$pch)) shp.layers.lst[[i]]$pch <- 16
             
-            ## Set all other missing parameters to 
-            shp.layers.lst[[i]][all.list.elements[!all.list.elements %in% names(shp.layers.lst[[i]])]] <- NA
+            if (is.null(shp.layers.lst[[i]]$col)) {
+                if (shp.layers.lst[[i]]$type=="polygon") {
+                    shp.layers.lst[[i]]$col <- NA   ## transparent
+                } else {
+                    shp.layers.lst[[i]]$col <- "gray20"
+                }
+            }
+            
+            ## See default values for graphic arguments for polygons
+            
+            ## Set all other missing parameters to NA
+            #shp.layers.lst[[i]][all.list.elements[!all.list.elements %in% names(shp.layers.lst[[i]])]] <- NA
         }
         
     } else {
