@@ -401,7 +401,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                 ptid.pp.idx.vec <- sapply(1:length(hs), function(hs.idx) which(hs[[hs.idx]][["pts"]][["ptid"]]==ptid)) 
                 
                 if (ellipses) {
-                    theta <- seq(0, 2 * pi, length = 18)
+                    theta <- seq(0, 2 * pi, length = 72)
                     ellps.all.params <- do.call("rbind", lapply(1:length(hs), function(hs.idx) hs[[hs.idx]][["ellipses"]][hs[[hs.idx]][["ellipses"]][["pts.idx"]]==ptid.pp.idx.vec[hs.idx], ]))                    
                     ellps.all.pts <- do.call(rbind, lapply(1:nrow(ellps.all.params), function(i) {
                                           p <- ellps.all.params[i,]
@@ -662,10 +662,8 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                         hull.pts <- hs[[hs.name]][["hulls"]]@polygons[[hull.idx]]@Polygons[[1]]@coords
                     }
                     if (ellipses) {
-                        #ellps.params <- hs[[hs.name]][["ellipses"]][hs[[hs.name]][["ellipses"]][["ptid"]]==ptidVal, ]
                         ellps.params <- hs[[hs.name]][["ellipses"]][hs[[hs.name]][["ellipses"]][["pts.idx"]]==pts.idx, ]
                         theta <- seq(0, 2 * pi, length = 72)
-
                         ellps.pts <- with(ellps.params,
                                           data.frame(x = cx + a * cos(theta) * cos(alpha) - b * sin(theta) * sin(alpha),
                                                      y = cy + a * cos(theta) * sin(alpha) + b * sin(theta) * cos(alpha)))
@@ -1349,6 +1347,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
         
                         if (ellipses) {
                             title.feats.str <- c(title.feats.str, "ellipses")
+                            theta <- seq(0, 2 * pi, length = 72)
                             for (i in 1:nrow(hs[[hs.name]][["ellipses"]])) {
                                 ellps.pts <- with(hs[[hs.name]][["ellipses"]][i, ],
                                               data.frame(x = cx + a * cos(theta) * cos(alpha) - b * sin(theta) * sin(alpha),

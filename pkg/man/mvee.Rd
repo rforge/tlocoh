@@ -48,7 +48,7 @@ ellipse equation) alpha - angle of rotation
 \description{
 Computes the minimum volume enclosing ellipsoid around a
 set of points using the Khachiyan Algorithm. In two
-dimensions, this is equivalent to the bounding ellipse
+dimensions, this is equivalent to the bounding ellipse.
 }
 \note{
 Adapted by Andy Lyons from Matlab code by Nima Moshtagh.

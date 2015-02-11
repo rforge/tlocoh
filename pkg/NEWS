@@ -1,3 +1,8 @@
+Changes in version 1.32.00 (2015-02-10)
+=========================
+* fixed a bug when printing all ellipses in <pre>plot.locoh.lhs</pre>
+* switched to a three-part version number, last two digits will be incremented for minor bug fixes
+
 Changes in version 1.31 (2015-02-03)
 =========================
 * fixed an ambiguous function call in <pre>lxy.reproject</pre>

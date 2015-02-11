@@ -2,7 +2,7 @@
 #'
 #' Computes the minimum volume enclosing ellipsoid around a set of points
 #' using the Khachiyan Algorithm. In two dimensions, this is equivalent to
-#' the bounding ellipse
+#' the bounding ellipse.
 #'
 #' @param xy a two-column data frame containing x and y coordinates. If NULL then a random sample set of 10 points will be generated
 #' @param tolerance a tolerance value
@@ -31,39 +31,7 @@
 #' @export
 
 mvee <- function(xy=NULL, tolerance = 0.005, plotme = FALSE, max.iter = 500, shiftxy = TRUE, no.ellipse.val=1, checks=TRUE) {
-
-######################################################################
-## mvee()
-## Uses the Khachiyan Algorithm to find the the minimum volume enclosing
-## ellipsoid (MVEE) of a set of points. In two dimensions, this is just
-## the bounding ellipse (this function is limited to two dimensions).
-## Adapted by Andy Lyons from Matlab code by Nima Moshtagh.
-## Copyright (c) 2009, Nima Moshtagh
-##         http://www.mathworks.com/matlabcentral/fileexchange/9542
-##         http://www.mathworks.com/matlabcentral/fileexchange/13844
-##         http://stackoverflow.com/questions/1768197/bounding-ellipse
-##
-## Parameters
-## xy          a two-column data frame containing x and y coordinates
-##             if NULL then a random sample set of 10 points will be generated
-## tolerance   a tolerance value (default = 0.005)
-## plotme      FALSE/TRUE. Plots the points and ellipse. Default TRUE.
-## max.iter    The maximum number of iterations. If the script tries this
-##             number of iterations but still can't get to the tolerance
-##             value, it displays an error message and returns NULL
-## shiftxy     TRUE/FALSE. If True, will apply a shift to the coordinates to make them
-##             smaller and speed up the matrix calculations, then reverse the shift
-##             to the center point of the resulting ellipoid. Default TRUE
-## Output:     A list containing the "center form" matrix equation of the
-##             ellipse. i.e. a 2x2 matrix "A" and a 2x1 vector "C" representing
-##             the center of the ellipse such that:
-##             (x - C)' A (x - C) <= 1
-##             Also in the list is a 2x1 vector elps.axes.lngth whose elements
-##             are one-half the lengths of the major and minor axes (variables
-##             a and b
-##             Also in list is alpha, the angle of rotation
-######################################################################
-
+                     
     if (no.ellipse.val==1) {
         no.ellipse <- NULL
     } else {
@@ -182,6 +150,6 @@ mvee <- function(xy=NULL, tolerance = 0.005, plotme = FALSE, max.iter = 500, shi
         points(c[1], c[2], pch=2, col="blue")
 
     }
-    ellipse.params <- list("A" = A, "c" = c, "ab" = semi.axes, alpha=alpha)
+    return(list("A" = A, "c" = c, "ab" = semi.axes, alpha=alpha))
 
 }
