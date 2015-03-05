@@ -5,6 +5,7 @@
 #' @param object A \link{LoCoH-xy} object
 #' @param lxy Deprecated, use \code{object} instead
 #' @param file A file name where the results will be saved
+#' @param id The name of an individual(s) 
 #' @param dt.int Whether to show a summary of the sampling interval
 #' @param round.coords The number of digits to display for the coordinates of the spatial extent
 #' @param ptsh Show table of 's' and proportion of time selected hulls values (if available)
@@ -16,7 +17,7 @@
 #' @export
 #' @import sp
 
-summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
+summary.locoh.lxy <- function(object, lxy, file="", id=NULL, dt.int=FALSE, round.coords=1, ptsh=FALSE, ...) {
 
     if (!missing(lxy)) warning("argument lxy is deprecated; please use 'object' instead.", call. = FALSE)
     lxy <- object
@@ -25,10 +26,19 @@ summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
     if (file!="") sink(file=file)
 
+    if (is.null(id)) {
+        id.use <- levels(lxy[["pts"]][["id"]])
+        id.idx <- 1:nrow(lxy[["pts"]])
+    } else {
+        id.use <- id
+        id.idx <- which(lxy[["pts"]][["id"]] %in% id.use)
+        if (length(id.idx)==0) stop("No matching records found")
+    }   
+
     cat("Summary of LoCoH-xy object:", deparse(substitute(object)), "\n")
     
     cat("***Locations\n")
-    ids.df <- do.call(rbind, lapply(levels(lxy[["pts"]][["id"]]), function(id) data.frame(id=id, num.pts=sum(lxy[["pts"]][["id"]]==id), dups=length(which(duplicated(coordinates(lxy[["pts"]][lxy[["pts"]][["id"]]==id, ]))))   )))
+    ids.df <- do.call(rbind, lapply(id.use, function(id) data.frame(id=id, num.pts=sum(lxy[["pts"]][["id"]]==id), dups=length(which(duplicated(coordinates(lxy[["pts"]][lxy[["pts"]][["id"]]==id, ]))))   )))
     print(formatdf4print(ids.df, indent=3), row.names=FALSE)
     
     cat("***Time span\n")
@@ -36,7 +46,7 @@ summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1
         cat("   no times recorded \n")
     } else {
         time.span.df <- NULL
-        for (idVal in levels(lxy[["pts"]][["id"]])) {
+        for (idVal in id.use) {
             time.span <- range(lxy[["pts"]][["dt"]][lxy[["pts"]][["id"]]==idVal])
             time.span.difftime <- diff(time.span)
             time.span.df <- rbind(time.span.df, c(idVal, format(time.span, format = "%Y-%m-%d"), 
@@ -48,11 +58,9 @@ summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1
     
         if (dt.int) {
             if (!is.null(lxy[["dt.int"]])) {
-                cat("***Sampling intervals", 
-                    if (lxy[["dt.int"]][lxy[["dt.int"]][["id"]]==idVal,"rounded.to.nearest"][1] > 1) paste(" (rounded to nearest ", lxy[["dt.int"]][lxy[["dt.int"]][["id"]]==idVal,"rounded.to.nearest"][1], " sec)", sep="") else "", 
-                    "\n", sep="")
-                for (idVal in levels(lxy[["pts"]][["id"]])) {
-                    if (nlevels(lxy[["pts"]][["id"]])>1) cat("   ", idVal, "\n", sep="")
+                cat("***Sampling intervals", if (lxy[["dt.int"]][lxy[["dt.int"]][["id"]]==idVal,"rounded.to.nearest"][1] > 1) paste(" (rounded to nearest ", lxy[["dt.int"]][lxy[["dt.int"]][["id"]]==idVal,"rounded.to.nearest"][1], " sec)", sep="") else "", "\n", sep="")
+                for (idVal in id.use) {
+                    if (length(id.use)>1) cat("   ", idVal, "\n", sep="")
                     dt.int.df <- lxy[["dt.int"]][lxy[["dt.int"]][["id"]]==idVal,c("interval", "count")]
                     dt.int.df[,"interval"] <- paste(dt.int.df[,"interval"], "s (", sapply(dt.int.df[,"interval"], secs.fmt), ")", sep="")
                     print(formatdf4print(dt.int.df, indent=3), row.names=FALSE)
@@ -62,8 +70,8 @@ summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1
     }
 
     cat("***Spatial extent \n")
-    for (idVal in levels(lxy[["pts"]][["id"]])) {    
-        if (nlevels(lxy[["pts"]][["id"]])>1) cat("   ", idVal, "\n", sep="")
+    for (idVal in id.use) {    
+        if (length(id.use)>1) cat("   ", idVal, "\n", sep="")
         cat("     x:", paste(round(range(coordinates(lxy[["pts"]][lxy[["pts"]][["id"]]==idVal, ])[, 1]), round.coords), collapse=" - "), "\n")
         cat("     y:", paste(round(range(coordinates(lxy[["pts"]][lxy[["pts"]][["id"]]==idVal, ])[, 2]), round.coords), collapse=" - "), "\n")
     }
@@ -71,7 +79,7 @@ summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1
     
     if (!is.null(lxy[["rw.params"]])) {
         cat("***Movement properties \n")
-        rw.params.df <- lxy[["rw.params"]]
+        rw.params.df <- lxy[["rw.params"]] [ lxy[["rw.params"]][["id"]] %in% id.use , ]
         rownames(rw.params.df) <- paste("   ", rownames(rw.params.df), sep="")
         rw.params.df <- transform(rw.params.df, time.step.median=paste(rw.params.df$time.step.median, " (", sapply(rw.params.df$time.step.median, secs.fmt), ")",sep=""))
         print(formatdf4print(rw.params.df, indent=3), row.names=FALSE)
@@ -90,34 +98,32 @@ summary.locoh.lxy <- function(object, lxy, file="", dt.int=FALSE, round.coords=1
     if (!is.null(lxy[["ptsh"]])) {
         cat("***ptsh s-values computed\n")
         if (ptsh) {
-            for (idVal in names(lxy[["ptsh"]])) {
+            for (idVal in intersect(id.use, names(lxy[["ptsh"]]))) {
                 for (ptsh.lst in lxy[["ptsh"]][[idVal]]) {
                     cat("   id=", ptsh.lst[["id"]], ", k=", ptsh.lst[["k"]], ", sample size =", ptsh.lst[["n"]], "\n", sep="")
                     row.idx <- match(ptsh.lst[["target.s"]], ptsh.lst[["s.ptsh"]][,1])
-                    print(formatdf4print(data.frame(ptsh.lst[["s.ptsh"]])[row.idx,2:1], indent=0), row.names=FALSE)
+                    ptshVal <- format(ptsh.lst[["s.ptsh"]][row.idx, 2], digits=3)
+                    sVal <- ptsh.lst[["s.ptsh"]][row.idx, 1] 
+                    print(formatdf4print(data.frame(ptsh=ptshVal, s=sVal), indent=3), row.names=FALSE)
                 }
+                cat("\n")
             }
-        
         
         } else {
             ptsh.info <- NULL        
-            for (idVal in names(lxy[["ptsh"]])) {
+            for (idVal in intersect(id.use, names(lxy[["ptsh"]]))) {
                 ptsh.info <- rbind(ptsh.info, do.call(rbind, lapply(lxy[["ptsh"]][[idVal]], function(x) data.frame(id=idVal, k=x$k, n=x$n, ptsh=paste(x$target.ptsh, collapse=", ", sep=""), stringsAsFactors=FALSE))))
             }
             ptsh.info.f4c <- formatdf4cat(ptsh.info, indent=3, wrap.last.col=TRUE, just.left=rep(FALSE,4), print=TRUE)
-            
         }
-
-        
     }
-    
-
 
     cat("***Nearest-neighbor set(s): \n")
     if (is.null(lxy[["nn"]])) {
         cat("   none saved \n")
     } else {
-        names.ord <- order(sapply(lxy[["nn"]], function(x) x[["id"]]), sapply(lxy[["nn"]], function(x) x[["s"]]))
+        nn.idx <- which(sapply(lxy[["nn"]], function(x) x[["id"]] %in% id.use))
+        names.ord <- nn.idx[ order(sapply(lxy[["nn"]][nn.idx], function(x) x[["id"]]), sapply(lxy[["nn"]][nn.idx], function(x) x[["s"]])) ]
         for (i in names.ord) {
             cat("   ", i, " ", names(lxy[["nn"]])[i], "\n", sep="")
             if (!is.null(lxy[["nn"]][[i]][["auto.a.df"]])) {

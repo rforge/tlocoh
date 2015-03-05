@@ -8,6 +8,7 @@
 #' @param r Value for the r method if creating the plot based on nearest neighbor tables (ignored if \code{use.nn=FALSE})
 #' @param a Value for the a method if creating the plot based on nearest neighbor tables (ignored if \code{use.nn=FALSE})
 #' @param slim The lower and upper bounds for s, two-element numeric vector
+#' @param boxplot Display boxplots of the range of s-values for each target ptsh for multiple individuals. T/F
 #' @param desc Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.
 #' @param cex.desc The expansion factor for the descriptive text. Numeric value.
 #' @param col.desc The color of the descriptive text. Color value.
@@ -54,14 +55,18 @@
 #'
 #' @export
 
-lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=NULL, a=NULL, slim=NULL,
+lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=NULL, a=NULL, slim=NULL, boxplot=FALSE,
                           desc=c(0,1,3)[2], cex.desc=0.8, col.desc="darkgreen", title=NULL, title.show=TRUE,
                           legend=c("none", "bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[2],
                           mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0), figs.per.page=NULL,
                           panel.num=NULL, panel.num.inside.plot=!title.show, png.dir=NULL, png.dir.make=TRUE, 
                           png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, ...) {
 
+    ## Consider adding a multi-individual scatter plot (see commented out code)
+    
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
+    if (!is.null(png.dir) && boxplot) stop("plotting to png isn't supported with the boxplot option just yet")
+    if (use.nn && boxplot) stop("use.nn isn't supported with the boxplot option just yet")
     
     if (use.nn) {
         if (is.null(lxy[["nn"]])) stop("nn not calculated. Run lxy.nn.add() and try again")
@@ -81,14 +86,18 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
     res <- list()
     
     if (is.null(figs.per.page)) {
-        if (is.null(png.dir)) {
-            figs.per.page <- length(id.use)
-        } else {
+        if (boxplot) {
             figs.per.page <- 1
+        } else {
+            if (is.null(png.dir)) {
+                figs.per.page <- length(id.use)
+            } else {
+                figs.per.page <- 1
+            }
         }
-     } else {
-        if (figs.per.page > 1) stop("When saving plots as PNG files, you can only have one plot per page")
-     }
+    } else {
+        if (figs.per.page > 1 && !is.null(png.dir)) stop("When saving plots as PNG files, you can only have one plot per page")
+    }
     if (figs.per.page > 1) desc <- 0
 
     ## Create png folder if needed
@@ -118,38 +127,11 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
             }
         }
     }
-
-    for (idVal in id.use) {
-        idVal.idx <- which(lxy[["pts"]][["id"]] == idVal)
-
-        #res[[idVal]] <- list()
-        
-        ## Create png device for combined set of plots if needed
-        if (is.null(png.dir)) {
-            png.fn <- NULL
-        } else {
-            png.fn <- file.path(png.dir, paste(paste(unlist(lxy[["comment"]][idVal]), collapse = ".", sep = ""), ".sptsh.png", sep=""))
-            if (file.exists(png.fn) && !png.overwrite) stop(paste(png.fn, "exists"))
-            par(bg="white")
-            png(filename=png.fn, height=png.height, width=png.width, bg="white", pointsize=png.pointsize)
-            pngs.made <- c(pngs.made, png.fn)
-            opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
-        }
-        
+    
+    if (boxplot) {
+    
         ## Prepare desc
-        desc.str <- paste("This plot shows the proportion of time-selected hulls (i.e., hulls constructed from time sequential locations) for ", idVal, " for a range of s values. ", sep="")
-        if (use.nn) {
-            data.computed.from <- paste("Data computed from all saved nearest neighbors for ", mode.str, "=", mode.val, ".", sep="")
-        } else {
-            ## Add another sentence about the number of samples
-            if (is.null(ptsh.idx)) {
-                ptsh.idx.use <- 1:length(lxy[["ptsh"]][[idVal]])
-            } else {
-                ptsh.idx.use <- intersect(ptsh.idx, 1:length(lxy[["ptsh"]][[idVal]]))
-            }
-            data.computed.from <- paste("Data computed from n=", paste(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["n"]]), collapse=",", sep=""), " randomly selected hulls for k=", paste(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["k"]]), collapse=",", sep=""), " nearest neighbors.", sep="")
-        }
-        desc.str <- paste(desc.str, data.computed.from, sep="")
+        desc.str <- paste("This plot shows the distribution of 's' for a range of proportions of time-selected hulls (hulls constructed from time sequential locations) for ", length(id.use), " individuals.", sep="")
         
         ## Prepare outer margin area
         if (desc !=0 ) {
@@ -161,118 +143,177 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
 
         ## Initialize title.str
         if (title.show) {
-            if (!is.null(title)) title.str <- title
+            if (is.null(title)) {
+                title.str <- paste("Distribution of s for ptsh\nfor ", length(id.use), " individuals", sep="")
+            } else {
+                title.str <- title
+            }
         } else {
             title.str <- NULL
         }
+
+        target.ptsh.all <- as.numeric(sapply(lxy[["ptsh"]][id.use], function(x) sapply(x, function(y) y$target.ptsh)))
+        target.s.all <- as.numeric(sapply(lxy[["ptsh"]][id.use], function(x) sapply(x, function(y) y$target.s)))
         
-        if (use.nn) {
-            if (title.show && is.null(title)) title.str <- paste("s vs. ptsh\n", idVal, ", nn sets, ", mode.str, "=", mode.val, sep="")
-            
-            ## Get the indices of the nearest neighbor sets affiliated with this idVal
-            nn.idVal.idx <- which(sapply(lxy[["nn"]], function(x) x[["id"]]==idVal))
-
-            ## Loop through these nn sets and construct a matrix of s and ptsh
-            s.ptsh <- NULL
-            cat("Computing ptsh for each saved nearest neighbor set \n")
-            pb <- txtProgressBar(min=0, max=length(nn.idVal.idx), style = 3)
-            for (i in 1:length(nn.idVal.idx)) {
-                setTxtProgressBar(pb, i)
-            
-                idx <- nn.idVal.idx[[i]]
-                if (lxy[["nn"]][[idx]][[paste(mode.str, "max", sep="")]] < mode.val) stop("Insufficient number of nearest neighbors")
-                if (mode.str == "k") {
-                    good.rows.idx <- lxy[["nn"]][[idx]][["nn.df"]][["nn.rank"]] <= k
-                } else if (mode.str == "a") {
-                    good.rows.idx <- lxy[["nn"]][[idx]][["nn.df"]][["tsd.cumsum"]] <= a
-                } else if (mode.str == "r") {
-                    good.rows.idx <- lxy[["nn"]][[idx]][["nn.df"]][["tsd"]] <= r
-                }
-                
-                nn.lst <- with(lxy[["nn"]][[idx]][["nn.df"]][good.rows.idx, c("pp.idx","nn.idx")], split(nn.idx, pp.idx))
-                ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
-                s.ptsh <- rbind(s.ptsh, c(lxy[["nn"]][[idx]][["s"]], ptsh.cur))
-            }
-            close(pb)
-            
-            s.ptsh <- s.ptsh[order(s.ptsh[,1]), , drop=FALSE]
-            
-            plot(s.ptsh, type="l", xlab="s", ylab="proportion time-selected hulls", main=title.str, ...)
-            points(s.ptsh, pch=20)
-            abline(v=pretty(range(s.ptsh[,1]), n=15), lty=3, col="gray", lwd=0.1)
-            #res[[idVal]][[1]] <- s.ptsh
-            
-            xmat <- s.ptsh[,1,drop=FALSE]; ymat <- s.ptsh[,2,drop=FALSE]
+        #print("How would a scatterplot look");browser()
+        #yjig <- runif(length(target.ptsh.all), min=-0.01, max=0.01)
+        #plot(x=target.s.all, y=target.ptsh.all + yjig, pch=16, cex=0.4)
         
-        } else {
-
-            if (is.null(ptsh.idx)) {
-                ptsh.idx.use <- 1:length(lxy[["ptsh"]][[idVal]])
-            } else {
-                ptsh.idx.use <- intersect(ptsh.idx, 1:length(lxy[["ptsh"]][[idVal]]))
-            }
-
-            if (!is.null(slim)) {
-                if (length(slim) != 2) stop("slim should be a two-element numeric vector")
-                for (i in ptsh.idx.use) {
-                    svals <- lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]][,1]
-                    lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]] <- lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]][ svals >= slim[1] & svals <= slim[2], ]
-                }
-            }
-        
-            xlim <- range(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["s.ptsh"]][,1]))
-            ylim <- range(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["s.ptsh"]][,2]))
-
-            if (title.show && is.null(title)) title.str <- paste("s vs. ptsh\n", idVal, ", sample data", sep="")
-            plot(NULL, xlim=xlim, ylim=ylim, xlab="s", ylab="proportion time-selected hulls", main=title.str, ...)
-
-            ## Create a matrix of 'NA' values to store the values plotted
-            max.num.vals <- max(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) nrow(x[["s.ptsh"]])))
-            xmat <- ymat <- matrix(NA, ncol=length(ptsh.idx.use), nrow=max.num.vals)
-
-            ## Put down the individual series
-            for (j in 1:length(ptsh.idx.use)) {
-                i <- ptsh.idx.use[j]
-                s.ptsh <- lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]]
-                #res[[idVal]][[i]] <- s.ptsh
-                points(s.ptsh, type="l", col=palette()[i])
-                points(s.ptsh, pch=20, cex=1, col=palette()[i])
-                #print("pause");browser()
-                xmat[1:nrow(s.ptsh),j] <- s.ptsh[,1,drop=FALSE]
-                ymat[1:nrow(s.ptsh),j] <- s.ptsh[,2,drop=FALSE]
-            }
-
-            ## Create vertical lines
-            abline(v=pretty(xlim, n=15), lty=3, col="gray", lwd=0.1)
-            
-            if (!identical(legend,"none")) {
-                legend.labels <- paste("n=", sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["n"]]), ", k=", sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["k"]]), sep="")
-                legend(legend, legend=legend.labels, col=palette()[1:length(lxy[["ptsh"]][[idVal]])], lty=1, bg="white")
-            }
-            
-        }
+        boxplot(s ~ ptsh, data=data.frame(s=target.s.all, ptsh=factor(target.ptsh.all)), ylab="s", xlab="proportion time-selected hulls", main=title.str, ...)
         
         ## Add descriptive text in the outer margin
         if (desc !=0 ) mtext(desc.str.chopped[1], side=desc, outer=TRUE, line=0 + if (desc==1) (as.numeric(desc.str.chopped[2]) - 1.25) else 0, cex=cex.desc, col=col.desc)
-
-        ## Add panel.num
-        if (!is.null(panel.num)) {
-            if (panel.num.inside.plot) {
-                text(x=par("usr")[1], y=par("usr")[4], labels=panel.num, cex=2, adj=c(-0.3,1.2), font=2)
+        
+    } else {    
+        for (idVal in id.use) {
+            idVal.idx <- which(lxy[["pts"]][["id"]] == idVal)
+            
+            ## Create png device for combined set of plots if needed
+            if (is.null(png.dir)) {
+                png.fn <- NULL
             } else {
-                mar.old <- par("mar")
-                par(mar=c(0, 0.3, 0.2, 0))
-                title(main=panel.num, adj=0, cex.main=2, line=-1.5)
-                par(mar=mar.old)
+                png.fn <- file.path(png.dir, paste(paste(unlist(lxy[["comment"]][idVal]), collapse = ".", sep = ""), ".sptsh.png", sep=""))
+                if (file.exists(png.fn) && !png.overwrite) stop(paste(png.fn, "exists"))
+                par(bg="white")
+                png(filename=png.fn, height=png.height, width=png.width, bg="white", pointsize=png.pointsize)
+                pngs.made <- c(pngs.made, png.fn)
+                opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
             }
+            
+            ## Prepare desc
+            desc.str <- paste("This plot shows the proportion of time-selected hulls (i.e., hulls constructed from time sequential locations) for ", idVal, " for a range of s values. ", sep="")
+            if (use.nn) {
+                data.computed.from <- paste("Data computed from all saved nearest neighbors for ", mode.str, "=", mode.val, ".", sep="")
+            } else {
+                ## Add another sentence about the number of samples
+                if (is.null(ptsh.idx)) {
+                    ptsh.idx.use <- 1:length(lxy[["ptsh"]][[idVal]])
+                } else {
+                    ptsh.idx.use <- intersect(ptsh.idx, 1:length(lxy[["ptsh"]][[idVal]]))
+                }
+                data.computed.from <- paste("Data computed from n=", paste(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["n"]]), collapse=",", sep=""), " randomly selected hulls for k=", paste(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["k"]]), collapse=",", sep=""), " nearest neighbors.", sep="")
+            }
+            desc.str <- paste(desc.str, data.computed.from, sep="")
+            
+            ## Prepare outer margin area
+            if (desc !=0 ) {
+                desc.str.chopped <- chop2plot(desc.str, width=dev.size()[1] * 0.9, cex=cex.desc)
+                oma.vals <- c(0,0,0,0)
+                oma.vals[desc] <- as.numeric(desc.str.chopped[2])
+                par(oma=oma.vals)
+            }
+    
+            ## Initialize title.str
+            if (title.show) {
+                if (!is.null(title)) title.str <- title
+            } else {
+                title.str <- NULL
+            }
+            
+            if (use.nn) {
+                if (title.show && is.null(title)) title.str <- paste("s vs. ptsh\n", idVal, ", nn sets, ", mode.str, "=", mode.val, sep="")
+                
+                ## Get the indices of the nearest neighbor sets affiliated with this idVal
+                nn.idVal.idx <- which(sapply(lxy[["nn"]], function(x) x[["id"]]==idVal))
+    
+                ## Loop through these nn sets and construct a matrix of s and ptsh
+                s.ptsh <- NULL
+                cat("Computing ptsh for each saved nearest neighbor set \n")
+                pb <- txtProgressBar(min=0, max=length(nn.idVal.idx), style = 3)
+                for (i in 1:length(nn.idVal.idx)) {
+                    setTxtProgressBar(pb, i)
+                
+                    idx <- nn.idVal.idx[[i]]
+                    if (lxy[["nn"]][[idx]][[paste(mode.str, "max", sep="")]] < mode.val) stop("Insufficient number of nearest neighbors")
+                    if (mode.str == "k") {
+                        good.rows.idx <- lxy[["nn"]][[idx]][["nn.df"]][["nn.rank"]] <= k
+                    } else if (mode.str == "a") {
+                        good.rows.idx <- lxy[["nn"]][[idx]][["nn.df"]][["tsd.cumsum"]] <= a
+                    } else if (mode.str == "r") {
+                        good.rows.idx <- lxy[["nn"]][[idx]][["nn.df"]][["tsd"]] <= r
+                    }
+                    
+                    nn.lst <- with(lxy[["nn"]][[idx]][["nn.df"]][good.rows.idx, c("pp.idx","nn.idx")], split(nn.idx, pp.idx))
+                    ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
+                    s.ptsh <- rbind(s.ptsh, c(lxy[["nn"]][[idx]][["s"]], ptsh.cur))
+                }
+                close(pb)
+                
+                s.ptsh <- s.ptsh[order(s.ptsh[,1]), , drop=FALSE]
+                
+                plot(s.ptsh, type="l", xlab="s", ylab="proportion time-selected hulls", main=title.str, ...)
+                points(s.ptsh, pch=20)
+                abline(v=pretty(range(s.ptsh[,1]), n=15), lty=3, col="gray", lwd=0.1)
+                
+                xmat <- s.ptsh[,1,drop=FALSE]; ymat <- s.ptsh[,2,drop=FALSE]
+            
+            } else {
+    
+                if (is.null(ptsh.idx)) {
+                    ptsh.idx.use <- 1:length(lxy[["ptsh"]][[idVal]])
+                } else {
+                    ptsh.idx.use <- intersect(ptsh.idx, 1:length(lxy[["ptsh"]][[idVal]]))
+                }
+    
+                if (!is.null(slim)) {
+                    if (length(slim) != 2) stop("slim should be a two-element numeric vector")
+                    for (i in ptsh.idx.use) {
+                        svals <- lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]][,1]
+                        lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]] <- lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]][ svals >= slim[1] & svals <= slim[2], ]
+                    }
+                }
+            
+                xlim <- range(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["s.ptsh"]][,1]))
+                ylim <- range(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["s.ptsh"]][,2]))
+    
+                if (title.show && is.null(title)) title.str <- paste("s vs. ptsh\n", idVal, ", sample data", sep="")
+                plot(NULL, xlim=xlim, ylim=ylim, xlab="s", ylab="proportion time-selected hulls", main=title.str, ...)
+    
+                ## Create a matrix of 'NA' values to store the values plotted
+                max.num.vals <- max(sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) nrow(x[["s.ptsh"]])))
+                xmat <- ymat <- matrix(NA, ncol=length(ptsh.idx.use), nrow=max.num.vals)
+    
+                ## Put down the individual series
+                for (j in 1:length(ptsh.idx.use)) {
+                    i <- ptsh.idx.use[j]
+                    s.ptsh <- lxy[["ptsh"]][[idVal]][[i]][["s.ptsh"]]
+                    points(s.ptsh, type="l", col=palette()[i])
+                    points(s.ptsh, pch=20, cex=1, col=palette()[i])
+                    xmat[1:nrow(s.ptsh),j] <- s.ptsh[,1,drop=FALSE]
+                    ymat[1:nrow(s.ptsh),j] <- s.ptsh[,2,drop=FALSE]
+                }
+    
+                ## Create vertical lines
+                abline(v=pretty(xlim, n=15), lty=3, col="gray", lwd=0.1)
+                
+                if (!identical(legend,"none")) {
+                    legend.labels <- paste("n=", sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["n"]]), ", k=", sapply(lxy[["ptsh"]][[idVal]][ptsh.idx.use], function(x) x[["k"]]), sep="")
+                    legend(legend, legend=legend.labels, col=palette()[1:length(lxy[["ptsh"]][[idVal]])], lty=1, bg="white")
+                }
+                
+            }
+            
+            ## Add descriptive text in the outer margin
+            if (desc !=0 ) mtext(desc.str.chopped[1], side=desc, outer=TRUE, line=0 + if (desc==1) (as.numeric(desc.str.chopped[2]) - 1.25) else 0, cex=cex.desc, col=col.desc)
+    
+            ## Add panel.num
+            if (!is.null(panel.num)) {
+                if (panel.num.inside.plot) {
+                    text(x=par("usr")[1], y=par("usr")[4], labels=panel.num, cex=2, adj=c(-0.3,1.2), font=2)
+                } else {
+                    mar.old <- par("mar")
+                    par(mar=c(0, 0.3, 0.2, 0))
+                    title(main=panel.num, adj=0, cex.main=2, line=-1.5)
+                    par(mar=mar.old)
+                }
+            }
+    
+            if (!is.null(png.dir)) dev.off()
+            res[[paste(idVal, ".sptsh", sep="")]] <- list(fn=png.fn, dim=img.dim, desc=desc.str, id=idVal, x=xmat, y=ymat)
+    
         }
-
-        if (!is.null(png.dir)) dev.off()
-
-        res[[paste(idVal, ".sptsh", sep="")]] <- list(fn=png.fn, dim=img.dim, desc=desc.str, id=idVal, x=xmat, y=ymat)
-
     }
-
+    
     if (!is.null(png.dir)) {
         cat("png file(s) made: \n")
         print(pngs.made)

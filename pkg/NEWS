@@ -1,3 +1,10 @@
+Changes in version 1.33.00 (2015-03-01)
+=========================
+* enhanced color selection when overlaying many individuals in <pre>plot.locoh.lxy</pre>
+* fixed bug in <pre>lxy.ptsh.add</pre> which could give incorrect 's' values for multi-individual Locoh-xy objects
+* added <pre>boxplot</pre> argument to <pre>lxy.plot.ptsh</pre> to plot range of 's' values vs ptsh for multi-individual Locoh-xy objects
+* added <pre>id</pre> argument to <pre>summary.locoh.lxy</pre>
+
 Changes in version 1.32.00 (2015-02-10)
 =========================
 * fixed a bug when printing all ellipses in <pre>plot.locoh.lhs</pre>

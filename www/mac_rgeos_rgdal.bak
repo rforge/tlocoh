@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
+
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Installing rgeos and rgdal on Mac OS X Mavericks</title>
+	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
+<style>
+     li.spaceafter {margin-bottom: 1em;}
+
+     .boxright {
+        float: right;
+        border-style:solid;
+        border-width: 5px;
+        border-color: LightSlateGray;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: LightGray;
+        color: black;
+     }
+
+     li.halfspaceafter {
+        margin-bottom: 0.5em;
+     }
+
+     .boxtext80 {
+        font-size: 80%;
+        text-align: center;
+        color: black;
+     }
+     .unused {
+         font: 13px/1.231 
+        background-color: #ffff80;  
+     }
+
+     .margin-three {
+        text-align: center;
+        margin-bottom: 0px;
+     }
+
+     body {
+         font-size: 100%;
+         font-family: "verdana",sans-serif;
+         color: rgb(68, 68, 68);
+         text-align: left;
+         margin-bottom: 1em;
+     }
+
+
+     pre {
+         font-size: 110%;
+         padding: 1em;
+         border: 1px dashed rgb(47, 111, 171);
+         color: black;
+         background-color: rgb(249, 249, 249);
+         line-height: 1.1em;
+         clear: both;
+     }
+
+     .boxed {
+         font-size: 90%;
+         padding: 0.5em;
+         border: 1px solid LightSlateGray;
+         color: red;
+         clear: both;
+     }
+
+     hr {
+         clear: both;
+     }
+
+</style>
+
+  </head>
+
+<body>
+
+<!-- R-Forge Logo -->
+
+<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
+
+<h1>T-LoCoH - Installing rgeos and rgdal on a Mac</h1>
+
+<p><a href="index.html">Home</a></p>
+
+
+<p>The <a href="http://cran.r-project.org/web/packages/rgeos/index.html">rgeos</a> package contains functions to union polygons together (amongst others), and is a dependent (i.e. required) package for T-LoCoH. <a href="http://cran.r-project.org/web/packages/rgdal/index.html">rdgal</a> is a suggested package, because it contains functions for importing GIS data (which can be displayed in plots).</p> 
+
+<p>If you are using OS X Mavericks, there may <em>not</em> be binary versions of <a href="http://cran.r-project.org/web/packages/rgeos/index.html">rgeos</a> or <a href="http://cran.r-project.org/web/packages/rgdal/index.html">rdgal</a> on CRAN. This means you have to install the geos and gdal libraries separately (free), and then install the rgeos and rgdal R packages (from source). The steps below describe that process in more detail.</p>
+
+<h3>Steps for installing geos and rgeos</h3>
+
+<p><em>These instructions were adapted from <a href="http://lostingeospace.blogspot.com/2011/08/rgeos-on-macos-x.html">Lost in Geospace</a>.</em></p>
+
+<ol>
+<li>Download and install the GDAL Complete frameworks (which includes gdal and geos) for MacOS X from <a href="http://www.kyngchaos.com/software:frameworks">http://www.kyngchaos.com/software:frameworks</a></li>
+<ul>
+<li>make sure you get the complete frameworks</li>
+<li>after you download the *.dmg file, you have to open (mount) it, and then double-click the .pkg file. If you get a security warning, cancel that and then ctrl+click the pkg file and select 'Open' from the pop-up menu. You'll then have a chance to override the security warning.</li>
+</ul>
+
+<p class="boxed">Problems installing geos? You can also install geos using <a href="http://www.macports.org/">MacPorts</a>, which is a Mac utility you can download that allows you to install open source software using a command line (in Terminal). <a href="http://www.janosgyerik.com/installing-rgdal-in-r-on-os-x-mavericks/">MacPorts example</a>.</p>
+</ol>
+
+<p><br>You've now installed geos. If fortune is smiling on you, you may just be able to install rgeos by typing in R:</p>
+
+<pre>install.packages("rgeos", repos="http://R-Forge.R-project.org", type="source")
+require(rgeos)</pre>
+
+<p>If that worked, then you're done. But, if you get an error message, the next thing to try is to install rgeos from the command line.</p>
+
+<ol start="2">
+<li>Make sure you're logged into your Mac with an administrator acount.</li> 
+<li>Download the latest source package of rgeos from <a href="https://r-forge.r-project.org/R/?group_id=602">https://r-forge.r-project.org/R/?group_id=602</a> (click the "Package source (.tar.gz)" link). You should see a *.tar.gz file in your downloads folder. Do not decompress the file (i.e. make it a folder). If Safari automatically decompressed it without asking you, try to ctrl+click on the link and save it to your downloads folder.</li>
+
+<li>Open Terminal on your Mac (its usually found in Applications --> Utilities). Type the following command (modified as described below) in Terminal:<br>
+ 
+<pre>R CMD INSTALL /<em>path-to-rgeos/rgeos_version.tar.gz</em> --configure-args='--with-geos-config=/Library/Frameworks/GEOS.framework/unix/bin/geos-config'</pre></li>
+<ul>
+<li>Replace <em>/path-to-rgeos/rgeos_version.tar.gz</em> to point towards the directory and filename of the actual rgeos tarball you downloaded in step 2. For example for me, the path was <em>/Users/andy/Downloads/rgeos_0.3-8.tar.gz</em>. You can get the path of a file by selecting it in Finder and pressing command+I (Info window).</li>
+<li>If the above command doesn't work, try just 'R64' instead of 'R'. You can also try 'sudo R'.</li>
+</ul>
+
+<p>If it worked, you should see some compiling going on, ending with:</p>
+
+<pre>
+** R
+** inst
+** preparing package for lazy loading
+** help
+*** installing help indices
+** building package indices ...
+** testing if installed package can be loaded
+<strong>* DONE (rgeos)</strong>
+</pre>
+</li>
+
+<li><p>See if it worked by typing into R:</p>
+<pre>require(rgeos)</pre>
+</li>
+
+</ol>
+
+<h3>Steps for installing gdal and rgdal</h3>
+
+<p>The steps for installing gdal and rgdal are very similar to the ones above. Remember that rgdal is only needed if you plan on displaying GIS files in your plots.</p>
+
+<ol>
+<li>If you didn't already do it above, download and install the GDAL Complete frameworks for MacOS X from <a href="http://www.kyngchaos.com/software:frameworks">http://www.kyngchaos.com/software:frameworks</a>. 
+
+<p class="boxed">Problems installing gdal? You can also install gdal using <a href="http://www.macports.org/">MacPorts</a>, which is a Mac utility you can download that allows you to install open source software using a command line (in Terminal). <a href="http://www.janosgyerik.com/installing-rgdal-in-r-on-os-x-mavericks/">MacPorts example</a>.</p>
+</li>
+
+<li>Attempt to install rgdal in R with the command:
+
+<pre>install.packages("rgdal", repos="http://R-Forge.R-project.org", type="source")
+require(rgdal)</pre>
+</li>
+
+
+<li>If that didn't work, type the following command (modifying the paths as needed, see above) in Terminal:<br>
+ 
+<pre>R CMD INSTALL /<em>path-to-downloads/rgdal_0.9-1.tar.gz</em> --configure-args='--with-gdal-config=/Library/Frameworks/GDAL.framework/Programs/gdal-config
+ --with-proj-include=/Library/Frameworks/PROJ.framework/Headers
+ --with-proj-lib=/Library/Frameworks/PROJ.framework/unix/lib'</pre></li>
+
+</ol>
+
+<h3>Option of last resort</h3>
+
+<p>If installing from source didn't work, some nice person at the University of Oxford has created Mac binaries for rgeos and rgdal. Note though these may not by the most recent versions of the packages, and they may or may not work with the most recent version of R.</p>
+
+<pre>
+install.packages('rgeos',repos="http://www.stats.ox.ac.uk/pub/RWin")
+install.packages('rgdal',repos="http://www.stats.ox.ac.uk/pub/RWin")
+</pre>
+
+<p>Questions? Comments? Alternative solutions? Please email the <a href="mailto:tlocoh@gmail.com">package author</a>.</p>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42624612-1', 'r-project.org');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
+
+

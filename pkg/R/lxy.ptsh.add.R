@@ -14,6 +14,7 @@
 #' @param ptsh.buf The level of accuracy or precison to which the found values of 's' return the targetted ptsh.
 #' @param max.iter The maximum number of times the script will double sinit in an effort to find the value of s that produces ptsh.max
 #' @param max.loops The maximum number of intermediate values of s the script will try when 'zooming' in on the target ptsh levels
+#' @param max.reached What to do if the maximum number of iterations is reached, \code{warning} or \code{stop}
 #' @param time.term The space-time transformation to use in the TSD distance metric: \code{'vmax'} for the maximum velocity 
 #' transformation (default) or \code{'dif'} for the diffusion transformation.
 #' @param FNN.algorithm  The algorithm to be used in the get.knnx() function in the package FNN
@@ -47,12 +48,13 @@
 #' @import pbapply sp
 
 lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, ptsh.target=1:9/10, ptsh.max=0.98, ptsh.buf=0.01, max.iter=15,
-                   max.loops=10, time.term=c("vmax", "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2], use.nn=FALSE,
+                   max.loops=15, max.reached=c("warning", "stop")[1], time.term=c("vmax", "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2], use.nn=FALSE,
                    plotme=TRUE, save=TRUE, nn.add=FALSE, use.pb.n=200, ptsh.exists=c("replace", "append")[2], beep=FALSE, status=TRUE) {
 
     ## Future enhancements
     ## 1) Option to compute ptsh from saved nearest neighbor sets   *** top priority ***
     ## 2) Option to compute ptsh for r and a methods
+    ## 3) Option to compute ptsh using the diffusion TSD method
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(lxy[["xys"]])) stop("Old data structure detected. Fix with lxy.repair()")
@@ -62,6 +64,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
     if (ptsh.max > 1) stop("ptsh.max should not be greater than 1")
     if (min(ptsh.target) < 0 || max(ptsh.target) > ptsh.max) stop("ptsh.target should be between 0 and ptsh.max")
     if (!FNN.algorithm %in% c("cover_tree", "kd_tree", "VR", "CR")) stop(paste(FNN.algorithm, " is not a valid value", sep=""))
+    if (!max.reached %in% c("warning", "stop")) stop("invalivd value for max.reached")
     if (time.term != "vmax") stop("Sorry, that value for time.term not yet supported")
     if (!ptsh.exists %in% c("replace", "append")) stop("Unknown value for ptsh.exists")
     if (!plotme && !save && !nn.add) stop("Nothing to do. Set plotme, save, or nn.add to TRUE")
@@ -80,7 +83,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
 
     ## Starting the first of the mother of all nested loops
     for (idVal in id) {
-        cat(idVal, "\n")
+        cat("id:", idVal, "\n")
         idVal.idx <- which(lxy[["pts"]][["id"]] == idVal)
 
         if (save) {
@@ -118,30 +121,34 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
         
         } else {
         
-            ## Find the ptsh using a sample of the points        
+            ## We will find the ptsh using a random sample of the points        
     
             ## Identify the indices of the points for this animal
-            
             xys.idVal <- coordinates(lxy[["pts"]])[idVal.idx,]
-            
+
+            ## Get the movement parameters             
             vmax <- lxy[["rw.params"]][lxy[["rw.params"]][["id"]]==idVal, "vmax"]
             if (is.null(vmax)) stop("vmax not found, please run lxy.repair")
 
+            ## Extract info about nearest neighbor sets 
             nn.info <- do.call(rbind, lapply(lxy[["nn"]], function(x) data.frame(id=x$id, s=x$s, kmax=x$kmax)))
+            
+            ## See if any of the existing nearest neighbor sets are for this id, s=0, and have enough k 
             nn.idx <- which(nn.info[["s"]]==0 & nn.info[["id"]]==idVal & nn.info[["kmax"]] >= k)
             
+                        
+            ## If such a nearest neighbor set doesn't exist, create it now (fast)
             if (length(nn.idx)==0) {
                 ## Find nearest neighbors s=0 for the whole dataset (we'll need to do this anyway)
                 if (status) cat("  Finding ", k, " nearest neighbors for s=0...", sep=""); flush.console()
                 lxy <- lxy.nn.add(lxy, id=idVal, k=k, s=0, status=FALSE)
                 if (status) cat("Done\n")
+                
+                nn.info <- do.call(rbind, lapply(lxy[["nn"]], function(x) data.frame(id=x$id, s=x$s, kmax=x$kmax)))
+                nn.idx <- which(nn.info[["s"]]==0 & nn.info[["id"]]==idVal & nn.info[["kmax"]] >= k)
+                if (length(nn.idx)==0) stop("Can't find the nearest neighbor set for s=0")
             }
             
-            ## Get ptsh for s=0
-            nn.info <- do.call(rbind, lapply(lxy[["nn"]], function(x) data.frame(id=x$id, s=x$s, kmax=x$kmax)))
-            nn.idx <- which(nn.info[["s"]]==0 & nn.info[["id"]]==idVal & nn.info[["kmax"]] >= k)
-            ## nn.idx <- with(nn.info, which(s==0 & id==idVal & kmax >= k))
-            if (length(nn.idx)==0) stop("Can't find the nearest neighbor set for s=0")
     
             ## Compute the ptsh for s=0
             nn.df <- lxy[["nn"]][[nn.idx]][["nn.df"]][  lxy[["nn"]][[nn.idx]][["nn.df"]][["nn.rank"]] <=k, c("pp.idx","nn.idx", "nn.rank") ]
@@ -152,16 +159,20 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
             s.ptsh <- matrix(c(0, ptsh.cur), ncol=2)
             colnames(s.ptsh) <- c("s", "ptsh")
     
-            ## Pick sample for the first run
+            ## Pick a sample of points
             if (is.null(samp.idx)) {
-                samp.idx <- sample(idVal.idx, min(n, length(idVal.idx)))
+                samp.idx.use <- sample(idVal.idx, min(n, length(idVal.idx)))
                 cat("  Selected ", n, " points at random \n", sep=""); flush.console()
             } else {
-                n <- length(samp.idx)
+                samp.idx.use <- samp.idx
+                if (FALSE %in% (lxy[["pts"]][["id"]][samp.idx.use] %in% idVal)) {
+                    stop(paste("Invalid values for samp.idx for id=", idVal, sep=""))
+                }
+                n <- length(samp.idx.use)
                 cat("  Using ", n, " samples from passed value of samp.idx \n", sep=""); flush.console()
             }
             cat("  Finding ", k, " nearest neighbors for ", n, " sample points \n", sep=""); flush.console()
-    
+            
             use.pb <- (n > use.pb.n)
             post.sequals.str <- if (use.pb) "\n" else ", "
             pbo.orig <- pboptions(type = if (use.pb) "txt" else "none")
@@ -199,7 +210,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                 cat(sequals.str); flush.console()
     
                 ## Find nn for sVal.cur
-                nn.lst <- pblapply(samp.idx, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
+                nn.lst <- pblapply(samp.idx.use, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
                                           query=cbind(coordinates(lxy[["pts"]])[i, , drop=F], 0), k=k+1, algorithm=FNN.algorithm)[["nn.index"]])])
     
                 ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
@@ -273,7 +284,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                         cat(sequals.str); flush.console()
     
                         ## Find nn for sVal.cur
-                        nn.lst <- pblapply(samp.idx, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
+                        nn.lst <- pblapply(samp.idx.use, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
                                                   query=cbind(coordinates(lxy[["pts"]])[i, , drop=F], 0), k=k+1, algorithm=FNN.algorithm)[["nn.index"]])])
     
                         ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
@@ -286,7 +297,12 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                 if (!use.pb && count.int > 0) cat("\n  ")
                 
                 if (count.int > max.loops && sum(s.ptsh[,"ptsh"] >= (ptshVal - ptsh.buf) & s.ptsh[,"ptsh"] <= (ptshVal + ptsh.buf))==0) {
-                    cat("count.int reached ", count.int, " but still could not find a value of s that worked \n"); browser()
+                    if (max.reached == "warning") {
+                        warning(paste(idVal, ": count.int reached ", count.int, " but still could not find a value of s that worked"))
+                        cat("count.int reached ", count.int, " but could not a value of s \n")
+                    } else if (max.reached == "stop") {
+                        stop(cw(paste(idVal, ": count.int=", count.int, " but still could not find a value of s that worked", sep="")))
+                    }
                 }
                 
             }
@@ -297,9 +313,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
     
             ptsh.target.all <- sort(unique(c(0, ptsh.target, ptsh.max)))
             magic.s <- s.ptsh[FNN::get.knnx(s.ptsh[,2], query=ptsh.target.all, k=1)[["nn.index"]],1]
-            res.idVal <- list(id=idVal, samp.idx=samp.idx, n=n, k=k, target.ptsh=ptsh.target.all, target.s=magic.s, s.ptsh=s.ptsh, time.taken=difftime(Sys.time(), start.time, units="secs"))
-
-
+            res.idVal <- list(id=idVal, samp.idx=samp.idx.use, n=n, k=k, target.ptsh=ptsh.target.all, target.s=magic.s, s.ptsh=s.ptsh, time.taken=difftime(Sys.time(), start.time, units="secs"))
 
         }
 

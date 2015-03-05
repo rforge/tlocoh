@@ -82,7 +82,6 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
         if (!overlay) warning("legend only supported when overlaying locations of multiple individuals")
     }
     
-
     ## Prepare the tiff file
     if (is.null(tiff.fn)) {
         range.expand.tiff <- 0    
@@ -197,6 +196,9 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
                 
     }
 
+    ## Create the color pallete for overlay
+    if (length(id) > 1 && overlay) cols.pallete <- rainbow(length(id), end=5/6)
+
     ## Loop through all the individuals
     for (i in 1:length(id)) {
         idVal <- id[i]
@@ -205,7 +207,7 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
         if (identical(col, "auto")) {
             if (is.null(lxy[["pts"]][["col"]])) {
                 if (length(id) > 1 && overlay) {
-                    col.use <- palette()[i]                    
+                    col.use <- cols.pallete[i]                    
                 } else {
                     col.use <- topo.colors(length(idVal.idx))
                 }
