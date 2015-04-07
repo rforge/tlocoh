@@ -148,10 +148,10 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
     on.exit(pboptions(pbo.orig))
                         
     start.time <- Sys.time()
-    if (status) cat("Using nearest-neighbor selection mode: ", mode, "\n", sep = "")
-    if (status) cat("Constructing hulls and hull metrics...\n")
-    
-    
+    if (status) {
+        cat("Using nearest-neighbor selection mode: ", mode, "\n", sep = "")
+        cat("Constructing hulls and hull metrics...\n")
+    }
     
     ## Start big nested loop
     for (idVal in id) {
@@ -278,10 +278,10 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
             
             ## Construct a name for this hullset in the form: ag208.k15.s0.srt-area
             lhs.name <- paste(idVal, ".pts", length(idVal.idx), ".", str.param, round(get(paste(str.param,"Val",sep="")),decimal.places), ".s", sVal, ".kmin", kmin, sep="")
-            cat("\n", lhs.name, "\n", sep="")
+            if (status) cat("\n", lhs.name, "\n", sep="")
             
             if (!blnCont) {
-                cat(cw(indent=1, exdent=3, x=paste(" - Unfortunately there isn't a set of nearest neighbors in lxy for this value of s :-( \n Run lxy.nn.add() and try again\n")))
+                if (status) cat(cw(indent=1, exdent=3, x=paste(" - Unfortunately there isn't a set of nearest neighbors in lxy for this value of s :-( \n Run lxy.nn.add() and try again\n")))
                 runs.not.added <- c(runs.not.added, lhs.name)
             } else {
                 if (status) {
@@ -310,7 +310,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                 nn.idx.lst <- nn.idx.lst[sapply(nn.idx.lst, length) >= 3]
 
                 if (length(nn.idx.lst) == 0) {
-                    cat("No hulls were created. If you are using Fixed-r or Fixed-a locoh, try entering a bigger value for r or a, or set kmin to a value greater than or equal to 2 \n")
+                    if (status) cat("No hulls were created. If you are using Fixed-r or Fixed-a locoh, try entering a bigger value for r or a, or set kmin to a value greater than or equal to 2 \n")
                     runs.not.added <- c(runs.not.added, lhs.name)
                 } else {
                 
@@ -391,8 +391,6 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
 
                     }
                     
-                    #cat("\n")
-
                     ## Save number of enclosed points to the list of hull metrics
                     hulls.data[["nep"]] <- sapply(enc.pts.idx, length)
                     hulls.meta[["nep"]] <- list(type="nep", aux=NULL)
@@ -426,7 +424,6 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                         if (sum(sapply(lxy[["pts"]]@data[as.character(lxy[["anv"]][["anv"]])], is.numeric)) > 0) {
                             hm.params <- list(anv=lxy[["anv"]][["anv"]][sapply(lxy[["pts"]]@data[as.character(lxy[["anv"]][["anv"]])], is.numeric)])
                         }
-                        #hulls.data.df <- data.frame(hulls.data.df, lxy[["pts"]]@data[idVal.idx, as.character(lxy[["anv"]][["anv"]]), drop=FALSE])
                         hulls.data.df <- data.frame(hulls.data.df, lxy[["pts"]]@data[nn.idx.lst.pp.pts.idx, as.character(lxy[["anv"]][["anv"]]), drop=FALSE])
                         anv.meta <- lxy[["anv"]]
                     } else {

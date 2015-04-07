@@ -145,7 +145,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
             }
             
             if (blnNeedToAddPtsh) {
-                cat("  - Finding s values that correspond to target proportions of time-selected hulls \n");flush.console
+                if (status) cat("  - Finding s values that correspond to target proportions of time-selected hulls \n");flush.console
                 lxy <- lxy.ptsh.add(lxy, id=idVal, k=10, n=200, ptsh.target=if (identical(ptsh, "all")) 1:9/10 else ptsh, plotme=FALSE, nn.add=FALSE, save=TRUE)
                 ptsh.idx <- length(lxy[["ptsh"]][[idVal]])
             }
@@ -225,12 +225,8 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
             append.idx <- NULL
             if (blnCont && !is.null(lxy[["nn"]])) {
                 ## Get a data frame with the parsed values of all the names of the lxy[["nn"]] list elements
-                #nn.names <- nn.name.df(names(lxy[["nn"]]))
                 nn.names <- do.call(rbind, lapply(lxy[["nn"]], function(x) data.frame(id=x$id, tt=x$time.term, s=x$s, n=length(x$ptid), kmax=x$kmax, rmax=x$rmax, amax=x$amax)))
 
-
-                #if (status) cat("If we allow multiple time.term, must filter by that also \n")
-                
                 ## Find those nn sets that have the same value of id, e, ce, and n (number of parent points)
                 nn.names.this.s.idx <- which(nn.names[["id"]] == idVal & nn.names[["n"]] == length(idVal.idx.sub) & sapply(nn.names[["s"]], function(x) isTRUE(all.equal(x, sVal))))
                 
@@ -476,7 +472,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                                     kth.nn.tsd.cumsum <- with(lxy[["nn"]][[append.idx]], nn.df[nn.df$nn.rank == kVal.tmp, "tsd.cumsum"])
                                     aVal <- kth.nn.tsd.cumsum[order(kth.nn.tsd.cumsum)][length(kth.nn.tsd.cumsum) * a[a.idx, "ptp"]]
                                     if (status) cat("  - found from existing NN set. Auto-a is", aVal, "\n")
-                                    #blnNeedAVal <- FALSE
                                     new.auto.a.only <- TRUE
                                 }
                             }
@@ -526,7 +521,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         num.test.pts <- min(ra.init.samp.size, idVal.num.pts)
                         if (status) cat("  - finding an initial value of k using ", num.test.pts, " randomly selected points...", sep="")
                         kVal.tmp <- max(15, kmin)
-                        #idx.test <- sample(1:idVal.num.pts, num.test.pts)
                         idVal.idx.test <- sample(idVal.idx, num.test.pts)
 
                         ## A-code
@@ -563,8 +557,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                             kVal.old <- kVal.tmp
                             kVal.tmp <- min(c(idVal.num.pts - 1, kVal.tmp * 2))
 
-                            #if (status) cat(cw(paste("  - ", kVal.old, " wasn't large enough for ", length(pp.idx.not.enuf), " points. Computing cumulative distances for k=", kVal.tmp, " points\n", sep=""), exdent=4, indent=1))
-                            
                             ## Recalculate
                             if (blnNoTime) {
                                 pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[pp.idx.not.enuf, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
@@ -776,14 +768,16 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
     
     time.taken = difftime(Sys.time(), start.time, units="auto")
 
-    if (status) cat("\nDone.")
-    if (!is.null(nn.name.added) && status) {
-        cat(" Nearest neighbor set(s) created / updated: \n", paste("  ", nn.name.added, collapse="\n", sep=""), sep="")
-    } else {
-        cat("\n")
+    if (status) {
+        cat("\nDone.")
+        if (!is.null(nn.name.added)) {
+            cat(" Nearest neighbor set(s) created / updated: \n", paste("  ", nn.name.added, collapse="\n", sep=""), sep="")
+        } else {
+            cat("\n")
+        }
+        cat("\nTotal time:", round(time.taken,1), units(time.taken), "\n", sep = " ")
     }
     
-    if (status) cat("\nTotal time:", round(time.taken,1), units(time.taken), "\n", sep = " ")
     if (beep) {
         flush.console()
         for (i in 1:3) {

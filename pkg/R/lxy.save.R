@@ -20,6 +20,9 @@ lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=
 
     if (!is.null(file)) {
         fn.full <- file
+        ## Strip off extension
+        fn.base.full <- file.path(dir, substr(file, 0, nchar(file) - 6))
+        
     } else {
         ## Build the pieces of a file name
         strids <- paste(unique(lxy[["pts"]][["id"]]), collapse="-", sep="")
@@ -43,7 +46,7 @@ lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=
 
     ## See if the file already exists
     if (file.exists(fn.full)) {
-        if (!is.null(file) || !auto.num.files) stop("File already exists. Please try a different file name.")
+        if (!auto.num.files) stop("File already exists. Please try a different file name.")
 
        # Construct a new file name by incrementing the auto-number
        i <- 1

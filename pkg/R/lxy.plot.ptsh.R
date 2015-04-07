@@ -26,6 +26,7 @@
 #' @param png.height The height of the PNG image
 #' @param png.overwrite Whether to overwrite an existing PNG file if it exists. T/F
 #' @param png.pointsize The pointsize (in pixels) for the PNG image, equivalent to the height or width of a character in pixels (increase to make labels appear larger)
+#' @param lo.save Change layout
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
 #' @details This function will plot the proportion of total hulls that are 'time-selected'. Time-selected means all of the
@@ -60,7 +61,7 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
                           legend=c("none", "bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[2],
                           mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0), figs.per.page=NULL,
                           panel.num=NULL, panel.num.inside.plot=!title.show, png.dir=NULL, png.dir.make=TRUE, 
-                          png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, ...) {
+                          png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, lo.save=TRUE, ...) {
 
     ## Consider adding a multi-individual scatter plot (see commented out code)
     
@@ -95,15 +96,15 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
                 figs.per.page <- 1
             }
         }
-    } else {
-        if (figs.per.page > 1 && !is.null(png.dir)) stop("When saving plots as PNG files, you can only have one plot per page")
     }
+    
+    if (figs.per.page > 1 && !is.null(png.dir)) stop("When saving plots as PNG files, you can only have one plot per page")
     if (figs.per.page > 1) desc <- 0
 
     ## Create png folder if needed
     if (is.null(png.dir)) {
         img.dim <- NULL
-        opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
+        if (lo.save) opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
     } else {
         img.dim <- c(png.width, png.height)
         if (!file.exists(png.dir)) {
@@ -177,7 +178,7 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
                 par(bg="white")
                 png(filename=png.fn, height=png.height, width=png.width, bg="white", pointsize=png.pointsize)
                 pngs.made <- c(pngs.made, png.fn)
-                opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
+                if (lo.save) opar <- par(mfrow = n2mfrow(figs.per.page), mar=mar, mgp=mgp, oma=c(0,0,0,0))
             }
             
             ## Prepare desc
@@ -313,6 +314,8 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
     
         }
     }
+    
+    if (lo.save) par(opar)
     
     if (!is.null(png.dir)) {
         cat("png file(s) made: \n")

@@ -83,7 +83,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
 
     ## Starting the first of the mother of all nested loops
     for (idVal in id) {
-        cat("id:", idVal, "\n")
+        if (status) cat("id:", idVal, "\n")
         idVal.idx <- which(lxy[["pts"]][["id"]] == idVal)
 
         if (save) {
@@ -98,12 +98,16 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
             ## Get the indices of the nearest neighbor sets affiliated with this idVal
             nn.idVal.idx <- which(sapply(lxy[["nn"]], function(x) x[["id"]]==idVal))
             
-            ## Loop through these nn sets and construct a matrix of s and ptsh
             s.ptsh <- NULL
-            cat("Computing ptsh for each saved nearest neighbor set \n")
-            pb <- txtProgressBar(min=0, max=length(nn.idVal.idx), style = 3)
+            
+            ## Loop through these nn sets and construct a matrix of s and ptsh
+            if (status) {
+                cat("Computing ptsh for each saved nearest neighbor set \n")
+                pb <- txtProgressBar(min=0, max=length(nn.idVal.idx), style = 3)
+            }
+            
             for (i in 1:length(nn.idVal.idx)) {
-                setTxtProgressBar(pb, i)
+                if (status) setTxtProgressBar(pb, i)
             
                 idx <- nn.idVal.idx[[i]]
                 
@@ -114,7 +118,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                 ptsh.cur <- sum(sapply(nn.lst, function(x) max(diff(sort(match(x, idVal.idx))))) == 1)  / length(nn.lst)
                 s.ptsh <- rbind(s.ptsh, c(lxy[["nn"]][[idx]][["s"]], ptsh.cur))
             }
-            close(pb)
+            if (status) close(pb)
             
             s.ptsh <- s.ptsh[order(s.ptsh[,2]), , drop=FALSE]
             res.idVal <- list(id=idVal, samp.idx=idVal.idx, n=length(idVal.idx), k=k, target.ptsh=signif(s.ptsh[,2],2), target.s=s.ptsh[,1], s.ptsh=s.ptsh, time.taken=difftime(Sys.time(), start.time, units="secs"))            
@@ -135,7 +139,6 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
             
             ## See if any of the existing nearest neighbor sets are for this id, s=0, and have enough k 
             nn.idx <- which(nn.info[["s"]]==0 & nn.info[["id"]]==idVal & nn.info[["kmax"]] >= k)
-            
                         
             ## If such a nearest neighbor set doesn't exist, create it now (fast)
             if (length(nn.idx)==0) {
@@ -162,26 +165,37 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
             ## Pick a sample of points
             if (is.null(samp.idx)) {
                 samp.idx.use <- sample(idVal.idx, min(n, length(idVal.idx)))
-                cat("  Selected ", n, " points at random \n", sep=""); flush.console()
+                if (status) {
+                    if (n < length(idVal.idx)) {
+                        cat("  Randomly selected ", n, " of ", length(idVal.idx), " points \n", sep=""); flush.console()
+                    } else {
+                        cat("  Using all ", length(samp.idx.use), " points \n", sep=""); flush.console()
+                    }
+                }
             } else {
                 samp.idx.use <- samp.idx
                 if (FALSE %in% (lxy[["pts"]][["id"]][samp.idx.use] %in% idVal)) {
                     stop(paste("Invalid values for samp.idx for id=", idVal, sep=""))
                 }
-                n <- length(samp.idx.use)
-                cat("  Using ", n, " samples from passed value of samp.idx \n", sep=""); flush.console()
+                #n <- length(samp.idx.use)
+                if (status) cat("  Using ", n, " samples from passed value of samp.idx \n", sep=""); flush.console()
             }
-            cat("  Finding ", k, " nearest neighbors for ", n, " sample points \n", sep=""); flush.console()
+            if (status) cat("  Finding ", k, " nearest neighbors for ", n, " sample points \n", sep=""); flush.console()
             
             use.pb <- (n > use.pb.n)
             post.sequals.str <- if (use.pb) "\n" else ", "
-            pbo.orig <- pboptions(type = if (use.pb) "txt" else "none")
-            on.exit(pboptions(pbo.orig))
-            con.width <- getOption("width")
+            if (status) {
+                pbo.orig <- pboptions(type = if (use.pb) "txt" else "none")
+                on.exit(pboptions(pbo.orig))
+                con.width <- getOption("width")
+            }
             
             ## First thing to do is to increase s until we ptsh >= ptsh.max
-            cat("  Finding s for ptsh=", ptsh.max, "\n", sep=""); flush.console()
-            if (!use.pb) cat("  ")
+            if (status) {
+                cat("  Finding s for ptsh=", ptsh.max, "\n", sep=""); flush.console()
+                if (!use.pb) cat("  ")
+            }
+            
             count.int <- 0
             sVal.cur <- sinit / 2
             sequals.len <- 2
@@ -189,8 +203,10 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
             while (ptsh.cur < ptsh.max) {
                 count.int <- count.int + 1
                 if (count.int > max.iter) {
-                    cat(" - reached the maximum iterations and still haven't reached ptsh.max=", ptsh.max, "\n")
-                    cat(" - resetting ptsh.max to ", ptsh.cur, "\n")
+                    if (status) {
+                        cat(" - reached the maximum iterations and still haven't reached ptsh.max=", ptsh.max, "\n")
+                        cat(" - resetting ptsh.max to ", ptsh.cur, "\n")
+                    }
                     ptsh.max <- ptsh.cur
                     ptsh.target <- ptsh.target[ptsh.target <= ptsh.max]
                     break
@@ -199,15 +215,17 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                 sVal.cur <- sVal.cur * 2
     
                 ## Prepare the feedback for the console
-                sequals.str <- paste("s=", sVal.cur, post.sequals.str, sep="")
-                if (!use.pb) {
-                    sequals.len <- sequals.len + nchar(sequals.str)
-                    if (sequals.len > con.width) {
-                        cat("\n  ")
-                        sequals.len <- 2
+                if (status) {
+                    sequals.str <- paste("s=", sVal.cur, post.sequals.str, sep="")
+                    if (!use.pb) {
+                        sequals.len <- sequals.len + nchar(sequals.str)
+                        if (sequals.len > con.width) {
+                            cat("\n  ")
+                            sequals.len <- 2
+                        }
                     }
+                    cat(sequals.str); flush.console()
                 }
-                cat(sequals.str); flush.console()
     
                 ## Find nn for sVal.cur
                 nn.lst <- pblapply(samp.idx.use, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
@@ -217,12 +235,13 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                 s.ptsh <- rbind(s.ptsh, c(sVal.cur, ptsh.cur))
     
             }
-            if (!use.pb) cat("\n  ")
-            
+            if (!use.pb && status) cat("\n  ")
             
             for (ptshVal in sort(ptsh.target, decreasing=FALSE)) {
-                cat("Finding s for ptsh=", ptshVal, " (+/- ", ptsh.buf, ")\n", sep=""); flush.console()
-                if (!use.pb) cat("  ")
+                if (status) {
+                    cat("Finding s for ptsh=", ptshVal, " (+/- ", ptsh.buf, ")\n", sep=""); flush.console()
+                    if (!use.pb) cat("  ")
+                }
                 sequals.len <- 2
                 count.int <- 0
     
@@ -254,7 +273,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                             while (TRUE %in% sapply(s.ptsh[,1], function(x) isTRUE(all.equal(sVal.cur, x)))) {
                                 int.converge.counter <- int.converge.counter + 1
                                 if (int.converge.counter > 6) {
-                                    cat("Failing to find a value of s which ptsh=", ptshVal, "\n"); browser()
+                                    if (status) cat("Failing to find a value of s which ptsh=", ptshVal, "\n")  #; browser()
                                     break
                                 }
                                 sVal.dup.idx <- which(sapply(s.ptsh[,1], function(x) isTRUE(all.equal(sVal.cur, x))))
@@ -273,15 +292,17 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                         }
     
                         ## Prepare the feedback for the console
-                        sequals.str <- paste("s=", sVal.cur, post.sequals.str, sep="")
-                        if (!use.pb) {
-                            sequals.len <- sequals.len + nchar(sequals.str)
-                            if (sequals.len > con.width) {
-                                cat("\n  ")
-                                sequals.len <- 2
+                        if (status) {
+                            sequals.str <- paste("s=", sVal.cur, post.sequals.str, sep="")
+                            if (!use.pb) {
+                                sequals.len <- sequals.len + nchar(sequals.str)
+                                if (sequals.len > con.width) {
+                                    cat("\n  ")
+                                    sequals.len <- 2
+                                }
                             }
+                            cat(sequals.str); flush.console()
                         }
-                        cat(sequals.str); flush.console()
     
                         ## Find nn for sVal.cur
                         nn.lst <- pblapply(samp.idx.use, function(i) idVal.idx[as.numeric(FNN::get.knnx(data=data.frame(x=xys.idVal[,1], y=xys.idVal[,2], z=tsd.zvals(delta.t=lxy.dt.int[idVal.idx] - lxy.dt.int[i], sVal=sVal.cur, type="vmax", d.bar=NULL, tau=NULL, vmax=vmax)),
@@ -294,19 +315,19 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
     
                 
                 }
-                if (!use.pb && count.int > 0) cat("\n  ")
+                if (!use.pb && count.int > 0 && status) cat("\n  ")
                 
                 if (count.int > max.loops && sum(s.ptsh[,"ptsh"] >= (ptshVal - ptsh.buf) & s.ptsh[,"ptsh"] <= (ptshVal + ptsh.buf))==0) {
                     if (max.reached == "warning") {
-                        warning(paste(idVal, ": count.int reached ", count.int, " but still could not find a value of s that worked"))
-                        cat("count.int reached ", count.int, " but could not a value of s \n")
+                        warning(paste(idVal, ": count.int reached ", count.int, " but still could not find a value of s that worked for ptsh=", ptshVal, sep=""))
+                        if (status) cat("count.int reached ", count.int, " but could not a value of s \n")
                     } else if (max.reached == "stop") {
-                        stop(cw(paste(idVal, ": count.int=", count.int, " but still could not find a value of s that worked", sep="")))
+                        stop(cw(paste(idVal, ": count.int=", count.int, " but still could not find a value of s that worked for ptsh=", ptshVal, sep="")))
                     }
                 }
                 
             }
-            if (!use.pb) cat("\n")
+            if (!use.pb && status) cat("\n")
     
             ## Sort matrix by s
             s.ptsh <- s.ptsh[order(s.ptsh[,1]),]
@@ -317,10 +338,10 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
 
         }
 
-        cat("Done with ", idVal, "\n", sep="")
+        if (status) cat("Done with ", idVal, "\n\n", sep="")
         
         if (plotme) {
-            plot(s.ptsh, type="l", main=paste("s vs. ptsh\n", idVal, ", n=", n, sep=""))
+            plot(s.ptsh, type="l", main=paste("s vs. ptsh\n", idVal, ", n=", length(samp.idx.use), sep=""))
             points(s.ptsh, pch=20, cex=1)
             abline(v=pretty(c(0,max(s.ptsh[,1])), n=15), lty=3, col="gray", lwd=0.1)
         }

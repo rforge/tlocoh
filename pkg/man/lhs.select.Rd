@@ -5,10 +5,10 @@
 \title{Select hullsets}
 \usage{
 lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, hs.idx = NULL, status = TRUE)
+  hs.names = NULL, hs.idx = NULL, selection = NULL, status = TRUE)
 }
 \arguments{
-  \item{lhs}{A LoCoH-hullset object}
+  \item{lhs}{A \link{LoCoH-hullset} object}
 
   \item{id}{The name(s) of individuals to extract}
 
@@ -24,6 +24,8 @@ lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
 
   \item{hs.idx}{The indices of saved hullsets to extract}
 
+  \item{selection}{A locoh.selection object, see Details}
+
   \item{status}{Show status messages (T/F)}
 }
 \value{
@@ -31,5 +33,16 @@ A LoCoH-hullset object
 }
 \description{
 Select hullsets
+}
+\details{
+This function returns a subset of hullsets based on the id
+value, k, a, r, or s. You may also select hullsets based on
+hullset names, indices, or a hullset selection object. A
+\emph{locoh.selection} object is a named list, with one
+element for each id, containing one or more a, k, or r
+value(s).
+
+See the \code{lhs.selection} function in the tlocoh.dev
+package for details.
 }
 

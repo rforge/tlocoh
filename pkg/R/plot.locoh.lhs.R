@@ -47,6 +47,7 @@
 #' @param col.nn The color of nearest neighbors. Single color value.
 #' @param col.nn.pp The color of parent-points. Used only when ptid is passed. Single color value.
 #' @param col.iso.fill A number corresponding to a preset color ramp that will be used to display the isopleths. 1=red to blue, 2=yellow to red, 3=blue to red, 4=red to yellow. Alternately, a character vector of color values of the same length as the number of isopleth levels.
+#' @param col.iso.opacity A number 0..1 for the opacity of isopleth fill color, where 1 is opaque and 0 is transparent
 #' @param col.iso.border Color value of the isopleth border. Color value (use NA for no border).
 #' @param col.iso.scale When plotting a subset of isopleths (by ecc or par), whether to scale the isopleth colors to the values of the subset. Not being used.
 #' @param col.dr The color of directional routes.
@@ -77,6 +78,9 @@
 #' @param desc Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.
 #' @param cex.desc The expansion factor for the descriptive text. Numeric value.
 #' @param col.desc The color of the descriptive text. Color value.
+#' @param gmap The name of a background image that will be downloaded from Google: \code{"none"}, 
+#' \code{"roadmap"}, \code{"satellite"}, \code{"hybrid"}, or \code{"terrain"}. May also be a object of type \code{locoh.gmap}, see Notes.
+#' @param gmap.one4all Whether to download a single background image for all ids. T/F
 #' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
 #' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
 #' @param tiff.bands A vector of exactly one (for a single band image) or exactly three integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, 
@@ -129,6 +133,13 @@
 #' what elements will go in the title and subtitle (i.e., the second line of the title) with the \code{title.inc} and \code{subtitle.inc} parameters.
 #' To omit the plot title completely, set \code{title.show=FALSE}.
 #'
+#' To display an image from Google in the background, set gmap to \code{"roadmap"}, \code{"satellite"}, \code{"hybrid"}, or \code{"terrain"}. 
+#' This requires an internet connection. When creating plots of hullsets from multiple individuals, 
+#' \code{gmap.one4all} determines whether a single background image is used for all individuals (faster to download but could result in blurry 
+#' backgrounds if the individuals occupy different parts of the landscape), or a separate image is used for each individual. In the later case,
+#' You may also set gmap to an object of type \code{locoh.gmap}, so the image(s) don't have to be 
+#' downloaded each time. See \code{lhs.gmap} (in the tlocoh.dev package). 
+
 #' \code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff}, \code{tiff.bands}, \code{tiff.col},
 #' and \code{tiff.fill.plot} control the display of a GeoTIFF image in
 #' the plot background. The GeoTIFF image must be georeferenced in the
@@ -158,7 +169,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     dr.metric=NULL, dr.thresh.val=NULL, dr.thresh.type=NULL, dr.smooth=NULL, lwd.dr=2,
     pch.allpts=16, cex.nn=2, cex.hpp=0.6, cex.allpts=0.5, cex.pp=2, cex.axis=0.8, cex.legend=0.8,
     col.hpp="gray50", col.hpp.na="yellow", col.hulls.border="gray50", col.hulls.fill=NA, col.ellipses="red", col.allpts=c("auto","gray")[1], 
-    col.nn="black", col.nn.pp="blue", col.iso.fill=1, col.iso.border=NA, col.iso.scale = TRUE, col.dr="red", 
+    col.nn="black", col.nn.pp="blue", col.iso.fill=1, col.iso.opacity=1, col.iso.border=NA, col.iso.scale = TRUE, col.dr="red", 
     hpp.classify=c("none", "hsp", hm.expr(names.only=TRUE, print=FALSE, desc=FALSE))[1],
     hpp.classify.bins=10, hpp.classify.chop=0.01, hpp.classify.legend=TRUE, hpp.classify.common.scale.discrete=TRUE,
     col.ramp=c("gray10,gray90", "rainbow")[1], col.ramp.bins=10, hsp=NULL, 
@@ -170,6 +181,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5),
     mgp=c(2, 0.7, 0), lo.save=TRUE, lo.margins.set=TRUE,
     desc=c(NONE<-0, BOTTOM<-1, TOP<-3)[ifelse(figs.per.page==1,2,1)], cex.desc=0.8, col.desc="darkgreen", 
+    gmap=c("none", "roadmap", "satellite", "hybrid", "terrain")[1], gmap.one4all=TRUE, 
     tiff.fn=NULL, tiff.pct=FALSE, tiff.bands=c(4,3,2), tiff.col=gray(0:255/255), tiff.buff=0, tiff.fill.plot=TRUE,
     shp.csv=NULL, layers=NULL, 
     png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.fn.pre=NULL, png.fn.mid=NULL, png.fn.suf=NULL, png.fn.incld.hs.name=TRUE, 
@@ -205,11 +217,19 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     lhs <- x; rm(x)
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (rast && !requireNamespace("raster", quietly=TRUE)) stop("package raster required, please install")
-
+    if (is.null(gmap)) gmap <- "none"
+    if (!identical(gmap,"none")) {
+        if (!requireNamespace("dismo", quietly=TRUE)) stop("package dismo required to display a background image, please install")
+        if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a background image, please install")
+        if (!requireNamespace("raster", quietly=TRUE)) stop("package raster required to display a background image, please install")    
+        if (inherits(gmap, "locoh.gmap") && gmap.one4all) gmap.one4all <- FALSE
+    }
+    
     ## Make sure tiff.fn exists, check tiff.bands
     if (!is.null(tiff.fn)) {
         if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a tiff in the background")
         if (!file.exists(tiff.fn)) stop(paste(tiff.fn, "not found"))
+        if (!identical(gmap,"none")) stop("you can't display a gmap and tiff at the same time")
         range.expand.tiff <- tiff.buff
         tiff.sgdf <- NULL
         if (length(tiff.bands) > 3) stop("tiff.bands can not be longer than 3")
@@ -386,7 +406,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     gis.features <- if (is.null(layers)) list() else shp.layers(layers, shp.csv=shp.csv)
     
     ## Compute the range of all runs combined to set the axis scales
-    if (same.axes.4all) {
+    if (same.axes.4all  || (!identical(gmap,"none") && gmap.one4all)) {
         if (is.null(aoi)) {
             if (is.null(ptid)) {
                 bbox.all <- do.call("rbind", lapply(1:length(hs), function(hs.idx) t(hs[[hs.idx]][["pts"]]@bbox)))
@@ -441,7 +461,31 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
         }
 
         ## Prepare the background image
-        if (!is.null(tiff.fn) && is.null(tiff.sgdf)) {
+        if (!identical(gmap,"none") && !inherits(gmap,"locoh.gmap")) {
+        
+            #if (is.list(gmap)) stop("If you pass a gmap list, don't set same.axes.4all=T")
+            
+            if (status) cat("Downloading common background image...")
+        
+            bbprj.sp <- SpatialPoints(cbind(rx, ry), proj4string=hs[[1]]$pts@proj4string)
+            bbll.sp <- spTransform(bbprj.sp, CRS("+proj=longlat +datum=WGS84"))
+            
+            ## Project the extent of the locoh-hullset to lat long
+            #extLatLong <- projectExtent(hs[[1]]$pts, CRS("+proj=longlat +datum=WGS84"))
+            
+            ## Download a basemap from Google
+            base.map.merc <- dismo::gmap(bbll.sp, type=gmap)
+            base.map.col <- base.map.merc@legend@colortable
+            
+            ## Project the downloaded basemap using nearest neighbor resampling
+            base.map.rast <- raster::projectRaster(base.map.merc, crs=hs[[1]]$pts@proj4string, method="ngb")
+            
+            if (status) cat("Done\n")
+            
+            #image(base.map.rast, col=col.merc, add=T)
+            #image(base.map.rast, col=base.map.col, add=T)
+            
+        } else if (!is.null(tiff.fn) && is.null(tiff.sgdf)) {
             if (tiff.fill.plot) {
                 half.plot.size <- c(-0.5, 0.5) * max(diff(rx), diff(ry))
                 rx.tiff <- half.plot.size + mean(rx)
@@ -633,8 +677,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
             for (ptidVal in n2z(ptid)) {
             for (dr.idx in dr.idx.use) {
             
-            
-            
                 ## Hereth begins the code to actually plot stuff
                 
                 title.ptid.str <- NULL
@@ -642,13 +684,8 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                 title.hpp.classify <- NULL
                 title.hmap <- NULL
 
-                #title.ptid.str <- if (is.null(ptid)) "" else paste("\nptid=", ptidVal, sep="")
-                #title.ptid.str <- if (is.null(ptid)) "" else paste("\nptid=", ptidVal, sep="")
-                
                 if (!is.null(ptid)) title.ptid.str <- paste("ptid=", ptidVal, sep="")
                 if (dr) title.feats.str <- c(title.feats.str, names(hs[[hs.name]][["dr"]])[dr.idx])
-
-                #subtitle <- paste(subtitle, ifelse(dr, paste("\n", , sep=""), ""), sep="")
                 
                 ## If there's a ptid, the let go ahead and prepare the shape(s) that will go on the plot, which we may need to set the global axes ranges
                 if (!is.null(ptid)) {
@@ -671,7 +708,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                 }
                 
                 ## Compute the range of the x and y axes if needed
-                if (!same.axes.4all) {
+                if (!same.axes.4all || inherits(gmap, "locoh.gmap")) {
                     if (is.null(aoi)) {
                         if (is.null(ptid)) {
                             #rx <- range(coordinates(hs[[hs.name]][["pts"]])[,1])
@@ -709,7 +746,38 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                     }
     
                     ## Prepare the background image
-                    if (!is.null(tiff.fn)) {
+
+                    if (!identical(gmap,"none")) {
+                        
+                        if (inherits(gmap, "locoh.gmap")) {
+                            idVal <- hs[[hs.name]]$id
+                            if (idVal %in% names(gmap)) {  
+                                base.map.rast <- gmap[[idVal]]$bg.rast
+                                base.map.col <- gmap[[idVal]]$bg.col
+                            
+                            } else {
+                                warning(paste("gmap image not found for ", idVal, sep="")) 
+                                base.map.rast <- NULL
+                                base.map.col <- NULL
+                            }
+                            
+                        } else if (!gmap.one4all) {
+                            if (status) cat("Getting background image...")
+                        
+                            bbprj.sp <- SpatialPoints(cbind(rx, ry), proj4string=hs[[1]]$pts@proj4string)
+                            bbll.sp <- spTransform(bbprj.sp, CRS("+proj=longlat +datum=WGS84"))
+                            
+                            ## Download a basemap from Google
+                            base.map.merc <- dismo::gmap(bbll.sp, type=gmap)
+                            base.map.col <- base.map.merc@legend@colortable
+                            
+                            ## Project the downloaded basemap using nearest neighbor resampling
+                            base.map.rast <- raster::projectRaster(base.map.merc, crs=hs[[1]]$pts@proj4string, method="ngb")
+                            
+                            if (status) cat("Done\n")
+                        }
+                        
+                    } else if (!is.null(tiff.fn)) {
                         if (tiff.fill.plot) {
                             half.plot.size <- c(-0.5, 0.5) * max(diff(rx), diff(ry))
                             rx.tiff <- half.plot.size + mean(rx)
@@ -895,7 +963,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                          axes=axes.show, xaxt=tick.show, yaxt=tick.show, cex.axis=cex.axis)
                     plots.made <- plots.made + 1
                 
-                    ## Show the background tiff
+                    ## Show the background tiff / gmap
                     if (!is.null(tiff.fn)) {
                         if (tiff.pct) {
                             image(tiff.sgdf, "idx", col=tiff.sgdf.cols[["ct"]], add=TRUE)
@@ -907,6 +975,8 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                                 image(tiff.sgdf, col=tiff.col, add=TRUE)
                             }
                         }
+                    } else if (!identical(gmap,"none")) {
+                        raster::image(base.map.rast, col=base.map.col, add=T)
                     }
 
                     ## Plot polygon layers 
@@ -987,14 +1057,17 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             stop(col.iso.fill.err.msg)
                         }
                         
-                        ## The big area polygons will draw first, so reverse the colors 
-                        ## NOT NEEDED 
+                        ## Reduce opacity if needed
+                        if (col.iso.opacity < 1) {
+                            col.iso.fill.use <- paste(col.iso.fill.use, toupper(as.hexmode(floor(255 * col.iso.opacity))), sep="")
+                        }
+                        
+                        ## The big area polygons will draw first, so reverse the colors -- NOT NEEDED 
                         #col.iso.fill.use <- rev(col.iso.fill.use)
-                        #lhs.ag214[[1]]$isos[[1]]$polys@plotOrder
                         
                         ## Take a subset of the colors if needed
                         if (!is.null(col.sub)) {
-                            print("This part needs to be updated");browser()
+                            print("Taking a subset of colors - needs to be updated")
                             #if (!is.null(iso.lst$par) || !is.null(iso.lst$ecc)) col.iso.fill.use <- rev(col.iso.fill.use)
                             #col.sub.start.end.idx <- 1 + round(col.sub * num.cols.for.subseting)
                             #col.iso.fill.use <- col.iso.fill.use[round(seq(from=col.sub.start.end.idx[1], to=col.sub.start.end.idx[2], length.out=num.iso))]
@@ -1209,7 +1282,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
 
 
                                         if (TRUE %in% is.infinite(unlist(hulls.pp.classify.val))) {
-                                            print("Found infinite values in the hull metric. Investigate.");browser()
                                             stop("Found infinite values in the hull metric. Investigate.")
                                         }
                                         
@@ -1310,7 +1382,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                                             }
 
                                         } else {
-                                            #print("Lets work on an expression for hulls.pp.cols");browser()
+                                            #print("Lets work on an expression for hulls.pp.cols")
                                             # This is completely ad-hoc, need to either remove or make it part of the hm.expression
                                             # Also need to figure out where to plot the legend (same problem as hsp legend)
                                             

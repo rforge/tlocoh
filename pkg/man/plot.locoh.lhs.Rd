@@ -16,23 +16,24 @@
   col.hpp = "gray50", col.hpp.na = "yellow", col.hulls.border = "gray50",
   col.hulls.fill = NA, col.ellipses = "red", col.allpts = c("auto",
   "gray")[1], col.nn = "black", col.nn.pp = "blue", col.iso.fill = 1,
-  col.iso.border = NA, col.iso.scale = TRUE, col.dr = "red",
-  hpp.classify = c("none", "hsp", hm.expr(names.only = TRUE, print = FALSE,
-  desc = FALSE))[1], hpp.classify.bins = 10, hpp.classify.chop = 0.01,
-  hpp.classify.legend = TRUE, hpp.classify.common.scale.discrete = TRUE,
-  col.ramp = c("gray10,gray90", "rainbow")[1], col.ramp.bins = 10,
-  hsp = NULL, record = FALSE, figs.per.page = 1, same.axes.4all = NULL,
-  ufat = TRUE, ufipt = TRUE, axes.show = TRUE, axes.ticks = axes.show,
-  axes.titles = axes.show, title = NULL, title.show = TRUE,
-  title.inc = c("title", "hs.name", "id", "kar", "features", "hpp.classify",
-  "hmap", "ptid")[if (is.null(title)) 3:4 else 1], subtitle.inc = c("title",
-  "hs.name", "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if
-  (is.null(title)) 5:8 else 0], mar = c(if (axes.titles || axes.ticks) 3.3
-  else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2
-  else 0.5, 0.5), mgp = c(2, 0.7, 0), lo.save = TRUE,
-  lo.margins.set = TRUE, desc = c(NONE <- 0, BOTTOM <- 1, TOP <-
-  3)[ifelse(figs.per.page == 1, 2, 1)], cex.desc = 0.8,
-  col.desc = "darkgreen", tiff.fn = NULL, tiff.pct = FALSE,
+  col.iso.opacity = 1, col.iso.border = NA, col.iso.scale = TRUE,
+  col.dr = "red", hpp.classify = c("none", "hsp", hm.expr(names.only = TRUE,
+  print = FALSE, desc = FALSE))[1], hpp.classify.bins = 10,
+  hpp.classify.chop = 0.01, hpp.classify.legend = TRUE,
+  hpp.classify.common.scale.discrete = TRUE, col.ramp = c("gray10,gray90",
+  "rainbow")[1], col.ramp.bins = 10, hsp = NULL, record = FALSE,
+  figs.per.page = 1, same.axes.4all = NULL, ufat = TRUE, ufipt = TRUE,
+  axes.show = TRUE, axes.ticks = axes.show, axes.titles = axes.show,
+  title = NULL, title.show = TRUE, title.inc = c("title", "hs.name", "id",
+  "kar", "features", "hpp.classify", "hmap", "ptid")[if (is.null(title)) 3:4
+  else 1], subtitle.inc = c("title", "hs.name", "id", "kar", "features",
+  "hpp.classify", "hmap", "ptid")[if (is.null(title)) 5:8 else 0], mar = c(if
+  (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2
+  else 0.5, if (title.show) 3.2 else 0.5, 0.5), mgp = c(2, 0.7, 0),
+  lo.save = TRUE, lo.margins.set = TRUE, desc = c(NONE <- 0, BOTTOM <- 1,
+  TOP <- 3)[ifelse(figs.per.page == 1, 2, 1)], cex.desc = 0.8,
+  col.desc = "darkgreen", gmap = c("none", "roadmap", "satellite", "hybrid",
+  "terrain")[1], gmap.one4all = TRUE, tiff.fn = NULL, tiff.pct = FALSE,
   tiff.bands = c(4, 3, 2), tiff.col = gray(0:255/255), tiff.buff = 0,
   tiff.fill.plot = TRUE, shp.csv = NULL, layers = NULL, png.fn = NULL,
   png.dir = NULL, png.dir.make = TRUE, png.fn.pre = NULL,
@@ -190,6 +191,10 @@
   yellow. Alternately, a character vector of color values
   of the same length as the number of isopleth levels.}
 
+  \item{col.iso.opacity}{A number 0..1 for the opacity of
+  isopleth fill color, where 1 is opaque and 0 is
+  transparent}
+
   \item{col.iso.border}{Color value of the isopleth border.
   Color value (use NA for no border).}
 
@@ -285,6 +290,15 @@
 
   \item{col.desc}{The color of the descriptive text. Color
   value.}
+
+  \item{gmap}{The name of a background image that will be
+  downloaded from Google: \code{"none"}, \code{"roadmap"},
+  \code{"satellite"}, \code{"hybrid"}, or \code{"terrain"}.
+  May also be a object of type \code{locoh.gmap}, see
+  Notes.}
+
+  \item{gmap.one4all}{Whether to download a single
+  background image for all ids. T/F}
 
   \item{tiff.fn}{The path and name of a GeoTIFF file (e.g.,
   satellite image) that will be displayed in the
@@ -437,6 +451,18 @@ title) with the \code{title.inc} and \code{subtitle.inc}
 parameters. To omit the plot title completely, set
 \code{title.show=FALSE}.
 
+To display an image from Google in the background, set gmap
+to \code{"roadmap"}, \code{"satellite"}, \code{"hybrid"},
+or \code{"terrain"}. This requires an internet connection.
+When creating plots of hullsets from multiple individuals,
+\code{gmap.one4all} determines whether a single background
+image is used for all individuals (faster to download but
+could result in blurry backgrounds if the individuals
+occupy different parts of the landscape), or a separate
+image is used for each individual. In the later case, You
+may also set gmap to an object of type \code{locoh.gmap},
+so the image(s) don't have to be downloaded each time. See
+\code{lhs.gmap} (in the tlocoh.dev package).
 \code{tiff.fn}, \code{tiff.pct}, \code{tiff.buff},
 \code{tiff.bands}, \code{tiff.col}, and
 \code{tiff.fill.plot} control the display of a GeoTIFF

@@ -56,7 +56,11 @@ hulls2iso.gpc <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasin
         
     if (status) cat("  Converting SpatialPolygons to gpc.poly objects \n")
     ## Converting from the coordinates was much faster than coercing 
-    hulls.gpc <- pblapply(hulls@polygons, function(x) as(x@Polygons[[1]]@coords[-nrow(x@Polygons[[1]]@coords) , ], "gpc.poly"))    
+    if (status) {
+        hulls.gpc <- pblapply(hulls@polygons, function(x) as(x@Polygons[[1]]@coords[-nrow(x@Polygons[[1]]@coords) , ], "gpc.poly"))    
+    } else {
+        hulls.gpc <- lapply(hulls@polygons, function(x) as(x@Polygons[[1]]@coords[-nrow(x@Polygons[[1]]@coords) , ], "gpc.poly"))    
+    }
     
     hulls.proj4string <- hulls@proj4string
     rm(hulls)
@@ -103,14 +107,16 @@ hulls2iso.gpc <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasin
         i <- 1
         merged.hulls <- to_numeric(hulls.gpc[[1]])
         
-        if (status) cat("  Unioning hulls and saving isopleths \n") 
-        pb <- txtProgressBar(min=0, max=last.hull.idx[length(last.hull.idx)], style=3, char="+", width=getOption("pboptions")$txt.width - 1)
+        if (status) {
+            cat("  Unioning hulls and saving isopleths \n") 
+            pb <- txtProgressBar(min=0, max=last.hull.idx[length(last.hull.idx)], style=3, char="+", width=getOption("pboptions")$txt.width - 1)
+        }
         for (j in 1:length(last.hull.idx)) {
             while (i <= last.hull.idx[j]) {
                 next.hull <- to_numeric(hulls.gpc[[i]])
                 merged.hulls <- .Call("Rgpc_polygon_clip", merged.hulls, next.hull, 3, PACKAGE="gpclib")
                 i <- i + 1
-                setTxtProgressBar(pb, i)
+                if (status) setTxtProgressBar(pb, i)
             } 
             
             ## We've gotten through a group, save this aggregation as an isopleth
@@ -138,9 +144,7 @@ hulls2iso.gpc <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasin
             
             isop.sp.lst[[j]] <- spChFIDs(isop.sp.lst[[j]], as.character(j))
         }
-        close(pb)
-        
-        #print("got thru all of theme");browser()
+        if (status) close(pb)
         
         ## Rbind the individual isopleths into a SpatialPolygons object
         grps.cum.union.sp <- do.call(rbind.SpatialPolygons, isop.sp.lst)

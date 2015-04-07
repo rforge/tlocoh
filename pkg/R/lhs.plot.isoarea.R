@@ -90,7 +90,8 @@ lhs.plot.isoarea <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
          iso.info.immVal <- iso.info.all[id.mode.metric==immVal, ]
          param.vals.immVal <-sort(unique(iso.info.immVal[["param.val"]]))
          iso.levels.immVal <-sort(unique(iso.info.immVal[["iso.level"]]))
-         col.overlay <- rainbow(length(iso.levels.immVal), end=5/6)
+         ##col.overlay <- rainbow(length(iso.levels.immVal), end=5/6)
+         col.overlay <- colorRampPalette(c("#FF0000", "#0000FF", "#BFBFFF"))(length(iso.levels.immVal))
          
          x.mat <- matrix(param.vals.immVal, ncol=length(iso.levels.immVal), nrow=length(param.vals.immVal))
          y.mat <- matrix(NA, ncol=length(iso.levels.immVal), nrow=length(param.vals.immVal))

@@ -49,11 +49,12 @@ lhs.save <- function (lhs, file=NULL, dir=".", suf=NULL, compress=TRUE, auto.num
         fn.full <- paste(fn.base.full, if (auto.num.files) ".01" else NULL, ".RData", sep="")
     } else {
         fn.full <- file
+        fn.base.full <- file.path(dir, substr(file, 0, nchar(file) - 6))
     }
 
     ## See if the file already exists
     if (file.exists(fn.full)) {
-        if (!is.null(fn) || !auto.num.files) stop("File already exists. Please try a different file name.")
+        if (!auto.num.files) stop("File already exists. Please try a different file name.")
 
        # Construct a new file name by incrementing the auto-number
        i <- 1

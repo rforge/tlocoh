@@ -13,7 +13,8 @@ lxy.plot.ptsh(lxy, id = NULL, ptsh.idx = NULL, use.nn = FALSE, k = NULL,
   figs.per.page = NULL, panel.num = NULL,
   panel.num.inside.plot = !title.show, png.dir = NULL,
   png.dir.make = TRUE, png.width = 800, png.height = png.width,
-  png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80, ...)
+  png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80,
+  lo.save = TRUE, ...)
 }
 \arguments{
   \item{lxy}{A \link{LoCoH-xy} object}
@@ -96,6 +97,8 @@ lxy.plot.ptsh(lxy, id = NULL, ptsh.idx = NULL, use.nn = FALSE, k = NULL,
   PNG image, equivalent to the height or width of a
   character in pixels (increase to make labels appear
   larger)}
+
+  \item{lo.save}{Change layout}
 
   \item{...}{Additional parameters that will be passed to
   the \code{\link{plot}} function}

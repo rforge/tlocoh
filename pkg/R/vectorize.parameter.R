@@ -1,7 +1,15 @@
-vectorize.parameter <- function (x, n2z=FALSE, type=c("numeric", "character")[1], sort.res=TRUE) {
+#' Convert a comma-separated string to a vector
+#'
+#' @param x The vector or character string to be evaluated 
+#' @param n2z Convert null values to zero or an empty string (depending on \code{type}
+#' @param type The data type: \code{numeric} or \code{character} 
+#' @param sort.res Whether to sort the result. T/F
+#'
+#' @return A vector
+#'
+#' @export
 
-    ## converts a comma delimited character string to a vector with option to sort
-    ## returns a sorted version of the vector
+vectorize.parameter <- function (x, n2z=FALSE, type=c("numeric", "character")[1], sort.res=TRUE) {
 
     if (is.null(x)) {
        if (n2z) {

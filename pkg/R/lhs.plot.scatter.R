@@ -306,8 +306,8 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                         }
                     } else {
                         # Make sure these values have been actually computed
-                        #print("Prog");browser()
                         if (check.ap.value.in.hmparams) {
+                            print("Chekc this");browser()
                             if (FALSE %in% (ddd.lst[[avparam]] %in%  hs[[hs.name]][["hm.params"]][[avparam]])) stop(paste("Value of ", avparam, " not found", sep=""))
                         }
                         avparams.lst[[avparam]] <- unique(c(avparams.lst[[avparam]], ddd.lst[[avparam]]))

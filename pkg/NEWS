@@ -1,4 +1,14 @@
-Changes in version 1.33.00 (2015-03-01)
+Changes in version 1.34.00 (2015-04-05)
+=========================
+* changed default colors in <pre>lhs.plot.isoear</pre> and <pre>lhs.plot.isoarea</pre> to conform with default colors on isopleth plots
+* allowed auto-numbering when file name is passed in <pre>lhs.save</pre> and <pre>lxy.save</pre>
+* fixed display output when <pre>status=FALSE</pre> in <pre>lxy.ptsh.add</pre>, <pre>lxy.nn.add</pre>, <pre>lxy.lhs</pre>, and <pre>hulls2iso.gpc</pre>
+* added <pre>lo.save</pre> argument to <pre>lxy.plot.ptsh</pre>
+* modified <pre>lhs.select</pre> to take a <pre>locoh.selection</pre> object
+* function <pre>vectorize.parameter</pre> exported (because needed by functions in tlocoh.dev package)
+* added arguments <pre>col.iso.opacity</pre> and <pre>gmap</pre> to <pre>plot.locoh.lhs</pre>
+
+Changes in version 1.33.00 (2015-03-05)
 =========================
 * enhanced color selection when overlaying many individuals in <pre>plot.locoh.lxy</pre>
 * fixed bug in <pre>lxy.ptsh.add</pre> which could give incorrect 's' values for multi-individual Locoh-xy objects
