@@ -4,19 +4,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
 
   <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>T-LoCoH</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta http-equiv="cleartype" content="on">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link href="http://r-forge.r-project.org/themes/rforge/styles/estilo1.css" rel="stylesheet" type="text/css" />
+
 <style>
      li.spaceafter {margin-bottom: 1em;}
 
-     .boxright {
+     img {max-width:100%;
+          border: 0px;
+     }
+
+     .boxright-680, .boxright-260, .boxright-440  {
+        max-width:100%;
         float: right;
         border-style:solid;
         border-width: 5px;
         border-color: LightSlateGray;
-        margin-left: 10px;
-        margin-bottom: 10px;
+        margin-left: 1em;
+        margin-bottom: 1em;
         padding: 10px;
         background-color: LightGray;
         color: black;
@@ -27,15 +35,11 @@
      }
 
      .boxtext80 {
+        max-width:100%;
         font-size: 80%;
         text-align: center;
         color: black;
      }
-     .unused {
-         font: 13px/1.231 
-        background-color: #ffff80;  
-     }
-
      .margin-three {
         text-align: center;
         margin-bottom: 0px;
@@ -64,6 +68,30 @@
          clear: both;
      }
 
+     @media screen and (max-width: 260px) {
+         .boxright-260 {
+            max-width:100%;
+            float: none;
+            margin-left: 0em;
+         }
+     }
+
+     @media screen and (max-width: 680px) {
+         .boxright-680 {
+            max-width:100%;
+            float: none;
+            margin-left: 0em;
+         }
+     }
+
+     @media screen and (max-width: 440px) {
+         .boxright-440 {
+            max-width:100%;
+            float: none;
+            margin-left: 0em;
+         }
+     }
+
 </style>
 
   </head>
@@ -73,18 +101,18 @@
 
 <!-- R-Forge Logo -->
 
-<div style="float: right;margin-right:20px"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" border="0" alt="R-Forge Logo" /> </a></div>
+<div style="float: right;margin-right:2em;"><a href="http://r-forge.r-project.org/"><img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" alt="R-Forge Logo" /> </a></div>
 
 <h1>Welcome to T-LoCoH!</h1>
 
-<blockquote><p><strong><a href="#overview">Overview</a> | <a href="#package">Package Features</a> | <a href="#installation">Installation</a> | <a href="#updates">Updates</a> | <a href="tips_faqs.html">Tips & FAQs</a> | <a href="#resources">Resources</a></strong></p></blockquote>
-<br>
+<p style="text-align:center;"><strong><a href="#overview">Overview</a> | <a href="#package">Package Features</a> | <a href="#installation">Installation</a> | <a href="#updates">Updates</a> | <a href="tips_faqs.html">Tips & FAQs</a> | <a href="#resources">Resources</a></strong></p>
 
+<br>
 
 <a name="overview"></a>
 <h2><br>Overview</h2>
 
-<div class="boxright"><div style="width: 600px;"><div class="boxtext80"><img src="images/ag206_isos_600x200.png" width=600 height=200 border=0><br>Utilzation distribution of a female Springbok antelope in Etosha National Park, Namibia</div></div></div>
+<div class="boxright-680"><div style="max-width:100%;"><div class="boxtext80"><img src="images/ag206_isos_600x200.png"><br>Utilzation distribution of a female Springbok antelope in Etosha National Park, Namibia</div></div></div>
 
 <p>T-LoCoH (Time Local Convex Hull) is a method for constructing home ranges and exploring spatio-temporal patterns in movement data. It is built upon the LoCoH method but contains with new analytical functions for data that have time values attached (e.g., movement data).</p>
 
@@ -97,7 +125,9 @@
 
 <a name="package"></a>
 <hr>
-<div class="boxright"><div style="width: 200px;"><img src="images/ag214_comp_200x400.png" width=200 height=400 align="right" border=0></div></div>
+
+<div class="boxright-260"><div style="max-width:220px;"><img src="images/ag214_comp_200x400.png" align="right"></div></div>
+
 <h2>Package Features</h2>
 
 <ul>
@@ -156,9 +186,9 @@ update.packages(oldPkgs="tlocoh", repos="http://R-Forge.R-project.org")
 <strong>Email List</strong><br>
 <p>To receive <strong>announcements</strong> about new updates, please subscribe to the T-LoCoH <a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/tlocoh-info">email list</a> (<a href="http://lists.r-forge.r-project.org/pipermail/tlocoh-info/">archives</a>). To see a list of new features and bug-fixes, see the package NEWS file. To request a feature or report a bug, please email the <a href="https://r-forge.r-project.org/users/ajlyons/">package administrator</a>.<br><br></p>  
 
-<div class="boxright"><div style="width: 500px;">
+<div class="boxright-440"><div style="max-width:400px;">
 <div class="margin-three"><strong>T-LoCoH Quiz</strong></div>
-<p class="margin-three"><img src="images/simdata_par_360x360.png" width=360 height=360 border=0></p>
+<p class="margin-three"><img src="images/simdata_par_360x360.png"></p>
 <div style="font-size:85%">
 <p style="margin-bottom:0px; margin-top:1em; text-align:left;">The image above illustrates:</p>
 <ol style="list-style-type:lower-alpha;">
