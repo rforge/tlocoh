@@ -11,7 +11,7 @@
 <meta name="author" content="Andy Lyons" />
 
 
-<title>Working with Hull Metric Scatterplots for Legends, Exporting, and Subsetting</title>
+<title>T-LoCoH Tips: Using Hull Metric Scatterplots for Legends and Filtering</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -63,7 +63,7 @@ img {
 
 
 <div id="header">
-<h1 class="title">Working with Hull Metric Scatterplots for Legends, Exporting, and Subsetting</h1>
+<h1 class="title">T-LoCoH Tips: Using Hull Metric Scatterplots for Legends and Filtering</h1>
 <h4 class="author"><em>Andy Lyons</em></h4>
 <h4 class="date"><em>June 2015</em></h4>
 </div>
@@ -109,7 +109,8 @@ summary(gz2.lhs)</code></pre>
 ##     isos: [1] iso.srt-nep.iso-q.h4222.i5
 ##    other: -none-
 ##  created: Sat Oct 25 03:46:14 2014</code></pre>
-<pre class="r"><code>plot(gz2.lhs, iso=TRUE, allpts=TRUE, cex.allpts=0.3)</code></pre>
+<pre class="r"><code>plot(gz2.lhs, iso=TRUE, gmap=&quot;satellite&quot;)</code></pre>
+<pre><code>## Downloading common background image...Done</code></pre>
 <p><img src="working_with_hsp_files/figure-html/gz2_plot.png" title="plot of chunk gz2_plot" alt="plot of chunk gz2_plot" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="view-hulls-in-time-use-space" class="section level3">
@@ -140,7 +141,7 @@ summary(gz2.lhs)</code></pre>
 <p><img src="working_with_hsp_files/figure-html/gz2_hpp.png" title="plot of chunk gz2_hpp" alt="plot of chunk gz2_hpp" width="672" style="display: block; margin: auto;" /></p>
 <p>To actually display the scatterplot next to the map of hull parent points, we need to create a two-column plot layout using <tt>par(mfrow=c(1,2))</tt>, or perhaps the <tt>layout()</tt> function before calling the two plot functions (see example below). Fortunately however we don’t have to redraw the polygon regions each time we want to plot them for a legend, we can simply pass the saved hsp object back to the plotting function:</p>
 <pre class="r"><code>## Set up a two column plot
-x &lt;- matrix(0, nrow=3, ncol=5, byrow = TRUE); x[1:2, 1:2] &lt;- 1; x[1:3, 3:5] &lt;- 2
+x &lt;- matrix(0, nrow=3, ncol=5); x[1:2, 1:2] &lt;- 1; x[1:3, 3:5] &lt;- 2
 layout(x)
 
 ## Plot the hulls in time-use-space as a legend, then the hull parent points
@@ -180,7 +181,7 @@ plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_hsp, cex.hpp=0.4, 
 </div>
 <div id="export-to-a-shapefile" class="section level3">
 <h3>Export to a Shapefile</h3>
-<p>To analyze the hull parent points that fall within a specific region using a GIS package, we can export them to a shapefile with the <tt>lhs.exp.shp</tt> function. When you open the shapefile in a GIS package, you’ll see a column in the attribute table called <em>hsp_reg</em> which stores the region number for that hull (or hull parent point).</p>
+<p>To analyze the hull parent points that fall within a specific region using a GIS package, we can export them to a shapefile with the <tt>lhs.exp.shp</tt> function. When you open the shapefile in a GIS package, you’ll see a column in the attribute table called <em>hsp_reg</em> which stores the region number for that hull (or hull parent point). Hull parent points that don’t fall in any region are assigned ‘0’.</p>
 <pre class="r"><code>lhs.exp.shp(gz2.lhs, hpp=TRUE, hulls=TRUE, hsp=1)</code></pre>
 <pre><code>##    Saving ./GZ2.s0.03.a8400.00.hpp.shp 
 ##    Saving ./GZ2.s0.03.a8400.00.hulls.shp 
@@ -196,13 +197,20 @@ op &lt;- par(mfrow=c(1,4))
 lhs.plot.scatter(gz2.lhs, x=&quot;dt&quot;, y=&quot;dt.hour&quot;, filter=gz2_groups, lo.save = FALSE, lo.margins.set=FALSE, desc=0)
 par(op)</code></pre>
 <p><img src="working_with_hsp_files/figure-html/gz2_lhs_filter.png" title="plot of chunk gz2_lhs_filter" alt="plot of chunk gz2_lhs_filter" width="960" style="display: block; margin: auto;" /></p>
+<p>The strong vertical character of the scatterplots suggest that this individual “flips into” certain combinations of revisitation and duration during specific times of the year, which may reflect territorial behavior during breeding, search strategies, rearing young, or other behaviors.</p>
+<p>TIP: the list object returned by <tt>lhs.filter.hsp</tt> contains the indices of the hull parent points in each region. You can use these indices to grab the hulls for those regions as a locoh-hullset (see <tt>lhs.select</tt>) or SpatialPolygonsDataFrame (see <tt>hulls()</tt>).</p>
 </div>
-<div id="variant-using-a-color-wheel-as-map-legend" class="section level3">
-<h3>Variant: Using a Color Wheel as Map Legend</h3>
-<p>Note, as an alternative to manually digitized regions, a hull metric scatterplot can also be symbolized with an overlaid color wheel by passing <tt>col=“spiral”</tt>. Other arguments you can use to customize the color wheel include <tt>center.method</tt>, <tt>sat.base</tt>, <tt>val.base</tt>, <tt>hue.offset</tt>, and <tt>bg</tt>.</p>
+<div id="variant-using-an-overlaid-color-wheel-in-hull-metric-space-as-a-map-legend" class="section level3">
+<h3>Variant: Using an Overlaid Color Wheel in Hull Metric Space as a Map Legend</h3>
+<p>Note, as an alternative to manually digitized regions, a hull metric scatterplot can also be symbolized with an overlaid color wheel by passing <tt>col=“spiral”</tt> to <tt>lhs.plot.scatter()</tt>. Other arguments you can use to customize the color wheel include <tt>center.method</tt>, <tt>sat.base</tt>, <tt>val.base</tt>, <tt>hue.offset</tt>, and <tt>bg</tt>.</p>
 <pre class="r"><code>## Set up a two column plot
-x &lt;- matrix(0, nrow=3, ncol=5, byrow = TRUE); x[1:2, 1:2] &lt;- 1; x[1:3, 3:5] &lt;- 2; layout(x)
+x &lt;- matrix(0, nrow=3, ncol=5); x[1:2, 1:2] &lt;- 1; x[1:3, 3:5] &lt;- 2
+layout(x)
+
+## Plot the hull metric scatterplot &amp; save the result
 gz2_colorwheel_hsp &lt;- lhs.plot.scatter(gz2.lhs, x=&quot;nsv&quot;, y=&quot;mnlv&quot;, col=&quot;spiral&quot;, desc=0, title=&quot;GZ2 - time use metrics&quot;, bg=&quot;black&quot;, lo.save = FALSE, lo.bg.as.box=TRUE, lo.margins.set=FALSE)
+
+## Plot the hull parent points
 plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_colorwheel_hsp, cex.hpp=0.6, lo.save = FALSE, desc=0, title=&quot;GZ2&quot;, lo.margins.set=FALSE, gmap=&quot;satellite&quot;)</code></pre>
 <pre><code>## Downloading common background image...Done</code></pre>
 <p><img src="working_with_hsp_files/figure-html/gz2_color_wheel.png" title="plot of chunk gz2_color_wheel" alt="plot of chunk gz2_color_wheel" width="960" style="display: block; margin: auto;" /></p>
