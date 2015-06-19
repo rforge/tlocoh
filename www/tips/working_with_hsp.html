@@ -11,7 +11,7 @@
 <meta name="author" content="Andy Lyons" />
 
 
-<title>Manually Digitizing Regions in Hull Scatterplot Space</title>
+<title>Working with Hull Metric Scatterplots for Legends, Exporting, and Subsetting</title>
 
 <script src="libs/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -63,7 +63,7 @@ img {
 
 
 <div id="header">
-<h1 class="title">Manually ‘Digitizing’ Regions in Hull Scatterplot Space</h1>
+<h1 class="title">Working with Hull Metric Scatterplots for Legends, Exporting, and Subsetting</h1>
 <h4 class="author"><em>Andy Lyons</em></h4>
 <h4 class="date"><em>June 2015</em></h4>
 </div>
@@ -72,7 +72,7 @@ img {
 <div id="summary" class="section level3">
 <h3>Summary</h3>
 <p>A useful feature of T-LoCoH is the ability to visualize - patterns between hull metrics, which may reflect different types of behavior. These patterns sometimes coincide with specific areas on the landscape - another clue that they reflect a behaviorial pattern. Notably, hull metrics for two dimensions of time-use (revisitation rate and duration of visit) have for many species revealed a “time use signature” for what appears to be territorial behavior (see figure below).</p>
-<p><img src="manually_digitized_regions_files/figure-html/lyons_et_al_2013_fig10.png" alt="Figure 10" /> <em>Adapted from Figure 10 from <a href="http://www.movementecologyjournal.com/content/1/1/2">Lyons et. al. 2013</a></em></p>
+<p><img src="working_with_hsp_files/figure-html/lyons_et_al_2013_fig10.png" alt="Figure 10" /> <em>Adapted from Figure 10 from <a href="http://www.movementecologyjournal.com/content/1/1/2">Lyons et. al. 2013</a></em></p>
 <p><br> This tip will illustrate how to manually digitize (i.e., draw with the mouse) discrete regions in scatterplot space. We can then:</p>
 <ul>
 <li>use the regions as a map legend</li>
@@ -110,13 +110,13 @@ summary(gz2.lhs)</code></pre>
 ##    other: -none-
 ##  created: Sat Oct 25 03:46:14 2014</code></pre>
 <pre class="r"><code>plot(gz2.lhs, iso=TRUE, allpts=TRUE, cex.allpts=0.3)</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_plot.png" title="plot of chunk gz2_plot" alt="plot of chunk gz2_plot" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_plot.png" title="plot of chunk gz2_plot" alt="plot of chunk gz2_plot" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="view-hulls-in-time-use-space" class="section level3">
 <h3>View Hulls in Time-Use Space</h3>
 <p>Let’s plot the hulls in hull metric scatterplot space. The two metrics (i.e., hull properties) we’ll look at are “number of separate visits”, which is a measure of revisitation, and “mean number of locations per visit” which is a measure of the duration of each visit.</p>
 <pre class="r"><code>lhs.plot.scatter(gz2.lhs, x=&quot;nsv&quot;, y=&quot;mnlv&quot;)</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_tus.png" title="plot of chunk gz2_tus" alt="plot of chunk gz2_tus" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_tus.png" title="plot of chunk gz2_tus" alt="plot of chunk gz2_tus" width="672" style="display: block; margin: auto;" /></p>
 <p>This looks interesting. There seems to be a spur in the middle of the time use space. We’ll look at the hulls that correspond to this spur, as well as the hulls with high and low revisitation.</p>
 </div>
 <div id="define-regions-in-hull-metric-space" class="section level3">
@@ -125,7 +125,7 @@ summary(gz2.lhs)</code></pre>
 <p>To draw each region, click on the plot window with the mouse where you want a node. You need to click at least twice (which will form a triangular region). When you’re ready to ‘close’ the polygon, hit escape (RStudio), or right-click and choose ‘stop’ (R GUI). Then, back at the console you’ll be prompted to type a label for the region (e.g., ‘low revisit’, or ‘searching’). Repeat the process for each region.</p>
 <p>Note also below how we are saving the result of <tt>lhs.plot.scatter()</tt> to a variable called <em>gz2_hsp</em>. I selected this variable name to remind myself that it contains a Hull Scatter Plot object, which is an object that essentially stores the polygon boundaries for each region and their labels.</p>
 <pre class="r"><code>gz2_hsp &lt;- lhs.plot.scatter(gz2.lhs, x=&quot;nsv&quot;, y=&quot;mnlv&quot;, regions=4)</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_tus_cached.png" title="plot of chunk gz2_tus_cached" alt="plot of chunk gz2_tus_cached" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_tus_cached.png" title="plot of chunk gz2_tus_cached" alt="plot of chunk gz2_tus_cached" width="672" style="display: block; margin: auto;" /></p>
 <p>TIP: If you want your regions to be drawn with specific colors, pass a vector of color values to <tt>regions</tt>.</p>
 </div>
 <div id="using-manually-defined-regions-as-a-map-legend" class="section level3">
@@ -137,7 +137,7 @@ summary(gz2.lhs)</code></pre>
 <li><tt>hsp=gz2_hsp</tt>. Use the regions in the saved <em>hsp</em> object</li>
 </ul>
 <pre class="r"><code>plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_hsp, cex.hpp=0.4)</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_hpp.png" title="plot of chunk gz2_hpp" alt="plot of chunk gz2_hpp" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_hpp.png" title="plot of chunk gz2_hpp" alt="plot of chunk gz2_hpp" width="672" style="display: block; margin: auto;" /></p>
 <p>To actually display the scatterplot next to the map of hull parent points, we need to create a two-column plot layout using <tt>par(mfrow=c(1,2))</tt>, or perhaps the <tt>layout()</tt> function before calling the two plot functions (see example below). Fortunately however we don’t have to redraw the polygon regions each time we want to plot them for a legend, we can simply pass the saved hsp object back to the plotting function:</p>
 <pre class="r"><code>## Set up a two column plot
 x &lt;- matrix(0, nrow=3, ncol=5, byrow = TRUE); x[1:2, 1:2] &lt;- 1; x[1:3, 3:5] &lt;- 2
@@ -146,7 +146,7 @@ layout(x)
 ## Plot the hulls in time-use-space as a legend, then the hull parent points
 lhs.plot.scatter(gz2.lhs, hsp=gz2_hsp, desc=0, title=&quot;GZ2 Hulls in Time Use Space&quot;, hsp.override=FALSE, lo.save = FALSE, lo.margins.set=FALSE)
 plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_hsp, cex.hpp=0.4, lo.save = FALSE, lo.margins.set=FALSE, title.show=FALSE, desc=0)</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_hsp_twocol.png" title="plot of chunk gz2_hsp_twocol" alt="plot of chunk gz2_hsp_twocol" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_hsp_twocol.png" title="plot of chunk gz2_hsp_twocol" alt="plot of chunk gz2_hsp_twocol" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div id="save-digitized-regions-as-part-of-the-hullset" class="section level3">
 <h3>Save Digitized Regions as Part of the Hullset</h3>
@@ -182,10 +182,10 @@ plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_hsp, cex.hpp=0.4, 
 <h3>Export to a Shapefile</h3>
 <p>To analyze the hull parent points that fall within a specific region using a GIS package, we can export them to a shapefile with the <tt>lhs.exp.shp</tt> function. When you open the shapefile in a GIS package, you’ll see a column in the attribute table called <em>hsp_reg</em> which stores the region number for that hull (or hull parent point).</p>
 <pre class="r"><code>lhs.exp.shp(gz2.lhs, hpp=TRUE, hulls=TRUE, hsp=1)</code></pre>
-<pre><code>##    Saving ./GZ2.s0.03.a8400.01.hpp.shp 
-##    Saving ./GZ2.s0.03.a8400.01.hulls.shp 
-## Total time: 1.8 secs</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/region_in_attribute_table.png" alt="Region number in attribute table" /> <em>The attribute table (opened in QGIS) of a set of hulls exported as shapefile. Note the column for the region number of the hull parent point.</em></p>
+<pre><code>##    Saving ./GZ2.s0.03.a8400.00.hpp.shp 
+##    Saving ./GZ2.s0.03.a8400.00.hulls.shp 
+## Total time: 2.2 secs</code></pre>
+<p><img src="working_with_hsp_files/figure-html/region_in_attribute_table.png" alt="Region number in attribute table" /> <em>The attribute table (opened in QGIS) of a set of hulls exported as shapefile. Note the column for the region number of the hull parent point.</em></p>
 </div>
 <div id="using-saved-regions-as-a-filter-to-create-plots-of-subsets-of-data" class="section level3">
 <h3>Using Saved Regions as a Filter to Create Plots of Subsets of Data</h3>
@@ -195,7 +195,7 @@ plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_hsp, cex.hpp=0.4, 
 op &lt;- par(mfrow=c(1,4))
 lhs.plot.scatter(gz2.lhs, x=&quot;dt&quot;, y=&quot;dt.hour&quot;, filter=gz2_groups, lo.save = FALSE, lo.margins.set=FALSE, desc=0)
 par(op)</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_lhs_filter.png" title="plot of chunk gz2_lhs_filter" alt="plot of chunk gz2_lhs_filter" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_lhs_filter.png" title="plot of chunk gz2_lhs_filter" alt="plot of chunk gz2_lhs_filter" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div id="variant-using-a-color-wheel-as-map-legend" class="section level3">
 <h3>Variant: Using a Color Wheel as Map Legend</h3>
@@ -205,7 +205,7 @@ x &lt;- matrix(0, nrow=3, ncol=5, byrow = TRUE); x[1:2, 1:2] &lt;- 1; x[1:3, 3:5
 gz2_colorwheel_hsp &lt;- lhs.plot.scatter(gz2.lhs, x=&quot;nsv&quot;, y=&quot;mnlv&quot;, col=&quot;spiral&quot;, desc=0, title=&quot;GZ2 - time use metrics&quot;, bg=&quot;black&quot;, lo.save = FALSE, lo.bg.as.box=TRUE, lo.margins.set=FALSE)
 plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_colorwheel_hsp, cex.hpp=0.6, lo.save = FALSE, desc=0, title=&quot;GZ2&quot;, lo.margins.set=FALSE, gmap=&quot;satellite&quot;)</code></pre>
 <pre><code>## Downloading common background image...Done</code></pre>
-<p><img src="manually_digitized_regions_files/figure-html/gz2_color_wheel.png" title="plot of chunk gz2_color_wheel" alt="plot of chunk gz2_color_wheel" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="working_with_hsp_files/figure-html/gz2_color_wheel.png" title="plot of chunk gz2_color_wheel" alt="plot of chunk gz2_color_wheel" width="960" style="display: block; margin: auto;" /></p>
 <p>A color wheel map legend does a reasonably good job in visualizing points by their location in scatterplot space, but unlike manually digitized regions color values are not included when you export a hullset to shapefile, and you can’t use color values to subset the data.</p>
 <hr />
 <p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>. (c) 2015 <br> <br></p>
