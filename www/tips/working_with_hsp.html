@@ -75,9 +75,9 @@ img {
 <p><img src="working_with_hsp_files/figure-html/lyons_et_al_2013_fig10.png" alt="Figure 10" /> <em>Adapted from Figure 10 from <a href="http://www.movementecologyjournal.com/content/1/1/2">Lyons et. al. 2013</a></em></p>
 <p><br> This tip will illustrate how to manually digitize (i.e., draw with the mouse) discrete regions in scatterplot space. We can then:</p>
 <ul>
-<li>use the regions as a map legend</li>
-<li>export regions as a attribute field in a shapefile</li>
-<li>create subsets of data</li>
+<li>use the regions as a map legend (as in the figure above)</li>
+<li>export each point’s region number as a attribute field in a shapefile</li>
+<li>use regions to create subsets of data</li>
 </ul>
 </div>
 <div id="load-data" class="section level3">
@@ -89,7 +89,7 @@ img {
 ## T-LoCoH for R (version 1.34.00)
 ## URL: http://tlocoh.r-forge.r-project.org/
 ## Bug reports: tlocoh@gmail.com</code></pre>
-<p>The hullset we’ll use in this example is from a zebra named <em>gz2</em>, collected by <a href="https://www.movebank.org/node/877">Ilya Fischhoff</a> in a study called <em>Zebras of Laikipia-Samburu, Kenya</em>. These data were obtained from <a href="https://www.movebank.org/">MoveBank.org</a>, and are subject to the MoveBank data sharing agreement.</p>
+<p>The hullset we’ll use in this example is from an individual zebra named <em>gz2</em> from the Laikipia Zebra Project<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Someone has already created hulls for this individual using a value of <em>s</em>=0.03 (i.e., time is included in nearest neighbor identification) and <em>a</em>=8400 (i.e., the adaptive method).</p>
 <pre class="r"><code>mycon &lt;- url(&quot;http://tlocoh.r-forge.r-project.org/gz2.n4223.s0.03.a8400.iso.lhs.01.RData&quot;)
 load(mycon); close(mycon)
 summary(gz2.lhs)</code></pre>
@@ -185,7 +185,7 @@ plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_hsp, cex.hpp=0.4, 
 <pre class="r"><code>lhs.exp.shp(gz2.lhs, hpp=TRUE, hulls=TRUE, hsp=1)</code></pre>
 <pre><code>##    Saving ./GZ2.s0.03.a8400.00.hpp.shp 
 ##    Saving ./GZ2.s0.03.a8400.00.hulls.shp 
-## Total time: 2.2 secs</code></pre>
+## Total time: 1.8 secs</code></pre>
 <p><img src="working_with_hsp_files/figure-html/region_in_attribute_table.png" alt="Region number in attribute table" /> <em>The attribute table (opened in QGIS) of a set of hulls exported as shapefile. Note the column for the region number of the hull parent point.</em></p>
 </div>
 <div id="using-saved-regions-as-a-filter-to-create-plots-of-subsets-of-data" class="section level3">
@@ -217,6 +217,12 @@ plot(gz2.lhs, hpp=TRUE, hpp.classify=&quot;hsp&quot;, hsp=gz2_colorwheel_hsp, ce
 <p>A color wheel map legend does a reasonably good job in visualizing points by their location in scatterplot space, but unlike manually digitized regions color values are not included when you export a hullset to shapefile, and you can’t use color values to subset the data.</p>
 <hr />
 <p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>. (c) 2015 <br> <br></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><strong>Laikipia Zebra Project</strong>. <a href="http://www.princeton.edu/eeb/people/display_person.xml?netid=dir">Dan Rubenstein</a>, Siva Sundaresan, and <a href="https://www.movebank.org/node/877">Ilya Fischhoff</a>. <em>Zebras of Laikipia-Samburu, Kenya</em> dataset obtained from <a href="https://www.movebank.org/">MoveBank.org</a>, and are subject to the MoveBank data sharing agreement. Used with permission.<a href="#fnref1">↩</a></p></li>
+</ol>
 </div>
 
 
