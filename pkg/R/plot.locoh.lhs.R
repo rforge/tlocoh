@@ -277,7 +277,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
         if (is.numeric(hsp)) {
             if (min(hsp) < 1 || max(hsp) > sapply(hs, function(x) length(x$hsp))) stop(err.msg)
         } else if (is.list(hsp)) {
-            if (FALSE %in% (sapply(hsp, function(x) class(x)=="locoh.hsp"))) stop(err.msg)
+            if (FALSE %in% (sapply(hsp, function(x) inherits(x, "locoh.hsp")))) stop(err.msg)
         } else {
              stop(err.msg)
         }

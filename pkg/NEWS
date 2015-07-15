@@ -1,3 +1,8 @@
+Changes in version 1.34.01 (2015-07-15)
+=========================
+* minor change to <pre>lhs.plot.scatter</pre>, <pre>lhs.hsp.add</pre>, <pre>lhs.exp.csv</pre>, <pre>lhs.exp.shp</pre>, <pre>lhs.filter.hsp</pre>, <pre>plot.locoh.lhs</pre>: modified data type check if a hsp is passed
+* new function <pre>hsp2expr</pre> to generate a valid R expression that will reproduce saved scatter plot settings (for the purposes of reproducable research)
+
 Changes in version 1.34.00 (2015-04-05)
 =========================
 * changed default colors in <pre>lhs.plot.isoear</pre> and <pre>lhs.plot.isoarea</pre> to conform with default colors on isopleth plots

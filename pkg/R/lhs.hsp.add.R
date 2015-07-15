@@ -21,7 +21,8 @@ lhs.hsp.add <- function(lhs, hsp.lst) {
   if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
   err.msg <- "hsp.lst should be a list of objects of class 'locoh.hsp'"
   if (!is.list(hsp.lst)) stop(err.msg)
-  if (FALSE %in% (sapply(hsp.lst, function(x) class(x)=="locoh.hsp"))) stop(err.msg)
+  if (FALSE %in% (sapply(hsp, function(x) inherits(x, "locoh.hsp")))) stop(err.msg)
+  
   
   for (j in 1:length(hsp.lst)) {
       if (is.null(lhs[[hsp.lst[[j]][["hs.name"]]]])) {

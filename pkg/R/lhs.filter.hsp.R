@@ -58,7 +58,8 @@ lhs.filter.hsp <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.name
         hsp <- hs[[1]][["hsp"]][hsp]
     } else {
         if (!is.list(hsp)) stop(err.msg.hsp)
-        if (class(hsp[[1]]) != "locoh.hsp") stop(err.msg.hsp)
+        if (FALSE %in% (sapply(hsp, function(x) inherits(x, "locoh.hsp")))) stop(err.msg.hsp)
+        #if (class(hsp[[1]]) != "locoh.hsp") stop(err.msg.hsp)
     }
     
 
