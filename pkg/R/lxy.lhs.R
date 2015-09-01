@@ -222,8 +222,13 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
             ## STILL NEED TO FILTER OUT BASED ON TIME, DIST, OR SPEED > 2 STD.DEV
         }
 
+        ## Next, we identify whether this only require one loop. If TRUE, then we can delete some objects from memory
+        ## when they are no longer needed. This flag is part of a (somewhat lame) strategy to deal with large datasets.
+        ## The strategy involves creating hullsets containing a single set of hulls, and saving those to disk.
+        ## (see lxy.lhs.batch(), in the tlocoh.dev package) 
+        ## By deleting unused objects from memory, we can hopefully work on larger datasets.
         
-        one.loop <- (length(n2z(s)) * length(n2z(k)) * nrow(as.data.frame(n2z(a))) * length(n2z(r))) == 1
+        one.loop <- (length(id) * length(n2z(s)) * length(n2z(k)) * nrow(as.data.frame(n2z(a))) * length(n2z(r))) == 1
         
         for (kVal in n2z(k)) {
         for (rVal in n2z(r)) {

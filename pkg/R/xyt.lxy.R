@@ -34,10 +34,10 @@
 #' \code{format()} function as part of a query to format a date field, e.g. \code{format(PointDate,
 #' "yyyy-mm-dd hh:nn:ss")}. In Excel, you can go to Format - Cells and give the date-time cells a
 #' custom format \code{yyyy-mm-dd hh:mm:ss}. See the Appendices of the T-LoCoH tutorial for more examples.
-#' 
+#'
 #' The time zone paramter \code{tz} is optional. If \code{tz} is omitted, R will try to get the timezone from
 #' dt, and if there is no timezone specified set it to \code{UTC}. Valid timezone names
-#' are to some extent OS specific, see \url{http://en.wikipedia.org/wiki/List_of_zoneinfo_time_zones}.
+#' are to some extent OS specific. To see valid timezone names, you may run \code{OlsonNames()}.
 #' If dt is of class POSIXct (which stores the time zone) and a different value for \code{tz} is passed,
 #' a prompt will ask whether date values should be converted.
 #'
