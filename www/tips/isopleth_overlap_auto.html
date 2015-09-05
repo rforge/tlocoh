@@ -11,7 +11,7 @@
 <meta name="author" content="Andy Lyons" />
 
 
-<title>Isopleth Overlap Example</title>
+<title>Computing Isopleth Overlap for All Pairs of Hullsets</title>
 
 <script src="isopleth_overlap_auto_files/jquery-1.11.0/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -63,7 +63,7 @@ img {
 
 
 <div id="header">
-<h1 class="title">Isopleth Overlap Example</h1>
+<h1 class="title">Computing Isopleth Overlap for All Pairs of Hullsets</h1>
 <h4 class="author"><em>Andy Lyons</em></h4>
 <h4 class="date"><em>September 4, 2015</em></h4>
 </div>
@@ -72,7 +72,7 @@ img {
 <p>In this tip, we demonstrate how to compute the area of overlap for pairs of hullsets (e.g., indviduals) using the <code>lhs.iso.overlap</code> function from the <em>tlocoh.dev</em> package.</p>
 <div id="create-dummy-data" class="section level3">
 <h3>Create Dummy Data</h3>
-<p>First let’s create some dummy movement data. We’ll create random walks for 50 indviduals, with 100 points each.</p>
+<p>First let’s create some dummy movement data. We’ll create random walks for 10 indviduals, with 100 points each.</p>
 <pre class="r"><code>step_size &lt;- 5
 xys_all &lt;- NULL
 num_id &lt;- 10
@@ -85,9 +85,20 @@ for (i in 1:num_id) {
                            x=start_loc[1] + step_size * cumsum(cos(theta)),
                            y=start_loc[2] + step_size * cumsum(sin(theta)))
     xys_all &lt;- rbind(xys_all, xys_this)
-}</code></pre>
+}
+head(xys_all)</code></pre>
+<pre><code>##       id        x        y
+## 1 ID0001 503.9631 571.4433
+## 2 ID0001 499.3660 569.4768
+## 3 ID0001 500.8815 564.7120
+## 4 ID0001 500.2178 559.7562
+## 5 ID0001 498.9221 564.5854
+## 6 ID0001 500.5292 559.8507</code></pre>
 <p>For a bit of realism, we’ll offset the locations so they’ll appear in Kansas.</p>
 <pre class="r"><code>xys_all &lt;- transform(xys_all, x = x + 71000, y = y + 4257200)</code></pre>
+</div>
+<div id="convert-to-a-locoh-xy-object" class="section level3">
+<h3>Convert to a locoh-xy Object</h3>
 <p>Next, we can convert our points to a locoh-xy object. Let’s first load the tlocoh package.</p>
 <pre class="r"><code>require(tlocoh)</code></pre>
 <pre><code>## Loading required package: tlocoh
@@ -99,10 +110,12 @@ for (i in 1:num_id) {
 packageVersion(&quot;tlocoh&quot;)</code></pre>
 <pre><code>## [1] &#39;1.35.0&#39;</code></pre>
 <pre class="r"><code>dummy.lxy &lt;- xyt.lxy(xy=xys_all[ ,2:3],id=xys_all[ ,1], proj4string = CRS(&quot;+proj=utm +zone=14 +ellps=WGS84&quot;))
-
 plot(dummy.lxy, overlay=T, title.show=F)</code></pre>
 <p><img src="isopleth_overlap_auto_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="672" /></p>
-<p>Next, identify nearest neighbors.</p>
+</div>
+<div id="create-hulls-and-isopleths" class="section level3">
+<h3>Create Hulls and Isopleths</h3>
+<p>To create hulls, we first identify nearest neighbors.</p>
 <pre class="r"><code>dummy.lxy &lt;- lxy.nn.add(dummy.lxy, s=0, k=10, status=FALSE)
 summary(dummy.lxy)</code></pre>
 <pre><code>## Summary of LoCoH-xy object: dummy.lxy 
@@ -122,53 +135,50 @@ summary(dummy.lxy)</code></pre>
 ##    no times recorded 
 ## ***Spatial extent 
 ##    ID0001
-##      x: 71584.7 - 71615.8 
-##      y: 4257699.8 - 4257768.3 
+##      x: 71480.5 - 71510.1 
+##      y: 4257747.2 - 4257816.7 
 ##    ID0002
-##      x: 71561.3 - 71622.4 
-##      y: 4257744.7 - 4257800.4 
+##      x: 71512.4 - 71542 
+##      y: 4257744.2 - 4257801.7 
 ##    ID0003
-##      x: 71543.3 - 71635.1 
-##      y: 4257732.2 - 4257766.7 
+##      x: 71473.1 - 71519 
+##      y: 4257702.7 - 4257765.8 
 ##    ID0004
-##      x: 71497.8 - 71543.6 
-##      y: 4257690.6 - 4257743.8 
+##      x: 71557 - 71598.9 
+##      y: 4257704.6 - 4257812.7 
 ##    ID0005
-##      x: 71523.2 - 71560.7 
-##      y: 4257698.3 - 4257744.7 
+##      x: 71545.6 - 71591 
+##      y: 4257728.4 - 4257769.3 
 ##    ID0006
-##      x: 71490.4 - 71576.2 
-##      y: 4257648.4 - 4257701.9 
+##      x: 71599.7 - 71649.6 
+##      y: 4257735.8 - 4257766.1 
 ##    ID0007
-##      x: 71519.3 - 71574.5 
-##      y: 4257701.8 - 4257752.3 
+##      x: 71550.8 - 71588.4 
+##      y: 4257754.3 - 4257799.8 
 ##    ID0008
-##      x: 71509.7 - 71552 
-##      y: 4257768.2 - 4257835.3 
+##      x: 71486 - 71532.7 
+##      y: 4257701.8 - 4257752.9 
 ##    ID0009
-##      x: 71507.9 - 71569.5 
-##      y: 4257691.3 - 4257721.8 
+##      x: 71487.6 - 71538.7 
+##      y: 4257633.2 - 4257728.4 
 ##    ID0010
-##      x: 71567.8 - 71644.8 
-##      y: 4257725.7 - 4257788.6 
+##      x: 71517.7 - 71553.1 
+##      y: 4257708.4 - 4257810.8 
 ##   proj: +proj=utm +zone=14 +ellps=WGS84
 ## ***Ancilliary Variables: 
 ##    -none- 
 ## ***Nearest-neighbor set(s): 
-##    1 ID0001|vmax|s0|n100|kmax10|rmax3.4|amax22
-##    2 ID0002|vmax|s0|n100|kmax10|rmax5|amax35.9
-##    3 ID0003|vmax|s0|n100|kmax10|rmax4|amax29.5
-##    4 ID0004|vmax|s0|n100|kmax10|rmax3.5|amax20.9
-##    5 ID0005|vmax|s0|n100|kmax10|rmax4.1|amax28.1
-##    6 ID0006|vmax|s0|n100|kmax10|rmax5|amax35.2
-##    7 ID0007|vmax|s0|n100|kmax10|rmax4|amax30.7
-##    8 ID0008|vmax|s0|n100|kmax10|rmax4.8|amax30.5
-##    9 ID0009|vmax|s0|n100|kmax10|rmax4.1|amax27.5
-##    10 ID0010|vmax|s0|n100|kmax10|rmax4.4|amax32.7</code></pre>
-</div>
-<div id="create-hulls-and-isopleths" class="section level3">
-<h3>Create Hulls and Isopleths</h3>
-<p>Next, we make a hullset object. We’ll add the <code>iso.add=TRUE</code> argument to create default density isopleths at the same time and specify the isopleth levels with <code>iso.levels</code>.</p>
+##    1 ID0001|vmax|s0|n100|kmax10|rmax4.3|amax27.7
+##    2 ID0002|vmax|s0|n100|kmax10|rmax3.6|amax24.7
+##    3 ID0003|vmax|s0|n100|kmax10|rmax4.1|amax24.7
+##    4 ID0004|vmax|s0|n100|kmax10|rmax4.8|amax32.2
+##    5 ID0005|vmax|s0|n100|kmax10|rmax3.7|amax25.6
+##    6 ID0006|vmax|s0|n100|kmax10|rmax3|amax24.1
+##    7 ID0007|vmax|s0|n100|kmax10|rmax4.3|amax29.9
+##    8 ID0008|vmax|s0|n100|kmax10|rmax3.3|amax22.8
+##    9 ID0009|vmax|s0|n100|kmax10|rmax3.6|amax26.8
+##    10 ID0010|vmax|s0|n100|kmax10|rmax4|amax28.1</code></pre>
+<p>Next, we make a hullset object. We’ll add the <code>iso.add=TRUE</code> argument to create default density isopleths at the same time and specify the isopleth levels we want to use with <code>iso.levels</code>.</p>
 <pre class="r"><code>dummy.lhs &lt;- lxy.lhs(dummy.lxy, k=10, s=0, iso.add=TRUE, iso.levels = c(0.5, 0.95), status=FALSE)
 #summary(dummy.lhs)</code></pre>
 <p>Let’s inspect isopleths for one of the individuals.</p>
@@ -207,40 +217,40 @@ plot(overlap_stats$spdf, col=&quot;#32323280&quot;, add=TRUE)</code></pre>
 <p><img src="isopleth_overlap_auto_files/figure-html/plot_areaoverlap-1.png" title="" alt="" width="672" /></p>
 <p>The data table (or attribute table) for the areas of intersection of two ids contains the area expressed in map units, as well as a proportion of the two hullsets.</p>
 <pre class="r"><code>head(overlap_stats$spdf@data)</code></pre>
-<pre><code>##                      hs1name                    hs2name iso_level      area area_prhs1 area_prhs2
-## 1 ID0001.pts100.k10.s0.kmin0 ID0002.pts100.k10.s0.kmin0      0.95 171.80099 0.19489992 0.17826482
-## 2 ID0001.pts100.k10.s0.kmin0 ID0003.pts100.k10.s0.kmin0      0.95 208.10337 0.23608322 0.25077164
-## 3 ID0001.pts100.k10.s0.kmin0 ID0010.pts100.k10.s0.kmin0      0.95 210.06741 0.23831133 0.22363975
-## 4 ID0002.pts100.k10.s0.kmin0 ID0003.pts100.k10.s0.kmin0      0.95 126.02754 0.13076920 0.15186747
-## 5 ID0002.pts100.k10.s0.kmin0 ID0010.pts100.k10.s0.kmin0      0.95 270.56581 0.28074557 0.28804691
-## 6 ID0003.pts100.k10.s0.kmin0 ID0005.pts100.k10.s0.kmin0      0.95  63.50262 0.07652281 0.08271858</code></pre>
+<pre><code>##                      hs1name                    hs2name iso_level       area  area_prhs1  area_prhs2
+## 1 ID0001.pts100.k10.s0.kmin0 ID0003.pts100.k10.s0.kmin0      0.95 117.550593 0.186894730 0.138830330
+## 2 ID0001.pts100.k10.s0.kmin0 ID0008.pts100.k10.s0.kmin0      0.95   3.033839 0.004823527 0.003562057
+## 3 ID0002.pts100.k10.s0.kmin0 ID0008.pts100.k10.s0.kmin0      0.95   6.381660 0.009442199 0.007492764
+## 4 ID0002.pts100.k10.s0.kmin0 ID0010.pts100.k10.s0.kmin0      0.95 212.910251 0.315018498 0.202157148
+## 5 ID0003.pts100.k10.s0.kmin0 ID0008.pts100.k10.s0.kmin0      0.95 124.601709 0.147157883 0.146295973
+## 6 ID0003.pts100.k10.s0.kmin0 ID0009.pts100.k10.s0.kmin0      0.95 112.677183 0.133074706 0.123978251</code></pre>
 <p>The SpatialPolygonsDataFrame can also be exported for use in a GIS program.</p>
 <p>The <strong>overlap_area</strong> and <strong>overlap_prop</strong> elements contain matrices of the area of intersection expressed as i) map units and ii) proportions of the areas of isopleths. We can inspect the comparison matrices. First we’ll look at the area of intersection. You’ll note that this matrix is symmetrical around the diagonal.</p>
 <pre class="r"><code>overlap_stats$overlap_area$iso95</code></pre>
-<pre><code>##          ID0001   ID0002    ID0003   ID0004    ID0005 ID0006    ID0007 ID0008    ID0009   ID0010
-## ID0001   0.0000 171.8010 208.10337   0.0000   0.00000      0   0.00000      0   0.00000 210.0674
-## ID0002 171.8010   0.0000 126.02754   0.0000   0.00000      0   0.00000      0   0.00000 270.5658
-## ID0003 208.1034 126.0275   0.00000   0.0000  63.50262      0 124.43664      0   0.00000 288.7087
-## ID0004   0.0000   0.0000   0.00000   0.0000 323.81116      0 321.64541      0 229.46767   0.0000
-## ID0005   0.0000   0.0000  63.50262 323.8112   0.00000      0 207.35964      0 193.74896   0.0000
-## ID0006   0.0000   0.0000   0.00000   0.0000   0.00000      0   0.00000      0   0.00000   0.0000
-## ID0007   0.0000   0.0000 124.43664 321.6454 207.35964      0   0.00000      0  25.48806   0.0000
-## ID0008   0.0000   0.0000   0.00000   0.0000   0.00000      0   0.00000      0   0.00000   0.0000
-## ID0009   0.0000   0.0000   0.00000 229.4677 193.74896      0  25.48806      0   0.00000   0.0000
-## ID0010 210.0674 270.5658 288.70872   0.0000   0.00000      0   0.00000      0   0.00000   0.0000</code></pre>
+<pre><code>##            ID0001    ID0002   ID0003   ID0004    ID0005 ID0006   ID0007     ID0008     ID0009    ID0010
+## ID0001   0.000000   0.00000 117.5506   0.0000   0.00000      0   0.0000   3.033839   0.000000   0.00000
+## ID0002   0.000000   0.00000   0.0000   0.0000   0.00000      0   0.0000   6.381660   0.000000 212.91025
+## ID0003 117.550593   0.00000   0.0000   0.0000   0.00000      0   0.0000 124.601709 112.677183   0.00000
+## ID0004   0.000000   0.00000   0.0000   0.0000  16.87670      0 139.1920   0.000000   0.000000   0.00000
+## ID0005   0.000000   0.00000   0.0000  16.8767   0.00000      0 227.7802   0.000000   0.000000  47.27948
+## ID0006   0.000000   0.00000   0.0000   0.0000   0.00000      0   0.0000   0.000000   0.000000   0.00000
+## ID0007   0.000000   0.00000   0.0000 139.1920 227.78016      0   0.0000   0.000000   0.000000   0.00000
+## ID0008   3.033839   6.38166 124.6017   0.0000   0.00000      0   0.0000   0.000000   5.966482  16.94726
+## ID0009   0.000000   0.00000 112.6772   0.0000   0.00000      0   0.0000   5.966482   0.000000   0.00000
+## ID0010   0.000000 212.91025   0.0000   0.0000  47.27948      0   0.0000  16.947263   0.000000   0.00000</code></pre>
 <p>Finally, we’ll look at the matrix which expresses the area of overlap as a proportion of i) the first hullset (on the vertical), and ii) the second hullset (on the horizontal). This matrix is <strong>not</strong> symmetrical.</p>
 <pre class="r"><code>overlap_stats$overlap_prop$iso95</code></pre>
-<pre><code>##           ID0001    ID0002     ID0003    ID0004     ID0005 ID0006     ID0007 ID0008     ID0009    ID0010
-## ID0001 0.0000000 0.1948999 0.23608322 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.2383113
-## ID0002 0.1782648 0.0000000 0.13076920 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.2807456
-## ID0003 0.2507716 0.1518675 0.00000000 0.0000000 0.07652281      0 0.14995039      0 0.00000000 0.3479038
-## ID0004 0.0000000 0.0000000 0.00000000 0.0000000 0.25005258      0 0.24838015      0 0.17719890 0.0000000
-## ID0005 0.0000000 0.0000000 0.08271858 0.4217968 0.00000000      0 0.27010690      0 0.25237761 0.0000000
-## ID0006 0.0000000 0.0000000 0.00000000 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.0000000
-## ID0007 0.0000000 0.0000000 0.15905759 0.4111341 0.26505156      0 0.00000000      0 0.03257939 0.0000000
-## ID0008 0.0000000 0.0000000 0.00000000 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.0000000
-## ID0009 0.0000000 0.0000000 0.00000000 0.3285105 0.27737489      0 0.03648922      0 0.00000000 0.0000000
-## ID0010 0.2236398 0.2880469 0.30736203 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.0000000</code></pre>
+<pre><code>##             ID0001      ID0002    ID0003     ID0004     ID0005 ID0006    ID0007      ID0008    ID0009     ID0010
+## ID0001 0.000000000 0.000000000 0.1868947 0.00000000 0.00000000      0 0.0000000 0.004823527 0.0000000 0.00000000
+## ID0002 0.000000000 0.000000000 0.0000000 0.00000000 0.00000000      0 0.0000000 0.009442199 0.0000000 0.31501850
+## ID0003 0.138830330 0.000000000 0.0000000 0.00000000 0.00000000      0 0.0000000 0.147157883 0.1330747 0.00000000
+## ID0004 0.000000000 0.000000000 0.0000000 0.00000000 0.01856652      0 0.1531289 0.000000000 0.0000000 0.00000000
+## ID0005 0.000000000 0.000000000 0.0000000 0.02538068 0.00000000      0 0.3425560 0.000000000 0.0000000 0.07110306
+## ID0006 0.000000000 0.000000000 0.0000000 0.00000000 0.00000000      0 0.0000000 0.000000000 0.0000000 0.00000000
+## ID0007 0.000000000 0.000000000 0.0000000 0.19040517 0.31158780      0 0.0000000 0.000000000 0.0000000 0.00000000
+## ID0008 0.003562057 0.007492764 0.1462960 0.00000000 0.00000000      0 0.0000000 0.000000000 0.0070053 0.01989793
+## ID0009 0.000000000 0.000000000 0.1239783 0.00000000 0.00000000      0 0.0000000 0.006564896 0.0000000 0.00000000
+## ID0010 0.000000000 0.202157148 0.0000000 0.00000000 0.04489161      0 0.0000000 0.016091336 0.0000000 0.00000000</code></pre>
 </div>
 <div id="summary" class="section level3">
 <h3>Summary</h3>
