@@ -22,7 +22,8 @@
   hpp.classify.chop = 0.01, hpp.classify.legend = TRUE,
   hpp.classify.common.scale.discrete = TRUE, col.ramp = c("gray10,gray90",
   "rainbow")[1], col.ramp.bins = 10, hsp = NULL, record = FALSE,
-  figs.per.page = 1, same.axes.4all = NULL, ufat = TRUE, ufipt = TRUE,
+  figs.per.page = 1, same.axes.4all = NULL, overlay = FALSE,
+  col.overlay.byhullset = FALSE, ufat = TRUE, ufipt = TRUE,
   axes.show = TRUE, axes.ticks = axes.show, axes.titles = axes.show,
   title = NULL, title.show = TRUE, title.inc = c("title", "hs.name", "id",
   "kar", "features", "hpp.classify", "hmap", "ptid")[if (is.null(title)) 3:4
@@ -165,6 +166,10 @@
 
 \item{same.axes.4all}{Whether to use the same axes ranges for all plots. T/F.}
 
+\item{overlay}{Whether to overlay the plots. T/F.}
+
+\item{col.overlay.byhullset}{Whether to use a different color for each hullset when overlay=TRUE. Affects only isopleths, hulls and ellipses. T/F.}
+
 \item{ufat}{Whether to use user-friendly-axis-titles. T/F.}
 
 \item{ufipt}{Whether to use user-friendly-isopleth-plot-titles. T/F.}
@@ -179,9 +184,9 @@
 
 \item{title.show}{Whether to show the title. T/F.}
 
-\item{title.inc}{The element(s) to include in the title (ignored if \code{title} is passed)}
+\item{title.inc}{The element(s) to include in the title (ignored if \code{title} is passed or \code{overlay=TRUE})}
 
-\item{subtitle.inc}{The element(s) to include in the subtitle (ignored if \code{title} is passed)}
+\item{subtitle.inc}{The element(s) to include in the subtitle (ignored if \code{title} is passed or \code{overlay=TRUE})}
 
 \item{mar}{The plot margins. A four item numeric vector.}
 
@@ -191,7 +196,7 @@
 
 \item{lo.margins.set}{Whether to save and reset the plot device margin settings (some wrapper functions that call this function don't want device settings reset). T/F.}
 
-\item{desc}{Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.}
+\item{desc}{Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top. Ignored if \code{overlay=TRUE}.}
 
 \item{cex.desc}{The expansion factor for the descriptive text. Numeric value.}
 

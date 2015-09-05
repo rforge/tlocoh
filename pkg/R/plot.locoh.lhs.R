@@ -62,6 +62,8 @@
 #' @param record Whether to open a new plot window and turn on recording. T/F.
 #' @param figs.per.page The number of plots per page.
 #' @param same.axes.4all Whether to use the same axes ranges for all plots. T/F.
+#' @param overlay Whether to overlay the plots. T/F.     
+#' @param col.overlay.byhullset Whether to use a different color for each hullset when overlay=TRUE. Affects only isopleths, hulls and ellipses. T/F.
 #' @param ufat Whether to use user-friendly-axis-titles. T/F.
 #' @param ufipt Whether to use user-friendly-isopleth-plot-titles. T/F.
 #' @param axes.show Whether to show the axes. T/F.
@@ -69,13 +71,13 @@
 #' @param axes.titles Whether to show axes titles. T/F.
 #' @param title The title to be displayed. Character. If NULL a title will be constructed.
 #' @param title.show Whether to show the title. T/F.
-#' @param title.inc The element(s) to include in the title (ignored if \code{title} is passed)
-#' @param subtitle.inc The element(s) to include in the subtitle (ignored if \code{title} is passed)
+#' @param title.inc The element(s) to include in the title (ignored if \code{title} is passed or \code{overlay=TRUE})
+#' @param subtitle.inc The element(s) to include in the subtitle (ignored if \code{title} is passed or \code{overlay=TRUE})
 #' @param mar The plot margins. A four item numeric vector.
 #' @param mgp The distance away from the edge of the plot for the 1) label, 2) tick marks, and 3) axis line. A three-item numeric vector.
 #' @param lo.save Whether to save and reset the plot device margin settings (some wrapper functions that call this function don't want device settings reset). T/F.
 #' @param lo.margins.set Whether to save and reset the plot device margin settings (some wrapper functions that call this function don't want device settings reset). T/F.
-#' @param desc Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.
+#' @param desc Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top. Ignored if \code{overlay=TRUE}.
 #' @param cex.desc The expansion factor for the descriptive text. Numeric value.
 #' @param col.desc The color of the descriptive text. Color value.
 #' @param gmap The name of a background image that will be downloaded from Google: \code{"none"}, 
@@ -173,7 +175,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     hpp.classify=c("none", "hsp", hm.expr(names.only=TRUE, print=FALSE, desc=FALSE))[1],
     hpp.classify.bins=10, hpp.classify.chop=0.01, hpp.classify.legend=TRUE, hpp.classify.common.scale.discrete=TRUE,
     col.ramp=c("gray10,gray90", "rainbow")[1], col.ramp.bins=10, hsp=NULL, 
-    record=FALSE, figs.per.page=1, same.axes.4all=NULL, ufat=TRUE, ufipt=TRUE, 
+    record=FALSE, figs.per.page=1, same.axes.4all=NULL, overlay=FALSE, col.overlay.byhullset=FALSE, ufat=TRUE, ufipt=TRUE, 
     axes.show=TRUE, axes.ticks=axes.show, axes.titles=axes.show, 
     title=NULL, title.show=TRUE,
     title.inc=c("title", "hs.name", "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if (is.null(title)) 3:4 else 1],
@@ -237,7 +239,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
 
     if (!is.numeric(desc) || desc > 4)  stop("Desc must be 0 (no description) or between and 1 and 4 (side to display description")
     if (desc != 0 && figs.per.page > 1) stop("You can't display description if figs.per.page > 1. Set desc=0.")
-    if (is.null(same.axes.4all)) same.axes.4all <- (length(ptid) <= 1)
+    if (is.null(same.axes.4all)) same.axes.4all <- (length(ptid) <= 1) || overlay
     
     if (!iso && !rast && !nn && !hulls && !ellipses && !allpts && !hpp && !dr) stop(cw("Don't know what to plot. Set at least one of the following parameters to TRUE: iso, rast, hulls, hpp, nn, allpts, dr, or ellipses", exdent=2))
     if (nn && is.null(ptid)) stop("To plot nearest neighbors you must specify a ptid")
@@ -247,7 +249,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
 
     if (!is.null(ptid) && iso) stop("You can not specify a point id(s) when plotting isopleths")
     if (!is.null(ptid) && hpp) stop("You can not specify a point id(s) when plotting hpp")
-    if (length(ptid) > 1 &&  same.axes.4all) stop("same.axes.4all can not be TRUE with multiple ptid")    
+    if (length(ptid) > 1 &&  same.axes.4all) stop("same.axes.4all can not be TRUE with multiple ptid") ## not sure why
     if (add && dev.cur()==1) stop("Can't add points to an existing plot, no plot window open")
     
     hme <- hm.expr(names.only=FALSE)   ## will use this list of expressions later
@@ -266,6 +268,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     
     iso.num.plotted <- 0
     plots.made <- 0             ## used to keep track when we need to create a new PNG file
+    innermost_loop_counter <- 0  ## used to determine when to add the plot title when overlay=TRUE
     tick.show <- if (axes.ticks) "s" else "n"
 
     ## Do some error checking on hsp, if its ok then assign values for all saved parameters
@@ -482,9 +485,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
             
             if (status) cat("Done\n")
             
-            #image(base.map.rast, col=col.merc, add=T)
-            #image(base.map.rast, col=base.map.col, add=T)
-            
         } else if (!is.null(tiff.fn) && is.null(tiff.sgdf)) {
             if (tiff.fill.plot) {
                 half.plot.size <- c(-0.5, 0.5) * max(diff(rx), diff(ry))
@@ -552,8 +552,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                 }
             }
             
-            #plot.title <- hs.name   ## Default plot title
-
             ## Set up dr.idx.use
             if (dr) {
                 if (is.null(hs[[hs.name]][["dr"]])) {
@@ -670,13 +668,30 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     
                 }
             } 
-            
+
+            if (overlay) {
+                total_num_iter <- length(dr.idx.use) * length(n2z(ptid)) * length(isos.idx.use) * nrow(hmap) * length(hs.names.to.loop.thru) * length(hsp)
+                if (is.null(title)) {                    
+                    title <- paste(total_num_iter, "Hullsets")  #title <- "Multiple Hullsets"
+                    title.inc <- "title"
+                    subtitle.inc <- character()
+                }
+                if (col.overlay.byhullset) {
+                    hullset_cols <- rainbow(total_num_iter)
+                }
+                desc <- 0
+                iso.legend <- FALSE
+            }
+
+
             for (hmap.idx in 1:nrow(hmap)) {
             for (iso.idx in isos.idx.use ) {
                 iso.num.plotted <- iso.num.plotted + 1
             for (ptidVal in n2z(ptid)) {
             for (dr.idx in dr.idx.use) {
-            
+                
+                innermost_loop_counter <- innermost_loop_counter + 1
+                
                 ## Hereth begins the code to actually plot stuff
                 
                 title.ptid.str <- NULL
@@ -861,10 +876,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             ## First turn off the device if there's already one running
                             if (plots.made > 0) dev.off()
                             
-                            ## if (first.png.made && png.each.plot.separate) dev.off()
-                            
-                            
-                            
                             if (is.null(png.fn)) {
                                 
                                 ## Construct the pieces or tokens of the filename
@@ -955,7 +966,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     
                 ## previous the chunk of code to compile desc was located here
                 
-                if (!add) {
+                if (!add && !(overlay && innermost_loop_counter > 1)) { 
                     if (lo.margins.set) if (max(oma.vals) > 0) par(oma=oma.vals)    
                     
                     ## Create a new plot
@@ -1038,7 +1049,14 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     
                         ## Define the colors from most dense to least dense
                         col.iso.fill.err.msg <- cw("col.iso should be a preset (1-4), or a character vector of color names equal in length to the number of isopleth levels", exdent=2, final.cr=FALSE)
-                        if (identical(col.iso.fill, 1)) {
+                        if (overlay && col.overlay.byhullset) {
+                            ## Create a set of colors that are all the same base but vary in transparency
+                            col.thishullset <- substr(hullset_cols[innermost_loop_counter], 0, 7)
+                            col.iso.fill.use <- paste(col.thishullset, as.hexmode(floor(seq(from=225, to=40, length.out=num.cols))), sep="")
+                            #int <- 200 / (num.cols + 1)
+                            #col.iso.fill.use <- paste(col.thishullset, as.hexmode(floor(seq(from=int, by=int, length.out=num.cols))), sep="")
+                            #col.iso.fill.use <- paste(col.thishullset, as.hexmode(floor(seq(from=50, by=int, length.out=num.cols))), sep="")
+                        } else if (identical(col.iso.fill, 1)) {
                             ## red to blue
                             col.iso.fill.use <- colorRampPalette(c("#FF0000", "#0000FF", "#BFBFFF"))(num.cols)
                         } else if (identical(col.iso.fill, 2)) {
@@ -1146,6 +1164,12 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                         }
     
                         if (hulls) {
+                            if (overlay && col.overlay.byhullset) {
+                                col.hulls.border <- paste(substr(hullset_cols[innermost_loop_counter], 0, 7), "80", sep="")
+                                if (!is.na(col.hulls.fill)) {
+                                    col.hulls.fill <- paste(substr(hullset_cols[innermost_loop_counter], 0, 7), "19", sep="")
+                                }
+                            }
                             plot(hs[[hs.name]][["hulls"]], add=TRUE, border=col.hulls.border, col=col.hulls.fill)
                         }
         
@@ -1160,12 +1184,9 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             for (featname in names(gis.features)[sapply(gis.features, function(x) x$type %in% c("point"))]) {
                                 with(gis.features[[featname]], plot(sdf, pch=pch, cex=cex, col=col, add=TRUE))
                             }
-                            
-                            
                         }
                         
                         if (hpp) {
-
                             hpp.xys <- coordinates(hs[[hs.name]][["pts"]])[hs[[hs.name]][["hulls"]]@data[["pts.idx"]], , drop=FALSE]
                             title.feats.str <- c(title.feats.str, "hull parent points")
                             
@@ -1402,8 +1423,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                                     }    ## plot with a single hull metric and a color ramp
                                 
                                 }
-                                
-                            
                             
                             
                             ## end loop for (hg.idx in hmap.grp.iter) 
@@ -1411,11 +1430,8 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             
                             ## Restore hmap.idx
                             hmap.idx <- hmap.idx.orig
-                            
-                            
     
                         }
-    
         
                         if (ellipses) {
                             title.feats.str <- c(title.feats.str, "ellipses")
@@ -1424,6 +1440,9 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                                 ellps.pts <- with(hs[[hs.name]][["ellipses"]][i, ],
                                               data.frame(x = cx + a * cos(theta) * cos(alpha) - b * sin(theta) * sin(alpha),
                                                          y = cy + a * cos(theta) * sin(alpha) + b * sin(theta) * cos(alpha)))
+                                if (overlay && col.overlay.byhullset) {
+                                    col.ellipses <- paste(substr(hullset_cols[innermost_loop_counter], 0, 7), "80", sep="")
+                                }
                                 points(ellps.pts, type="l", col=col.ellipses)
                             }
                         }
@@ -1431,7 +1450,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                         if (length(hs) * length(n2z(ptid)) > 1) box()
         
                     }
-                    #if (length(gis.features)>0) box("plot")
         
                 } else {
                 
@@ -1472,7 +1490,6 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                     } 
                     
                     ## Next, add the hull
-                    #if (hulls) points(hull.pts, type="l", col=col.hulls.border)
                     if (hulls) polygon(hull.pts, border=col.hulls.border, col=col.hulls.fill)
                     
                     ## Finally, add the bounding ellipse
@@ -1484,27 +1501,20 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                 #hmap.subtitles <- paste(unlist(sapply(c(x.axis, y.axis), function(myaxis) sapply(hme[[myaxis]][["req.ap.subtitle"]], function(x) eval(x)))), collapse="; ", sep="")
 
                 ## Add the plot title
-                if (title.show) {
-                    #if (is.null(title)) {
-
-                    
-                        title.pieces <- unlist(sapply(title.inc, function(x) eval(title.pieces.exp.lst[[x]])))
-                        subtitle.pieces <- unlist(sapply(subtitle.inc, function(x) eval(title.pieces.exp.lst[[x]])))
-                        if (is.null(subtitle.pieces)) {
-                            subtitle.pieces.str <- NULL
-                        } else {
-                            subtitle.pieces.str <- paste("\n", paste(subtitle.pieces, collapse=", ", sep=""), sep="")
-                        } 
-                        title.use <- paste(paste(title.pieces, collapse=", ", sep=""), subtitle.pieces.str, sep="")
-                    
-                    #} else {
-                    #    title.use <- title
-                    #}
+                if (title.show && !add && !(overlay && innermost_loop_counter > 1)) {
+                    title.pieces <- unlist(sapply(title.inc, function(x) eval(title.pieces.exp.lst[[x]])))
+                    subtitle.pieces <- unlist(sapply(subtitle.inc, function(x) eval(title.pieces.exp.lst[[x]])))
+                    if (is.null(subtitle.pieces)) {
+                        subtitle.pieces.str <- NULL
+                    } else {
+                        subtitle.pieces.str <- paste("\n", paste(subtitle.pieces, collapse=", ", sep=""), sep="")
+                    } 
+                    title.use <- paste(paste(title.pieces, collapse=", ", sep=""), subtitle.pieces.str, sep="")
                     title(title.use)
                 }
                 
                 ## Add panel.num
-                if (!is.null(panel.num)) {
+                if (!is.null(panel.num) && !add && !(overlay && innermost_loop_counter > 1)) {
                     if (panel.num.inside.plot) {
                         text(x=par("usr")[1], y=par("usr")[4], labels=panel.num, cex=2, adj=c(-0.3,1.2), font=2)
                     } else {

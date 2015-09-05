@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Andy Lyons" />
+
+
+<title>Isopleth Overlap Example</title>
+
+<script src="isopleth_overlap_auto_files/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="isopleth_overlap_auto_files/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="isopleth_overlap_auto_files/bootstrap-3.3.1/js/bootstrap.min.js"></script>
+<script src="isopleth_overlap_auto_files/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
+<script src="isopleth_overlap_auto_files/bootstrap-3.3.1/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="isopleth_overlap_auto_files/highlight/default.css"
+      type="text/css" />
+<script src="isopleth_overlap_auto_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div id="header">
+<h1 class="title">Isopleth Overlap Example</h1>
+<h4 class="author"><em>Andy Lyons</em></h4>
+<h4 class="date"><em>September 4, 2015</em></h4>
+</div>
+
+
+<p>In this tip, we demonstrate how to compute the area of overlap for pairs of hullsets (e.g., indviduals) using the <code>lhs.iso.overlap</code> function from the <em>tlocoh.dev</em> package.</p>
+<div id="create-dummy-data" class="section level3">
+<h3>Create Dummy Data</h3>
+<p>First let’s create some dummy movement data. We’ll create random walks for 50 indviduals, with 100 points each.</p>
+<pre class="r"><code>step_size &lt;- 5
+xys_all &lt;- NULL
+num_id &lt;- 10
+num_pts &lt;- 100
+for (i in 1:num_id) {
+    id &lt;- sprintf(&quot;ID%04d&quot;, i)
+    theta &lt;- runif(num_pts, min = 0, max = 2 *pi)
+    start_loc &lt;- runif(2, min=500, max=600)
+    xys_this &lt;- data.frame(id=id, 
+                           x=start_loc[1] + step_size * cumsum(cos(theta)),
+                           y=start_loc[2] + step_size * cumsum(sin(theta)))
+    xys_all &lt;- rbind(xys_all, xys_this)
+}</code></pre>
+<p>For a bit of realism, we’ll offset the locations so they’ll appear in Kansas.</p>
+<pre class="r"><code>xys_all &lt;- transform(xys_all, x = x + 71000, y = y + 4257200)</code></pre>
+<p>Next, we can convert our points to a locoh-xy object. Let’s first load the tlocoh package.</p>
+<pre class="r"><code>require(tlocoh)</code></pre>
+<pre><code>## Loading required package: tlocoh
+## Loading required package: sp
+## T-LoCoH for R (version 1.35.0)
+## URL: http://tlocoh.r-forge.r-project.org/
+## Bug reports: tlocoh@gmail.com</code></pre>
+<pre class="r"><code>## Make sure you&#39;re using version 1.35.00 or later.
+packageVersion(&quot;tlocoh&quot;)</code></pre>
+<pre><code>## [1] &#39;1.35.0&#39;</code></pre>
+<pre class="r"><code>dummy.lxy &lt;- xyt.lxy(xy=xys_all[ ,2:3],id=xys_all[ ,1], proj4string = CRS(&quot;+proj=utm +zone=14 +ellps=WGS84&quot;))
+
+plot(dummy.lxy, overlay=T, title.show=F)</code></pre>
+<p><img src="isopleth_overlap_auto_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="672" /></p>
+<p>Next, identify nearest neighbors.</p>
+<pre class="r"><code>dummy.lxy &lt;- lxy.nn.add(dummy.lxy, s=0, k=10, status=FALSE)
+summary(dummy.lxy)</code></pre>
+<pre><code>## Summary of LoCoH-xy object: dummy.lxy 
+## ***Locations
+##        id num.pts dups
+##    ID0001     100    0
+##    ID0002     100    0
+##    ID0003     100    0
+##    ID0004     100    0
+##    ID0005     100    0
+##    ID0006     100    0
+##    ID0007     100    0
+##    ID0008     100    0
+##    ID0009     100    0
+##    ID0010     100    0
+## ***Time span
+##    no times recorded 
+## ***Spatial extent 
+##    ID0001
+##      x: 71584.7 - 71615.8 
+##      y: 4257699.8 - 4257768.3 
+##    ID0002
+##      x: 71561.3 - 71622.4 
+##      y: 4257744.7 - 4257800.4 
+##    ID0003
+##      x: 71543.3 - 71635.1 
+##      y: 4257732.2 - 4257766.7 
+##    ID0004
+##      x: 71497.8 - 71543.6 
+##      y: 4257690.6 - 4257743.8 
+##    ID0005
+##      x: 71523.2 - 71560.7 
+##      y: 4257698.3 - 4257744.7 
+##    ID0006
+##      x: 71490.4 - 71576.2 
+##      y: 4257648.4 - 4257701.9 
+##    ID0007
+##      x: 71519.3 - 71574.5 
+##      y: 4257701.8 - 4257752.3 
+##    ID0008
+##      x: 71509.7 - 71552 
+##      y: 4257768.2 - 4257835.3 
+##    ID0009
+##      x: 71507.9 - 71569.5 
+##      y: 4257691.3 - 4257721.8 
+##    ID0010
+##      x: 71567.8 - 71644.8 
+##      y: 4257725.7 - 4257788.6 
+##   proj: +proj=utm +zone=14 +ellps=WGS84
+## ***Ancilliary Variables: 
+##    -none- 
+## ***Nearest-neighbor set(s): 
+##    1 ID0001|vmax|s0|n100|kmax10|rmax3.4|amax22
+##    2 ID0002|vmax|s0|n100|kmax10|rmax5|amax35.9
+##    3 ID0003|vmax|s0|n100|kmax10|rmax4|amax29.5
+##    4 ID0004|vmax|s0|n100|kmax10|rmax3.5|amax20.9
+##    5 ID0005|vmax|s0|n100|kmax10|rmax4.1|amax28.1
+##    6 ID0006|vmax|s0|n100|kmax10|rmax5|amax35.2
+##    7 ID0007|vmax|s0|n100|kmax10|rmax4|amax30.7
+##    8 ID0008|vmax|s0|n100|kmax10|rmax4.8|amax30.5
+##    9 ID0009|vmax|s0|n100|kmax10|rmax4.1|amax27.5
+##    10 ID0010|vmax|s0|n100|kmax10|rmax4.4|amax32.7</code></pre>
+</div>
+<div id="create-hulls-and-isopleths" class="section level3">
+<h3>Create Hulls and Isopleths</h3>
+<p>Next, we make a hullset object. We’ll add the <code>iso.add=TRUE</code> argument to create default density isopleths at the same time and specify the isopleth levels with <code>iso.levels</code>.</p>
+<pre class="r"><code>dummy.lhs &lt;- lxy.lhs(dummy.lxy, k=10, s=0, iso.add=TRUE, iso.levels = c(0.5, 0.95), status=FALSE)
+#summary(dummy.lhs)</code></pre>
+<p>Let’s inspect isopleths for one of the individuals.</p>
+<pre class="r"><code>plot(dummy.lhs, iso=TRUE, id=&quot;ID0005&quot;, allpts=T, col.allpts=&quot;gray30&quot;, cex.allpts=0.4)</code></pre>
+<p><img src="isopleth_overlap_auto_files/figure-html/isoplot_one-1.png" title="" alt="" width="672" /></p>
+<p>Now we’ll plot an overlay of the isopleths for all of the individuals.</p>
+<pre class="r"><code>plot(dummy.lhs, iso=TRUE, overlay=TRUE, col.overlay.byhullset=TRUE, gmap=&quot;hybrid&quot;)</code></pre>
+<pre><code>## Downloading common background image...Done</code></pre>
+<p><img src="isopleth_overlap_auto_files/figure-html/isoplot_all-1.png" title="" alt="" width="672" /></p>
+</div>
+<div id="find-isopleth-intersections" class="section level3">
+<h3>Find Isopleth Intersections</h3>
+<p>Some of these virtual indviduals appear to overlap. Let’s find which ones using the function <code>lhs.iso.overlap</code>. This function will take all pairs of individuals, and find the area of intersection. This function is currently in the <code>toloch.dev</code> package, which is the package for ‘experimental’ functions for T-LoCoH.</p>
+<pre class="r"><code>## Make sure you&#39;re using version 1.3.0 or later.
+if (!require(tlocoh.dev)) install.packages(&quot;tlocoh.dev&quot;, repos=&quot;http://R-Forge.R-project.org&quot;)</code></pre>
+<pre><code>## Loading required package: tlocoh.dev
+## Development features for T-LoCoH
+## Version 1.3.0
+## URL: http://tlocoh.r-forge.r-project.org/
+## Please send bug reports and feedback to: tlocoh@gmail.com</code></pre>
+<pre class="r"><code>require(tlocoh.dev)
+packageVersion(&quot;tlocoh.dev&quot;)</code></pre>
+<pre><code>## [1] &#39;1.3.0&#39;</code></pre>
+<p>The function we want to use is <code>lhs.iso.overlap</code>. This function will look at all pairs of hullsets in <code>dummy.lhs</code> (which in our case correspond to different individuals), and compute the area of intersection.</p>
+<pre class="r"><code>library(rgeos)</code></pre>
+<pre><code>## rgeos version: 0.3-11, (SVN revision 479)
+##  GEOS runtime version: 3.4.2-CAPI-1.8.2 r3921 
+##  Linking to sp version: 1.1-1 
+##  Polygon checking: TRUE</code></pre>
+<pre class="r"><code>overlap_stats &lt;- lhs.iso.overlap(dummy.lhs, iso.level=0.95, status=FALSE)
+names(overlap_stats)</code></pre>
+<pre><code>## [1] &quot;spdf&quot;         &quot;overlap_area&quot; &quot;overlap_prop&quot;</code></pre>
+<p><code>lhs.iso.overlap</code> returns a named list with three elements. The <strong>spdf</strong> element is a SpatialPolygonsDataFrame contained the polygons of intersection.</p>
+<pre class="r"><code>plot(dummy.lhs, iso=TRUE, overlay=TRUE, col.overlay.byhullset=TRUE)
+plot(overlap_stats$spdf, col=&quot;#32323280&quot;, add=TRUE)</code></pre>
+<p><img src="isopleth_overlap_auto_files/figure-html/plot_areaoverlap-1.png" title="" alt="" width="672" /></p>
+<p>The data table (or attribute table) for the areas of intersection of two ids contains the area expressed in map units, as well as a proportion of the two hullsets.</p>
+<pre class="r"><code>head(overlap_stats$spdf@data)</code></pre>
+<pre><code>##                      hs1name                    hs2name iso_level      area area_prhs1 area_prhs2
+## 1 ID0001.pts100.k10.s0.kmin0 ID0002.pts100.k10.s0.kmin0      0.95 171.80099 0.19489992 0.17826482
+## 2 ID0001.pts100.k10.s0.kmin0 ID0003.pts100.k10.s0.kmin0      0.95 208.10337 0.23608322 0.25077164
+## 3 ID0001.pts100.k10.s0.kmin0 ID0010.pts100.k10.s0.kmin0      0.95 210.06741 0.23831133 0.22363975
+## 4 ID0002.pts100.k10.s0.kmin0 ID0003.pts100.k10.s0.kmin0      0.95 126.02754 0.13076920 0.15186747
+## 5 ID0002.pts100.k10.s0.kmin0 ID0010.pts100.k10.s0.kmin0      0.95 270.56581 0.28074557 0.28804691
+## 6 ID0003.pts100.k10.s0.kmin0 ID0005.pts100.k10.s0.kmin0      0.95  63.50262 0.07652281 0.08271858</code></pre>
+<p>The SpatialPolygonsDataFrame can also be exported for use in a GIS program.</p>
+<p>The <strong>overlap_area</strong> and <strong>overlap_prop</strong> elements contain matrices of the area of intersection expressed as i) map units and ii) proportions of the areas of isopleths. We can inspect the comparison matrices. First we’ll look at the area of intersection. You’ll note that this matrix is symmetrical around the diagonal.</p>
+<pre class="r"><code>overlap_stats$overlap_area$iso95</code></pre>
+<pre><code>##          ID0001   ID0002    ID0003   ID0004    ID0005 ID0006    ID0007 ID0008    ID0009   ID0010
+## ID0001   0.0000 171.8010 208.10337   0.0000   0.00000      0   0.00000      0   0.00000 210.0674
+## ID0002 171.8010   0.0000 126.02754   0.0000   0.00000      0   0.00000      0   0.00000 270.5658
+## ID0003 208.1034 126.0275   0.00000   0.0000  63.50262      0 124.43664      0   0.00000 288.7087
+## ID0004   0.0000   0.0000   0.00000   0.0000 323.81116      0 321.64541      0 229.46767   0.0000
+## ID0005   0.0000   0.0000  63.50262 323.8112   0.00000      0 207.35964      0 193.74896   0.0000
+## ID0006   0.0000   0.0000   0.00000   0.0000   0.00000      0   0.00000      0   0.00000   0.0000
+## ID0007   0.0000   0.0000 124.43664 321.6454 207.35964      0   0.00000      0  25.48806   0.0000
+## ID0008   0.0000   0.0000   0.00000   0.0000   0.00000      0   0.00000      0   0.00000   0.0000
+## ID0009   0.0000   0.0000   0.00000 229.4677 193.74896      0  25.48806      0   0.00000   0.0000
+## ID0010 210.0674 270.5658 288.70872   0.0000   0.00000      0   0.00000      0   0.00000   0.0000</code></pre>
+<p>Finally, we’ll look at the matrix which expresses the area of overlap as a proportion of i) the first hullset (on the vertical), and ii) the second hullset (on the horizontal). This matrix is <strong>not</strong> symmetrical.</p>
+<pre class="r"><code>overlap_stats$overlap_prop$iso95</code></pre>
+<pre><code>##           ID0001    ID0002     ID0003    ID0004     ID0005 ID0006     ID0007 ID0008     ID0009    ID0010
+## ID0001 0.0000000 0.1948999 0.23608322 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.2383113
+## ID0002 0.1782648 0.0000000 0.13076920 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.2807456
+## ID0003 0.2507716 0.1518675 0.00000000 0.0000000 0.07652281      0 0.14995039      0 0.00000000 0.3479038
+## ID0004 0.0000000 0.0000000 0.00000000 0.0000000 0.25005258      0 0.24838015      0 0.17719890 0.0000000
+## ID0005 0.0000000 0.0000000 0.08271858 0.4217968 0.00000000      0 0.27010690      0 0.25237761 0.0000000
+## ID0006 0.0000000 0.0000000 0.00000000 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.0000000
+## ID0007 0.0000000 0.0000000 0.15905759 0.4111341 0.26505156      0 0.00000000      0 0.03257939 0.0000000
+## ID0008 0.0000000 0.0000000 0.00000000 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.0000000
+## ID0009 0.0000000 0.0000000 0.00000000 0.3285105 0.27737489      0 0.03648922      0 0.00000000 0.0000000
+## ID0010 0.2236398 0.2880469 0.30736203 0.0000000 0.00000000      0 0.00000000      0 0.00000000 0.0000000</code></pre>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>The <code>lhs.iso.overlap</code> function from the <code>tlocoh.dev</code> package makes it easy to compute the area of intersection of many pairs of hullsets. While not as nuanced as other measures of association, homerange intersection can give you idea of which pairs of individuals share space.</p>
+<hr />
+<p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>. (c) 2015 <br> <br></p>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
