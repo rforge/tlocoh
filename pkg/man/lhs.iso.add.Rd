@@ -10,7 +10,8 @@ lhs.iso.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
   iso.method = c("pt.quantiles", "hm.vals")[1], iso.cap.method = c(">=",
   "<=")[1], scale.iso.levels.to.hm.vals = (iso.method == "hm.vals" &&
   max(iso.levels <= 1)), subset.metric = NULL, subset.vals = NULL,
-  allow.gpc = TRUE, beep = FALSE, status = TRUE, ...)
+  allow.gpc = TRUE, sliver_check = TRUE, beep = FALSE, status = TRUE,
+  ...)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}
@@ -51,6 +52,8 @@ Can also be a character string in the form of "equal intervals, n", or "quantitl
 spread equally between the minimum and maximum subset metric value (equal interval) or so an equal number of hulls is in each strata}
 
 \item{allow.gpc}{Allow functions from the gpclib package if the functions from rgeos fail. See details. T/F}
+
+\item{sliver_check}{Whether to check for and delete slivers in isopleths. See details. T/F}
 
 \item{beep}{Beep when done. T/F}
 
@@ -93,7 +96,8 @@ You can use the \code{\link{summary.locoh.lhs}} function to see which isopleths 
 
 Hulls are unioned using the gUnion and gUnaryUnion functions from the rgeos package, which in general is very fast. These functions occasionally fail when lines are too close together or there are other topological conditions.
 This is not a problem with the data, but an inherent limitation of the algorithms / processing. If \code{allow.gpc=TRUE}, functions from the gpclib package will
-be used as backup.
+be used as backup. If \code{sliver_check=TRUE}, isopleths will checked for 'slivers'. Slivers (as used here) refer to polygons or holes with <3 unique nodes.
+Slivers can be caused by reductions in numeric precision or rounding errors, and are not uncommon.
 }
 \examples{
 # Create 0.5 and 0.95 isopleths. By not specifying the sort.metric,

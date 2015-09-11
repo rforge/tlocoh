@@ -16,13 +16,14 @@
 #' @param ud Deprecated (no longer used). Use \code{iso.add} instead
 #' @param iso.add Whether to also create density isopleths, T/F
 #' @param iso.levels Isopleth levels (see also \code{\link{lhs.iso.add}}), numeric vector. Ignored if |code{iso.add=FALSE}.
+#' @param sliver_check Whether to check for and delete slivers in isopleths. See details. T/F
 #' @param pbo.style Progress bar style (see pbapply package) 
 #' @param beep Beep when done. T/F
 #' @param status Show messages. T/F
 #' @param save.hulls Whether to save the hulls. T/F
 #' @param save.enc.pts Whether to save the enclosed points. T/F
 #'
-#' @note
+#' @details
 #' This function creates a \link{LoCoH-hullset} object from a \link{LoCoH-xy} object. Other functions allow you to do things with 
 #' hullsets, including computing additional hull metrics, constructing isopleths, directional routes, generating scatterplots, exporting, etc.
 #' Note that before you use this function, nearest neighbors must have already been identified and saved in the 
@@ -30,7 +31,9 @@
 #'
 #' If \code{iso.add=TRUE}, after the hulls are created the function will create density isopleths using the default 
 #' sort order (area for \emph{k-method}, number of enclosed points for the \emph{a} and \emph{r-methods}). You can 
-#' control which isopleth levels are created using the \code{iso.levels} argument.
+#' control which isopleth levels are created using the \code{iso.levels} argument. If \code{sliver_check=TRUE}, 
+#' isopleths will checked for 'slivers'. Slivers (as used here) refer to polygons or holes with <3 unique nodes. 
+#' Slivers can be caused by reductions in numeric precision or rounding errors, and are not uncommon.
 #'
 #' When working with a large dataset where memory limts may affect performance, you can choose to not save the hulls or enclosed points by 
 #' setting \code{save.hulls=FALSE} and \code{save.enc.pts=FALSE}. See the vignette on working with large datasets.
@@ -51,7 +54,8 @@
 
 lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy=TRUE, 
                     decimal.places=1, offset.dups=1, velocity.metrics=TRUE,
-                    ud=NULL, iso.add=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), pbo.style=3, beep=FALSE, status=TRUE, 
+                    ud=NULL, iso.add=FALSE, iso.levels=c(0.1,0.25,0.5,0.75,0.95), sliver_check=TRUE,
+                    pbo.style=3, beep=FALSE, status=TRUE, 
                     save.hulls=TRUE, save.enc.pts=TRUE) {
     
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")

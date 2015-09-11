@@ -1,3 +1,9 @@
+Changes in version 1.36.00 (2015-09-10)
+=========================
+* added <pre>clean_slivers</pre>
+* modified <pre>hulls2iso.rgeos</pre> and <pre>hulls2iso.gpc</pre> - added <pre>sliver_check</pre> argument
+* added <pre>sliver_check</pre> argument to <pre>lhs.iso.add</pre> and <pre>lxy.lhs</pre>
+
 Changes in version 1.35.00 (2015-09-04)
 =========================
 * added <pre>overlay</pre> and <pre>col.overlay.byhullset</pre> arguments to <pre>plot.locoh.lhs</pre>

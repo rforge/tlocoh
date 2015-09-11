@@ -1,6 +1,6 @@
 hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasing=FALSE, 
                       iso.method=c("pt.quantiles", "hm.vals")[1], iso.cap.method=c(">=", "<=")[1],
-                      one.by.one=FALSE, merge.from.hull1=FALSE, hs.name=NULL, status=TRUE, total.num.points=NULL) {
+                      one.by.one=FALSE, merge.from.hull1=FALSE, sliver_check=TRUE, hs.name=NULL, status=TRUE, total.num.points=NULL) {
 
     ############################################################################
     ## hulls2iso.sp
@@ -207,6 +207,8 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
     
     } 
 
+    if (sliver_check) grps.cum.union.sp <- clean_slivers(grps.cum.union.sp, status=FALSE)$sp
+    
     ## Compute the total length of edge (including holes) for each isopleth
     edge.len <- sapply(1:length(grps.cum.union.sp@polygons), function(i) sum(sapply(grps.cum.union.sp@polygons[[i]]@Polygons, function(p) matperim(p@coords))))
 

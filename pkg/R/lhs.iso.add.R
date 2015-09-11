@@ -26,6 +26,7 @@
 #' (shorthand versions of these commands are "ei,n" and "q,n" where n is a number). The script will compute the break points either 
 #' spread equally between the minimum and maximum subset metric value (equal interval) or so an equal number of hulls is in each strata
 #' @param allow.gpc Allow functions from the gpclib package if the functions from rgeos fail. See details. T/F
+#' @param sliver_check Whether to check for and delete slivers in isopleths. See details. T/F
 #' @param beep Beep when done. T/F
 #' @param status Show status messages. T/F
 #' @param ... Additional auxillary parameters for the hull sort metric 
@@ -59,7 +60,8 @@
 #' 
 #' Hulls are unioned using the gUnion and gUnaryUnion functions from the rgeos package, which in general is very fast. These functions occasionally fail when lines are too close together or there are other topological conditions.
 #' This is not a problem with the data, but an inherent limitation of the algorithms / processing. If \code{allow.gpc=TRUE}, functions from the gpclib package will 
-#' be used as backup. 
+#' be used as backup. If \code{sliver_check=TRUE}, isopleths will checked for 'slivers'. Slivers (as used here) refer to polygons or holes with <3 unique nodes. 
+#' Slivers can be caused by reductions in numeric precision or rounding errors, and are not uncommon.
 #' 
 #' @return A \link{LoCoH-hullset} object
 #'
@@ -84,7 +86,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                         iso.levels=c(0.1,0.25,0.5,0.75,0.95), iso.method=c("pt.quantiles", "hm.vals")[1], 
                         iso.cap.method=c(">=", "<=")[1], 
                         scale.iso.levels.to.hm.vals=(iso.method=="hm.vals" && max(iso.levels <= 1)), 
-                        subset.metric=NULL, subset.vals=NULL, allow.gpc=TRUE, beep=FALSE, status=TRUE, ...) {
+                        subset.metric=NULL, subset.vals=NULL, allow.gpc=TRUE, sliver_check=TRUE, beep=FALSE, status=TRUE, ...) {
 
     # taken out @param ivg Value(s) for inter-visit gap, required if the sort metric is a time-use metric (e.g., visitation). 
     # An inter-visit gap is the period of time (in second) which must pass before another occurrence 
@@ -341,7 +343,8 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     polys.spdf <- hulls2iso.rgeos(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
                                                iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
-                                               iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, status=status)
+                                               iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
+                                               sliver_check=sliver_check, status=status)
                     
                     if (is.null(polys.spdf)) {
                         if (status) cat("  Not enough hulls to make isopleths!!! \n")

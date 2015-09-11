@@ -10,6 +10,7 @@
 
 <meta name="author" content="Andy Lyons" />
 
+<meta name="date" content="2015-09-10" />
 
 <title>Computing Isopleth Overlap for All Pairs of Hullsets</title>
 
@@ -65,14 +66,17 @@ img {
 <div id="header">
 <h1 class="title">Computing Isopleth Overlap for All Pairs of Hullsets</h1>
 <h4 class="author"><em>Andy Lyons</em></h4>
-<h4 class="date"><em>September 4, 2015</em></h4>
+<h4 class="date"><em>September 10, 2015</em></h4>
 </div>
 
 
-<p>In this tip, we demonstrate how to compute the area of overlap for pairs of hullsets (e.g., indviduals) using the <code>lhs.iso.overlap</code> function from the <em>tlocoh.dev</em> package.</p>
-<div id="create-dummy-data" class="section level3">
-<h3>Create Dummy Data</h3>
-<p>First let’s create some dummy movement data. We’ll create random walks for 10 indviduals, with 100 points each.</p>
+<style>
+strong > em {color:red; font-style:normal;}
+</style>
+<p>In this tip, we demonstrate how to compute the area of overlap for pairs of hullsets (e.g., indviduals) using the <code>lhs.iso.overlap</code> function from the <tt>tlocoh.dev</tt> package.</p>
+<div id="create-some-sample-data" class="section level3">
+<h3>Create Some Sample Data</h3>
+<p>First let’s create some fake movement data. We’ll create random walks for 10 indviduals, with 100 points each.</p>
 <pre class="r"><code>step_size &lt;- 5
 xys_all &lt;- NULL
 num_id &lt;- 10
@@ -87,35 +91,35 @@ for (i in 1:num_id) {
     xys_all &lt;- rbind(xys_all, xys_this)
 }
 head(xys_all)</code></pre>
-<pre><code>##       id        x        y
-## 1 ID0001 503.9631 571.4433
-## 2 ID0001 499.3660 569.4768
-## 3 ID0001 500.8815 564.7120
-## 4 ID0001 500.2178 559.7562
-## 5 ID0001 498.9221 564.5854
-## 6 ID0001 500.5292 559.8507</code></pre>
+<pre><code>##       id   x   y
+## 1 ID0001 507 560
+## 2 ID0001 504 556
+## 3 ID0001 500 553
+## 4 ID0001 496 550
+## 5 ID0001 499 546
+## 6 ID0001 496 542</code></pre>
 <p>For a bit of realism, we’ll offset the locations so they’ll appear in Kansas.</p>
 <pre class="r"><code>xys_all &lt;- transform(xys_all, x = x + 71000, y = y + 4257200)</code></pre>
 </div>
 <div id="convert-to-a-locoh-xy-object" class="section level3">
 <h3>Convert to a locoh-xy Object</h3>
-<p>Next, we can convert our points to a locoh-xy object. Let’s first load the tlocoh package.</p>
+<p>Next, we can convert our points to a locoh-xy object. Let’s first load the <tt>tlocoh</tt> package.</p>
 <pre class="r"><code>require(tlocoh)</code></pre>
 <pre><code>## Loading required package: tlocoh
 ## Loading required package: sp
-## T-LoCoH for R (version 1.35.0)
+## T-LoCoH for R (version 1.36.0)
 ## URL: http://tlocoh.r-forge.r-project.org/
 ## Bug reports: tlocoh@gmail.com</code></pre>
-<pre class="r"><code>## Make sure you&#39;re using version 1.35.00 or later.
+<pre class="r"><code>## Make sure you&#39;re using version 1.36.00 or later.
 packageVersion(&quot;tlocoh&quot;)</code></pre>
-<pre><code>## [1] &#39;1.35.0&#39;</code></pre>
+<pre><code>## [1] &#39;1.36.0&#39;</code></pre>
 <pre class="r"><code>dummy.lxy &lt;- xyt.lxy(xy=xys_all[ ,2:3],id=xys_all[ ,1], proj4string = CRS(&quot;+proj=utm +zone=14 +ellps=WGS84&quot;))
 plot(dummy.lxy, overlay=T, title.show=F)</code></pre>
 <p><img src="isopleth_overlap_auto_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="672" /></p>
 </div>
 <div id="create-hulls-and-isopleths" class="section level3">
 <h3>Create Hulls and Isopleths</h3>
-<p>To create hulls, we first identify nearest neighbors.</p>
+<p>To create hulls, we first identify nearest neighbors. There’s a process to go through to decide how many neighbors to build hulls with, but we’ll just use k=10 for now.</p>
 <pre class="r"><code>dummy.lxy &lt;- lxy.nn.add(dummy.lxy, s=0, k=10, status=FALSE)
 summary(dummy.lxy)</code></pre>
 <pre><code>## Summary of LoCoH-xy object: dummy.lxy 
@@ -135,52 +139,51 @@ summary(dummy.lxy)</code></pre>
 ##    no times recorded 
 ## ***Spatial extent 
 ##    ID0001
-##      x: 71480.5 - 71510.1 
-##      y: 4257747.2 - 4257816.7 
+##      x: 71467.4 - 71507.3 
+##      y: 4257736.4 - 4257824.1 
 ##    ID0002
-##      x: 71512.4 - 71542 
-##      y: 4257744.2 - 4257801.7 
+##      x: 71500.7 - 71578.9 
+##      y: 4257776 - 4257817.2 
 ##    ID0003
-##      x: 71473.1 - 71519 
-##      y: 4257702.7 - 4257765.8 
+##      x: 71528.7 - 71590 
+##      y: 4257732.9 - 4257759.8 
 ##    ID0004
-##      x: 71557 - 71598.9 
-##      y: 4257704.6 - 4257812.7 
+##      x: 71566.6 - 71607.1 
+##      y: 4257700.1 - 4257753.3 
 ##    ID0005
-##      x: 71545.6 - 71591 
-##      y: 4257728.4 - 4257769.3 
+##      x: 71472.7 - 71520.9 
+##      y: 4257707.6 - 4257788.5 
 ##    ID0006
-##      x: 71599.7 - 71649.6 
-##      y: 4257735.8 - 4257766.1 
+##      x: 71519.5 - 71570.4 
+##      y: 4257730.2 - 4257784.2 
 ##    ID0007
-##      x: 71550.8 - 71588.4 
-##      y: 4257754.3 - 4257799.8 
+##      x: 71584.6 - 71610.5 
+##      y: 4257697 - 4257725.3 
 ##    ID0008
-##      x: 71486 - 71532.7 
-##      y: 4257701.8 - 4257752.9 
+##      x: 71512.1 - 71569.4 
+##      y: 4257721.8 - 4257764 
 ##    ID0009
-##      x: 71487.6 - 71538.7 
-##      y: 4257633.2 - 4257728.4 
+##      x: 71511.1 - 71558.2 
+##      y: 4257791.1 - 4257832.2 
 ##    ID0010
-##      x: 71517.7 - 71553.1 
-##      y: 4257708.4 - 4257810.8 
+##      x: 71529.4 - 71598.3 
+##      y: 4257764.1 - 4257804 
 ##   proj: +proj=utm +zone=14 +ellps=WGS84
 ## ***Ancilliary Variables: 
 ##    -none- 
 ## ***Nearest-neighbor set(s): 
-##    1 ID0001|vmax|s0|n100|kmax10|rmax4.3|amax27.7
-##    2 ID0002|vmax|s0|n100|kmax10|rmax3.6|amax24.7
-##    3 ID0003|vmax|s0|n100|kmax10|rmax4.1|amax24.7
-##    4 ID0004|vmax|s0|n100|kmax10|rmax4.8|amax32.2
-##    5 ID0005|vmax|s0|n100|kmax10|rmax3.7|amax25.6
-##    6 ID0006|vmax|s0|n100|kmax10|rmax3|amax24.1
-##    7 ID0007|vmax|s0|n100|kmax10|rmax4.3|amax29.9
-##    8 ID0008|vmax|s0|n100|kmax10|rmax3.3|amax22.8
-##    9 ID0009|vmax|s0|n100|kmax10|rmax3.6|amax26.8
-##    10 ID0010|vmax|s0|n100|kmax10|rmax4|amax28.1</code></pre>
+##    1 ID0001|vmax|s0|n100|kmax10|rmax4.5|amax30.7
+##    2 ID0002|vmax|s0|n100|kmax10|rmax4.5|amax30
+##    3 ID0003|vmax|s0|n100|kmax10|rmax3.6|amax23.3
+##    4 ID0004|vmax|s0|n100|kmax10|rmax4.5|amax27.8
+##    5 ID0005|vmax|s0|n100|kmax10|rmax4.6|amax31
+##    6 ID0006|vmax|s0|n100|kmax10|rmax3.5|amax26
+##    7 ID0007|vmax|s0|n100|kmax10|rmax2.9|amax18
+##    8 ID0008|vmax|s0|n100|kmax10|rmax4.8|amax34.3
+##    9 ID0009|vmax|s0|n100|kmax10|rmax4.3|amax26.3
+##    10 ID0010|vmax|s0|n100|kmax10|rmax2.9|amax17.5</code></pre>
 <p>Next, we make a hullset object. We’ll add the <code>iso.add=TRUE</code> argument to create default density isopleths at the same time and specify the isopleth levels we want to use with <code>iso.levels</code>.</p>
-<pre class="r"><code>dummy.lhs &lt;- lxy.lhs(dummy.lxy, k=10, s=0, iso.add=TRUE, iso.levels = c(0.5, 0.95), status=FALSE)
-#summary(dummy.lhs)</code></pre>
+<pre class="r"><code>dummy.lhs &lt;- lxy.lhs(dummy.lxy, k=10, s=0, iso.add=TRUE, iso.levels = c(0.5, 0.95), status=FALSE)</code></pre>
 <p>Let’s inspect isopleths for one of the individuals.</p>
 <pre class="r"><code>plot(dummy.lhs, iso=TRUE, id=&quot;ID0005&quot;, allpts=T, col.allpts=&quot;gray30&quot;, cex.allpts=0.4)</code></pre>
 <p><img src="isopleth_overlap_auto_files/figure-html/isoplot_one-1.png" title="" alt="" width="672" /></p>
@@ -191,70 +194,394 @@ summary(dummy.lxy)</code></pre>
 </div>
 <div id="find-isopleth-intersections" class="section level3">
 <h3>Find Isopleth Intersections</h3>
-<p>Some of these virtual indviduals appear to overlap. Let’s find which ones using the function <code>lhs.iso.overlap</code>. This function will take all pairs of individuals, and find the area of intersection. This function is currently in the <code>toloch.dev</code> package, which is the package for ‘experimental’ functions for T-LoCoH.</p>
-<pre class="r"><code>## Make sure you&#39;re using version 1.3.0 or later.
+<p>Some of these virtual indviduals appear to overlap. Let’s find which ones using the function <code>lhs.iso.overlap</code>. This function will take all pairs of individuals, and find the area of intersection. This function is currently in the <tt>toloch.dev</tt> package, which is the package for ‘experimental’ functions for T‑LoCoH.</p>
+<pre class="r"><code>## Make sure you&#39;re using version 1.3.01 or later.
 if (!require(tlocoh.dev)) install.packages(&quot;tlocoh.dev&quot;, repos=&quot;http://R-Forge.R-project.org&quot;)</code></pre>
 <pre><code>## Loading required package: tlocoh.dev
 ## Development features for T-LoCoH
-## Version 1.3.0
+## Version 1.3.01
 ## URL: http://tlocoh.r-forge.r-project.org/
-## Please send bug reports and feedback to: tlocoh@gmail.com</code></pre>
-<pre class="r"><code>require(tlocoh.dev)
-packageVersion(&quot;tlocoh.dev&quot;)</code></pre>
-<pre><code>## [1] &#39;1.3.0&#39;</code></pre>
+## Please send bug reports and feature requests to tlocoh@gmail.com</code></pre>
+<pre class="r"><code>require(tlocoh.dev)</code></pre>
 <p>The function we want to use is <code>lhs.iso.overlap</code>. This function will look at all pairs of hullsets in <code>dummy.lhs</code> (which in our case correspond to different individuals), and compute the area of intersection.</p>
-<pre class="r"><code>library(rgeos)</code></pre>
-<pre><code>## rgeos version: 0.3-11, (SVN revision 479)
-##  GEOS runtime version: 3.4.2-CAPI-1.8.2 r3921 
-##  Linking to sp version: 1.1-1 
-##  Polygon checking: TRUE</code></pre>
 <pre class="r"><code>overlap_stats &lt;- lhs.iso.overlap(dummy.lhs, iso.level=0.95, status=FALSE)
 names(overlap_stats)</code></pre>
 <pre><code>## [1] &quot;spdf&quot;         &quot;overlap_area&quot; &quot;overlap_prop&quot;</code></pre>
-<p><code>lhs.iso.overlap</code> returns a named list with three elements. The <strong>spdf</strong> element is a SpatialPolygonsDataFrame contained the polygons of intersection.</p>
+<p><code>lhs.iso.overlap</code> returns a named list with three elements. The <strong>spdf</strong> element is a SpatialPolygonsDataFrame contained the polygons of intersection. We can plot it on top of the isopleths:</p>
 <pre class="r"><code>plot(dummy.lhs, iso=TRUE, overlay=TRUE, col.overlay.byhullset=TRUE)
 plot(overlap_stats$spdf, col=&quot;#32323280&quot;, add=TRUE)</code></pre>
 <p><img src="isopleth_overlap_auto_files/figure-html/plot_areaoverlap-1.png" title="" alt="" width="672" /></p>
 <p>The data table (or attribute table) for the areas of intersection of two ids contains the area expressed in map units, as well as a proportion of the two hullsets.</p>
-<pre class="r"><code>head(overlap_stats$spdf@data)</code></pre>
-<pre><code>##                      hs1name                    hs2name iso_level       area  area_prhs1  area_prhs2
-## 1 ID0001.pts100.k10.s0.kmin0 ID0003.pts100.k10.s0.kmin0      0.95 117.550593 0.186894730 0.138830330
-## 2 ID0001.pts100.k10.s0.kmin0 ID0008.pts100.k10.s0.kmin0      0.95   3.033839 0.004823527 0.003562057
-## 3 ID0002.pts100.k10.s0.kmin0 ID0008.pts100.k10.s0.kmin0      0.95   6.381660 0.009442199 0.007492764
-## 4 ID0002.pts100.k10.s0.kmin0 ID0010.pts100.k10.s0.kmin0      0.95 212.910251 0.315018498 0.202157148
-## 5 ID0003.pts100.k10.s0.kmin0 ID0008.pts100.k10.s0.kmin0      0.95 124.601709 0.147157883 0.146295973
-## 6 ID0003.pts100.k10.s0.kmin0 ID0009.pts100.k10.s0.kmin0      0.95 112.677183 0.133074706 0.123978251</code></pre>
-<p>The SpatialPolygonsDataFrame can also be exported for use in a GIS program.</p>
+<pre class="r"><code>pander( head(overlap_stats$spdf@data) )</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">hs1name</th>
+<th align="right">hs2name</th>
+<th align="right">iso_level</th>
+<th align="right">area</th>
+<th align="right">area_prhs1</th>
+<th align="right">area_prhs2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">ID0001.pts100.k10.s0.kmin0</td>
+<td align="right">ID0002.pts100.k10.s0.kmin0</td>
+<td align="right">0.95</td>
+<td align="right">20.78</td>
+<td align="right">0.01904</td>
+<td align="right">0.02144</td>
+</tr>
+<tr class="even">
+<td align="right">ID0001.pts100.k10.s0.kmin0</td>
+<td align="right">ID0005.pts100.k10.s0.kmin0</td>
+<td align="right">0.95</td>
+<td align="right">126.1</td>
+<td align="right">0.1155</td>
+<td align="right">0.1269</td>
+</tr>
+<tr class="odd">
+<td align="right">ID0002.pts100.k10.s0.kmin0</td>
+<td align="right">ID0009.pts100.k10.s0.kmin0</td>
+<td align="right">0.95</td>
+<td align="right">306.9</td>
+<td align="right">0.3166</td>
+<td align="right">0.4001</td>
+</tr>
+<tr class="even">
+<td align="right">ID0002.pts100.k10.s0.kmin0</td>
+<td align="right">ID0010.pts100.k10.s0.kmin0</td>
+<td align="right">0.95</td>
+<td align="right">71.34</td>
+<td align="right">0.0736</td>
+<td align="right">0.09879</td>
+</tr>
+<tr class="odd">
+<td align="right">ID0003.pts100.k10.s0.kmin0</td>
+<td align="right">ID0004.pts100.k10.s0.kmin0</td>
+<td align="right">0.95</td>
+<td align="right">112.7</td>
+<td align="right">0.1775</td>
+<td align="right">0.09494</td>
+</tr>
+<tr class="even">
+<td align="right">ID0003.pts100.k10.s0.kmin0</td>
+<td align="right">ID0006.pts100.k10.s0.kmin0</td>
+<td align="right">0.95</td>
+<td align="right">229.3</td>
+<td align="right">0.3612</td>
+<td align="right">0.3959</td>
+</tr>
+</tbody>
+</table>
+<p>The SpatialPolygonsDataFrame could also be exported for use in a GIS program using the <tt>rgdal</tt> package.</p>
 <p>The <strong>overlap_area</strong> and <strong>overlap_prop</strong> elements contain matrices of the area of intersection expressed as i) map units and ii) proportions of the areas of isopleths. We can inspect the comparison matrices. First we’ll look at the area of intersection. You’ll note that this matrix is symmetrical around the diagonal.</p>
-<pre class="r"><code>overlap_stats$overlap_area$iso95</code></pre>
-<pre><code>##            ID0001    ID0002   ID0003   ID0004    ID0005 ID0006   ID0007     ID0008     ID0009    ID0010
-## ID0001   0.000000   0.00000 117.5506   0.0000   0.00000      0   0.0000   3.033839   0.000000   0.00000
-## ID0002   0.000000   0.00000   0.0000   0.0000   0.00000      0   0.0000   6.381660   0.000000 212.91025
-## ID0003 117.550593   0.00000   0.0000   0.0000   0.00000      0   0.0000 124.601709 112.677183   0.00000
-## ID0004   0.000000   0.00000   0.0000   0.0000  16.87670      0 139.1920   0.000000   0.000000   0.00000
-## ID0005   0.000000   0.00000   0.0000  16.8767   0.00000      0 227.7802   0.000000   0.000000  47.27948
-## ID0006   0.000000   0.00000   0.0000   0.0000   0.00000      0   0.0000   0.000000   0.000000   0.00000
-## ID0007   0.000000   0.00000   0.0000 139.1920 227.78016      0   0.0000   0.000000   0.000000   0.00000
-## ID0008   3.033839   6.38166 124.6017   0.0000   0.00000      0   0.0000   0.000000   5.966482  16.94726
-## ID0009   0.000000   0.00000 112.6772   0.0000   0.00000      0   0.0000   5.966482   0.000000   0.00000
-## ID0010   0.000000 212.91025   0.0000   0.0000  47.27948      0   0.0000  16.947263   0.000000   0.00000</code></pre>
-<p>Finally, we’ll look at the matrix which expresses the area of overlap as a proportion of i) the first hullset (on the vertical), and ii) the second hullset (on the horizontal). This matrix is <strong>not</strong> symmetrical.</p>
-<pre class="r"><code>overlap_stats$overlap_prop$iso95</code></pre>
-<pre><code>##             ID0001      ID0002    ID0003     ID0004     ID0005 ID0006    ID0007      ID0008    ID0009     ID0010
-## ID0001 0.000000000 0.000000000 0.1868947 0.00000000 0.00000000      0 0.0000000 0.004823527 0.0000000 0.00000000
-## ID0002 0.000000000 0.000000000 0.0000000 0.00000000 0.00000000      0 0.0000000 0.009442199 0.0000000 0.31501850
-## ID0003 0.138830330 0.000000000 0.0000000 0.00000000 0.00000000      0 0.0000000 0.147157883 0.1330747 0.00000000
-## ID0004 0.000000000 0.000000000 0.0000000 0.00000000 0.01856652      0 0.1531289 0.000000000 0.0000000 0.00000000
-## ID0005 0.000000000 0.000000000 0.0000000 0.02538068 0.00000000      0 0.3425560 0.000000000 0.0000000 0.07110306
-## ID0006 0.000000000 0.000000000 0.0000000 0.00000000 0.00000000      0 0.0000000 0.000000000 0.0000000 0.00000000
-## ID0007 0.000000000 0.000000000 0.0000000 0.19040517 0.31158780      0 0.0000000 0.000000000 0.0000000 0.00000000
-## ID0008 0.003562057 0.007492764 0.1462960 0.00000000 0.00000000      0 0.0000000 0.000000000 0.0070053 0.01989793
-## ID0009 0.000000000 0.000000000 0.1239783 0.00000000 0.00000000      0 0.0000000 0.006564896 0.0000000 0.00000000
-## ID0010 0.000000000 0.202157148 0.0000000 0.00000000 0.04489161      0 0.0000000 0.016091336 0.0000000 0.00000000</code></pre>
+<pre class="r"><code>pander( overlap_stats$overlap_area$iso95 )</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="right">ID0001</th>
+<th align="right">ID0002</th>
+<th align="right">ID0003</th>
+<th align="right">ID0004</th>
+<th align="right">ID0005</th>
+<th align="right">ID0006</th>
+<th align="right">ID0007</th>
+<th align="right">ID0008</th>
+<th align="right">ID0009</th>
+<th align="right">ID0010</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>ID0001</strong></td>
+<td align="right">0</td>
+<td align="right">20.78</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">126.1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0002</strong></td>
+<td align="right">20.78</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">306.9</td>
+<td align="right">71.34</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0003</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">112.7</td>
+<td align="right">0</td>
+<td align="right">229.3</td>
+<td align="right">0</td>
+<td align="right">124.6</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0004</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">112.7</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.2265</td>
+<td align="right">15.85</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0005</strong></td>
+<td align="right">126.1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0006</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">229.3</td>
+<td align="right">0.2265</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">141.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0007</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">15.85</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0008</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">124.6</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">141.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0009</strong></td>
+<td align="right">0</td>
+<td align="right">306.9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">13.08</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0010</strong></td>
+<td align="right">0</td>
+<td align="right">71.34</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">13.08</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Finally, we’ll look at the matrix which expresses the area of overlap as a proportion of each of the two isopleths. This matrix is <strong>not</strong> symmetrical. For example, the output below tells us that the intersection of the 95% isopleth for <strong>ID0005</strong> and <strong>ID0001</strong> was 12.69% of the area of the 95% isopleth for <strong>ID0005</strong>, and 11.55% of the area for <strong>ID0001</strong>.</p>
+<pre class="r"><code>pander(overlap_stats$overlap_prop$iso95)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="right">ID0001</th>
+<th align="right">ID0002</th>
+<th align="right">ID0003</th>
+<th align="right">ID0004</th>
+<th align="right">ID0005</th>
+<th align="right">ID0006</th>
+<th align="right">ID0007</th>
+<th align="right">ID0008</th>
+<th align="right">ID0009</th>
+<th align="right">ID0010</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>ID0001</strong></td>
+<td align="right">0</td>
+<td align="right">0.01904</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right"><strong><em>0.1155</em></strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0002</strong></td>
+<td align="right">0.02144</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.3166</td>
+<td align="right">0.0736</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0003</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.1775</td>
+<td align="right">0</td>
+<td align="right">0.3612</td>
+<td align="right">0</td>
+<td align="right">0.1963</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0004</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.09494</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.0001909</td>
+<td align="right">0.01335</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0005</strong></td>
+<td align="right"><strong><em>0.1269</em></strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0006</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.3959</td>
+<td align="right">0.0003912</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.2439</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0007</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.04577</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0008</strong></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.1388</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.1573</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>ID0009</strong></td>
+<td align="right">0</td>
+<td align="right">0.4001</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.01705</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>ID0010</strong></td>
+<td align="right">0</td>
+<td align="right">0.09879</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.01811</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="summary" class="section level3">
 <h3>Summary</h3>
-<p>The <code>lhs.iso.overlap</code> function from the <code>tlocoh.dev</code> package makes it easy to compute the area of intersection of many pairs of hullsets. While not as nuanced as other measures of association, homerange intersection can give you idea of which pairs of individuals share space.</p>
+<p>The <code>lhs.iso.overlap</code> function from the <tt>tlocoh.dev</tt> package makes it easy to compute the area of intersection of many pairs of hullsets. While not as nuanced as other measures of association, homerange intersection can give you idea of which pairs of individuals share space.</p>
 <hr />
 <p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>. (c) 2015 <br> <br></p>
 </div>
