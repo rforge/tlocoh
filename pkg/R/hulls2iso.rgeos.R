@@ -207,7 +207,11 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
     
     } 
 
-    if (sliver_check) grps.cum.union.sp <- clean_slivers(grps.cum.union.sp, status=FALSE)$sp
+    if (sliver_check) {
+        cleaned_polys <- clean_slivers(grps.cum.union.sp, status=FALSE)
+        grps.cum.union.sp <- cleaned_polys$sp
+        if (status && !is.null(cleaned_polys$results)) cat("  ", nrow(cleaned_polys$results), " invalid polygon(s) removed \n", sep="")
+    }
     
     ## Compute the total length of edge (including holes) for each isopleth
     edge.len <- sapply(1:length(grps.cum.union.sp@polygons), function(i) sum(sapply(grps.cum.union.sp@polygons[[i]]@Polygons, function(p) matperim(p@coords))))

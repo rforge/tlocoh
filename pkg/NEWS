@@ -1,6 +1,11 @@
+Changes in version 1.36.01 (2015-09-16)
+=========================
+* fixed a bug in <pre>hulls2iso.gpc</pre>, which caused an error when calling clean_slivers
+* fixed a bug in <pre>lhs.iso.add</pre>, which didn't pass the clean_slivers argument to <pre>hulls2iso.gpc</pre>
+
 Changes in version 1.36.00 (2015-09-10)
 =========================
-* added <pre>clean_slivers</pre>
+* added <pre>clean_slivers</pre>, which will delete colinear extraneous polygon 'slivers' from isopleths
 * modified <pre>hulls2iso.rgeos</pre> and <pre>hulls2iso.gpc</pre> - added <pre>sliver_check</pre> argument
 * added <pre>sliver_check</pre> argument to <pre>lhs.iso.add</pre> and <pre>lxy.lhs</pre>
 

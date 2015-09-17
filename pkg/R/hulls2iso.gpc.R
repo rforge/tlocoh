@@ -191,8 +191,8 @@ hulls2iso.gpc <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasin
         }
     
     } 
-
-    if (sliver_check) grps.cum.union.sp <- clean_slivers(grps.cum.union.sp, status=FALSE)@sp
+    
+    if (sliver_check) grps.cum.union.sp <- clean_slivers(grps.cum.union.sp, status=FALSE)$sp
 
     ## Compute the total length of edge (including holes) for each isopleth
     edge.len <- sapply(1:length(grps.cum.union.sp@polygons), function(i) sum(sapply(grps.cum.union.sp@polygons[[i]]@Polygons, function(p) matperim(p@coords))))
@@ -202,7 +202,7 @@ hulls2iso.gpc <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreasin
                                     edge.len=edge.len, nep=enc.pts.cummulative.len[last.hull.idx], ptp=ep.ptp[last.hull.idx],
                                     hm.val=hm.vals.for.spdf, num.hulls=num.hulls.for.spdf)
     
-    if (status && false.holes.corrected > 0) cat("  ", false.holes.corrected, " linear 'holes' removed \n")
+    if (status && false.holes.corrected > 0) cat("  ", false.holes.corrected, " invavlid polygon(s) removed \n", sep="")
     
     return(SpatialPolygonsDataFrame(grps.cum.union.sp, data=isos.sp.comb.data, match.ID=FALSE) )
     

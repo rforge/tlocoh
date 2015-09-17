@@ -303,8 +303,6 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     } 
 
                     ## Create a descriptive comment that will be used as caption or footnote text for plots of the isopleths 
-                    #hs.mode <- attr(hs, "mode")
-                    #hs.mode.var <- substr(hs.mode, nchar(hs.mode), nchar(hs.mode))
                     iso.desc <- paste(if (length(iso.levels)==1) "This isopleth was " else "These isopleths were ", "constructed from ",
                                          if (is.null(subset.metric)) "" else "a subset of ", length(hulls2merge.idx), " ",
                                          if (is.null(subset.metric)) "" else paste("out of ", length(hs[[hs.name]][["hulls"]]), " ", sep=""), "hulls",
@@ -322,7 +320,6 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                                                                                    
 
                     ## Create a user-friendly plot title
-                    #iso.ufipt <- paste(hs[[hs.name]][["id"]], "\n", hme[[sort.metric.use]][["ufipt"]], sep="")
                     iso.ufipt <- hme[[sort.metric.use]][["ufipt"]]
                       
                     if (status) {
@@ -356,7 +353,8 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                                 polys.spdf <- hulls2iso.gpc(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                    points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
                                                    iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
-                                                   iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, status=status)
+                                                   iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
+                                                   sliver_check=sliver_check, status=status)
                             } else {
                                 if (status) cat("  Union error.  \n")
                             }
