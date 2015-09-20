@@ -474,7 +474,7 @@ lxy.lhs <- function (lxy, id=NULL, s=0, a=NULL, r=NULL, k=NULL, kmin=0, anv.copy
                     if (iso.add) {
                         class(hullset) <- c("locoh.lhs")
                         if (status) cat("  Computing density isopleths \n"); flush.console()
-                        hullset <- lhs.iso.add(hullset, iso.levels=iso.levels, status=FALSE)
+                        hullset <- lhs.iso.add(hullset, iso.levels=iso.levels, status=FALSE, sliver_check=sliver_check)
                     }
                     
                     ## Remove hulls SpatialPolygons, leaving just the data frame, and enc.pts if needed

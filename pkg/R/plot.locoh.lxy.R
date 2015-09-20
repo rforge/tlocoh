@@ -41,6 +41,7 @@
 #' @param ylim The lower and upper limit of the y-axis, two-element numeric vector
 #' @param legend One of the following keywords specifying where to put a legend when overlaying the locations of multiple individuals: \code{bottomright}, \code{bottom}, \code{bottomleft}, \code{left}, \code{topleft},
 #' \code{top}, \code{topright}, \code{right} or \code{center}
+#' @param add Whether to add to an existing plot. T/F.
 #' @param ... Additional parameters that will be passed to the \code{\link{plot}} function
 #'
 #' @details
@@ -61,7 +62,7 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
                            mgp=c(2, 0.7, 0), lo.save=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show,
                            png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, 
                            tiff.fn=NULL, tiff.bands=c(3,2,1), tiff.col=gray(0:255/255), tiff.pct=FALSE, tiff.buff=0, tiff.fill.plot=TRUE, 
-                           layers=NULL, shp.csv=NULL, xlim=NULL, ylim=NULL, legend=NULL, ...) {
+                           layers=NULL, shp.csv=NULL, xlim=NULL, ylim=NULL, legend=NULL, add=FALSE, ...) {
     
     if (!missing(lxy)) warning("argument lxy is deprecated; please use x instead.", call. = FALSE)
     lxy <- x; rm(x)
@@ -82,6 +83,15 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
         if (!overlay) warning("legend only supported when overlaying locations of multiple individuals")
     }
     
+    ## Error check incompatible options with add=T
+    if (add) {
+        if (!is.null(panel.num)) stop("You can not add a panel number to an existing plot")
+        if (!is.null(title)) stop("You can not add a title to an existing plot")
+        if (!is.null(xlim) || !is.null(ylim)) stop("You can not specify the plot extent when adding to an existing plot")
+        if (!is.null(png.dir)) stop("You can not add to an existing plot when plotting to a new png file")
+        overlay <- TRUE
+    }
+    
     ## Prepare the tiff file
     if (is.null(tiff.fn)) {
         range.expand.tiff <- 0    
@@ -100,6 +110,7 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
     
     ## Create a vector to hold the names of png files created, and create the output folder if needed
     if (!is.null(png.dir)) {
+        
         if (!file.exists(png.dir)) {
             if (png.dir.make) {
                 dir.made <- dir.create(png.dir)
@@ -136,27 +147,30 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
             png(filename=fn, height=png.height, width=png.width, bg="white", pointsize=png.pointsize)
             pngs.made <- c(pngs.made, list(list(fn=fn, dim=c(png.width, png.height))))
         }
+        
+        if (!add) {
+            ## Save layout if needed
+            if (lo.save) {
+                opar <- par(c("mar", "mgp"))
+                on.exit(par(opar))
+            }
 
-        ## Save layout if needed
-        if (lo.save) {
-            opar <- par(c("mar", "mgp"))
-            on.exit(par(opar))
+            ## Set the margins
+            par(mar=mar, mgp=mgp)
+    
+            ## Compute xlim and ylim
+            range.expand <- matrix(0, nrow=1, ncol=2)
+            range.expand <- c(min(c(range.expand[,1], -range.expand.tiff)), max(c(range.expand[,2], range.expand.tiff)))
+            idx_these_ids <- lxy[["pts"]][["id"]] %in% id
+            xlim.use <- if (is.null(xlim)) range(coordinates(lxy[["pts"]])[idx_these_ids,1]) + range.expand else xlim
+            ylim.use <- if (is.null(ylim)) range(coordinates(lxy[["pts"]])[idx_these_ids,2]) + range.expand else ylim
+    
+            ## Create an empty plot
+            plot(NULL, xlim=xlim.use, ylim=ylim.use, asp=1, axes=axes.show, xaxt=tick.show, yaxt=tick.show, 
+                 xlab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[1] else "", 
+                 ylab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[2] else "", ...)
         }
         
-        ## Set the margins
-        par(mar=mar, mgp=mgp)
-
-        ## Compute xlim and ylim
-        range.expand <- matrix(0, nrow=1, ncol=2)
-        range.expand <- c(min(c(range.expand[,1], -range.expand.tiff)), max(c(range.expand[,2], range.expand.tiff)))
-        xlim.use <- if (is.null(xlim)) range(coordinates(lxy[["pts"]])[,1]) + range.expand else xlim
-        ylim.use <- if (is.null(ylim)) range(coordinates(lxy[["pts"]])[,2]) + range.expand else ylim
-
-        ## Create an empty plot
-        plot(NULL, xlim=xlim.use, ylim=ylim.use, asp=1, axes=axes.show, xaxt=tick.show, yaxt=tick.show, 
-             xlab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[1] else "", 
-             ylab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[2] else "", ...)
-
         ## Display the tiff
         if (!is.null(tiff.fn)) {
             if (tiff.fill.plot) {
@@ -232,19 +246,22 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
                 pngs.made <- c(pngs.made, list(list(fn=fn, dim=c(png.width, png.height))))
             }
             
-            ## Set the margins
-            par(mar=mar, mgp=mgp)
-
-            ## Compute xlim and ylim
-            range.expand <- matrix(0, nrow=1, ncol=2)
-            range.expand <- c(min(c(range.expand[,1], -range.expand.tiff)), max(c(range.expand[,2], range.expand.tiff)))
-            xlim.use <- if (is.null(xlim)) range(coordinates(lxy[["pts"]])[,1]) + range.expand else xlim
-            ylim.use <- if (is.null(ylim)) range(coordinates(lxy[["pts"]])[,2]) + range.expand else ylim
             
-            ## Create an empty plot
-            plot(NULL, xlim=xlim.use, ylim=ylim.use, asp = 1, axes=axes.show, xaxt=tick.show, yaxt=tick.show, 
-                 xlab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[1] else "", 
-                 ylab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[2] else "", ...)
+            if (!add) { 
+                ## Set the margins
+                par(mar=mar, mgp=mgp)
+                
+                ## Compute xlim and ylim
+                range.expand <- matrix(0, nrow=1, ncol=2)
+                range.expand <- c(min(c(range.expand[,1], -range.expand.tiff)), max(c(range.expand[,2], range.expand.tiff)))
+                xlim.use <- if (is.null(xlim)) range(coordinates(lxy[["pts"]])[,1]) + range.expand else xlim
+                ylim.use <- if (is.null(ylim)) range(coordinates(lxy[["pts"]])[,2]) + range.expand else ylim
+                
+                ## Create an empty plot
+                plot(NULL, xlim=xlim.use, ylim=ylim.use, asp = 1, axes=axes.show, xaxt=tick.show, yaxt=tick.show, 
+                     xlab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[1] else "", 
+                     ylab=if (axes.titles) colnames(coordinates(lxy[["pts"]]))[2] else "", ...)
+            }
             
             if (!is.null(tiff.fn)) {
                 if (tiff.fill.plot) {
@@ -315,7 +332,7 @@ plot.locoh.lxy <- function(x, lxy, id=NULL, cex=0.8, show.start=TRUE, show.end=T
     }  # for each id
     
     ## Add a plot title if overlaying multiple individuals
-    if (title.show && length(id) > 1 && overlay) {
+    if (title.show && length(id) > 1 && overlay && !add) {
         if (is.null(title)) {
             title.use <- paste(unlist(lxy[["comment"]][id]), collapse = "\n", sep = "")
         } else {

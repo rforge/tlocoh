@@ -16,7 +16,8 @@
   png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80,
   tiff.fn = NULL, tiff.bands = c(3, 2, 1), tiff.col = gray(0:255/255),
   tiff.pct = FALSE, tiff.buff = 0, tiff.fill.plot = TRUE, layers = NULL,
-  shp.csv = NULL, xlim = NULL, ylim = NULL, legend = NULL, ...)
+  shp.csv = NULL, xlim = NULL, ylim = NULL, legend = NULL,
+  add = FALSE, ...)
 }
 \arguments{
 \item{x}{A \link{LoCoH-xy} object}
@@ -95,6 +96,8 @@
 
 \item{legend}{One of the following keywords specifying where to put a legend when overlaying the locations of multiple individuals: \code{bottomright}, \code{bottom}, \code{bottomleft}, \code{left}, \code{topleft},
 \code{top}, \code{topright}, \code{right} or \code{center}}
+
+\item{add}{Whether to add to an existing plot. T/F.}
 
 \item{...}{Additional parameters that will be passed to the \code{\link{plot}} function}
 }

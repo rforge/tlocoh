@@ -1,3 +1,8 @@
+Changes in version 1.37.00 (2015-09-20)
+=========================
+* modified <pre>plot.locoh.lxy</pre> to reduce plot extent when plotting a single id; added an argument for <pre>add</pre>
+* made <pre>clean_slivers</pre> visible
+
 Changes in version 1.36.01 (2015-09-16)
 =========================
 * fixed a bug in <pre>hulls2iso.gpc</pre>, which caused an error when calling clean_slivers
