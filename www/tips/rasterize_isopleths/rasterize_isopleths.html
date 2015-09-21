@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Andy Lyons" />
+
+<meta name="date" content="2015-09-21" />
+
+<title>Rasterize Isopleths</title>
+
+<script src="rasterize_isopleths_files/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="rasterize_isopleths_files/bootstrap-3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<script src="rasterize_isopleths_files/bootstrap-3.3.1/js/bootstrap.min.js"></script>
+<script src="rasterize_isopleths_files/bootstrap-3.3.1/shim/html5shiv.min.js"></script>
+<script src="rasterize_isopleths_files/bootstrap-3.3.1/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="rasterize_isopleths_files/highlight/default.css"
+      type="text/css" />
+<script src="rasterize_isopleths_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img { 
+  max-width:100%; 
+  height: auto; 
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div id="header">
+<h1 class="title">Rasterize Isopleths</h1>
+<h4 class="author"><em>Andy Lyons</em></h4>
+<h4 class="date"><em>September 21, 2015</em></h4>
+</div>
+
+
+<p>This tip demonstrates how to rasterize isopleths to approximate a continuous UD (comparable to what a raster UD estimation method like KDE would generate).</p>
+<p>Load packages.</p>
+<pre class="r"><code>require(raster)</code></pre>
+<pre><code>## Loading required package: raster
+## Loading required package: sp</code></pre>
+<pre class="r"><code>require(tlocoh)</code></pre>
+<pre><code>## Loading required package: tlocoh
+## T-LoCoH for R (version 1.37.00)
+## URL: http://tlocoh.r-forge.r-project.org/
+## Bug reports: tlocoh@gmail.com</code></pre>
+<pre class="r"><code>require(tlocoh.dev)</code></pre>
+<pre><code>## Loading required package: tlocoh.dev
+## Loading required package: shiny
+## tlocoh.dev provides features under development for T-LoCoH
+## Version 1.31.0
+## URL: http://tlocoh.r-forge.r-project.org/
+## Please send bug reports and feedback to tlocoh@gmail.com</code></pre>
+<p>First we load a dataset for ‘queen’, a buffalo in Kruger NP in South Africa.</p>
+<pre class="r"><code>mycon &lt;- url(&quot;http://tlocoh.r-forge.r-project.org/queen.n4545.s0.003.k13.lhs.01.RData&quot;)
+load(mycon); close(mycon)
+plot(queen.lhs, allpts=T, gmap=&quot;hybrid&quot;, cex.allpts=0.2)</code></pre>
+<pre><code>## Downloading common background image...Done</code></pre>
+<p><img src="rasterize_isopleths_files/figure-html/downloadqueen-1.png" title="" alt="" width="672" /></p>
+<p>Next we create isopleths. We’ll create isopleths for 100 levels, so that the result UD will be approximately continuous.</p>
+<pre class="r"><code>queen.lhs &lt;- lhs.iso.add(queen.lhs, iso.levels=1:100/100, status=FALSE)</code></pre>
+<pre><code>## Loading required namespace: gpclib</code></pre>
+<pre class="r"><code>plot(queen.lhs, iso=T)</code></pre>
+<p><img src="rasterize_isopleths_files/figure-html/plotqueen-1.png" title="" alt="" width="576" /></p>
+<p>Next we create rasterized version of the isopleths, and verify that the cell values sum to one.</p>
+<pre class="r"><code>queen.lhs &lt;- lhs.iso.rast(queen.lhs, cell.size=100, status=FALSE)</code></pre>
+<p>Verify the cell values sum to one.</p>
+<pre class="r"><code>r &lt;- queen.lhs[[1]]$isos[[1]]$rast
+r</code></pre>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 371, 246, 91266  (nrow, ncol, ncell)
+## resolution  : 100, 100  (x, y)
+## extent      : 356700, 381300, 7273800, 7310900  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=utm +south +zone=36 +ellps=WGS84 
+## data source : in memory
+## names       : layer 
+## values      : 0, 0.002508251  (min, max)</code></pre>
+<pre class="r"><code>sum(getValues(r))</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>Plot it.</p>
+<pre class="r"><code>plot(queen.lhs, rast=T, iso.legend=FALSE, desc=0, title=&quot;queen UD&quot;)</code></pre>
+<p><img src="rasterize_isopleths_files/figure-html/plotrast-1.png" title="" alt="" width="576" /></p>
+<p>Zoom in a bit.</p>
+<pre class="r"><code>plot(queen.lhs, rast=T, iso.legend=FALSE, xlim=c(370300,376600), ylim=c(7297500,7292300), desc=0, title=&quot;queen UD&quot;)</code></pre>
+<p><img src="rasterize_isopleths_files/figure-html/plotrastzoom-1.png" title="" alt="" width="576" /></p>
+<p>From here, we could use the raster as input into any function that takes a raster based UD (e.g., VI or UDOI).</p>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
