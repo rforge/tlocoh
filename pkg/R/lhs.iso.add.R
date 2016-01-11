@@ -260,6 +260,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     ## Get the hull metric values for sort.metric.use
                     hm.vals <- eval(hme[[sort.metric.use]][["expr"]])[hulls2merge.idx]
                     
+                    ## Prepare a helpful error message
                     if (is.null(hm.vals)) {
                         if (is.null(hme[[sort.metric.use]][["fun"]])) {
                             hm_fun <- ""
@@ -337,7 +338,13 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     ## - total number of points (for computing isopleth quantile levels)
                     ## - a flag 'decreasing' for whether larger values mean more density
                     
-                    polys.spdf <- hulls2iso.rgeos(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
+#                   polys.spdf <- hulls2iso.rgeos(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
+#                                               points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
+#                                               iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
+#                                               iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
+#                                               sliver_check=sliver_check, status=status)
+#
+                    polys.spdf <- get("hulls2iso.rgeos", 1)(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
                                                iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
                                                iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 

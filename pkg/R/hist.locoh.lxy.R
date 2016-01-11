@@ -13,7 +13,7 @@
 #' @param dt.bins.width The width of the time bins (for histogram of number of points over time). In seconds.
 #' @param figs.per.page Number of plots per page
 #' @param col The color of the bars
-#' @param lo.margins.set Whether to save and reset the plot device margin settings (some wrapper functions that call this function don't want device settings reset). T/F.
+#' @param lo.save Whether to set the plot device options (margins, rows and columns). T/F.
 #' @param d.tct temporal connectivity thsesshold for the distance between two points to be included in the histogram of step length. In other words, detlta.t must be <= median delta.t * d.tct). Ignored if d=F.
 #' @param delta.t.num.sd Number of standard deviations for delta.t to be included in the histogram. To omit outliers from appearing in the histogram (which can make the central data more difficult to discern, set delta.t.num.sd to ~2. Ignored if delta.t=F.
 #' @param time.unit The unit of time on the x-axis (character). Ignored if delta.t=F.
@@ -28,7 +28,7 @@
 #' @import sp
 
 hist.locoh.lxy <- function(x, lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRUE, figs.per.page=NULL, col="gray80",
-                           lo.margins.set=TRUE, dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,
+                           lo.save=TRUE, dt.bins.base=c("secs", "mins", "hours", "days")[4], dt.bins.width=3600*24*7,
                            delta.t.num.sd=NULL, d.tct=1.2, time.unit="auto", overlay.median=TRUE, breaks=20, ...) {
 
     if (!missing(lxy)) {
@@ -48,8 +48,10 @@ hist.locoh.lxy <- function(x, lxy, id=NULL, dt=TRUE, d=TRUE, delta.t=TRUE, v=TRU
         if (FALSE %in% (id %in% levels(lxy[["pts"]][["id"]]))) stop("id value(s) not found")
     }
     
-    opar <- par(mfrow = n2mfrow(if (is.null(figs.per.page)) d + delta.t + v + dt else figs.per.page), mar=c(4,3.2,3.2,0.5), mgp=c(1.2, 0.5, 0), bg="white")
-    on.exit(par(opar))
+    if (lo.save) {
+      opar <- par(mfrow = n2mfrow(if (is.null(figs.per.page)) d + delta.t + v + dt else figs.per.page), mar=c(4,3.2,3.2,0.5), mgp=c(1.2, 0.5, 0), bg="white")
+      on.exit(par(opar))
+    }
     res <- list()
     
     for (idVal in id) {

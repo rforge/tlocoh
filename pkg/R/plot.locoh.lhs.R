@@ -114,6 +114,7 @@
 #' @param xlim The lower and upper limit of the x-axis, two-element numeric vector
 #' @param ylim The lower and upper limit of the y-axis, two-element numeric vector
 #' @param check.ap.value.in.hmparams Whether to check if hull metrics exist for the auxillary parameters passed. T/F
+#' @param hme A list of hull metric expressions
 #' @param ... Other parameters, including any auxillary parameters required by certain hull metrics
 #'
 #' @note
@@ -189,7 +190,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.fn.pre=NULL, png.fn.mid=NULL, png.fn.suf=NULL, png.fn.incld.hs.name=TRUE, 
     png.each.plot.separate=TRUE, png.width=800, png.height=png.width, png.pointsize=12+(png.width-480)/80, png.overwrite=TRUE, 
     status=TRUE, panel.num=NULL, panel.num.inside.plot=!title.show, hmap=NULL,
-    iso.level=NULL, xlim=NULL, ylim=NULL, check.ap.value.in.hmparams=TRUE, ...) {
+    iso.level=NULL, xlim=NULL, ylim=NULL, check.ap.value.in.hmparams=TRUE, hme=hm.expr(names.only=FALSE), ...) {
 
     ## removed: sp=0, spc.reg.det.xaxis=NULL, spc.reg.det.yaxis=NULL, spc.reg.det.layout="auto", spc.reg.det.layout.map.nrow=2, spc.reg.det.layout.det.ncol=NULL,
     ##          sat.base=NULL, val.base=NULL, hue.offset=NULL, center.method=c("bbox","mean")[1],  
@@ -225,6 +226,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
         if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a background image, please install")
         if (!requireNamespace("raster", quietly=TRUE)) stop("package raster required to display a background image, please install")    
         if (inherits(gmap, "locoh.gmap") && gmap.one4all) gmap.one4all <- FALSE
+        if (inherits(gmap, "locoh.gmap") && overlay) stop("overlay is not currently compatible with a saved gmap object")
     }
     
     ## Make sure tiff.fn exists, check tiff.bands
@@ -252,7 +254,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     if (length(ptid) > 1 &&  same.axes.4all) stop("same.axes.4all can not be TRUE with multiple ptid") ## not sure why
     if (add && dev.cur()==1) stop("Can't add points to an existing plot, no plot window open")
     
-    hme <- hm.expr(names.only=FALSE)   ## will use this list of expressions later
+    ## hme <- hm.expr(names.only=FALSE)   ## will use this list of expressions later
     ddd.lst <- list(...)
     
     if (!hpp.classify %in% c("none", "hsp", names(hme))) stop("Unknown value for hpp.classify")
@@ -759,9 +761,9 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                         rx <- range(aoi[, 1])
                         ry <- range(aoi[, 2])
                     }
-    
+                    
                     ## Prepare the background image
-
+                      
                     if (!identical(gmap,"none")) {
                         
                         if (inherits(gmap, "locoh.gmap")) {
@@ -815,10 +817,10 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                                 }
                             }
                         }
-                    }
+                    } 
                     
                 }
-                xlim.use <- if (is.null(xlim)) rx else xlim
+                                xlim.use <- if (is.null(xlim)) rx else xlim
                 ylim.use <- if (is.null(ylim)) ry else ylim
                 
                 ## Create the descriptive text string

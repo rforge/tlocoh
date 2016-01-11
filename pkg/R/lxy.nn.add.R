@@ -104,10 +104,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
         s <- vectorize.parameter(s)
     } else {
         if (!is.null(s)) stop("Do not pass both 's' and 'ptsh'")
-        if (identical(ptsh, "all")) {
-            
-        
-        } else {
+        if (!identical(ptsh, "all")) {
             if (min(ptsh)<=0 || max(ptsh)>1) stop("'ptsh' should be between 0 and 1")
         }
     }

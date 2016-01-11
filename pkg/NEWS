@@ -1,3 +1,15 @@
+Changes in version 1.39.00 (2016-01-11)
+=========================
+* added argument <pre>check_samp_int</pre> to <pre>lhs.visit.add</pre>
+* trapped a conflict in  <pre>plot.locoh.lhs</pre> whereby overlay=T was nullified when gmap was passed
+* added argument <pre>lo.save</pre> to <pre>hist.locoh.lxy</pre>
+* deprecated argument <pre>lo.margins.set</pre> in <pre>hist.locoh.lhs</pre> (for consistency across functions), replaced with <pre>lo.save</pre>
+* added argument <pre>hme</pre> to <pre>plot.locoh.lhs</pre> so that hull metric expressions can be customized
+
+Changes in version 1.38.00 (2015-09-23)
+=========================
+* added argument <pre>overlay</pre> to <pre>lxy.plot.ptsh</pre>
+
 Changes in version 1.37.00 (2015-09-20)
 =========================
 * modified <pre>plot.locoh.lxy</pre> to reduce plot extent when plotting a single id; added an argument for <pre>add</pre>

@@ -4,6 +4,7 @@
 #'
 #' @param lhs A LoCoH-hullset object
 #' @param ivg Value(s) for inter-visit gap (in seconds) (numeric vector)
+#' @param check_samp_int Whether or not to check whether \code{ivg} is greater than the median sampling interval. T/F.
 #' @param status Show status messages. T/F.
 #'
 #' @note
@@ -18,7 +19,7 @@
 #' @export
 #' @import pbapply
 
-lhs.visit.add <- function(lhs, ivg=NULL, status=TRUE) {
+lhs.visit.add <- function(lhs, ivg=NULL, check_samp_int=TRUE, status=TRUE) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     if (TRUE %in% sapply(lhs, function(hs) is.null(hs[["pts"]][["dt"]]))) stop("Date stamps not found, can't add time use metrics")
@@ -33,7 +34,7 @@ lhs.visit.add <- function(lhs, ivg=NULL, status=TRUE) {
         for (ivg.idx in 1:length(ivg)) {
             ivgVal <- ivg[ivg.idx]
             
-            if (ivgVal < tau) {
+            if (check_samp_int && ivgVal < tau) {
                 cat("ivg should not be smaller than median sampling frequency, skipping... \n")
             } else {
                 if (status) cat(ivg.idx, " of ", length(ivg), ". Computing the number of visits in each hull for ivg=", ivgVal, " (", secs.fmt(ivgVal), ")\n", sep="")

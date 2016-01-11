@@ -5,12 +5,12 @@
 \title{Plots the proportion of time-selected hulls over 's'}
 \usage{
 lxy.plot.ptsh(lxy, id = NULL, ptsh.idx = NULL, use.nn = FALSE, k = NULL,
-  r = NULL, a = NULL, slim = NULL, boxplot = FALSE, desc = c(0, 1,
-  3)[2], cex.desc = 0.8, col.desc = "darkgreen", title = NULL,
-  title.show = TRUE, legend = c("none", "bottomright", "bottom",
-  "bottomleft", "left", "topleft", "top", "topright", "right", "center")[2],
-  mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp = c(1.8, 0.5, 0),
-  figs.per.page = NULL, panel.num = NULL,
+  r = NULL, a = NULL, slim = NULL, boxplot = FALSE, overlay = FALSE,
+  desc = c(0, 1, 3)[2], cex.desc = 0.8, col.desc = "darkgreen",
+  title = NULL, title.show = TRUE, legend = c("none", "bottomright",
+  "bottom", "bottomleft", "left", "topleft", "top", "topright", "right",
+  "center")[2], mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
+  mgp = c(1.8, 0.5, 0), figs.per.page = NULL, panel.num = NULL,
   panel.num.inside.plot = !title.show, png.dir = NULL,
   png.dir.make = TRUE, png.width = 800, png.height = png.width,
   png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80,
@@ -34,6 +34,8 @@ lxy.plot.ptsh(lxy, id = NULL, ptsh.idx = NULL, use.nn = FALSE, k = NULL,
 \item{slim}{The lower and upper bounds for s, two-element numeric vector}
 
 \item{boxplot}{Display boxplots of the range of s-values for each target ptsh for multiple individuals. T/F}
+
+\item{overlay}{Overlay curves for multiple individuals. T/F}
 
 \item{desc}{Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.}
 

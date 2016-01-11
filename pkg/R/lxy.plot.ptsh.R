@@ -9,6 +9,7 @@
 #' @param a Value for the a method if creating the plot based on nearest neighbor tables (ignored if \code{use.nn=FALSE})
 #' @param slim The lower and upper bounds for s, two-element numeric vector
 #' @param boxplot Display boxplots of the range of s-values for each target ptsh for multiple individuals. T/F
+#' @param overlay Overlay curves for multiple individuals. T/F
 #' @param desc Which side to display automatically generated desciptive text (e.g. caption). 0=none, 1=bottom, 3=top.
 #' @param cex.desc The expansion factor for the descriptive text. Numeric value.
 #' @param col.desc The color of the descriptive text. Color value.
@@ -56,10 +57,10 @@
 #'
 #' @export
 
-lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=NULL, a=NULL, slim=NULL, boxplot=FALSE,
+lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=NULL, a=NULL, slim=NULL, boxplot=FALSE, overlay=FALSE,
                           desc=c(0,1,3)[2], cex.desc=0.8, col.desc="darkgreen", title=NULL, title.show=TRUE,
                           legend=c("none", "bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right", "center")[2],
-                          mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0), figs.per.page=NULL,
+                          mar=c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp=c(1.8, 0.5, 0), figs.per.page=NULL, 
                           panel.num=NULL, panel.num.inside.plot=!title.show, png.dir=NULL, png.dir.make=TRUE, 
                           png.width=800, png.height=png.width, png.overwrite=TRUE, png.pointsize=12+(png.width-480)/80, lo.save=TRUE, ...) {
 
@@ -68,6 +69,7 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (!is.null(png.dir) && boxplot) stop("plotting to png isn't supported with the boxplot option just yet")
     if (use.nn && boxplot) stop("use.nn isn't supported with the boxplot option just yet")
+    if (overlay && boxplot) stop("overlay can not be used with boxplot")
     
     if (use.nn) {
         if (is.null(lxy[["nn"]])) stop("nn not calculated. Run lxy.nn.add() and try again")
@@ -87,7 +89,7 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
     res <- list()
     
     if (is.null(figs.per.page)) {
-        if (boxplot) {
+        if (boxplot || overlay) {
             figs.per.page <- 1
         } else {
             if (is.null(png.dir)) {
@@ -156,14 +158,35 @@ lxy.plot.ptsh <- function(lxy, id=NULL, ptsh.idx=NULL, use.nn=FALSE, k=NULL, r=N
         target.ptsh.all <- as.numeric(sapply(lxy[["ptsh"]][id.use], function(x) sapply(x, function(y) y$target.ptsh)))
         target.s.all <- as.numeric(sapply(lxy[["ptsh"]][id.use], function(x) sapply(x, function(y) y$target.s)))
         
-        #print("How would a scatterplot look");browser()
-        #yjig <- runif(length(target.ptsh.all), min=-0.01, max=0.01)
-        #plot(x=target.s.all, y=target.ptsh.all + yjig, pch=16, cex=0.4)
-        
         boxplot(s ~ ptsh, data=data.frame(s=target.s.all, ptsh=factor(target.ptsh.all)), ylab="s", xlab="proportion time-selected hulls", main=title.str, ...)
         
         ## Add descriptive text in the outer margin
         if (desc !=0 ) mtext(desc.str.chopped[1], side=desc, outer=TRUE, line=0 + if (desc==1) (as.numeric(desc.str.chopped[2]) - 1.25) else 0, cex=cex.desc, col=col.desc)
+        
+    } else if (overlay) {
+
+        ## Initialize title.str
+        if (title.show) {
+            if (is.null(title)) {
+                title.str <- paste("Distribution of s for ptsh\nfor ", length(id.use), " individuals", sep="")
+            } else {
+                title.str <- title
+            }
+        } else {
+            title.str <- NULL
+        }
+    
+        
+        xvals.mat <- matrix(as.numeric(sapply(lxy[["ptsh"]][id.use], function(x) sapply(x, function(y) y$target.s))), ncol=length(id.use))
+        yvals.mat <- matrix(as.numeric(sapply(lxy[["ptsh"]][id.use], function(x) sapply(x, function(y) y$target.ptsh))), ncol=length(id.use))
+        col.lines <- rainbow(length(id.use), end=5/6)
+        
+        matplot(xvals.mat, yvals.mat, type="l", col=col.lines, main=title.str, xlab="s", ylab="proportion time-selected hulls", lty=1, ...)
+        abline(v=pretty(range(xvals.mat), n=15), lty=3, col="gray", lwd=0.1)
+
+        if (!identical(legend,"none")) {
+            legend(legend, legend=id.use, col=col.lines, lty=1, bg="white")
+        }
         
     } else {    
         for (idVal in id.use) {

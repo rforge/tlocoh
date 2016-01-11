@@ -4,12 +4,14 @@
 \alias{lhs.visit.add}
 \title{Add time use hull metrics to a LoCoH-hullset object}
 \usage{
-lhs.visit.add(lhs, ivg = NULL, status = TRUE)
+lhs.visit.add(lhs, ivg = NULL, check_samp_int = TRUE, status = TRUE)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}
 
 \item{ivg}{Value(s) for inter-visit gap (in seconds) (numeric vector)}
+
+\item{check_samp_int}{Whether or not to check whether \code{ivg} is greater than the median sampling interval. T/F.}
 
 \item{status}{Show status messages. T/F.}
 }

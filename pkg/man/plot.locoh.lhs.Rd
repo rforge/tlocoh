@@ -43,7 +43,7 @@
   png.pointsize = 12 + (png.width - 480)/80, png.overwrite = TRUE,
   status = TRUE, panel.num = NULL, panel.num.inside.plot = !title.show,
   hmap = NULL, iso.level = NULL, xlim = NULL, ylim = NULL,
-  check.ap.value.in.hmparams = TRUE, ...)
+  check.ap.value.in.hmparams = TRUE, hme = hm.expr(names.only = FALSE), ...)
 }
 \arguments{
 \item{x}{A \link{LoCoH-hullset} object}
@@ -265,6 +265,8 @@ of a multi-frame graphic (as in publications). Character}
 \item{ylim}{The lower and upper limit of the y-axis, two-element numeric vector}
 
 \item{check.ap.value.in.hmparams}{Whether to check if hull metrics exist for the auxillary parameters passed. T/F}
+
+\item{hme}{A list of hull metric expressions}
 
 \item{...}{Other parameters, including any auxillary parameters required by certain hull metrics}
 }
