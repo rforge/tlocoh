@@ -338,18 +338,18 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     ## - total number of points (for computing isopleth quantile levels)
                     ## - a flag 'decreasing' for whether larger values mean more density
                     
-#                   polys.spdf <- hulls2iso.rgeos(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
-#                                               points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
-#                                               iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
-#                                               iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
-#                                               sliver_check=sliver_check, status=status)
-#
-                    polys.spdf <- get("hulls2iso.rgeos", 1)(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
+                    polys.spdf <- hulls2iso.rgeos(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
                                                iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
                                                iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
                                                sliver_check=sliver_check, status=status)
-                    
+
+#                    polys.spdf <- get("hulls2iso.rgeos", 1)(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
+#                                               points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
+#                                               iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
+#                                               iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
+#                                               sliver_check=sliver_check, status=status)
+#                    
                     if (is.null(polys.spdf)) {
                         if (status) cat("  Not enough hulls to make isopleths!!! \n")
                     } else {

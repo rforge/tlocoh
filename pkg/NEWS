@@ -1,10 +1,15 @@
+Changes in version 1.40.00 (2016-01-28)
+=========================
+* Fixed a bug in <pre>lhs.iso.add</pre> that was creating an error message: <i>object 'hulls2iso.rgeos' not found</i>
+
 Changes in version 1.39.00 (2016-01-11)
 =========================
 * added argument <pre>check_samp_int</pre> to <pre>lhs.visit.add</pre>
-* trapped a conflict in  <pre>plot.locoh.lhs</pre> whereby overlay=T was nullified when gmap was passed
+* trapped a conflict in <pre>plot.locoh.lhs</pre> whereby overlay=T was nullified when gmap was passed
 * added argument <pre>lo.save</pre> to <pre>hist.locoh.lxy</pre>
 * deprecated argument <pre>lo.margins.set</pre> in <pre>hist.locoh.lhs</pre> (for consistency across functions), replaced with <pre>lo.save</pre>
 * added argument <pre>hme</pre> to <pre>plot.locoh.lhs</pre> so that hull metric expressions can be customized
+* added function <pre>lhs.ids.get</pre>
 
 Changes in version 1.38.00 (2015-09-23)
 =========================
