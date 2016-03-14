@@ -12,13 +12,13 @@ lhs.anv.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
 
 \item{id}{The name(s) of individuals to export}
 
-\item{k}{The k value of hullsets to export}
+\item{k}{The k value of hullsets to add an ancillary value to}
 
-\item{r}{The r value of hullsets to export}
+\item{r}{The r value of hullsets to add an ancillary value to}
 
-\item{a}{The a value of hullsets to export}
+\item{a}{The a value of hullsets to add an ancillary value to}
 
-\item{s}{The s value of hullsets to export}
+\item{s}{The s value of hullsets to add an ancillary value to}
 
 \item{hs.names}{The name(s) of saved hullsets to export}
 
@@ -26,7 +26,7 @@ lhs.anv.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
 
 \item{anv.desc}{A character vector of descriptions}
 
-\item{overwrite}{Whether to overwrite existing variables with the same names (T/F)}
+\item{overwrite}{Whether to overwrite existing ancillary values with the same names (T/F)}
 }
 \value{
 A \link{LoCoH-hullset} object
@@ -36,6 +36,14 @@ Add ancillary values to the points of a hullset, which can then be used as hull 
 }
 \details{
 This will add one or more ancillary values (columns) to the point locations
-in a \link{LoCoH-hullset} object.
+in a \link{LoCoH-hullset} object. The name of the columns will be the name of the object passed
+(in the case where \code{anv} is a vector), the list element names (in the case of a named list), or
+column names (in the case of a data frame).
+
+In other functions, you can sort (or filter) hulls based on ancillary values of the parent points using the hull metric 'anv' and passing another
+argument (called anv) set to the name of the ancillary value.
+}
+\seealso{
+\code{\link{lhs.iso.add}}
 }
 

@@ -113,6 +113,9 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
     ## Get the list of hull metric expressions
     hme <- hm.expr(names.only=FALSE, desc=FALSE, print=FALSE)
 
+    ## Define digits (used for creating the isopleth name)
+    digits <- 3                                                                                                         
+    
     ## Preliminary error checks for subset.metric
     if (!is.null(subset.metric)) {
         if (!subset.metric %in% names(hme)) stop(cw(paste("subset.metric must be one of the following: ", paste(names(hme), collapse=", ", sep=""), sep="")))
@@ -228,7 +231,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                 hm.vals.subset <- eval(hme[[subset.metric]][["expr"]])
     
                 ## If subset.vals is one of the 'auto' formats, construct ss.vals.df
-                if (is.list(subset.vals)) {
+                if (is.list(subset.vals) && !is.data.frame(subset.vals)) {
                     n <- subset.vals$num.strata
                     if (subset.vals$method == "ei") {
                         subset.vals.seq <- seq(from=min(hm.vals.subset), to=max(hm.vals.subset), length.out=n+1)
@@ -307,7 +310,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     iso.desc <- paste(if (length(iso.levels)==1) "This isopleth was " else "These isopleths were ", "constructed from ",
                                          if (is.null(subset.metric)) "" else "a subset of ", length(hulls2merge.idx), " ",
                                          if (is.null(subset.metric)) "" else paste("out of ", length(hs[[hs.name]][["hulls"]]), " ", sep=""), "hulls",
-                                         if (is.null(subset.metric)) "" else paste(" (", if (is.list(subset.vals)) paste(subset.vals$method, " ", sprintf("%02d", ssv.df.rnum), " of ", nrow(ssv.df), ", ", sep="") else "",
+                                         if (is.null(subset.metric)) "" else paste(" (", if (is.list(subset.vals) && !is.data.frame(subset.vals)) paste(subset.vals$method, " ", sprintf("%02d", ssv.df.rnum), " of ", nrow(ssv.df), ", ", sep="") else "",
                                                                                    signif(as.numeric(ssv.df[ssv.df.rnum, 1]), digits=digits), 
                                                                                    " < ", subset.metric, " < ",  
                                                                                    signif(as.numeric(ssv.df[ssv.df.rnum, 2]), digits=digits), ")", sep=""),
@@ -344,12 +347,6 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                                                iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
                                                sliver_check=sliver_check, status=status)
 
-#                    polys.spdf <- get("hulls2iso.rgeos", 1)(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
-#                                               points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
-#                                               iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 
-#                                               iso.cap.method=iso.cap.method, total.num.points=length(hs[[hs.name]][["pts"]]), hs.name=hs.name, 
-#                                               sliver_check=sliver_check, status=status)
-#                    
                     if (is.null(polys.spdf)) {
                         if (status) cat("  Not enough hulls to make isopleths!!! \n")
                     } else {
@@ -382,7 +379,6 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                             if (is.null(hs[[hs.name]][["isos"]])) hs[[hs.name]][["isos"]] <- list()
                             
                             ## Put together a name for this group of isopleth
-                            digits <- 3                                                                                                         
                             iso.name <- paste("iso.srt-", sort.metric.use, 
                                       if (is.na(hmap[hmap.idx,1])) "" else paste(".", sapply(1:length(hmap), function(j) paste(names(hmap)[j], ".", hmap[hmap.idx,j], sep="")), collapse=".", sep=""),
                                       iso.method.fn.token.lst[[iso.method]],

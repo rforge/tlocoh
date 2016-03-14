@@ -4,20 +4,26 @@
 #'
 #' @param lhs A LoCoH-hullset object
 #' @param id The name(s) of individuals to export
-#' @param k The k value of hullsets to export
-#' @param r The r value of hullsets to export
-#' @param a The a value of hullsets to export
-#' @param s The s value of hullsets to export
+#' @param k The k value of hullsets to add an ancillary value to
+#' @param r The r value of hullsets to add an ancillary value to
+#' @param a The a value of hullsets to add an ancillary value to
+#' @param s The s value of hullsets to add an ancillary value to
 #' @param hs.names The name(s) of saved hullsets to export
 #' @param anv A vector, named list, or data frame with the same number of values as points
 #' @param anv.desc A character vector of descriptions
-#' @param overwrite Whether to overwrite existing variables with the same names (T/F)
+#' @param overwrite Whether to overwrite existing ancillary values with the same names (T/F)
 #'
 #' @return A \link{LoCoH-hullset} object
 #'
 #' @details This will add one or more ancillary values (columns) to the point locations
-#' in a \link{LoCoH-hullset} object.
+#' in a \link{LoCoH-hullset} object. The name of the columns will be the name of the object passed
+#' (in the case where \code{anv} is a vector), the list element names (in the case of a named list), or 
+#' column names (in the case of a data frame).
 #'
+#' In other functions, you can sort (or filter) hulls based on ancillary values of the parent points using the hull metric 'anv' and passing another 
+#' argument (called anv) set to the name of the ancillary value.
+#'
+#' @seealso \code{\link{lhs.iso.add}}
 #' @export
 
 
@@ -34,7 +40,7 @@ lhs.anv.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
     if (length(hs.matching.idx)==0) stop("No sets of hulls found matching those criteria")
 
     ## if anv is a vector, convert to a named list
-    if (is.vector(anv)) {
+    if (is.vector(anv) && !is.list(anv)) {
         lst <- list()
         lst[[deparse(substitute(anv))]] <- anv
         anv <- lst
@@ -73,9 +79,9 @@ lhs.anv.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
                 }
             } else {
                 if (length(anv[[i]]) == nrow(lhs[[hs.idx]][["pts"]])) {
-                    print("closer");browser()
                     lhs[[hs.idx]][["anv"]] <- rbind(lhs[[hs.idx]][["anv"]], data.frame(anv=anv.name, desc=anv.desc[i], stringsAsFactors=FALSE))
                     lhs[[hs.idx]][["pts"]]@data[[anv.name]] <- anv[[i]]
+                    lhs[[hs.idx]][["hm.params"]][["anv"]] <- c(lhs[[hs.idx]][["hm.params"]][["anv"]], anv.name)
                 } else {
                     anv.wrongnum <- c(anv.wrongnum, paste(names(lhs)[hs.idx], ": ", anv.name, sep=""))
                 }

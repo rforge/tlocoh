@@ -44,7 +44,7 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
         hulls <- hulls[rev.idx,]
         points.lst <- points.lst[rev.idx]
         hm.vals <- hm.vals[rev.idx]
-        print("we shall also reverse the isopleth levels also, for iso.method=hm.val")
+        ##print("we shall also reverse the isopleth levels also, for iso.method=hm.val")
         if (iso.method == "hm.vals") iso.levels <- rev(iso.levels)
     } else {                                 
         bln.hmvals.dec <- FALSE
