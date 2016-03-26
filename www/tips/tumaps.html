@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Andy Lyons" />
+
+<meta name="date" content="2016-03-25" />
+
+<title>Creating Gridded Time Use Maps for LoCoH-xy Objects</title>
+
+<script src="tumaps_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="tumaps_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="tumaps_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="tumaps_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="tumaps_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="tumaps_files/highlight/default.css"
+      type="text/css" />
+<script src="tumaps_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="tumaps_files/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+<h1 class="title">Creating Gridded Time Use Maps for LoCoH-xy Objects</h1>
+<h4 class="author"><em>Andy Lyons</em></h4>
+<h4 class="date"><em>March 25, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>The spatial patterns of revisitation and duration of visits can yield insights into animal behavior and resource use. T-LoCoH computes revisitation and visit duration as metrics of hulls (little MPCs constructed around each point). In addition, you can also compute revisitation and duration for a fixed grid or hexagonal surface. This tip demonstrates how to do this.</p>
+</div>
+<div id="load-packages-data" class="section level3">
+<h3>Load Packages &amp; Data</h3>
+<p>The first step is to load the packages. The function which computes time use metrics for a square or hexagonal superimposed on the location data is currently saved in the <strong>tlocoh.dev</strong> package (the ‘development’ package for tlocoh<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>). Note that we need tlocoh.dev version 1.33.00 or later.</p>
+<pre class="r"><code>library(tlocoh)
+library(tlocoh.dev)</code></pre>
+<pre><code>## tlocoh.dev contains features under development for T-LoCoH
+## Version 1.33.00
+## URL: http://tlocoh.r-forge.r-project.org/
+## Please send bug reports and feedback to tlocoh@gmail.com</code></pre>
+<p>Next we’ll load a sample dataset from the internet. We’ll use a LoCoH-xy object for Toni the Buffalo from South Africa.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>mycon &lt;- url(&quot;http://tlocoh.r-forge.r-project.org/toni.n5775.2005-08-22.2006-04-23.lxy.RData&quot;)
+load(mycon); close(mycon) </code></pre>
+</div>
+<div id="select-an-inter-visit-gap-interval" class="section level3">
+<h3>Select an Inter-Visit Gap Interval</h3>
+<p>Quantifying the rate of revisitation requires a definition of what a ‘visit’ constitutes. In tlocoh, visits are defined based on a minimum time period an individual remains <strong>away</strong> from an area. This parameter is known as the <em>inter-visit gap</em> (IVG). For example, if the inter-visit gap is 6 hours, then whenever the individual is away from a hull or grid cell for more than 6 hours, the next time they are back at that location is counted as a different visit.</p>
+<p>Choosing an inter-visit gap interval is a subjective decision, but should be shaped by 1) the sampling frequency (because you can’t differentiate visits with an IVG shorter than the sampling frequency), and 2) the temporal signature of the behavior of interest. Let’s look at the sampling frequency of Toni the Buffalo:</p>
+<pre class="r"><code>summary(toni.lxy)</code></pre>
+<pre><code>## Summary of LoCoH-xy object: toni.lxy 
+## ***Locations
+##      id num.pts dups
+##    toni    5775    9
+## ***Time span
+##      id      begin        end     period
+##    toni 2005-08-23 2006-04-23 243.3 days
+## ***Spatial extent 
+##      x: 369305.5 - 391823.9 
+##      y: 7305737.9 - 7330491.3 
+##   proj:  +proj=utm +south +zone=36 +ellps=WGS84
+## ***Movement properties 
+##      id time.step.median    d.bar      vmax
+##    toni       3600 (1hs) 173.7452 0.9267969
+## ***Ancilliary Variables: 
+##    -none- 
+## ***Nearest-neighbor set(s): 
+##    none saved</code></pre>
+<p>It looks like Toni’s locations were generally recorded once per hour. If we are interested in behaviors associated with diurnal patterns of revisitation, for example, then a reasonable value of the inter-visit gap might be 10 hours. This means if Toni is away from a cell for more than 10 hours, then her next occurence in the cell should be counted as a different visit. Hence morning and evening visits to a water hole would be considered different visits.</p>
+<p>Now that we have selected a IVG value, we can now compute the revisitation rate for each cell using the function <tt>lxy.tumap()</tt>. Note that this function requires a LoCoH-xy object, not a hullset (because we are not using hulls here). The <tt>gridtype</tt> argument is used to specify the type of grid we want - square or hexagonal. The <tt>ivg</tt> argument should be expressed in seconds. By default, <tt>lxy.tumap()</tt> will compute both the revisitation rate (number of separate visits) and a proxy for the average duration of each visit (expressed not as time but as the mean number of locations per visit <tt>mnlv</tt>).</p>
+<pre class="r"><code>toni.tumap1 &lt;- lxy.tumap(toni.lxy, ivg=10*3600, gridtype=&quot;square&quot;)</code></pre>
+<pre><code>## Constructing 483 cells 
+## 1 of 1. Computing the number of visits in each hull for ivg=36000 (10hs)
+##   Identifying enclosed points...Done.</code></pre>
+<pre class="r"><code>plot(toni.tumap1, cex.axis=0.8, cex=0.8, legend=&quot;topright&quot;)</code></pre>
+<p><img src="tumaps_files/figure-html/plot_toni_tumap01-1.png" title="" alt="" width="672" /><img src="tumaps_files/figure-html/plot_toni_tumap01-2.png" title="" alt="" width="672" /></p>
+<pre class="r"><code>toni.tumap2 &lt;- lxy.tumap(toni.lxy, ivg=10*3600, gridtype=&quot;hex&quot;)</code></pre>
+<pre><code>## Constructing 210 hexagons 
+## 1 of 1. Computing the number of visits in each hull for ivg=36000 (10hs)
+##   Identifying enclosed points...Done.</code></pre>
+<pre class="r"><code>plot(toni.tumap2, cex.axis=0.8, cex=0.8, legend=&quot;topright&quot;)</code></pre>
+<p><img src="tumaps_files/figure-html/plot_toni_tumap02-1.png" title="" alt="" width="672" /><img src="tumaps_files/figure-html/plot_toni_tumap02-2.png" title="" alt="" width="672" /></p>
+</div>
+<div id="specifying-the-cell-size" class="section level3">
+<h3>Specifying the Cell Size</h3>
+<p>You can control the cell size either by passing the <tt>cellsize</tt> argument (i.e., the cell width in map units), or the <tt>mindim</tt> argument (which specifies the minimum number of rows and/or columns).</p>
+<pre class="r"><code>toni.tumap3 &lt;- lxy.tumap(toni.lxy, ivg=10*3600, gridtype=&quot;hex&quot;, mindim=40)</code></pre>
+<pre><code>## Constructing 756 hexagons 
+## 1 of 1. Computing the number of visits in each hull for ivg=36000 (10hs)
+##   Identifying enclosed points...Done.</code></pre>
+<pre class="r"><code>plot(toni.tumap3, cex.axis=0.8, cex=0.8, legend=&quot;topright&quot;)</code></pre>
+<p><img src="tumaps_files/figure-html/plot_toni_tumap03-1.png" title="" alt="" width="672" /><img src="tumaps_files/figure-html/plot_toni_tumap03-2.png" title="" alt="" width="672" /></p>
+</div>
+<div id="overlaying-gis-layers" class="section level3">
+<h3>Overlaying GIS Layers</h3>
+<p>If we have shapfiles in the same projection system, we can import them using the <tt>rgdal</tt> package, and overlay them on the time use map.</p>
+<pre class="r"><code>require(rgdal)</code></pre>
+<pre><code>## Loading required package: rgdal</code></pre>
+<pre><code>## rgdal: version: 1.1-3, (SVN revision 594)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 2.0.1, released 2015/09/15
+##  Path to GDAL shared files: C:/Users/Andy/Documents/R/win-library/3.0/rgdal/gdal
+##  GDAL does not use iconv for recoding strings.
+##  Loaded PROJ.4 runtime: Rel. 4.9.1, 04 March 2015, [PJ_VERSION: 491]
+##  Path to PROJ.4 shared files: C:/Users/Andy/Documents/R/win-library/3.0/rgdal/proj
+##  Linking to sp version: 1.2-2</code></pre>
+<pre class="r"><code>kruger_bnd &lt;- readOGR(dsn=&quot;.&quot;, layer=&quot;knp_boundary_36s&quot;, verbose=FALSE)
+kruger_water &lt;- readOGR(dsn=&quot;.&quot;, layer=&quot;drinking_troughs_36s&quot;, verbose=FALSE)
+kruger_roads &lt;- readOGR(dsn=&quot;.&quot;, layer=&quot;roads_36s&quot;, verbose=FALSE)
+
+plot(toni.tumap3, mnlv=FALSE, nsv=TRUE, cex.axis=0.8, cex=0.8, legend=&quot;topright&quot;)
+plot(kruger_bnd, add=TRUE, border=&quot;green&quot;)
+plot(kruger_water, add=TRUE, pch=24, col=&quot;black&quot;, bg=&quot;yellow&quot;, cex=0.6)
+plot(kruger_roads, add=TRUE, lty=3, col=&quot;black&quot;)</code></pre>
+<p><img src="tumaps_files/figure-html/plot_toni_tumap03_gis-1.png" title="" alt="" width="672" /></p>
+</div>
+<div id="exporting-the-results-as-a-shapefile" class="section level3">
+<h3>Exporting the results as a Shapefile</h3>
+<p>The object returned by <tt>lxy.tumap()</tt> is a list of SpatialPolygonsDataFrames (one per individual). The cell values of nsv and mnlv are saved in the attribute table. To export it to a Shapefile, we can use a function from the <tt>rgdal</tt> package.</p>
+<pre class="r"><code>require(rgdal)
+writeOGR(toni.tumap3[[&quot;toni&quot;]], &quot;.&quot;, &quot;toni_timeuse&quot;, overwrite_layer = TRUE, driver=&quot;ESRI Shapefile&quot;)
+list.files(&quot;.&quot;, pattern = &quot;^toni&quot;)        </code></pre>
+<pre><code>## [1] &quot;toni_timeuse.dbf&quot; &quot;toni_timeuse.prj&quot; &quot;toni_timeuse.shp&quot;
+## [4] &quot;toni_timeuse.shx&quot;</code></pre>
+<p><br><br></p>
+<p><strong>T-LoCoH Tips</strong>. If you find this tip useful, or have feedback or another question on how to use T-LoCoH, please contact the <a href="mailto:tlocoh@gmail.com">package author</a>. (c) 2015 <br> <br></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>tlocoh.dev can be installed from <tt>install.packages(“tlocoh”, dependencies=T, repos=“<a href="http://R-Forge.R-project.org" class="uri">http://R-Forge.R-project.org</a>”)</tt><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Kruger African Buffalo, GPS tracking, South Africa. Downloaded from <a href="http://www.movebank.org" class="uri">http://www.movebank.org</a>, July 2012. Collection of Kruger Park Buffalo data funded by NSF Grant DEB-0090323 to Wayne M. Getz. Principal Investigator: Paul Cross<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
