@@ -190,7 +190,6 @@ lhs.plot.scatter.auto <- function(hs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, h
             
             #cat(i, ", ", metrics.pairs[i,2], ", ", metrics.pairs[i,3], ", ", metrics.pairs[i,4], "\n", sep="")
 
-            #print('ready to call lhs.plot.scatter');browser()
             ## Call lhs.plot.scatter
             hsp.this <- lhs.plot.scatter(hs, hs.names=metrics.pairs[i,"hs.name"], 
                 x.axis=metrics.pairs[i,"x.metric"], y.axis=metrics.pairs[i,"y.metric"], 

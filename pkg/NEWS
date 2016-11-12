@@ -1,6 +1,12 @@
+Changes in version 1.40.02 (2016-11-12)
+=========================
+* Added <pre>stringsAsFactors=FALSE</pre> to line 289 of <pre>xyt.lxy</pre>, which was causing an error in <pre>plot.locoh.lhs</pre>
+* Added an error check in <pre>plot.locoh.lhs</pre>
+* Removed a pause code line in <pre>lhs.plot.scatter</pre>
+
 Changes in version 1.40.01 (2016-03-13)
 =========================
-* Fixed a bug in <pre>lhs.anv.add</pre> that prevented adding an ancillary value passed as a named list.
+* Fixed a bug in <pre>lhs.anv.add</pre> that prevented adding an ancillary value passed as a named list
 * Fixed a bug in <pre>lhs.iso.add</pre> that prevented creating isopleth for subsets of hulls if the <pre>subset.vals</pre> was passed as a data frame
 * Removed a programming information message from <pre>hulls2iso.rgeos</pre> 
 

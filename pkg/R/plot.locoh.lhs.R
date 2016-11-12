@@ -330,11 +330,17 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                         
                         avparams.lst[[avparam]] <- unique(c(avparams.lst[[avparam]], ddd.lst[[avparam]]))
                      } else {
+
                         if (is.null(hme[[axis.metric]][["req.ap.def"]])) {
                             stop(paste("Required parameter missing: ", avparam, sep=""))
                         } else if (identical(hme[[axis.metric]][["req.ap.def"]][[avparam]], "all")) {
                             ## Get all of the hull parameters that have been run
                             for (hs.name in names(lhs)) {
+
+                                ## This is a bug check for hullsets created prior to v1.40.02
+                                if (is.factor(hs[[hs.name]][["hm.params"]][[avparam]])) {
+                                   hs[[hs.name]][["hm.params"]][[avparam]] <- as.character(hs[[hs.name]][["hm.params"]][[avparam]])
+                                }
                                 avparams.lst[[avparam]] <- unique(c(avparams.lst[[avparam]], hs[[hs.name]][["hm.params"]][[avparam]]))
                             }
                         } else {
@@ -343,6 +349,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                     } 
                 }
             }
+
             if (length(avparams.lst) > 0) {
                 ## Convert the list of auxillary variables into a data frame containing all permutations of the variables
                 ## Oct 2012 - I decided to not use expand.grid, because rarely will you get hull metrics with multiple independent aux parameters each

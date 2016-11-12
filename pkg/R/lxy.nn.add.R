@@ -585,7 +585,6 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
                         }
                     
                         ## Find the maximum nn.rank for each point
-                        #print("lets stop and see what metric to get");browser()
                         pp.nn.df.nn.rank.aval <- sort(sapply(split(pp.nn.df[pp.nn.df$tsd.cumsum <= aVal, "nn.rank"], pp.nn.df[pp.nn.df$tsd.cumsum <= aVal, "pp.idx"]), max))
                         
                         ## Take the nth percentile as the starting point for kVal.tmp (plus one because we to get one more than the minimum)
@@ -609,8 +608,7 @@ lxy.nn.add <- function(lxy, id=NULL, ptid=NULL, k=NULL, r=NULL, a=NULL, s=NULL, 
     
                         if (blnNoTime) {
                             pp.nn.lst <- FNN::get.knnx(data=xys.idVal, query=coordinates(lxy[["pts"]])[idVal.idx.sub.nmnn, ,drop=FALSE], k=kVal.tmp + 1, algorithm=FNN.algorithm)
-                            #print("bug found");browser()
-                            pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.sub.nmnn, each=kVal.tmp + 1), 
+                            pp.nn.df <- data.frame(pp.idx = rep(idVal.idx.sub.nmnn, each=kVal.tmp + 1),
                                                    nn.rank = rep(0:kVal.tmp, times=length(idVal.idx.sub.nmnn)), 
                                                    nn.idx = idVal.idx[c(t(pp.nn.lst$nn.index))], 
                                                    tsd = c(t(pp.nn.lst$nn.dist)))

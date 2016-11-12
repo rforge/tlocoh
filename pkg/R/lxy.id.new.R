@@ -86,7 +86,6 @@ lxy.id.new <- function(lxy, id.new, save.old.id=NULL, dup.dt=c("check", "offset"
         dup.dt.check <- FALSE
     } else if (dup.dt == "offset") {
         if (anyDuplicated(data.frame(dt=as.numeric(lxy[["pts"]][["dt"]], units="secs"), id=id.new)) != 0) {
-            #print("Pause");browser()
             dups.idx <- which(duplicated(data.frame(dt=as.numeric(lxy[["pts"]][["dt"]], units="secs"), id=id.new)))
             if (status) cat(" - offsetting the time stamp of ", length(dups.idx), " duplicate time points \n"); flush.console()
             #dups.idx <- which(duplicated(dt.idnew))

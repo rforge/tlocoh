@@ -340,7 +340,7 @@ lhs.iso.add <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
                     ## - iso.levels (also sorted increasing)
                     ## - total number of points (for computing isopleth quantile levels)
                     ## - a flag 'decreasing' for whether larger values mean more density
-                    
+
                     polys.spdf <- hulls2iso.rgeos(hulls=hs[[hs.name]][["hulls"]][hulls2merge.idx.srt,], 
                                                points.lst=hs[[hs.name]][["enc.pts"]][["idx"]][hulls2merge.idx.srt], iso.levels=iso.levels.use, 
                                                iso.method=iso.method, hm.vals=hm.vals[hm.vals.ord], decreasing=hme[[sort.metric.use]][["iso.dec"]], 

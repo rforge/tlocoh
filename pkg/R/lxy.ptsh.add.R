@@ -273,7 +273,7 @@ lxy.ptsh.add <- function(lxy, id=NULL, k=10, n=200, samp.idx=NULL, sinit=0.005, 
                             while (TRUE %in% sapply(s.ptsh[,1], function(x) isTRUE(all.equal(sVal.cur, x)))) {
                                 int.converge.counter <- int.converge.counter + 1
                                 if (int.converge.counter > 6) {
-                                    if (status) cat("Failing to find a value of s which ptsh=", ptshVal, "\n")  #; browser()
+                                    if (status) cat("Failing to find a value of s which ptsh=", ptshVal, "\n")
                                     break
                                 }
                                 sVal.dup.idx <- which(sapply(s.ptsh[,1], function(x) isTRUE(all.equal(sVal.cur, x))))

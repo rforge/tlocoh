@@ -197,13 +197,9 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
             ## Define the hull indices 'break points' which divide isopleths. 
             ## Because iso.levels and hm.vals are both reversed, to use the findInterval function we 
             ## have to first reverse them and then flip them back 
-            
-            print("Iso levels are in descending order. Lets find the last hull idx");browser()
-            
+
             last.hull.idx.rev <- findInterval(rev(iso.levels), rev(hm.vals))
             last.hull.idx <- rev(length(hm.vals) - last.hull.idx.rev)
-            print("This looks good, but now we need to check for >=")
-            
             base.idx <- max(1, last.hull.idx[1])
             
             # Because they are reverse, we need to add the final index (which will be the hull with the lowest hm.val)
@@ -221,7 +217,7 @@ hulls2iso.rgeos <- function(hulls, points.lst, hm.vals=NULL, iso.levels, decreas
             ## idx.groups.lst <- lapply(last.hull.idx, function(i) base.idx:i)
 
         } else {
-            print("lets find the last hull index for *ascednding* hm.valss"); browser()
+            #print("lets find the last hull index for *ascednding* hm.valss")
             last.hull.idx <- findInterval(iso.levels, hm.vals)
             hm.vals.for.spdf <- hm.vals[last.hull.idx]
             num.hulls.for.spdf <- last.hull.idx

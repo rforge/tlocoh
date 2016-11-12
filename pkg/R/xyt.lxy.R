@@ -286,7 +286,7 @@ xyt.lxy <- function (xy, dt=NULL, tz=NULL, id=NULL, ptid=NULL, proj4string=CRS(a
         } else {
             if (length(anv.desc) != ncol(anv)) stop("anv.desc must be the same length as anv")
         }
-        anv.df <- data.frame(anv=names(anv), desc=anv.desc)
+        anv.df <- data.frame(anv=names(anv), desc=anv.desc, stringsAsFactors=FALSE)
     }
     
     ## Construct comment

@@ -54,7 +54,6 @@ multi.proportion.col <- function(pmat, prop.all=NULL, ps.coords=FALSE, testme=FA
         alpha.dist.to.edge <- sin(theta.afo[alpha.prev.theta.idx]) * theta.mag[alpha.prev.theta.idx] / sin(pi - theta.afo[alpha.prev.theta.idx] - (alpha - theta[alpha.prev.theta.idx]))
         xs <- alpha.dist.to.edge * cos(alpha); ys <- alpha.dist.to.edge * sin(alpha)
         points(xs, ys, col="blue")
-        print("hows that");browser()
     }
 
     # Convert the set of proportion to an xy value in color space by mapping it to each axes

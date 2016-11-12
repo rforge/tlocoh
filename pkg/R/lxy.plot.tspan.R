@@ -192,8 +192,7 @@ lxy.plot.tspan <- function(lxy, s=NULL, k=NULL, a=NULL, r=NULL, id=NULL, type=c(
             par(mfrow=mfrow.vals)
         }
         par(oma=oma.vals)
-        #print("about to make a plot"); browser()
-        
+
         ## Create the plot 
         if (type == "hist") {
             for (i in 1:length(tspan.lst)) {

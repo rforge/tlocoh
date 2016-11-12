@@ -307,8 +307,7 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                     } else {
                         # Make sure these values have been actually computed
                         if (check.ap.value.in.hmparams) {
-                            print("Chekc this");browser()
-                            if (FALSE %in% (ddd.lst[[avparam]] %in%  hs[[hs.name]][["hm.params"]][[avparam]])) stop(paste("Value of ", avparam, " not found", sep=""))
+                            if (FALSE %in% (ddd.lst[[avparam]] %in%  hs[[hs.name]][["hm.params"]][[avparam]])) stop(paste("Value of '", avparam, "' not found", sep=""))
                         }
                         avparams.lst[[avparam]] <- unique(c(avparams.lst[[avparam]], ddd.lst[[avparam]]))
                     }
@@ -560,7 +559,6 @@ lhs.plot.scatter <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.na
                                          main = if (title.show) main.title else NULL)
                                 }
                                 plots.made <- plots.made + 1
-                                #print("lets pause");browser()
 
                                 ## Add panel.num
                                 if (!is.null(panel.num)) {

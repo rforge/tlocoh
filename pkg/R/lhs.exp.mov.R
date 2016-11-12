@@ -270,9 +270,6 @@ lhs.exp.mov <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names =
         
     }
     
-    #print("good time to check out idx.ids.lst");browser()
-    
-    
     ## Error check legend settings
     ids.legend.bln <- all.ids.at.once && all.ids.col.unique && !is.null(all.ids.legend)
     if (ids.legend.bln) {
