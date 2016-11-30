@@ -120,9 +120,10 @@ lhs.exp.csv <- function(lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.names=N
             anv.use <- intersect(anv, as.character(hs[[hs.name]][["anv"]][["anv"]]))
             if (length(anv.use)==0) stop("Ancillary variable(s) not found")
         }
-        if (!is.null(anv.use)) csv.data <- cbind(csv.data, hs[[hs.name]][["pts"]][hulls.pp.idx, anv.use])
+        if (!is.null(anv.use)) csv.data <- cbind(csv.data, hs[[hs.name]][["pts"]]@data[hulls.pp.idx, anv.use, drop=FALSE])
 
         ## Create hmap (hull metric auxillary parameters for computing hsp values
+        ## This is for exporting the region number of each point
         hmap <- as.data.frame(NA)
         if (is.null(hsp)) {
             hsp.use <- NULL

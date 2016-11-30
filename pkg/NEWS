@@ -1,3 +1,7 @@
+Changes in version 1.40.03 (2016-11-xx)
+=========================
+* Corrected a bug in <pre>lhs.exp.csv</pre> which caused malformed csv files when exporting ancillary variables with hulls metrics 
+
 Changes in version 1.40.02 (2016-11-12)
 =========================
 * Added <pre>stringsAsFactors=FALSE</pre> to line 289 of <pre>xyt.lxy</pre>, which was causing an error in <pre>plot.locoh.lhs</pre>
