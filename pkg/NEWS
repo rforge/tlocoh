@@ -1,4 +1,8 @@
-Changes in version 1.40.03 (2016-11-xx)
+Changes in version 1.40.04 (2017-02-03)
+=========================
+* Updated <pre>lxy.anvgrid.add</pre> to deal with a change in the sp package (where the 'overlay' function was renamed 'over')
+
+Changes in version 1.40.03 (2016-11-29)
 =========================
 * Corrected a bug in <pre>lhs.exp.csv</pre> which caused malformed csv files when exporting ancillary variables with hulls metrics 
 

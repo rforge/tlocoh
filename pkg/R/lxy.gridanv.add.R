@@ -39,6 +39,8 @@ lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.
     if (is.null(fn) && length(fn) != 0) stop("fn must be of length 1. To grab values from multiple image by date, use dtfn")
     if (!date.match %in% c("closest", "before")) stop("Unknown value for date.match")
     
+    if (!requireNamespace("rgdal")) stop("package rgdal is required for this function")
+
     ## Do some error checking on dtfn
     dtfn.err <- "dtfn should be a two-column data frame containing a date and filename"
     if (!requireNamespace("rgdal")) stop("package rgdal required to read raster image")
@@ -93,7 +95,7 @@ lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.
             if (!file.exists(fn[i])) stop(paste(fn[i], "not found"))
             
             ## Get the bounding box of the image, because we don't want to read the whole thing
-            fn.info <- GDALinfo(fn[i], silent=TRUE)
+            fn.info <- rgdal::GDALinfo(fn[i], silent=TRUE)
             fn.bbox <- matrix(data=c(fn.info[4], fn.info[4] + fn.info[2] * fn.info[6], fn.info[5], fn.info[5] + fn.info[1] * fn.info[7]), ncol=2, byrow=T, dimnames=list(c("x","y"), c("min","max")))
             
             ## Define the bounding box of the region of the image to read, making sure it isn't bigger than the image itself
@@ -104,9 +106,9 @@ lxy.gridanv.add <- function(lxy, band=1, dtfn=NULL, fn=NULL, anv.name=NULL, anv.
             ## Read in the image        
             img.sgdf <- readpartgdal(fn[i], xlim=lxy.bbox.use[1,], ylim=lxy.bbox.use[2,], band=band, silent=TRUE, status=FALSE)
             
-            ## Use the overlay function to grab the pixel values of each location, 
+            ## Use the over function to grab the pixel values of each location,
             ## returning a spatial points data frame, which one attribute field for each band
-            overlay.spdf <- overlay(img.sgdf, lxy[["pts"]][ptdt.lst[[i]], ])
+            overlay.spdf <- sp::over(img.sgdf, lxy[["pts"]][ptdt.lst[[i]], ])
             
             ## Put the results in the holding frame
             gridvals.mat[ptdt.lst[[i]], ] <- as.matrix(overlay.spdf@data)
