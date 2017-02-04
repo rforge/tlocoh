@@ -2,7 +2,7 @@ Package: tlocoh
 Type: Package
 Title: Constructs homeranges and explores time use patterns from location data
 Version: 1.40.04
-Date: 2017-02-03
+Date: 2017-02-04
 Author: Andy Lyons
 Maintainer: Andy Lyons <tlocoh@gmail.com>
 BugReports: Andy Lyons <tlocoh@gmail.com>

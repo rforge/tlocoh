@@ -1,6 +1,6 @@
-Changes in version 1.40.04 (2017-02-03)
+Changes in version 1.40.04 (2017-02-04)
 =========================
-* Updated <pre>lxy.anvgrid.add</pre> to deal with a change in the sp package (where the 'overlay' function was renamed 'over')
+* Updated <pre>lxy.gridanv.add</pre> to deal with a change in the sp package (where the 'overlay' function was renamed 'over'). Also improved how the extent of the raster to import is computed.
 
 Changes in version 1.40.03 (2016-11-29)
 =========================
