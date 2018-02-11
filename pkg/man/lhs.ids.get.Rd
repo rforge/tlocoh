@@ -36,4 +36,3 @@ This function returns the ids of specified hullsets
 \seealso{
 \code{\link{lhs.select}}
 }
-

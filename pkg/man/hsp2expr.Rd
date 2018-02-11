@@ -29,4 +29,3 @@ polygons that were manually defined with the mouse in a hull metric scatterplot 
 return a valid chunk of R code that recreates the saved scatterplot settings. This code can be
 copy-pasted into a RMarkdown document or other report format so the work may be recreated.
 }
-

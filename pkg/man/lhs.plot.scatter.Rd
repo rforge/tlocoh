@@ -196,4 +196,3 @@ to create a filter based on ranges of values of an ancillary variable. The argum
 \seealso{
 \code{\link{lhs.plot.scatter.auto}}, \code{\link{hm.expr}}, \code{\link{lhs.hsp.add}}, \code{\link{lhs.filter.hsp}}, \code{\link{lhs.filter.anv}}
 }
-

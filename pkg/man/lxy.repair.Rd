@@ -35,4 +35,3 @@ Set \code{fix.dup.ptid=TRUE} to automatically generate new ptid values if any du
 \seealso{
 \code{\link{xyt.lxy}}, \code{\link{lxy.id.new}}, \code{\link{lxy.merge}}
 }
-

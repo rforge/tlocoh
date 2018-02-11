@@ -88,4 +88,3 @@ for \code{png.dir}) which will create a bunch of PNG files which you can then vi
 \seealso{
 \code{\link{lhs.plot.scatter}}, \code{\link{hm.expr}}
 }
-

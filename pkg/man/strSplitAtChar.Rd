@@ -26,4 +26,3 @@ This will take a long character object and split it into pieces at character \co
 If \code{separator} is passed, the individual pieces will be concatenated using the \code{separator} character and returned as a character vector of length 1.
 Otherwise each piece will be returned as a separate element of a character vector.
 }
-

@@ -115,4 +115,3 @@ Slivers can be caused by reductions in numeric precision or rounding errors, and
 \seealso{
 \code{\link{isopleths}}
 }
-

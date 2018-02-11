@@ -81,4 +81,3 @@ value of \emph{s} that results in a proportion of time-selected hulls between 0.
 \seealso{
 \code{\link{lxy.nn.add}}
 }
-

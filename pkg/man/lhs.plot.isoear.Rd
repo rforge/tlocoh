@@ -79,4 +79,3 @@ lhs.plot.isoear(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
 \description{
 Creates a plot of the ratio of edge to area for isopleths
 }
-

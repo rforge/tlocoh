@@ -27,4 +27,3 @@ plot(toni[,2:3])
 
 }
 \keyword{datasets}
-

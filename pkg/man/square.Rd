@@ -12,4 +12,3 @@ square(x)
 \description{
 square
 }
-

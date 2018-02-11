@@ -14,4 +14,3 @@ textContrastColor(x, ...)
 \description{
 Choose a white or black plot background for a particular color of text
 }
-

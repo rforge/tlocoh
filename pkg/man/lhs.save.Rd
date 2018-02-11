@@ -30,4 +30,3 @@ Saves a LoCoH-hullset object to disk, constructing a filename if needed that ref
 \seealso{
 \code{\link{lxy.save}}
 }
-

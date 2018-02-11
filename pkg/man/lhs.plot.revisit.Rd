@@ -97,4 +97,3 @@ This function will plot a histogram of the revisitation times for a hullset. Rev
 \seealso{
 \code{\link{lhs.visit.add}}
 }
-

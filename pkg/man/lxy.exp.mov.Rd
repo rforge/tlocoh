@@ -232,4 +232,3 @@ editing to the frames prior to encoding.
 
 If \code{fn.mov.exists = "auto.increment"}, a two-digit number will be appended to the filename to avoid overwriting an existing file
 }
-

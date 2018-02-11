@@ -31,4 +31,3 @@ This function will export the id value (i.e., animal name) point-id value (ptid)
 
 If file is not passed, a filename will be automatically constructed.
 }
-

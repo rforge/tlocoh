@@ -46,4 +46,3 @@ argument (called anv) set to the name of the ancillary value.
 \seealso{
 \code{\link{lhs.iso.add}}
 }
-

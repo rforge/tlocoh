@@ -76,4 +76,3 @@ those values of 's' will be used.
 \code{\link{lxy.amin.add}}
 \code{\link{lxy.ptsh.add}}
 }
-

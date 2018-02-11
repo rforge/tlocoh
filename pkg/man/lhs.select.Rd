@@ -41,4 +41,3 @@ a named list, with one element for each id, containing one or more a, k, or r va
 
 See the \code{lhs.selection} function in the tlocoh.dev package for details.
 }
-

@@ -318,4 +318,3 @@ DEM or classified image, the colors are set by \code{tiff.col}. \code{tiff.buff}
 used to expand the range of values on the x and y axis so that you see
 a bit of the background image beyond the extent of the points.
 }
-

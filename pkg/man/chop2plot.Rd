@@ -33,4 +33,3 @@ such that each line will be <= \code{width} when plotted. Breaks are replaced wi
 \code{char.break.keep} is \code{TRUE}, the break character will be kept, otherwise it will be removed. If no occurrence
 of the /code{char.break} is available, the line will be chopped at the last character that fits.
 }
-

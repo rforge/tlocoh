@@ -106,4 +106,3 @@ Plotting the sampling frequency over time can help identify gaps in the data as 
 \seealso{
 \code{\link{lxy.thin.bursts}}, \code{\link{lxy.thin.byfreq}}
 }
-

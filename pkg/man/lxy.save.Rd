@@ -30,4 +30,3 @@ Saves a LoCoH-xy object to disk, constructing a file name if needed that reflect
 \seealso{
 \code{\link{xyt.lxy}}, \code{\link{lhs.save}}
 }
-

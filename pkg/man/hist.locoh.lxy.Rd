@@ -53,4 +53,3 @@ A list of frequencies with one element for each of the histograms plotted.
 \description{
 Displays histogram(s) of point-to-point step length, velocity, and sampling frequency for a LoCoH-xy object
 }
-

@@ -97,4 +97,3 @@ Plot histograms of hull metrics
 \note{
 To see the names of hull metrics, type \code{hm.expr()}. Only hull metrics which have been computed can be plotted.
 }
-

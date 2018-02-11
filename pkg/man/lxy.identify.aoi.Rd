@@ -26,4 +26,3 @@ You can then use this information as a parameter in \code{\link{lxy.subset}} fun
 \seealso{
 \code{\link{aoi}}, \code{\link{plot.locoh.lxy}}, \code{\link{lxy.subset}}
 }
-

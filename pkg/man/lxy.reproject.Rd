@@ -42,4 +42,3 @@ lxy.utm <- lxy.reproject(lxy, CRS("+proj=utm +north +zone=18 +ellps=WGS84"))
 \seealso{
 \code{\link{lxy.proj.add}}, \code{\link{summary.locoh.lxy}}, \code{\link{CRS}}
 }
-

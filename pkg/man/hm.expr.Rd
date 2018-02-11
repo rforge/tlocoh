@@ -57,4 +57,3 @@ use \code{\link{summary.locoh.lhs}}.
 \seealso{
 \code{\link{lhs.ellipses.add}}, \code{\link{lhs.visit.add}}
 }
-

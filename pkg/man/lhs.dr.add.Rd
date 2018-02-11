@@ -38,4 +38,3 @@ Hull elongation is proxied by one of two hull metrics: perimeter:area ratio ('pa
 are automatically computed when a hullset is created; bounding ellipses must be computed separately using \code{\link{lhs.ellipses.add}}. 
 Once computed, you can plot directional routes by passing \code{dr=TRUE} to \code{\link{plot.locoh.lhs}}.
 }
-

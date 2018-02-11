@@ -107,4 +107,3 @@ nearest neighbor information for each and every point.
 \seealso{
 \code{\link{lxy.ptsh.add}}, \code{\link{lxy.nn.add}}
 }
-

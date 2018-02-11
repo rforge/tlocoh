@@ -92,4 +92,3 @@ to the working folder.
 \seealso{
 \code{\link{lhs.exp.csv}}, \code{\link{hulls}}, \code{\link{isopleths}}
 }
-

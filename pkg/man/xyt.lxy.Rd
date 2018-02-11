@@ -117,4 +117,3 @@ summary(lxy)
 \seealso{
 \code{\link{lxy.nn.add}}, \code{\link{lxy.repair}}, \code{\link{lxy.subset}}
 }
-

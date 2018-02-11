@@ -69,4 +69,3 @@ and a list of the svals
 \description{
 This will find the value of s that will result in the time term of TSD being approximately equal to the distance term
 }
-

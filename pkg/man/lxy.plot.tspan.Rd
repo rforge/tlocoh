@@ -87,4 +87,3 @@ list with elements for the filename (or NULL), filename dimensions in pixels (or
 \description{
 Plot distributions of the time span of nearest neighbors as a proportion of the median sampling interval
 }
-

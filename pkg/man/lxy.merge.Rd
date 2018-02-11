@@ -39,4 +39,3 @@ The merged object will no have nearest neighbors table and the random walk param
 \seealso{
 \code{\link{lxy.id.new}}
 }
-

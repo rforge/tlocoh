@@ -30,4 +30,3 @@ Prints a summary of a locoh xy object (set of locations)
 \seealso{
 \code{\link{lxy.plot.freq}}, \code{\link{lxy.ptsh.add}}
 }
-

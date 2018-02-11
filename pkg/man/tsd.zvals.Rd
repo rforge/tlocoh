@@ -22,4 +22,3 @@ tsd.zvals(delta.t, sVal, type, d.bar = NULL, tau = NULL, vmax = NULL)
 \description{
 Returns the values for the "time axis" of the TSD distance metric
 }
-

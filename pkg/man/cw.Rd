@@ -26,4 +26,3 @@ appearance when printing to the terminal window
 This function can prevent long messages from extending beyond the width of the R-console.
 Works with any function that prints to the console (e.g., cat, print, stop)
 }
-

@@ -21,4 +21,3 @@ A \link{LoCoH-xy} object
 \description{
 Add ancillary variable(s) to a LoCoH-xy object
 }
-

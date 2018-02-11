@@ -22,4 +22,3 @@ Allows the user to select an area of interest (box) by clicking on the active pl
 \note{
 This function requires a plot window to be open
 }
-

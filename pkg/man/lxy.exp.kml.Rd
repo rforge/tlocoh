@@ -49,4 +49,3 @@ Adapated from plotKML package.
 \seealso{
 \code{\link{lxy.exp.mov}}
 }
-

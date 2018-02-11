@@ -57,4 +57,3 @@ point can be included in the csv file if you pass the hullscatter plot as parame
 \seealso{
 \code{\link{lhs.exp.shp}}
 }
-

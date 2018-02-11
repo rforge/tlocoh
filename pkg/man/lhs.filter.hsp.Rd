@@ -54,4 +54,3 @@ using the \code{\link{lhs.plot.scatter}} function. \code{hsp} objects can also b
 Note that this function can only return subsets for *one* hullset and *one* hsp object. This means that either \code{lhs} must contain a single
 hullset, or other parameters (e.g., \code{id}, \code{hs.names}, \code{k}, \code{r}, and/or \code{a}) are passed to select one and only one of the hullsets in \code{lhs}.
 }
-

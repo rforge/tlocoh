@@ -1,3 +1,8 @@
+Changes in version 1.40.05 (2018-02-09) 
+=========================
+* Changed the default values of arguments <pre>trim.ends</pre> and <pre>byfreq</pre> to FALSE in function <pre>lxy.thin.byfreq</pre>. Also changed an ambiguous feedback message, and a data type check for arguments <pre>dt.start</pre> and <pre>dt.end</pre>.
+* Added a <pre>min_nodes</pre> argument to <pre>clean_slivers</pre>.
+
 Changes in version 1.40.04 (2017-02-04)
 =========================
 * Updated <pre>lxy.gridanv.add</pre> to deal with a change in the sp package (where the 'overlay' function was renamed 'over'). Also improved how the extent of the raster to import is computed.

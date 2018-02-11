@@ -33,4 +33,3 @@ Returns a subset of a LoCoH-xy object based on the id, ptid, idx, or dates
 \seealso{
 \code{\link{xyt.lxy}}, \code{\link{lxy.repair}}, \code{\link{lxy.thin.byfreq}}, \code{\link{lxy.thin.bursts}}, \code{\link{lxy.merge}}
 }
-

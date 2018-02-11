@@ -83,4 +83,3 @@ setting \code{save.hulls=FALSE} and \code{save.enc.pts=FALSE}. See the vignette 
 \code{\link{hulls}} for extracting hulls as a SpatialPolygonsDataFrame
 \code{\link{lhs.exp.shp}} to export hulls as shapefile
 }
-

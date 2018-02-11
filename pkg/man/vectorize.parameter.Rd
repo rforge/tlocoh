@@ -22,4 +22,3 @@ A vector
 \description{
 Convert a comma-separated string to a vector
 }
-

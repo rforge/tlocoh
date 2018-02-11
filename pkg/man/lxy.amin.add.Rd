@@ -40,4 +40,3 @@ If timestamps are not present, it will use the median non-zero nearest neighbor 
 Note that the value of 'a' such that \code{ptp} of points are nearest neighbors does not mean that \code{ptp} points are
 enclosed. Points can be enclosed by hulls that are not a nearest neighbor of any hull parent point.
 }
-

@@ -12,4 +12,3 @@ n2z(x)
 \description{
 Convert NULL to a zero
 }
-

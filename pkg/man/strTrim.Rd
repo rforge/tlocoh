@@ -14,4 +14,3 @@ strTrim(str, side = "both")
 \description{
 Trim leading and/or trailing blanks from a character object
 }
-

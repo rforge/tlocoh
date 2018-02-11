@@ -28,4 +28,3 @@ Occurences in the hull are considered a separate visit only if the animal was ab
 For each ivg value, the function examines each hull and computes the number of separate visits to the hull (visitation, hull metric name = "nsv")
 and the mean number of locations per visit (visit duration, hull metric name = "mnlv")
 }
-

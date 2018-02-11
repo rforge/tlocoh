@@ -35,4 +35,3 @@ for each hullset in \code{lhs}. The data table will contain the hull metrics.
 \seealso{
 \code{\link{isopleths}}, \code{\link{lhs.exp.shp}}, \code{\link{lhs.exp.csv}}, Vignette on T-LoCoH data classes
 }
-

@@ -46,4 +46,3 @@ lxy <- lxy.nn.add(lxy, ptsh=0.5, a=auto.a())
 \seealso{
 \code{\link{lxy.nn.add}}
 }
-

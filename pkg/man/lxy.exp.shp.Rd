@@ -43,4 +43,3 @@ Only the individual locations and their ancillary values are exported. The neare
 \seealso{
 \code{\link{lxy.exp.kml}}, \code{\link{lxy.exp.mov}}
 }
-

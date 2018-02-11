@@ -45,4 +45,3 @@ as it was in the entire dataset.
 \seealso{
 \code{\link{lxy.id.new}}
 }
-

@@ -44,4 +44,3 @@ Copyright (c) 2009, Nima Moshtagh
         http://www.mathworks.com/matlabcentral/fileexchange/13844
         http://stackoverflow.com/questions/1768197/bounding-ellipse
 }
-

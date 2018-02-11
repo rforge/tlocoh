@@ -4,12 +4,14 @@
 \alias{clean_slivers}
 \title{Clean slivers}
 \usage{
-clean_slivers(sp, status = TRUE)
+clean_slivers(sp, status = TRUE, min_nodes = 3)
 }
 \arguments{
 \item{sp}{A SpatialPolygons or SpatialPolygonsDataFrame object}
 
 \item{status}{Show messages. T/F}
+
+\item{min_nodes}{The minimum number of unique nodes a polygon must have to *not* be labeled a sliver and deleted.}
 }
 \value{
 Returns a list with two elements:
@@ -21,9 +23,8 @@ Returns a list with two elements:
 Remove 'slivers' from a SpatialPolygons* object
 }
 \details{
-As defined here, a 'sliver' is polygon or hole that has < 3 unique nodes
+As defined here, a 'sliver' is polygon or hole that has < \code{min_nodes} (default=3) unique nodes
 (perhaps due to a data type conversion or rounding error). 
 This seems to be a particularly common type of geometry error that 
 crops in when unioning hulls into isopleths.
 }
-

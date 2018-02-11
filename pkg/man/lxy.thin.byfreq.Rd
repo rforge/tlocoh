@@ -4,8 +4,8 @@
 \alias{lxy.thin.byfreq}
 \title{Delete locations to harmonize the sampling frequency and time duration}
 \usage{
-lxy.thin.byfreq(lxy, id = NULL, trim.ends = TRUE, dt.start = NULL,
-  dt.end = NULL, byfreq = TRUE, samp.freq = "lcm", lcm.round = 120,
+lxy.thin.byfreq(lxy, id = NULL, trim.ends = FALSE, dt.start = NULL,
+  dt.end = NULL, byfreq = FALSE, samp.freq = "lcm", lcm.round = 120,
   lcm.max.iter = 300, status = TRUE, dt.int.round.to = 0.1,
   tau.diff.max = 0.02)
 }
@@ -16,7 +16,7 @@ lxy.thin.byfreq(lxy, id = NULL, trim.ends = TRUE, dt.start = NULL,
 
 \item{trim.ends}{Truncate points from either end of the timeline to achieve a common time window, T/F}
 
-\item{dt.start}{The starting date-time that all individual trajectories will be truncated to. If \code{NULL}, the first date-time that 
+\item{dt.start}{The starting date-time that all individual trajectories will be truncated to. Should be a POSIXct or POSIXlt object. If \code{NULL}, the first date-time that 
 all points have in common will be used.}
 
 \item{dt.end}{The end date-time that all individual trajectories will be truncated to. If \code{NULL}, the last date-time that 
@@ -48,7 +48,7 @@ a \link{LoCoH-xy} object
 Standardize the sampling frequency and duration across individuals in a \link{LoCoH-xy} object by deleting points
 }
 \note{
-This function processes a \link{LoCoH-xy} object that contains movement data for several individuals, and removes points
+This function processes a \link{LoCoH-xy} object that contains movement data (for one for several individuals), and removes points
 such that the output contains a fixed start and end date for each individual, as well as an approximately uniform sampling frequency (time step).
 
 Before using this function, you should clean your data of all abnormally short time intervals (e.g., bursts). See \code{\link{lxy.thin.bursts}}.
@@ -66,4 +66,3 @@ Because this function deletes points, the nearest-neighbors lookup table of the 
 \seealso{
 \code{\link{xyt.lxy}}, \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.bursts}}
 }
-

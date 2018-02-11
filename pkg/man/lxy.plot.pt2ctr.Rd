@@ -39,4 +39,3 @@ of when the point series started. This can be helpful for seeing cycles of a spe
 \seealso{
 \code{\link{lxy.plot.sfinder}}
 }
-

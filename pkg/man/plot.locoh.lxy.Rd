@@ -112,4 +112,3 @@ the \code{pts} element (e.g., \code{x$pts}, where \code{x} is a LoCoH-xy object)
 \seealso{
 Vignette on T-LoCoH data classes, Tutorial Vignette (for details on displyaing GIS layers and raster images in the background)
 }
-

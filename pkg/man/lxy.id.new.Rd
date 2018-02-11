@@ -45,4 +45,3 @@ betwen points must be withint \code{tau.diff.max} of tau for that pair of points
 
 One can also use this function to change the id (name of the individual), rebuild the rw.params or table of sampling frequencies
 }
-

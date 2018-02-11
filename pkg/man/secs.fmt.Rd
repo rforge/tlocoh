@@ -22,4 +22,3 @@ This function only works with a single value. To format a multiple time values s
 
 Based on the value of secsVal, the formatted version will be converted to days, hours, minutes, or seconds
 }
-

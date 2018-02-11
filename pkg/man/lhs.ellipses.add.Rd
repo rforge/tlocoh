@@ -43,4 +43,3 @@ saved as a hull metric. The only real reason to save ellipses is if you wish to 
 
 Note creating ellipses is computationally intensive and can take a long time.
 }
-

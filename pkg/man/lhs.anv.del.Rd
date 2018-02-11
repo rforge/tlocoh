@@ -40,4 +40,3 @@ Copying ancillary variables is optional when creating a hullset with \code{\link
 \seealso{
 \code{\link{summary.locoh.lhs}}
 }
-

@@ -23,4 +23,3 @@ Searches for a file on the system environment path
 This will return the first found occurence of file \code{fn}, searching 1) the current working directory, 2) the user's R 'home' directory, 
 then 3) the directories on the operating system environment 'path'
 }
-

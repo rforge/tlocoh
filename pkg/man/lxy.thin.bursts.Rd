@@ -56,4 +56,3 @@ and the parameters for random walk model will be recomputed.
 \seealso{
 \code{\link{lxy.plot.freq}}, \code{\link{lxy.thin.byfreq}}
 }
-

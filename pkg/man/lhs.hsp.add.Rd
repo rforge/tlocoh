@@ -26,4 +26,3 @@ hsp objects are typically created with \code{\link{lhs.plot.scatter}} function. 
 ## summary(lhs)
 
 }
-

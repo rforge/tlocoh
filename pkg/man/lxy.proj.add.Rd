@@ -29,4 +29,3 @@ information will be overwritten.
 \seealso{
 \code{\link{CRS-class}} for arguments accepted by the \code{\link{CRS}} function.
 }
-

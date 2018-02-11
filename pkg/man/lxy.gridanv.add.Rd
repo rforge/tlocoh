@@ -42,11 +42,12 @@ specify which band(s) to read using the optional argument \code{band}. A
 separate ancillary variable will be created for each band. You can provide
 name(s) for the ancillary variable(s) with the \code{anv.name} parameter.
 
-You can also pass a time-series of images, and the function will use the image from the closest date time for each point.
-To do this, pass a two-column data frame as the argument \code{dtfn}. The first column of \code{dtfn} must be a date
-(one of the POSIXt date-time classes), and the second column must be a valid raster filename associated with that date. If each image is a time composite,
-(e.g., two-week NDVI), the date should either be the mid-point or the beginning date. Two options for time matching are 
-available through the argument \code{date.match}: \code{closest} = select the image whose date is closest in time (before or after), and \code{before} = pick the closest image
-that comes before the location.
+You can also pass a time-series of images, and the function will use the image from the closest date
+for each point. To do this, pass a two-column data frame as the argument \code{dtfn}. The first
+column of \code{dtfn} must be a date (in one of the POSIXt date-time classes), and the second column
+must be a valid raster filename associated with that date. If each image is a time composite, (e.g.,
+two-week NDVI), the date should either be the mid-point or the beginning date. Two options for time
+matching are available through the argument \code{date.match}. When \code{date.match='closest'}, the
+image whose date is closest in time (before or after) will be used. When \code{date.match='before'},
+it will pick the first image that comes before the location.
 }
-

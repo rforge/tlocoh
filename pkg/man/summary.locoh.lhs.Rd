@@ -40,4 +40,3 @@
 \description{
 Displays a summary of a LoCoH-hullset object
 }
-

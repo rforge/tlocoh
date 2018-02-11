@@ -28,4 +28,3 @@ polygons(myaoi)
 \seealso{
 \code{\link{aoi}}
 }
-

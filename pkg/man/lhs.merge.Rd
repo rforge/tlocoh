@@ -21,4 +21,3 @@ Merge LoCoH-hullsets
 Hullsets in different objects can be merged together, but the hullsets themselves remain separate. If
 duplicate hullsets are detected (e.g., same id, same mode, same parameter value), an error message will appear.
 }
-

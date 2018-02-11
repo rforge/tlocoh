@@ -64,4 +64,3 @@ summary(leroy.lxy)
 \seealso{
 \code{\link{xyt.lxy}}
 }
-

@@ -41,4 +41,3 @@ and an isopleth name.
 \seealso{
 \code{\link{hulls}}, \code{\link{lhs.exp.shp}}, \code{\link{lhs.exp.csv}}, Vignette on T-LoCoH data classes
 }
-

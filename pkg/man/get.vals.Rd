@@ -23,4 +23,3 @@ Get x and/or y values from a plot using the mouse
 This function allows you to get the x and/or y values by clicking on the active plot window. When you're done
 clicking, right-click and select 'Stop' from the pop-up menu.
 }
-

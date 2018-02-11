@@ -5,7 +5,7 @@
 #' @param lxy A \link{LoCoH-xy} object
 #' @param id The id value(s) to be harmonized
 #' @param trim.ends Truncate points from either end of the timeline to achieve a common time window, T/F
-#' @param dt.start The starting date-time that all individual trajectories will be truncated to. If \code{NULL}, the first date-time that 
+#' @param dt.start The starting date-time that all individual trajectories will be truncated to. Should be a POSIXct or POSIXlt object. If \code{NULL}, the first date-time that 
 #' all points have in common will be used.
 #' @param dt.end The end date-time that all individual trajectories will be truncated to. If \code{NULL}, the last date-time that 
 #' all points have in common will be used.
@@ -22,7 +22,7 @@
 #' two points to be included in the calculation of the median step length
 #' @param status Show messages, T/F
 #'
-#' @note This function processes a \link{LoCoH-xy} object that contains movement data for several individuals, and removes points
+#' @note This function processes a \link{LoCoH-xy} object that contains movement data (for one for several individuals), and removes points
 #' such that the output contains a fixed start and end date for each individual, as well as an approximately uniform sampling frequency (time step).
 #' 
 #' Before using this function, you should clean your data of all abnormally short time intervals (e.g., bursts). See \code{\link{lxy.thin.bursts}}.
@@ -45,13 +45,19 @@
 
 # You can thin by dt.start / end, deltat, or both
 
-lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, dt.start=NULL, dt.end=NULL, 
-                             byfreq=TRUE, samp.freq="lcm", lcm.round=120, lcm.max.iter=300,
+lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=FALSE, dt.start=NULL, dt.end=NULL,
+                             byfreq=FALSE, samp.freq="lcm", lcm.round=120, lcm.max.iter=300,
                              status=TRUE, dt.int.round.to=0.1, tau.diff.max=0.02) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
     if (is.null(lxy[["pts"]][["dt"]])) stop("Can't harmonize the temporal frequency without date-time values")
-    if (!trim.ends && !byfreq) stop("Don't know what to do. trim.ends and/or byfreq must be TRUE")
+    if (!trim.ends && !byfreq) stop("Don't know what to do! Set trim.ends and/or byfreq to TRUE")
+    if (!is.null(dt.start)) {
+        if (!inherits(dt.start, "POSIXt")) stop("dt.start must be class POSIXct or POSIXlt")
+    }
+    if (!is.null(dt.end)) {
+        if (!inherits(dt.end, "POSIXt")) stop("dt.end must be class POSIXct or POSIXlt")
+    }
     
     if (is.null(id)) {
         id <- levels(lxy[["pts"]][["id"]])
@@ -101,7 +107,7 @@ lxy.thin.byfreq <- function (lxy, id=NULL, trim.ends=TRUE, dt.start=NULL, dt.end
         if (length(idx.comb)==0) stop("No points fall within those date ranges")
         
         if (length(idx.comb) == idx.comb.orig.len) {
-            if (status) cat(" - no points thinned out due to the start and end dates \n")        
+            if (status) cat(" - no points removed from the start or end due because the start and end dates passed include everything \n")
         } else {
             if (status) cat(" - trimming date-times to ", format(dt.start.use, format="%Y-%m-%d"), " to ", format(dt.end.use, format="%Y-%m-%d"), "\n", sep="")
         }

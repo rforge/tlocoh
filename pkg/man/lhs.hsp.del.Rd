@@ -22,4 +22,3 @@ Deletes a saved hull scatterplot from a LoCoH-hullset object
 \note{
 Use the summary() command to see the indices of saved hull scatterplots
 }
-

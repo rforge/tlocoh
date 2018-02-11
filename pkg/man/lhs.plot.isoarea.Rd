@@ -79,4 +79,3 @@ lhs.plot.isoarea(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
 \description{
 Creates a plot of the area of isopleths in a LoCoH-hullset area
 }
-

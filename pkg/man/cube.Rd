@@ -15,4 +15,3 @@ x^3
 \description{
 Cubes a number
 }
-

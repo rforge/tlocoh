@@ -20,4 +20,3 @@ Delete isopleth(s) from a LoCoH-hullset object
 \note{
 To see the indices of isopleths, run \code{\link{summary.locoh.lhs}}
 }
-

@@ -1,8 +1,8 @@
 Package: tlocoh
 Type: Package
 Title: Constructs homeranges and explores time use patterns from location data
-Version: 1.40.04
-Date: 2017-02-04
+Version: 1.40.05
+Date: 2018-02-09
 Author: Andy Lyons
 Maintainer: Andy Lyons <tlocoh@gmail.com>
 BugReports: Andy Lyons <tlocoh@gmail.com>
@@ -25,4 +25,4 @@ Description: Constructs homeranges and explores time use patterns from location
     data.
 License: GPL-2
 URL: http://tlocoh.r-forge.r-project.org
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

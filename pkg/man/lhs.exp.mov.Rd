@@ -226,4 +226,3 @@ To create the individual frames only, set \code{tmp.dir="."} (the working direct
 
 If \code{fn.mov.exists = "auto.increment"}, a two-digit number will be appended to the *.mov filename to avoid overwriting an existing file
 }
-
