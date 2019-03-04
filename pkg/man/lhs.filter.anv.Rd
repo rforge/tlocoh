@@ -4,9 +4,9 @@
 \alias{lhs.filter.anv}
 \title{Define subsets of hulls based on an ancillary variable}
 \usage{
-lhs.filter.anv(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, anv.var = NULL, anv.val = NULL, label = NULL,
-  col = NULL, status = TRUE)
+lhs.filter.anv(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, anv.var = NULL, anv.val = NULL,
+  label = NULL, col = NULL, status = TRUE)
 }
 \arguments{
 \item{lhs}{A \code{\link{LoCoH-hullset}} object}

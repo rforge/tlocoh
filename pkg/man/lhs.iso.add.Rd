@@ -4,14 +4,15 @@
 \alias{lhs.iso.add}
 \title{Compute isopleths}
 \usage{
-lhs.iso.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, sort.metric = c("auto", hm.expr(names.only = T, desc = F,
-  print = F))[1], iso.levels = c(0.1, 0.25, 0.5, 0.75, 0.95),
-  iso.method = c("pt.quantiles", "hm.vals")[1], iso.cap.method = c(">=",
-  "<=")[1], scale.iso.levels.to.hm.vals = (iso.method == "hm.vals" &&
+lhs.iso.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, sort.metric = c("auto",
+  hm.expr(names.only = T, desc = F, print = F))[1], iso.levels = c(0.1,
+  0.25, 0.5, 0.75, 0.95), iso.method = c("pt.quantiles", "hm.vals")[1],
+  iso.cap.method = c(">=", "<=")[1],
+  scale.iso.levels.to.hm.vals = (iso.method == "hm.vals" &&
   max(iso.levels <= 1)), subset.metric = NULL, subset.vals = NULL,
-  allow.gpc = TRUE, sliver_check = TRUE, beep = FALSE, status = TRUE,
-  ...)
+  allow.gpc = TRUE, sliver_check = TRUE, beep = FALSE,
+  status = TRUE, ...)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}

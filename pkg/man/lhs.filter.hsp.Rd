@@ -4,9 +4,9 @@
 \alias{lhs.filter.hsp}
 \title{Define subsets of hulls based on the location of the parent point in hull scatterplot space}
 \usage{
-lhs.filter.hsp(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, hsp = NULL, reg.idx = NULL, label = NULL,
-  col = NULL)
+lhs.filter.hsp(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, hsp = NULL, reg.idx = NULL,
+  label = NULL, col = NULL)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}

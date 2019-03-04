@@ -10,11 +10,12 @@
 #' @param auto.num.files Use a number as part of the constructed filename. T/F
 #' @param width The number of digits of the auto-number token in the filename (ignored if \code{auto.num.files=F})
 #' @param save.as The name of the object when saved (default is the same as the original)
+#' @param overwrite Overwrite existing file
 #'
 #' @export
 #' @seealso \code{\link{lxy.save}}
 
-lhs.save <- function (lhs, file=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, save.as=NULL) {
+lhs.save <- function (lhs, file=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, save.as=NULL, overwrite=FALSE) {
 
     if (!inherits(lhs, "locoh.lhs")) stop("lhs should be of class \"locoh.lhs\"")
     
@@ -54,15 +55,17 @@ lhs.save <- function (lhs, file=NULL, dir=".", suf=NULL, compress=TRUE, auto.num
 
     ## See if the file already exists
     if (file.exists(fn.full)) {
-        if (!auto.num.files) stop("File already exists. Please try a different file name.")
-
-       # Construct a new file name by incrementing the auto-number
-       i <- 1
-       while (file.exists(fn.full)) {
-          i <- i + 1
-          fn.full <- paste(fn.base.full, if (auto.num.files) paste(".", formatC(i, flag=0, width=width), sep="") else NULL, ".RData", sep="")
-          if (i > 99) stop("i > 99")
-       }       
+       if (auto.num.files) {        
+           # Construct a new file name by incrementing the auto-number
+           i <- 1
+           while (file.exists(fn.full)) {
+              i <- i + 1
+              fn.full <- paste(fn.base.full, if (auto.num.files) paste(".", formatC(i, flag=0, width=width), sep="") else NULL, ".RData", sep="")
+              if (i > 99) stop("i > 99")
+           }
+       } else if (!overwrite) {
+           stop("File already exists. Please try a different file name.")
+       }    
     }
 
     if (is.null(save.as)) {

@@ -5,15 +5,16 @@
 \title{Plots of sampling frequency}
 \usage{
 lxy.plot.freq(lxy, id = NULL, deltat.by.date = F, samp.by.date = F,
-  cp = F, cp.min = 0, cp.max = 1, time.unit = c("auto", "sec", "min",
-  "hour", "day", "week", "month", "year")[1], xlim = NULL, ylim = NULL,
-  ylim.deltat.by.date = c(0, 0.999), sbd.y.jiggle = 0.1, sbd.vline = NULL,
-  sbd.vline.trunc.units.to = c("secs", "mins", "hours", "days")[4],
-  cex.pts = 0.3, desc = c(0, 1, 3)[2], cex.desc = 0.8,
-  col.desc = "darkgreen", title = NULL, title.show = TRUE,
-  subtitle = "auto", mar = c(2.8, 2.8, if (title.show) 2.8 else 0.5, 0.5),
-  mgp = c(1.8, 0.5, 0), figs.per.page = NULL, status = TRUE,
-  panel.num = NULL, panel.num.inside.plot = !title.show, png.dir = NULL,
+  cp = F, cp.min = 0, cp.max = 1, time.unit = c("auto", "sec",
+  "min", "hour", "day", "week", "month", "year")[1], xlim = NULL,
+  ylim = NULL, ylim.deltat.by.date = c(0, 0.999), sbd.y.jiggle = 0.1,
+  sbd.vline = NULL, sbd.vline.trunc.units.to = c("secs", "mins",
+  "hours", "days")[4], cex.pts = 0.3, desc = c(0, 1, 3)[2],
+  cex.desc = 0.8, col.desc = "darkgreen", title = NULL,
+  title.show = TRUE, subtitle = "auto", mar = c(2.8, 2.8, if
+  (title.show) 2.8 else 0.5, 0.5), mgp = c(1.8, 0.5, 0),
+  figs.per.page = NULL, status = TRUE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, png.dir = NULL,
   png.dir.make = TRUE, png.width = 800, png.height = png.width,
   png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80, ...)
 }

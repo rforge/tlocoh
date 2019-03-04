@@ -4,8 +4,9 @@
 \alias{lhs.anv.add}
 \title{Adds an ancillary value to a hullset}
 \usage{
-lhs.anv.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, anv, anv.desc = NULL, overwrite = FALSE)
+lhs.anv.add(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, anv, anv.desc = NULL,
+  overwrite = FALSE)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}

@@ -83,6 +83,8 @@
 #' @param gmap The name of a background image that will be downloaded from Google: \code{"none"}, 
 #' \code{"roadmap"}, \code{"satellite"}, \code{"hybrid"}, or \code{"terrain"}. May also be a object of type \code{locoh.gmap}, see Notes.
 #' @param gmap.one4all Whether to download a single background image for all ids. T/F
+#' @param google_apikey API key for the Google Static Map API service. See https://developers.google.com/maps/documentation/maps-static/get-api-key for details.
+
 #' @param tiff.fn The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.
 #' @param tiff.pct Whether or to convert the GeoTIFF to an indexed 256 color RGB image, which may speed up drawing. T/F.
 #' @param tiff.bands A vector of exactly one (for a single band image) or exactly three integers corresponding to the bands of the GeoTIFF image that will be mapped to the red, 
@@ -184,7 +186,7 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     mar=c(if (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if (title.show) 3.2 else 0.5, 0.5),
     mgp=c(2, 0.7, 0), lo.save=TRUE, lo.margins.set=TRUE,
     desc=c(NONE<-0, BOTTOM<-1, TOP<-3)[ifelse(figs.per.page==1,2,1)], cex.desc=0.8, col.desc="darkgreen", 
-    gmap=c("none", "roadmap", "satellite", "hybrid", "terrain")[1], gmap.one4all=TRUE, 
+    gmap=c("none", "roadmap", "satellite", "hybrid", "terrain")[1], gmap.one4all=TRUE, google_apikey=NULL,
     tiff.fn=NULL, tiff.pct=FALSE, tiff.bands=c(4,3,2), tiff.col=gray(0:255/255), tiff.buff=0, tiff.fill.plot=TRUE,
     shp.csv=NULL, layers=NULL, 
     png.fn=NULL, png.dir=NULL, png.dir.make=TRUE, png.fn.pre=NULL, png.fn.mid=NULL, png.fn.suf=NULL, png.fn.incld.hs.name=TRUE, 
@@ -222,9 +224,10 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
     if (rast && !requireNamespace("raster", quietly=TRUE)) stop("package raster required, please install")
     if (is.null(gmap)) gmap <- "none"
     if (!identical(gmap,"none")) {
-        if (!requireNamespace("dismo", quietly=TRUE)) stop("package dismo required to display a background image, please install")
+        ## if (!requireNamespace("dismo", quietly=TRUE)) stop("package dismo required to display a background image, please install")
         if (!requireNamespace("rgdal", quietly=TRUE)) stop("package rgdal required to display a background image, please install")
         if (!requireNamespace("raster", quietly=TRUE)) stop("package raster required to display a background image, please install")    
+        if (is.null(google_apikey)) stop("to plot background maps, google_apikey is a required argument. For more info see https://developers.google.com/maps/documentation/maps-static/intro") 
         if (inherits(gmap, "locoh.gmap") && gmap.one4all) gmap.one4all <- FALSE
         if (inherits(gmap, "locoh.gmap") && overlay) stop("overlay is not currently compatible with a saved gmap object")
     }
@@ -486,7 +489,9 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
             #extLatLong <- projectExtent(hs[[1]]$pts, CRS("+proj=longlat +datum=WGS84"))
             
             ## Download a basemap from Google
-            base.map.merc <- dismo::gmap(bbll.sp, type=gmap)
+            ##base.map.merc <- dismo::gmap(bbll.sp, type=gmap)  ## no longer works without an API key
+            base.map.merc <- tlocoh::gmap2(bbll.sp, type=gmap, google_apikey=google_apikey)          ## modified function 
+            
             base.map.col <- base.map.merc@legend@colortable
             
             ## Project the downloaded basemap using nearest neighbor resampling
@@ -792,7 +797,8 @@ plot.locoh.lhs <- function (x, lhs, id=NULL, k=NULL, r=NULL, a=NULL, s=NULL, hs.
                             bbll.sp <- spTransform(bbprj.sp, CRS("+proj=longlat +datum=WGS84"))
                             
                             ## Download a basemap from Google
-                            base.map.merc <- dismo::gmap(bbll.sp, type=gmap)
+                            #base.map.merc <- dismo::gmap(bbll.sp, type=gmap)
+                            base.map.merc <- tlocoh::gmap2(bbll.sp, type=gmap, google_apikey=google_apikey)
                             base.map.col <- base.map.merc@legend@colortable
                             
                             ## Project the downloaded basemap using nearest neighbor resampling

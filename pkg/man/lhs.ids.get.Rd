@@ -4,8 +4,8 @@
 \alias{lhs.ids.get}
 \title{Get the ids in a hullsets}
 \usage{
-lhs.ids.get(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, hs.idx = NULL)
+lhs.ids.get(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, hs.idx = NULL)
 }
 \arguments{
 \item{lhs}{A \link{LoCoH-hullset} object}

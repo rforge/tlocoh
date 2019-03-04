@@ -4,13 +4,13 @@
 \alias{lhs.exp.shp}
 \title{Export a LoCoH-hullset to shapefile}
 \usage{
-lhs.exp.shp(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, hpp = FALSE, hulls = FALSE, iso = FALSE,
-  iso.idx = NULL, iso.metric = NULL, ellipses = FALSE, dr = FALSE,
-  dr.idx = NULL, allpts = FALSE, nn = FALSE, dir = ".",
-  file.base = "", file.base.auto = TRUE, avl.file = NULL, status = TRUE,
-  show.time = TRUE, hm = "all", anv = NULL, hsp = NULL,
-  metadata = TRUE)
+lhs.exp.shp(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, hpp = FALSE, hulls = FALSE,
+  iso = FALSE, iso.idx = NULL, iso.metric = NULL, ellipses = FALSE,
+  dr = FALSE, dr.idx = NULL, allpts = FALSE, nn = FALSE,
+  dir = ".", file.base = "", file.base.auto = TRUE,
+  avl.file = NULL, status = TRUE, show.time = TRUE, hm = "all",
+  anv = NULL, hsp = NULL, metadata = TRUE)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}

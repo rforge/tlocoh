@@ -4,7 +4,8 @@
 \alias{chop2plot}
 \title{Chops a long character object into separate lines for adding to a plot}
 \usage{
-chop2plot(str, width, char.break = " ", char.break.keep = FALSE, cex = 1)
+chop2plot(str, width, char.break = " ", char.break.keep = FALSE,
+  cex = 1)
 }
 \arguments{
 \item{str}{The string to format}

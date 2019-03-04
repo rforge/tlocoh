@@ -4,8 +4,8 @@
 \alias{vectorize.parameter}
 \title{Convert a comma-separated string to a vector}
 \usage{
-vectorize.parameter(x, n2z = FALSE, type = c("numeric", "character")[1],
-  sort.res = TRUE)
+vectorize.parameter(x, n2z = FALSE, type = c("numeric",
+  "character")[1], sort.res = TRUE)
 }
 \arguments{
 \item{x}{The vector or character string to be evaluated}

@@ -4,8 +4,9 @@
 \alias{lhs.select}
 \title{Select hullsets}
 \usage{
-lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, hs.idx = NULL, selection = NULL, status = TRUE)
+lhs.select(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, hs.idx = NULL, selection = NULL,
+  status = TRUE)
 }
 \arguments{
 \item{lhs}{A \link{LoCoH-hullset} object}

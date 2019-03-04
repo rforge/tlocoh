@@ -4,8 +4,8 @@
 \alias{strSplitAtChar}
 \title{Split a character object into multiple lines}
 \usage{
-strSplitAtChar(object, size, char = ".", separator = paste("\\n", char, sep
-  = ""), ...)
+strSplitAtChar(object, size, char = ".", separator = paste("\\n", char,
+  sep = ""), ...)
 }
 \arguments{
 \item{object}{Input character vector (should be length 1)}

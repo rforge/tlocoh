@@ -9,11 +9,12 @@ lhs.plot.scatter.auto(hs, id = NULL, k = NULL, r = NULL, a = NULL,
   y.metrics = c("auto", "all")[1], metrics.exclude = c("bearing",
   "sgf.nn.mean", "sgf.enc.mean"), exclude.same.pair = TRUE,
   exclude.reverse.pair = TRUE, png.dir = NULL, png.dir.make = TRUE,
-  png.width = 800, png.height = png.width, png.pointsize = 12 + (png.width
-  - 480)/80, png.fn.pre = NULL, png.fn.mid = NULL, png.fn.suf = NULL,
-  png.exists = c("skip", "overwrite")[1], progress.bar = TRUE,
-  test.sample = NULL, enumerate.pairs.only = FALSE,
-  new.plot.window = TRUE, hmap = NULL, ...)
+  png.width = 800, png.height = png.width, png.pointsize = 12 +
+  (png.width - 480)/80, png.fn.pre = NULL, png.fn.mid = NULL,
+  png.fn.suf = NULL, png.exists = c("skip", "overwrite")[1],
+  progress.bar = TRUE, test.sample = NULL,
+  enumerate.pairs.only = FALSE, new.plot.window = TRUE, hmap = NULL,
+  ...)
 }
 \arguments{
 \item{hs}{A LoCoH-hullset object}

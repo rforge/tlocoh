@@ -5,11 +5,12 @@
 \title{Compute s vs. proportion-time-selected hulls table}
 \usage{
 lxy.ptsh.add(lxy, id = NULL, k = 10, n = 200, samp.idx = NULL,
-  sinit = 0.005, ptsh.target = 1:9/10, ptsh.max = 0.98, ptsh.buf = 0.01,
-  max.iter = 15, max.loops = 15, max.reached = c("warning", "stop")[1],
-  time.term = c("vmax", "dif")[1], FNN.algorithm = c("cover_tree",
-  "kd_tree", "VR", "CR")[2], use.nn = FALSE, plotme = TRUE, save = TRUE,
-  nn.add = FALSE, use.pb.n = 200, ptsh.exists = c("replace", "append")[2],
+  sinit = 0.005, ptsh.target = 1:9/10, ptsh.max = 0.98,
+  ptsh.buf = 0.01, max.iter = 15, max.loops = 15,
+  max.reached = c("warning", "stop")[1], time.term = c("vmax",
+  "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2],
+  use.nn = FALSE, plotme = TRUE, save = TRUE, nn.add = FALSE,
+  use.pb.n = 200, ptsh.exists = c("replace", "append")[2],
   beep = FALSE, status = TRUE)
 }
 \arguments{

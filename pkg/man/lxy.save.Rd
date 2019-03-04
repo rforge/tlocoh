@@ -5,7 +5,8 @@
 \title{Save a LoCoH-xy object to disk}
 \usage{
 lxy.save(lxy, file = NULL, save.as = NULL, dir = ".", suf = NULL,
-  compress = TRUE, auto.num.files = TRUE, width = 2)
+  compress = TRUE, auto.num.files = TRUE, width = 2,
+  overwrite = FALSE)
 }
 \arguments{
 \item{lxy}{A \link{LoCoH-xy} object}
@@ -23,6 +24,8 @@ lxy.save(lxy, file = NULL, save.as = NULL, dir = ".", suf = NULL,
 \item{auto.num.files}{Use a numeric token as part of the constructed file name to get a unique file name(T/F)}
 
 \item{width}{The number of digits in auto.num.files}
+
+\item{overwrite}{Overwrite an existing file}
 }
 \description{
 Saves a LoCoH-xy object to disk, constructing a file name if needed that reflects the contents

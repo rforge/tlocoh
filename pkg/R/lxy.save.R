@@ -10,11 +10,12 @@
 #' @param compress Compress file (T/F)
 #' @param auto.num.files Use a numeric token as part of the constructed file name to get a unique file name(T/F)
 #' @param width The number of digits in auto.num.files
+#' @param overwrite Overwrite an existing file 
 #'
 #' @export
 #' @seealso \code{\link{xyt.lxy}}, \code{\link{lhs.save}}
 
-lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2) {
+lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=TRUE, auto.num.files=TRUE, width=2, overwrite=FALSE) {
 
     if (!inherits(lxy, "locoh.lxy")) stop("lxy should be of class \"locoh.lxy\"")
 
@@ -46,14 +47,16 @@ lxy.save <- function (lxy, file=NULL, save.as=NULL, dir=".", suf=NULL, compress=
 
     ## See if the file already exists
     if (file.exists(fn.full)) {
-        if (!auto.num.files) stop("File already exists. Please try a different file name.")
-
-       # Construct a new file name by incrementing the auto-number
-       i <- 1
-       while (file.exists(fn.full)) {
-          i <- i + 1
-          fn.full <- paste(fn.base.full, if (auto.num.files) paste(".", formatC(i, flag=0, width=width), sep="") else NULL, ".RData", sep="")
-          if (i > 99) stop("i > 99")
+       if (auto.num.files) {
+           # Construct a new file name by incrementing the auto-number
+           i <- 1
+           while (file.exists(fn.full)) {
+              i <- i + 1
+              fn.full <- paste(fn.base.full, if (auto.num.files) paste(".", formatC(i, flag=0, width=width), sep="") else NULL, ".RData", sep="")
+              if (i > 99) stop("i > 99")
+           }
+       } else if (!overwrite) {
+           stop("File already exists. Please try a different file name.")
        }
     }
 

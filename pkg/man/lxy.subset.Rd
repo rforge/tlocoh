@@ -4,8 +4,9 @@
 \alias{lxy.subset}
 \title{Take a subset of a LoCoH-xy object}
 \usage{
-lxy.subset(lxy, id = NULL, ptid = NULL, idx = NULL, dt.start = NULL,
-  dt.end = NULL, dt.int.round.to = 0.1, tau.diff.max = 0.02)
+lxy.subset(lxy, id = NULL, ptid = NULL, idx = NULL,
+  dt.start = NULL, dt.end = NULL, dt.int.round.to = 0.1,
+  tau.diff.max = 0.02)
 }
 \arguments{
 \item{lxy}{A \link{LoCoH-xy} object}

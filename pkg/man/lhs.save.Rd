@@ -5,7 +5,8 @@
 \title{Save a LoCoH-hullset object to disk}
 \usage{
 lhs.save(lhs, file = NULL, dir = ".", suf = NULL, compress = TRUE,
-  auto.num.files = TRUE, width = 2, save.as = NULL)
+  auto.num.files = TRUE, width = 2, save.as = NULL,
+  overwrite = FALSE)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}
@@ -23,6 +24,8 @@ lhs.save(lhs, file = NULL, dir = ".", suf = NULL, compress = TRUE,
 \item{width}{The number of digits of the auto-number token in the filename (ignored if \code{auto.num.files=F})}
 
 \item{save.as}{The name of the object when saved (default is the same as the original)}
+
+\item{overwrite}{Overwrite existing file}
 }
 \description{
 Saves a LoCoH-hullset object to disk, constructing a filename if needed that reflects the contents

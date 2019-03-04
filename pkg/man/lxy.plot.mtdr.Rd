@@ -7,13 +7,14 @@
 lxy.plot.mtdr(lxy, s = NULL, k = NULL, a = NULL, r = NULL,
   type = c("mtd.tsd", "mtd.ed")[1], offset.dups = 1, id = NULL,
   show.samp.size = TRUE, outline = FALSE, desc = c(0, 1, 3)[2],
-  cex.desc = 0.8, col.desc = "darkgreen", mar = c(3, 3, if (title.show) 3
-  else 0.7, 0.5), mgp = c(1.9, 0.5, 0), figs.per.page = NULL,
-  title = NULL, title.show = TRUE, title.obj.name = FALSE,
-  panel.num = NULL, panel.num.inside.plot = !title.show,
-  no.sci.notation = FALSE, png.dir = NULL, png.dir.make = TRUE,
-  png.width = 800, png.height = png.width, png.overwrite = TRUE,
-  png.pointsize = 12 + (png.width - 480)/80, status = TRUE, ...)
+  cex.desc = 0.8, col.desc = "darkgreen", mar = c(3, 3, if
+  (title.show) 3 else 0.7, 0.5), mgp = c(1.9, 0.5, 0),
+  figs.per.page = NULL, title = NULL, title.show = TRUE,
+  title.obj.name = FALSE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, no.sci.notation = FALSE,
+  png.dir = NULL, png.dir.make = TRUE, png.width = 800,
+  png.height = png.width, png.overwrite = TRUE, png.pointsize = 12 +
+  (png.width - 480)/80, status = TRUE, ...)
 }
 \arguments{
 \item{lxy}{A \link{LoCoH-xy} object}

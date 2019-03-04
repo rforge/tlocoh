@@ -7,43 +7,48 @@
 \method{plot}{locoh.lhs}(x, lhs, id = NULL, k = NULL, r = NULL,
   a = NULL, s = NULL, hs.names = NULL, iso = FALSE, rast = FALSE,
   hulls = FALSE, hpp = FALSE, dr = FALSE, nn = FALSE,
-  ellipses = FALSE, allpts = FALSE, ptid = NULL, ptid.highlight = TRUE,
-  add = FALSE, aoi = NULL, iso.idx = NULL, iso.sort.metric = NULL,
-  iso.legend = TRUE, legend.space = 0.25, dr.metric = NULL,
-  dr.thresh.val = NULL, dr.thresh.type = NULL, dr.smooth = NULL,
-  lwd.dr = 2, pch.allpts = 16, cex.nn = 2, cex.hpp = 0.6,
-  cex.allpts = 0.5, cex.pp = 2, cex.axis = 0.8, cex.legend = 0.8,
-  col.hpp = "gray50", col.hpp.na = "yellow", col.hulls.border = "gray50",
-  col.hulls.fill = NA, col.ellipses = "red", col.allpts = c("auto",
-  "gray")[1], col.nn = "black", col.nn.pp = "blue", col.iso.fill = 1,
+  ellipses = FALSE, allpts = FALSE, ptid = NULL,
+  ptid.highlight = TRUE, add = FALSE, aoi = NULL, iso.idx = NULL,
+  iso.sort.metric = NULL, iso.legend = TRUE, legend.space = 0.25,
+  dr.metric = NULL, dr.thresh.val = NULL, dr.thresh.type = NULL,
+  dr.smooth = NULL, lwd.dr = 2, pch.allpts = 16, cex.nn = 2,
+  cex.hpp = 0.6, cex.allpts = 0.5, cex.pp = 2, cex.axis = 0.8,
+  cex.legend = 0.8, col.hpp = "gray50", col.hpp.na = "yellow",
+  col.hulls.border = "gray50", col.hulls.fill = NA,
+  col.ellipses = "red", col.allpts = c("auto", "gray")[1],
+  col.nn = "black", col.nn.pp = "blue", col.iso.fill = 1,
   col.iso.opacity = 1, col.iso.border = NA, col.iso.scale = TRUE,
-  col.dr = "red", hpp.classify = c("none", "hsp", hm.expr(names.only = TRUE,
-  print = FALSE, desc = FALSE))[1], hpp.classify.bins = 10,
+  col.dr = "red", hpp.classify = c("none", "hsp", hm.expr(names.only =
+  TRUE, print = FALSE, desc = FALSE))[1], hpp.classify.bins = 10,
   hpp.classify.chop = 0.01, hpp.classify.legend = TRUE,
-  hpp.classify.common.scale.discrete = TRUE, col.ramp = c("gray10,gray90",
-  "rainbow")[1], col.ramp.bins = 10, hsp = NULL, record = FALSE,
-  figs.per.page = 1, same.axes.4all = NULL, overlay = FALSE,
+  hpp.classify.common.scale.discrete = TRUE,
+  col.ramp = c("gray10,gray90", "rainbow")[1], col.ramp.bins = 10,
+  hsp = NULL, record = FALSE, figs.per.page = 1,
+  same.axes.4all = NULL, overlay = FALSE,
   col.overlay.byhullset = FALSE, ufat = TRUE, ufipt = TRUE,
   axes.show = TRUE, axes.ticks = axes.show, axes.titles = axes.show,
-  title = NULL, title.show = TRUE, title.inc = c("title", "hs.name", "id",
-  "kar", "features", "hpp.classify", "hmap", "ptid")[if (is.null(title)) 3:4
-  else 1], subtitle.inc = c("title", "hs.name", "id", "kar", "features",
-  "hpp.classify", "hmap", "ptid")[if (is.null(title)) 5:8 else 0], mar = c(if
-  (axes.titles || axes.ticks) 3.3 else 0.5, if (axes.titles || axes.ticks) 3.2
-  else 0.5, if (title.show) 3.2 else 0.5, 0.5), mgp = c(2, 0.7, 0),
-  lo.save = TRUE, lo.margins.set = TRUE, desc = c(NONE <- 0, BOTTOM <- 1,
-  TOP <- 3)[ifelse(figs.per.page == 1, 2, 1)], cex.desc = 0.8,
-  col.desc = "darkgreen", gmap = c("none", "roadmap", "satellite", "hybrid",
-  "terrain")[1], gmap.one4all = TRUE, tiff.fn = NULL, tiff.pct = FALSE,
-  tiff.bands = c(4, 3, 2), tiff.col = gray(0:255/255), tiff.buff = 0,
-  tiff.fill.plot = TRUE, shp.csv = NULL, layers = NULL, png.fn = NULL,
-  png.dir = NULL, png.dir.make = TRUE, png.fn.pre = NULL,
-  png.fn.mid = NULL, png.fn.suf = NULL, png.fn.incld.hs.name = TRUE,
-  png.each.plot.separate = TRUE, png.width = 800, png.height = png.width,
-  png.pointsize = 12 + (png.width - 480)/80, png.overwrite = TRUE,
-  status = TRUE, panel.num = NULL, panel.num.inside.plot = !title.show,
-  hmap = NULL, iso.level = NULL, xlim = NULL, ylim = NULL,
-  check.ap.value.in.hmparams = TRUE, hme = hm.expr(names.only = FALSE), ...)
+  title = NULL, title.show = TRUE, title.inc = c("title", "hs.name",
+  "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if
+  (is.null(title)) 3:4 else 1], subtitle.inc = c("title", "hs.name",
+  "id", "kar", "features", "hpp.classify", "hmap", "ptid")[if
+  (is.null(title)) 5:8 else 0], mar = c(if (axes.titles || axes.ticks)
+  3.3 else 0.5, if (axes.titles || axes.ticks) 3.2 else 0.5, if
+  (title.show) 3.2 else 0.5, 0.5), mgp = c(2, 0.7, 0), lo.save = TRUE,
+  lo.margins.set = TRUE, desc = c(NONE <- 0, BOTTOM <- 1, TOP <-
+  3)[ifelse(figs.per.page == 1, 2, 1)], cex.desc = 0.8,
+  col.desc = "darkgreen", gmap = c("none", "roadmap", "satellite",
+  "hybrid", "terrain")[1], gmap.one4all = TRUE, google_apikey = NULL,
+  tiff.fn = NULL, tiff.pct = FALSE, tiff.bands = c(4, 3, 2),
+  tiff.col = gray(0:255/255), tiff.buff = 0, tiff.fill.plot = TRUE,
+  shp.csv = NULL, layers = NULL, png.fn = NULL, png.dir = NULL,
+  png.dir.make = TRUE, png.fn.pre = NULL, png.fn.mid = NULL,
+  png.fn.suf = NULL, png.fn.incld.hs.name = TRUE,
+  png.each.plot.separate = TRUE, png.width = 800,
+  png.height = png.width, png.pointsize = 12 + (png.width - 480)/80,
+  png.overwrite = TRUE, status = TRUE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, hmap = NULL, iso.level = NULL,
+  xlim = NULL, ylim = NULL, check.ap.value.in.hmparams = TRUE,
+  hme = hm.expr(names.only = FALSE), ...)
 }
 \arguments{
 \item{x}{A \link{LoCoH-hullset} object}
@@ -206,6 +211,8 @@
 \code{"roadmap"}, \code{"satellite"}, \code{"hybrid"}, or \code{"terrain"}. May also be a object of type \code{locoh.gmap}, see Notes.}
 
 \item{gmap.one4all}{Whether to download a single background image for all ids. T/F}
+
+\item{google_apikey}{API key for the Google Static Map API service. See https://developers.google.com/maps/documentation/maps-static/get-api-key for details.}
 
 \item{tiff.fn}{The path and name of a GeoTIFF file (e.g., satellite image) that will be displayed in the background. See notes.}
 

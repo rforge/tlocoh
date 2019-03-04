@@ -4,8 +4,8 @@
 \alias{lxy.nn.add}
 \title{Identifies nearest neighbors for a LoCoH-xy object}
 \usage{
-lxy.nn.add(lxy, id = NULL, ptid = NULL, k = NULL, r = NULL, a = NULL,
-  s = NULL, kmin = 0, ptsh = NULL, ptsh.idx = 1,
+lxy.nn.add(lxy, id = NULL, ptid = NULL, k = NULL, r = NULL,
+  a = NULL, s = NULL, kmin = 0, ptsh = NULL, ptsh.idx = 1,
   nn.exists = c("append", "replace", "skip")[1], time.term = c("vmax",
   "dif")[1], FNN.algorithm = c("cover_tree", "kd_tree", "VR", "CR")[2],
   dec.places = 1, ra.init.samp.size = 30, ra.init.quant = 0.8,

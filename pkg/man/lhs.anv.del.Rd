@@ -4,8 +4,8 @@
 \alias{lhs.anv.del}
 \title{Delete ancillary variables from a LoCoH-hullset}
 \usage{
-lhs.anv.del(lhs, anv = NULL, id = NULL, k = NULL, r = NULL, a = NULL,
-  s = NULL, hs.names = NULL, status = TRUE)
+lhs.anv.del(lhs, anv = NULL, id = NULL, k = NULL, r = NULL,
+  a = NULL, s = NULL, hs.names = NULL, status = TRUE)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}

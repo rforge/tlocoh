@@ -6,22 +6,22 @@
 \usage{
 lxy.exp.mov(lxy, id = NULL, all.ids.at.once = TRUE,
   all.ids.col.unique = all.ids.at.once, all.ids.col = NULL,
-  all.ids.legend = c("bottomright", "bottom", "bottomleft", "left", "topleft",
-  "top", "topright", "right", "center")[5], all.ids.legend.cex = 0.8,
-  dt.start = NULL, dt.end = NULL, frame.method = c("auto", "time",
-  "location")[1], frame.rtd = "auto", xlim = NULL, ylim = NULL,
-  dt.label = TRUE, dt.label.x = NULL, dt.label.y = NULL,
-  dt.label.col = "black", dt.label.bg = "gray90", title = NULL,
-  title.show = TRUE, axes.show = TRUE, axes.ticks = axes.show,
-  axes.titles = FALSE, mar.map = c(0.7 + (if (axes.ticks) 0.9 else 0) + (if
-  (axes.titles) 1.3 else 0), 0.5 + (if (axes.ticks) 0.9 else 0) + (if
-  (axes.titles) 1.3 else 0), if (title.show) 2.1 else 0.5, 0.5),
-  mgp.map = c(0.4 + if (axes.ticks) 1.2 else 0, 0.4, 0),
-  col.xys.active = "red", col.xys.background = "gray80",
+  all.ids.legend = c("bottomright", "bottom", "bottomleft", "left",
+  "topleft", "top", "topright", "right", "center")[5],
+  all.ids.legend.cex = 0.8, dt.start = NULL, dt.end = NULL,
+  frame.method = c("auto", "time", "location")[1], frame.rtd = "auto",
+  xlim = NULL, ylim = NULL, dt.label = TRUE, dt.label.x = NULL,
+  dt.label.y = NULL, dt.label.col = "black", dt.label.bg = "gray90",
+  title = NULL, title.show = TRUE, axes.show = TRUE,
+  axes.ticks = axes.show, axes.titles = FALSE, mar.map = c(0.7 + (if
+  (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0), 0.5 + (if
+  (axes.ticks) 0.9 else 0) + (if (axes.titles) 1.3 else 0), if (title.show)
+  2.1 else 0.5, 0.5), mgp.map = c(0.4 + if (axes.ticks) 1.2 else 0, 0.4,
+  0), col.xys.active = "red", col.xys.background = "gray80",
   cex.xys.active = 1.5, cex.xys.background = 0.5, tz.local = NULL,
   tz.local.check = TRUE, col.by.hour.of.day = FALSE,
-  col.hod = colorRampPalette(colors()[c(24, 30, 553, 121, 26, 121, 553, 30,
-  24)])(24), width = if (screen.test) 7 else 608, height = NULL,
+  col.hod = colorRampPalette(colors()[c(24, 30, 553, 121, 26, 121, 553,
+  30, 24)])(24), width = if (screen.test) 7 else 608, height = NULL,
   max.frames = NULL, png.pointsize = 16 + (width - 480)/80,
   screen.test = FALSE, tmp.dir = NULL, tmp.files.delete = TRUE,
   prompt.continue = TRUE, fn.mov = NULL, fn.mov.dir = getwd(),
@@ -29,11 +29,12 @@ lxy.exp.mov(lxy, id = NULL, all.ids.at.once = TRUE,
   duration = NULL, fps = NULL, skip = NULL, ffmpeg = NULL,
   create.mov = TRUE, show.cmd = FALSE, fmt = c("mov", "mp4")[1],
   info.only = TRUE, shp.csv = NULL, layers = NULL, tiff.fn = NULL,
-  tiff.bands = c(3, 2, 1), tiff.col = gray(0:255/255), tiff.pct = FALSE,
-  tiff.buff = 0, tiff.fill.plot = TRUE, bg2png = !is.null(layers),
-  crop.layers.to.extent = TRUE, date.bar = 0.85, date.bar.bins = 12,
-  col.db = "darkblue", cex.axis.db = 0.7, beep = FALSE,
-  report.time = TRUE, status = TRUE)
+  tiff.bands = c(3, 2, 1), tiff.col = gray(0:255/255),
+  tiff.pct = FALSE, tiff.buff = 0, tiff.fill.plot = TRUE,
+  bg2png = !is.null(layers), crop.layers.to.extent = TRUE,
+  date.bar = 0.85, date.bar.bins = 12, col.db = "darkblue",
+  cex.axis.db = 0.7, beep = FALSE, report.time = TRUE,
+  status = TRUE)
 }
 \arguments{
 \item{lxy}{A \link{LoCoH-xy} object}

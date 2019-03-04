@@ -8,8 +8,8 @@
   a = NULL, s = NULL, hs.names = NULL, metric = "area",
   include.missing.hulls = TRUE, hmap = NULL, hmap.in.title = TRUE,
   hs.name.in.title = TRUE, title = NULL, title.show = TRUE,
-  figs.per.page = NULL, mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5),
-  mgp = c(1.8, 0.5, 0), same.axes.for.all = FALSE, ufat = TRUE,
+  figs.per.page = NULL, mar = c(3, 3, if (title.show) 2.8 else 0.7,
+  0.5), mgp = c(1.8, 0.5, 0), same.axes.for.all = FALSE, ufat = TRUE,
   breaks = "Sturges", col = "gray80", lo.margins.set, lo.save = TRUE,
   png.dir = NULL, png.dir.make = TRUE, png.width = 800,
   png.height = png.width, png.overwrite = TRUE, png.pointsize = 12 +

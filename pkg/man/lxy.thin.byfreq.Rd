@@ -5,9 +5,9 @@
 \title{Delete locations to harmonize the sampling frequency and time duration}
 \usage{
 lxy.thin.byfreq(lxy, id = NULL, trim.ends = FALSE, dt.start = NULL,
-  dt.end = NULL, byfreq = FALSE, samp.freq = "lcm", lcm.round = 120,
-  lcm.max.iter = 300, status = TRUE, dt.int.round.to = 0.1,
-  tau.diff.max = 0.02)
+  dt.end = NULL, byfreq = FALSE, samp.freq = "lcm",
+  lcm.round = 120, lcm.max.iter = 300, status = TRUE,
+  dt.int.round.to = 0.1, tau.diff.max = 0.02)
 }
 \arguments{
 \item{lxy}{A \link{LoCoH-xy} object}

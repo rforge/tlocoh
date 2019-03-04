@@ -1,7 +1,17 @@
+Changes in version 1.40.07 (2019-03-03) 
+=========================
+* added <pre>google_apikey</pre> to <pre>plot.locoh.lhs</pre>
+* added <pre>gmap2</pre> function containing a modification of the same function from dismo with the ability to pass an API key for the Google Static Maps API
+* dismo package no longer a suggest 
+
+Changes in version 1.40.06 (2018-05-27) 
+=========================
+* added <pre>overwrite</pre> argument to <pre>lxy.save</pre> and <pre>lhs.save</pre>
+
 Changes in version 1.40.05 (2018-02-09) 
 =========================
 * Changed the default values of arguments <pre>trim.ends</pre> and <pre>byfreq</pre> to FALSE in function <pre>lxy.thin.byfreq</pre>. Also changed an ambiguous feedback message, and a data type check for arguments <pre>dt.start</pre> and <pre>dt.end</pre>.
-* Added a <pre>min_nodes</pre> argument to <pre>clean_slivers</pre>.
+* Added a <pre>min_nodes</pre> argument to <pre>clean_slivers</pre>. [THANKS TO ALAN HAYNES FOR THIS ADDITION]   ****************************
 
 Changes in version 1.40.04 (2017-02-04)
 =========================

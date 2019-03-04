@@ -4,10 +4,10 @@
 \alias{lhs.exp.csv}
 \title{Export a LoCoH-hullset to csv}
 \usage{
-lhs.exp.csv(lhs, id = NULL, k = NULL, r = NULL, a = NULL, s = NULL,
-  hs.names = NULL, csv.save = TRUE, dir = ".", csv.fn.pre = NULL,
-  csv.fn.mid = c("none", "short", "long")[2], hm = "all", anv = NULL,
-  hsp = NULL, status = TRUE)
+lhs.exp.csv(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
+  s = NULL, hs.names = NULL, csv.save = TRUE, dir = ".",
+  csv.fn.pre = NULL, csv.fn.mid = c("none", "short", "long")[2],
+  hm = "all", anv = NULL, hsp = NULL, status = TRUE)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}

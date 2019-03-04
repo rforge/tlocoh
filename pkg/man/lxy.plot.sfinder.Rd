@@ -4,12 +4,13 @@
 \alias{lxy.plot.sfinder}
 \title{Plot distributions of 's' such that the vmax/diffusion term in TSD are equivalent to the actual displacement}
 \usage{
-lxy.plot.sfinder(lxy, id = NULL, delta.t = "auto", delta.t.auto.n = 8,
-  delta.t.err = 0.01, outline = FALSE, desc = c(0, 1, 3)[2],
-  cex.desc = 0.8, col.desc = "darkgreen", time.term = c("vmax", "dif")[1],
-  mar = c(3, 3, if (title.show) 2.8 else 0.7, 0.5), mgp = c(1.8, 0.5, 0),
-  figs.per.page = NULL, title = NULL, title.show = TRUE,
-  panel.num = NULL, panel.num.inside.plot = !title.show, png.dir = NULL,
+lxy.plot.sfinder(lxy, id = NULL, delta.t = "auto",
+  delta.t.auto.n = 8, delta.t.err = 0.01, outline = FALSE,
+  desc = c(0, 1, 3)[2], cex.desc = 0.8, col.desc = "darkgreen",
+  time.term = c("vmax", "dif")[1], mar = c(3, 3, if (title.show) 2.8
+  else 0.7, 0.5), mgp = c(1.8, 0.5, 0), figs.per.page = NULL,
+  title = NULL, title.show = TRUE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, png.dir = NULL,
   png.dir.make = TRUE, png.width = 800, png.height = png.width,
   png.overwrite = TRUE, png.pointsize = 12 + (png.width - 480)/80, ...)
 }

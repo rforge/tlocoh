@@ -6,15 +6,16 @@
 \usage{
 lhs.plot.revisit(lhs, id = NULL, k = NULL, r = NULL, a = NULL,
   s = NULL, hs.names = NULL, ta.min = "auto", ta.max = NULL,
-  breaks = 40, xaxis.vals = NULL, ta.min.auto.tau = 4, col = "gray80",
-  figs.per.page = 1, title = NULL, title.show = TRUE, subtitle = TRUE,
-  mar = c(2.8, 3.2, if (title.show) (if (subtitle) 3.2 else 2.3) else 0.5,
-  0.5), mgp = c(1, 0.7, 0), png.fn = NULL, png.dir = NULL,
-  png.dir.make = TRUE, png.width = 800, png.height = png.width,
-  png.pointsize = 12 + (png.width - 480)/80, png.fn.pre = NULL,
-  png.fn.suf = NULL, png.overwrite = TRUE, panel.num = NULL,
-  panel.num.inside.plot = !title.show, bg = "white", legend.space = if
-  (legend) 0.05 else 0, ...)
+  breaks = 40, xaxis.vals = NULL, ta.min.auto.tau = 4,
+  col = "gray80", figs.per.page = 1, title = NULL,
+  title.show = TRUE, subtitle = TRUE, mar = c(2.8, 3.2, if
+  (title.show) (if (subtitle) 3.2 else 2.3) else 0.5, 0.5), mgp = c(1,
+  0.7, 0), png.fn = NULL, png.dir = NULL, png.dir.make = TRUE,
+  png.width = 800, png.height = png.width, png.pointsize = 12 +
+  (png.width - 480)/80, png.fn.pre = NULL, png.fn.suf = NULL,
+  png.overwrite = TRUE, panel.num = NULL,
+  panel.num.inside.plot = !title.show, bg = "white",
+  legend.space = if (legend) 0.05 else 0, ...)
 }
 \arguments{
 \item{lhs}{A LoCoH-hullset object}
